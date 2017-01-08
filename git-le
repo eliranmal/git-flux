@@ -5,6 +5,7 @@ usage() {
 	echo
 	echo "Available subcommands are:"
 	echo "hello <name>  Print out Hello World or Hello <name> (if provided)"
+	echo
 }
 
 version() {
