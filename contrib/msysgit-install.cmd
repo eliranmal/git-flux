@@ -16,10 +16,6 @@ set ERR=0
 
 echo Installing git-le into "%GIT_HOME%"...
 
-call :ChkGetopt getopt.exe || set ERR=1
-if %ERR%==1 goto :End
-echo getopt.exe... Found
-
 if not exist "%GIT_HOME%\usr\bin\git-le" goto :Install
 echo GitFlow is already installed.>&2
 set /p mychoice="Do you want to replace it [y/n]"
@@ -57,15 +53,6 @@ goto :End
 echo Installation canceled.>&2
 set ERR=1
 goto :End
-
-:ChkGetopt
-:: %1 is getopt.exe
-if exist "%GIT_HOME%\usr\bin\%1" goto :EOF
-if exist "%USERPROFILE%\usr\bin\%1" goto :EOF
-if exist "%~f$PATH:1" goto :EOF
-echo %GIT_HOME%\usr\bin\%1 not found.>&2
-echo You have to install this file manually. See the GitFlow README.
-exit /B 1
 
 :FindGitHome
 setlocal
