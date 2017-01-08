@@ -8,7 +8,7 @@ REPO_HOME="http://lpgithub.dev.lprnd.net/UI-Group/le-ui-gitflow.git"
 EXEC_FILES="git-le"
 SCRIPT_FILES="git-le-wat git-le-foo"
 
-echo "### git-le no-make installer ###"
+echo "### git-le setup ###"
 
 case "$1" in
 	uninstall)
