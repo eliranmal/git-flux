@@ -8,36 +8,36 @@ REPO_HOME="http://lpgithub.dev.lprnd.net/UI-Group/le-ui-gitflow.git"
 EXEC_FILES="git-le"
 SCRIPT_FILES="git-le-wat git-le-foo"
 
-echo "### gitflow no-make installer ###"
+echo "### git-le no-make installer ###"
 
 case "$1" in
 	uninstall)
-		echo "Uninstalling git-flow from $INSTALL_PREFIX"
+		echo "uninstalling git-le from $INSTALL_PREFIX"
 		if [ -d "$INSTALL_PREFIX" ] ; then
 			for script_file in $SCRIPT_FILES $EXEC_FILES ; do
 				echo "rm -vf $INSTALL_PREFIX/$script_file"
 				rm -vf "$INSTALL_PREFIX/$script_file"
 			done
 		else
-			echo "The '$INSTALL_PREFIX' directory was not found."
-			echo "Do you need to set INSTALL_PREFIX ?"
+			echo "the '$INSTALL_PREFIX' directory was not found."
+			echo "do you need to set INSTALL_PREFIX ?"
 		fi
 		exit
 		;;
 	help)
-		echo "Usage: [environment] gitflow-installer.sh [install|uninstall]"
-		echo "Environment:"
+		echo "usage: [environment] install.sh [install|uninstall]"
+		echo "environment:"
 		echo "   INSTALL_PREFIX=$INSTALL_PREFIX"
 		echo "   REPO_HOME=$REPO_HOME"
 		echo "   REPO_NAME=$REPO_NAME"
 		exit
 		;;
 	*)
-		echo "Installing git-flow to $INSTALL_PREFIX"
+		echo "installing git-le to $INSTALL_PREFIX"
 		if [ -d "$REPO_NAME" -a -d "$REPO_NAME/.git" ] ; then
 			echo "Using existing repo: $REPO_NAME"
 		else
-			echo "Cloning repo from GitHub to $REPO_NAME"
+			echo "cloning repo from github to $REPO_NAME"
 			git clone "$REPO_HOME" "$REPO_NAME"
 		fi
 		install -v -d -m 0755 "$INSTALL_PREFIX"
