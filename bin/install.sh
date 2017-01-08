@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# currently supporting default *nix systems, to support more flavors, use this: https://gist.github.com/eliranmal/567ecf4b40a4a5cc0218
+# currently supporting default prefix in common *nix systems, to support more flavors, use this: https://gist.github.com/eliranmal/567ecf4b40a4a5cc0218
 INSTALL_PREFIX="/usr/local/bin"
 REPO_NAME="le-ui-gitflow"
 REPO_HOME="http://lpgithub.dev.lprnd.net/UI-Group/le-ui-gitflow.git"
