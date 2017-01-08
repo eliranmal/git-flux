@@ -14,7 +14,7 @@ exit /B 1
 :GitHomeOK
 set ERR=0
 
-echo Installing gitle into "%GIT_HOME%"...
+echo Installing git-le into "%GIT_HOME%"...
 
 call :ChkGetopt getopt.exe || set ERR=1
 if %ERR%==1 goto :End
@@ -28,7 +28,7 @@ goto :Abort
 
 :DeleteOldFiles
 echo Deleting old files...
-for /F %%i in ("%GIT_HOME%\git-le*" "%GIT_HOME%\gitle-*") do if exist "%%~fi" del /F /Q "%%~fi"
+for /F %%i in ("%GIT_HOME%\git-le*") do if exist "%%~fi" del /F /Q "%%~fi"
 
 :Install
 echo Copying files...
@@ -37,7 +37,6 @@ xcopy "%~dp0\..\git-le"            "%GIT_HOME%\bin"                 /Y /R /F
 if errorlevel 4 if not errorlevel 5 goto :AccessDenied
 if errorlevel 1 set ERR=1
 xcopy "%~dp0\..\git-le*"           "%GIT_HOME%\bin"                 /Y /R /F || set ERR=1
-xcopy "%~dp0\..\gitle-*"           "%GIT_HOME%\bin"                 /Y /R /F || set ERR=1
 
 if %ERR%==1 choice /T 30 /C Y /D Y /M "Some unexpected errors happened. Sorry, you'll have to fix them by yourself."
 
