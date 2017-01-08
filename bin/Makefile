@@ -1,7 +1,7 @@
 BIN_DIR   = /usr/local/bin
-LOADER    = git-le
-COMMANDS  = git-le-wat
-#COMMNADS += git-le-anothercommand
+LOADER    = ../git-le
+COMMANDS  = ../commands/git-le-wat
+COMMNADS += ../commands/git-le-foo
 
 all:
 	@echo "usage: make [install|uninstall]"

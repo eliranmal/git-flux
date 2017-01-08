@@ -1,0 +1,25 @@
+#!/usr/bin/env sh
+
+usage() {
+    echo "usage: git le foo [name]"
+    echo
+}
+
+cmd_foo() {
+    if [ "$#" -lt 1 ]; then
+        say_hello World; exit 0
+    elif [ "$#" -eq 1 ]; then
+        if [ $1 == "help" ]; then
+            usage; exit 0
+        fi
+
+        say_hello $1; exit 0
+    fi
+
+    usage; exit 1
+}
+
+say_hello() {
+    echo "Hello ${1}"
+    echo
+}

@@ -36,8 +36,8 @@ main() {
 
 	source "$workingdir/git-le-$subcommand"
 
-	local has_subcommand=$(type "cmd_$subcommand");
-	if [ ! $has_subcommand ]; then
+	local has_subcommand=type "cmd_$subcommand";
+	if [ ! has_subcommand ]; then
 		usage; exit 1
 	fi
 
