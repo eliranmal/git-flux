@@ -3,15 +3,18 @@ setlocal
 if not "%~1"=="" set GIT_HOME=%~f1
 if "%GIT_HOME%"=="" call :FindGitHome "git.cmd"
 
-if not exist "%GIT_HOME%" set GIT_HOME="%ProgramFiles%\Git"
-
 if exist "%GIT_HOME%" goto :GitHomeOK
+
+echo MsysGit installation directory not found.>&2
+echo Try to give the directory name on the command line:>&2
+echo   %0 "%ProgramFiles%\Git"
 endlocal
+exit /B 1
 
 :GitHomeOK
 set ERR=0
 
-echo Installing git-le into "%GIT_HOME%"...
+echo Installing GitLE into "%GIT_HOME%"...
 
 if not exist "%GIT_HOME%\usr\bin\git-le" goto :Install
 echo GitLE is already installed.>&2
