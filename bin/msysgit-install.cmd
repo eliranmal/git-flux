@@ -3,13 +3,10 @@ setlocal
 if not "%~1"=="" set GIT_HOME=%~f1
 if "%GIT_HOME%"=="" call :FindGitHome "git.cmd"
 
-if exist "%GIT_HOME%" goto :GitHomeOK
+if not exist "%GIT_HOME%" set GIT_HOME="%ProgramFiles%\Git"
 
-echo MsysGit installation directory not found.>&2
-echo Try to give the directory name on the command line:>&2
-echo   %0 "%ProgramFiles%\Git"
+if exist "%GIT_HOME%" goto :GitHomeOK
 endlocal
-exit /B 1
 
 :GitHomeOK
 set ERR=0
@@ -17,7 +14,7 @@ set ERR=0
 echo Installing git-le into "%GIT_HOME%"...
 
 if not exist "%GIT_HOME%\usr\bin\git-le" goto :Install
-echo GitFlow is already installed.>&2
+echo GitLE is already installed.>&2
 set /p mychoice="Do you want to replace it [y/n]"
 if "%mychoice%"=="y" goto :DeleteOldFiles
 goto :Abort
@@ -28,7 +25,6 @@ for /F %%i in ("%GIT_HOME%\git-le*") do if exist "%%~fi" del /F /Q "%%~fi"
 
 :Install
 echo Copying files...
-::goto :EOF
 xcopy "%~dp0\..\git-le"            "%GIT_HOME%\usr\bin"                 /Y /R /F
 if errorlevel 4 if not errorlevel 5 goto :AccessDenied
 if errorlevel 1 set ERR=1
