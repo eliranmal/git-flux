@@ -1,0 +1,46 @@
+#!/usr/bin/env sh
+
+usage() {
+	echo "usage: git le <subcommand>"
+	echo
+	echo "Available subcommands are:"
+	echo "hello <name>  Print out Hello World or Hello <name> (if provided)"
+}
+
+version() {
+	echo "le git plugin v0.1.0"
+	echo
+}
+
+main() {
+	if [ "$#" -lt 1 ]; then
+		usage; exit 1
+	fi
+
+	local subcommand="$1"; shift
+
+	case $subcommand in
+		"-h"|"--help")
+			usage; exit 0
+			;;
+		"-v"|"--version")
+			version; exit 0
+			;;
+	esac
+
+	local workingdir=$(dirname "$(echo "$0" | sed -e 's,\\,/,g')")
+	if [ ! -e "$workingdir/git-le-$subcommand" ]; then
+		usage; exit 1
+	fi
+
+	source "$workingdir/git-le-$subcommand"
+
+	local has_subcommand=$(type "cmd_$subcommand");
+	if [ ! has_subcommand ]; then
+		usage; exit 1
+	fi
+
+	cmd_$subcommand "$@"
+}
+
+main "$@"
