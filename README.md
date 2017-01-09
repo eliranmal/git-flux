@@ -1,6 +1,6 @@
 # le-ui-gitflow
 
-> provides workflow commands for ui development with git
+> provides workflow commands for live-engage ui development with git
 
 
 # setup
