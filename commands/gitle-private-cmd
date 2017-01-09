@@ -1,0 +1,6 @@
+#!/usr/bin/env sh
+
+say_wat() {
+    echo "wat ${1}"
+    echo
+}
