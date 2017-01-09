@@ -69,7 +69,7 @@ fire up git-bash __as administrator__, and:
 
 #### uninstall
 
-sorry-not-sorry, there is no way to uninstall on windows. 
+sorry-not-sorry; there is no way to uninstall on windows. 
 
 if you insist, dig through the `bin/msysgit-install.cmd` file, look for 
 all the paths it copies files into, and manually remove them.
