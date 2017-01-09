@@ -6,7 +6,7 @@ if [ -z "$INSTALL_PREFIX" ] ; then
 fi
 
 if [ -z "$REPO_URL" ] ; then
-	REPO_URL="http://lpgithub.dev.lprnd.net/UI-Group/le-ui-gitflow.git"
+	REPO_URL="http://lpgithub.dev.lprnd.net/WebJedi/le-ui-gitflow.git"
 fi
 
 REPO_NAME="le-ui-gitflow"

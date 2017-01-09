@@ -14,7 +14,7 @@ exit /B 1
 :GitHomeOK
 set ERR=0
 
-set REPO_URL="http://lpgithub.dev.lprnd.net/UI-Group/le-ui-gitflow.git"
+set REPO_URL="http://lpgithub.dev.lprnd.net/WebJedi/le-ui-gitflow.git"
 set REPO_NAME="le-ui-gitflow"
 if exist "%~dp0\%REPO_NAME%" goto :RepoOk
 call git clone "%REPO_URL%" "%REPO_NAME%" || set ERR=1
