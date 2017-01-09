@@ -55,7 +55,7 @@ fire up git-bash __as administrator__, and:
   
 - create a temporary directory (or use an existing one), and navigate to it:
   
-  ```cmd
+  ```sh
   mkdir ~/tmp
   cd ~/tmp
   ```
