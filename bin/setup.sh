@@ -2,6 +2,10 @@
 
 echo "- - - git-le setup - - -"
 
+repo_name="le-ui-gitflow"
+exec_files="git-le"
+script_files="git-le-wat git-le-foo gitle-private-cmd"
+
 if [[ "$OSTYPE" == "linux-gnu" || "$OSTYPE" == "darwin"* ]]; then # linux / mac osx
 	INSTALL_PREFIX="/usr/local/bin"
 elif [[ "$OSTYPE" == "msys" ]]; then # mingw
@@ -16,8 +20,9 @@ if [ -z "$REPO_URL" ] ; then
 	REPO_URL="http://lpgithub.dev.lprnd.net/WebJedi/le-ui-gitflow.git"
 fi
 
-exec_files="git-le"
-script_files="git-le-wat git-le-foo gitle-private-cmd"
+if [ -z "$REPO_PATH" ] ; then
+	REPO_PATH="$repo_name"
+fi
 
 case "$1" in
 	help)
@@ -48,19 +53,16 @@ case "$1" in
 		echo "installing git-le to $INSTALL_PREFIX"
 		if [ -d "$REPO_PATH" -a -d "$REPO_PATH/.git" ] ; then
 			echo "using existing repo: $REPO_PATH"
-			repo_dir="$REPO_PATH"
 		else
-			repo_name="le-ui-gitflow"
 			echo "cloning repo from github to $repo_name"
 			git clone "$REPO_URL" "$repo_name"
-			repo_dir="$repo_name"
 		fi
 		install -v -d -m 0755 "$INSTALL_PREFIX"
 		for exec_file in $exec_files ; do
-			install -v -m 0755 "$repo_dir/$exec_file" "$INSTALL_PREFIX"
+			install -v -m 0755 "$REPO_PATH/$exec_file" "$INSTALL_PREFIX"
 		done
 		for script_file in $script_files ; do
-			install -v -m 0644 "$repo_dir/commands/$script_file" "$INSTALL_PREFIX"
+			install -v -m 0644 "$REPO_PATH/commands/$script_file" "$INSTALL_PREFIX"
 		done
 		exit
 		;;
