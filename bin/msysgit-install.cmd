@@ -14,22 +14,22 @@ exit /B 1
 :GitHomeOK
 set ERR=0
 
-echo Installing GitLE into "%GIT_HOME%"...
+echo Installing GitLE into "%GIT_HOME%\usr\bin"...
 
 if not exist "%GIT_HOME%\usr\bin\git-le" goto :Install
 echo GitLE is already installed.>&2
-set /p mychoice="Do you want to replace it [y/n]"
+set /p mychoice="Do you want to replace it? [y/n] "
 if "%mychoice%"=="y" goto :DeleteOldFiles
 goto :Abort
 
 :DeleteOldFiles
 echo Deleting old files...
-for /F %%i in ("%GIT_HOME%\git-le*") do if exist "%%~fi" del /F /Q "%%~fi"
+for /F %%i in ("%GIT_HOME%\usr\bin\git-le*") do if exist "%%~fi" del /F /Q "%%~fi"
+for /F %%i in ("%GIT_HOME%\usr\bin\gitle-*") do if exist "%%~fi" del /F /Q "%%~fi"
 
 :Install
 echo Copying files...
-echo "%~dp0\..\git-le" -> "%GIT_HOME%\usr\bin"
-xcopy "%~dp0\..\git-le"            "%GIT_HOME%\usr\bin"                 /Y /R /F
+xcopy "%~dp0\..\git-le"                     "%GIT_HOME%\usr\bin"                 /Y /R /F
 if errorlevel 4 if not errorlevel 5 goto :AccessDenied
 if errorlevel 1 set ERR=1
 xcopy "%~dp0\..\commands\git-le*"           "%GIT_HOME%\usr\bin"                 /Y /R /F || set ERR=1
