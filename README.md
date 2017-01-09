@@ -3,11 +3,17 @@
 > provides workflow commands for live-engage ui development with git
 
 
-# setup
+## prerequisites
 
-## *nix
+- __windows__: [git windows client][1] (you need git-bash)
+- __\*nix__: none!
 
-### install
+
+## setup
+
+### *nix
+
+#### install
 
 - create a temporary directory (or use an existing one), and navigate to it:
   
@@ -17,46 +23,49 @@
   ```
 
 - get the setup script, and run it:
-   
-   ```sh
-   curl -H 'Authorization: token 8ba9fcb4212fd9ba15371d60af1c3d10c73b5522' \
-       -H 'Accept: application/vnd.github.v3.raw' \
-       -O -L https://lpgithub.dev.lprnd.net/raw/UI-Group/le-ui-gitflow/master/bin/setup.sh
-   chmod +x setup.sh
-   ./setup.sh
-   ```
+  
+  ```sh
+  curl -H 'Authorization: token 8ba9fcb4212fd9ba15371d60af1c3d10c73b5522' \
+      -H 'Accept: application/vnd.github.v3.raw' \
+      -O -L https://lpgithub.dev.lprnd.net/raw/UI-Group/le-ui-gitflow/master/bin/setup.sh
+  chmod +x setup.sh
+  ./setup.sh
+  ```
 
-### uninstall
+#### uninstall
 
 - navigate to the temporary directory used during install:
-
-```sh
-cd ~/tmp
-```
+  
+  ```sh
+  cd ~/tmp
+  ```
 
 - run the setup script again, with the `uninstall` option:
+  
+  ```sh
+  ./setup.sh uninstall
+  ```
 
-```sh
-./setup.sh uninstall
-```
 
 
+### windows
 
-## windows
+#### install
 
-### install
+
+curl -H 'Authorization: token 8ba9fcb4212fd9ba15371d60af1c3d10c73b5522' -H 'Accept: application/vnd.github.v3.raw' -O -L https://lpgithub.dev.lprnd.net/raw/UI-Group/le-ui-gitflow/master/bin/msysgit-install.cmd
 
 run `bin/msysgit-install.cmd` in the windows command prompt (i.e. **cmd**, 
 not git-bash!). you may have to open cmd with administrator privileges.
 
-### uninstall
+#### uninstall
 
 sorry-not-sorry, there is no way to uninstall on windows. 
 if you insist, dig through the `bin/msysgit-install.cmd` file, look for 
 all the paths it copies files into, and manually remove them.
 
 
-# usage
+## usage
 
 this tool only supports bash/msysgit/mingw32, so:
 
@@ -65,6 +74,8 @@ this tool only supports bash/msysgit/mingw32, so:
 
 
 todo - document usage some more..
+
+
 
 
 

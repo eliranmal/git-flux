@@ -28,6 +28,7 @@ for /F %%i in ("%GIT_HOME%\git-le*") do if exist "%%~fi" del /F /Q "%%~fi"
 
 :Install
 echo Copying files...
+echo "%~dp0\..\git-le" -> "%GIT_HOME%\usr\bin"
 xcopy "%~dp0\..\git-le"            "%GIT_HOME%\usr\bin"                 /Y /R /F
 if errorlevel 4 if not errorlevel 5 goto :AccessDenied
 if errorlevel 1 set ERR=1
