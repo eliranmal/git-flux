@@ -19,7 +19,9 @@ cd ~/tmp
 - run this:
 
 ```sh
-curl -H 'Authorization: token 8ba9fcb4212fd9ba15371d60af1c3d10c73b5522' -H 'Accept: application/vnd.github.v3.raw' -O -L https://lpgithub.dev.lprnd.net/raw/UI-Group/le-ui-gitflow/master/bin/setup.sh
+curl -H 'Authorization: token 8ba9fcb4212fd9ba15371d60af1c3d10c73b5522' \
+    -H 'Accept: application/vnd.github.v3.raw' \
+    -O -L https://lpgithub.dev.lprnd.net/raw/UI-Group/le-ui-gitflow/master/bin/setup.sh
 chmod +x setup.sh
 ./setup.sh
 ```

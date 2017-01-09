@@ -14,12 +14,15 @@ version() {
 }
 
 main() {
+	# no arguments, just show help and quit
 	if [ "$#" -lt 1 ]; then
 		usage; exit 1
 	fi
 
+	# retrieve the subcommand and remove it from the arguments list
 	local subcommand="$1"; shift
 
+	# handle special cases (subcommand is help/version)
 	case $subcommand in
 		"-h"|"--help")
 			usage; exit 0
@@ -29,18 +32,22 @@ main() {
 			;;
 	esac
 
+	# verify the subcommand script exists
 	local workingdir=$(dirname "$(echo "$0" | sed -e 's,\\,/,g')")
 	if [ ! -e "$workingdir/git-le-$subcommand" ]; then
 		usage; exit 1
 	fi
 
+	# include the subcommand script into the current shell
 	source "$workingdir/git-le-$subcommand"
 
+	# verify the subcommand main function exists
 	local has_subcommand=type "cmd_$subcommand";
 	if [ ! has_subcommand ]; then
 		usage; exit 1
 	fi
 
+	# delegate the subcommand to the appropriate function
 	cmd_$subcommand "$@"
 }
 

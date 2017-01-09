@@ -5,20 +5,25 @@ if [ -z "$INSTALL_PREFIX" ] ; then
 	INSTALL_PREFIX="/usr/local/bin"
 fi
 
-if [ -z "$REPO_NAME" ] ; then
-	REPO_NAME="le-ui-gitflow"
+if [ -z "$REPO_URL" ] ; then
+	REPO_URL="http://lpgithub.dev.lprnd.net/UI-Group/le-ui-gitflow.git"
 fi
 
-if [ -z "$REPO_HOME" ] ; then
-	REPO_HOME="http://lpgithub.dev.lprnd.net/UI-Group/le-ui-gitflow.git"
-fi
-
+REPO_NAME="le-ui-gitflow"
 EXEC_FILES="git-le"
 SCRIPT_FILES="git-le-wat git-le-foo"
 
 echo "### git-le setup ###"
 
 case "$1" in
+	help)
+		echo "usage: [environment] setup.sh [install|uninstall]"
+		echo "environment:"
+		echo "   INSTALL_PREFIX=$INSTALL_PREFIX"
+		echo "   REPO_URL=$REPO_URL"
+		echo "   REPO_PATH=$REPO_PATH"
+		exit
+		;;
 	uninstall)
 		echo "uninstalling git-le from $INSTALL_PREFIX"
 		if [ -d "$INSTALL_PREFIX" ] ; then
@@ -32,28 +37,22 @@ case "$1" in
 		fi
 		exit
 		;;
-	help)
-		echo "usage: [environment] install.sh [install|uninstall]"
-		echo "environment:"
-		echo "   INSTALL_PREFIX=$INSTALL_PREFIX"
-		echo "   REPO_HOME=$REPO_HOME"
-		echo "   REPO_NAME=$REPO_NAME"
-		exit
-		;;
 	*)
 		echo "installing git-le to $INSTALL_PREFIX"
-		if [ -d "$REPO_NAME" -a -d "$REPO_NAME/.git" ] ; then
-			echo "Using existing repo: $REPO_NAME"
+		if [ -d "$REPO_PATH" -a -d "$REPO_PATH/.git" ] ; then
+			echo "Using existing repo: $REPO_PATH"
+			repo_dir="$REPO_PATH"
 		else
 			echo "cloning repo from github to $REPO_NAME"
-			git clone "$REPO_HOME" "$REPO_NAME"
+			git clone "$REPO_URL" "$REPO_NAME"
+			repo_dir="$REPO_NAME"
 		fi
 		install -v -d -m 0755 "$INSTALL_PREFIX"
 		for exec_file in $EXEC_FILES ; do
-			install -v -m 0755 "$REPO_NAME/$exec_file" "$INSTALL_PREFIX"
+			install -v -m 0755 "$repo_dir/$exec_file" "$INSTALL_PREFIX"
 		done
 		for script_file in $SCRIPT_FILES ; do
-			install -v -m 0644 "$REPO_NAME/commands/$script_file" "$INSTALL_PREFIX"
+			install -v -m 0644 "$repo_dir/commands/$script_file" "$INSTALL_PREFIX"
 		done
 		exit
 		;;
