@@ -11,7 +11,7 @@ fi
 
 REPO_NAME="le-ui-gitflow"
 EXEC_FILES="git-le"
-SCRIPT_FILES="git-le-wat git-le-foo"
+SCRIPT_FILES="git-le-wat git-le-foo gitle-private"
 
 echo "### git-le setup ###"
 

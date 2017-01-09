@@ -9,14 +9,14 @@
 
 ### install
 
-- create a temporary directory, and navigate to it:
+- create a temporary directory (or use an existing one), and navigate to it:
 
 ```sh
 mkdir ~/tmp
 cd ~/tmp
 ```
 
-- run this:
+- get the setup script, and run it:
 
 ```sh
 curl -H 'Authorization: token 8ba9fcb4212fd9ba15371d60af1c3d10c73b5522' \
@@ -28,13 +28,13 @@ chmod +x setup.sh
 
 ### uninstall
 
-- navigate to the temporary directory created during install:
+- navigate to the temporary directory used during install:
 
 ```sh
 cd ~/tmp
 ```
 
-- run this:
+- run the setup script again, with the `uninstall` option:
 
 ```sh
 ./setup.sh uninstall
@@ -58,6 +58,15 @@ all the paths it copies files into, and manually remove them.
 
 # usage
 
-- *nix users, just fire up the terminal. you're good to go.
-- windows ppl, open your git-bash shell.
+this tool only supports bash/msysgit/mingw32, so:
 
+- *nix users, just fire up the terminal. you're good to go.
+- windows ppl, open your [git-bash][1], please.
+
+
+todo - document usage some more..
+
+
+
+
+[1]: https://git-scm.com/download/win
