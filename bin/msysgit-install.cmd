@@ -32,6 +32,7 @@ xcopy "%~dp0\..\git-le"            "%GIT_HOME%\usr\bin"                 /Y /R /F
 if errorlevel 4 if not errorlevel 5 goto :AccessDenied
 if errorlevel 1 set ERR=1
 xcopy "%~dp0\..\commands\git-le*"           "%GIT_HOME%\usr\bin"                 /Y /R /F || set ERR=1
+xcopy "%~dp0\..\commands\gitle-*"           "%GIT_HOME%\usr\bin"                 /Y /R /F || set ERR=1
 
 if %ERR%==1 choice /T 30 /C Y /D Y /M "Some unexpected errors happened. Sorry, you'll have to fix them by yourself."
 
