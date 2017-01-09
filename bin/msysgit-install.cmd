@@ -14,6 +14,16 @@ exit /B 1
 :GitHomeOK
 set ERR=0
 
+setlocal
+set REPO_URL="http://lpgithub.dev.lprnd.net/UI-Group/le-ui-gitflow.git"
+set REPO_NAME="le-ui-gitflow"
+if exist "%~dp0\%REPO_NAME%" goto :RepoOk
+call git clone "%REPO_URL%" "%REPO_NAME%" || set ERR=1
+endlocal
+
+:RepoOk
+set ERR=0
+
 echo Installing GitLE into "%GIT_HOME%\usr\bin"...
 
 if not exist "%GIT_HOME%\usr\bin\git-le" goto :Install
@@ -29,11 +39,11 @@ for /F %%i in ("%GIT_HOME%\usr\bin\gitle-*") do if exist "%%~fi" del /F /Q "%%~f
 
 :Install
 echo Copying files...
-xcopy "%~dp0\..\git-le"                     "%GIT_HOME%\usr\bin"                 /Y /R /F
+xcopy "%~dp0\%REPO_NAME%\git-le"                     "%GIT_HOME%\usr\bin"                 /Y /R /F
 if errorlevel 4 if not errorlevel 5 goto :AccessDenied
 if errorlevel 1 set ERR=1
-xcopy "%~dp0\..\commands\git-le*"           "%GIT_HOME%\usr\bin"                 /Y /R /F || set ERR=1
-xcopy "%~dp0\..\commands\gitle-*"           "%GIT_HOME%\usr\bin"                 /Y /R /F || set ERR=1
+xcopy "%~dp0\%REPO_NAME%\commands\git-le*"           "%GIT_HOME%\usr\bin"                 /Y /R /F || set ERR=1
+xcopy "%~dp0\%REPO_NAME%\commands\gitle-*"           "%GIT_HOME%\usr\bin"                 /Y /R /F || set ERR=1
 
 if %ERR%==1 choice /T 30 /C Y /D Y /M "Some unexpected errors happened. Sorry, you'll have to fix them by yourself."
 
