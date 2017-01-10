@@ -4,7 +4,7 @@ echo "- - - git-le setup - - -"
 
 repo_name="le-ui-gitflow"
 exec_files="git-le"
-script_files="git-le-wat git-le-foo gitle-private-cmd"
+script_files="git-le-feature gitle-common"
 
 if [[ "$OSTYPE" == "linux-gnu" || "$OSTYPE" == "darwin"* ]]; then # linux / mac osx
 	INSTALL_PREFIX="/usr/local/bin"
@@ -62,7 +62,7 @@ case "$1" in
 			install -v -m 0755 "$REPO_PATH/$exec_file" "$INSTALL_PREFIX"
 		done
 		for script_file in $script_files ; do
-			install -v -m 0644 "$REPO_PATH/commands/$script_file" "$INSTALL_PREFIX"
+			install -v -m 0644 "$REPO_PATH/$script_file" "$INSTALL_PREFIX"
 		done
 		exit
 		;;

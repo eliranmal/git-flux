@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+
+exists() {
+	type $1 >/dev/null 2>&1;
+}

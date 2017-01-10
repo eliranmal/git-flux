@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 usage() {
-    echo "usage: git le foo [name]"
+    echo "usage: git le feature [name]"
     echo
 }
 

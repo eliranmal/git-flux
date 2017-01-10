@@ -1,14 +1,16 @@
 #!/usr/bin/env sh
 
 usage() {
-	echo "usage: git le <subcommand>"
 	echo
-	echo "Available subcommands are:"
-	echo "wat <name>  Print out Hello World or Hello <name> (if provided)"
+	echo "usage: git le <sub_command>"
+	echo
+	echo "Available sub_commands are:"
+	echo "feature <action>  feature stuff"
 	echo
 }
 
 version() {
+	echo
 	echo "le git plugin v0.1.0"
 	echo
 }
@@ -19,11 +21,11 @@ main() {
 		usage; exit 1
 	fi
 
-	# retrieve the subcommand and remove it from the arguments list
-	local subcommand="$1"; shift
+	# retrieve the sub-command and remove it from the arguments list
+	local sub_command="$1"; shift
 
-	# handle special cases (subcommand is help/version)
-	case $subcommand in
+	# handle special cases (help/version)
+	case $sub_command in
 		"-h"|"--help")
 			usage; exit 0
 			;;
@@ -32,23 +34,35 @@ main() {
 			;;
 	esac
 
-	# verify the subcommand script exists
-	local workingdir=$(dirname "$(echo "$0" | sed -e 's,\\,/,g')")
-	if [ ! -e "$workingdir/git-le-$subcommand" ]; then
+	local working_dir=$(dirname "$(echo "$0" | sed -e 's,\\,/,g')")
+	
+	# include common utilities
+	source "$working_dir/gitle-common"
+
+	# verify the sub-command script exists
+	if [ ! -e "$working_dir/git-le-$sub_command" ]; then
 		usage; exit 1
 	fi
 
-	# include the subcommand script into the current shell
-	source "$workingdir/git-le-$subcommand"
+	# include the sub-command script in the current shell
+	source "$working_dir/git-le-$sub_command"
 
-	# verify the subcommand main function exists
-	local has_subcommand=type "cmd_$subcommand";
-	if [ ! has_subcommand ]; then
+
+	# retrieve the action and remove it from the arguments list
+	local action="$1"; shift
+
+	# verify the action exists
+	if [[ -z $action || $action = "help" ]]; then
+		usage; exit 0
+	fi
+
+	# verify the action function is available
+	if ! exists "cmd_$action"; then
 		usage; exit 1
 	fi
 
-	# delegate the subcommand to the appropriate function
-	cmd_$subcommand "$@"
+	# delegate the sub_command to the appropriate action function
+	cmd_${action} "$@"
 }
 
 main "$@"
