@@ -9,7 +9,7 @@ script_files="git-le-feature gitle-common"
 if [[ "$OSTYPE" == "linux-gnu" || "$OSTYPE" == "darwin"* ]]; then # linux / mac osx
 	INSTALL_PREFIX="/usr/local/bin"
 elif [[ "$OSTYPE" == "msys" ]]; then # mingw
-	INSTALL_PREFIX="$EXEPATH/usr/bin"
+	INSTALL_PREFIX="$EXEPATH/usr/local/bin"
 fi
 
 if [ -z "$INSTALL_PREFIX" ] ; then
