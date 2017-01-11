@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 SUBDIRECTORY_OK="yes"
-USAGE="<feature|...> [action]"
+USAGE="<feature|team> [action]"
 # long-usage is shown (appended) when using the `-h` flag
 #LONG_USAGE="
 #heading

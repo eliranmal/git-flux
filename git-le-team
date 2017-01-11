@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-USAGE="feature <pull|push>"
+USAGE="team <pull|push>"
 
 cmd_pull() {
 	die "watwatwat pull"
