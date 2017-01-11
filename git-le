@@ -32,11 +32,6 @@ main() {
 	# retrieve the action and remove it from the arguments list
 	local action="$1"; shift
 
-	# verify the action exists
-	if [[ -z $action || $action = "help" ]]; then
-		usage
-	fi
-
 	# verify the action function is available
 	if ! exists "cmd_$action"; then
 		usage
