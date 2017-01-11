@@ -1,24 +1,34 @@
 #!/usr/bin/env sh
 
+SUBDIRECTORY_OK="yes"
 USAGE="<feature|...> [action]"
+# long-usage is shown when using the `-h` flag
+#LONG_USAGE="
+#heading
+#
+#subheading
+#
+#
+#content, content, content
+#"
 
 main() {
 
 	# include git utilities lib
 	source "$(git --exec-path)/git-sh-setup"
 
-	# no arguments, just show usage and quit
+	# no arguments, just show usage and abort
 	if [ "$#" -lt 1 ]; then
 		usage
 	fi
-
-	# retrieve the sub-command and remove it from the arguments list
-	local sub_command="$1"; shift
 
 	local working_dir=$(dirname "$(echo "$0" | sed -e 's,\\,/,g')")
 	
 	# include common utilities
 	source "$working_dir/gitle-common"
+
+	# retrieve the sub-command and remove it from the arguments list
+	local sub_command="$1"; shift
 
 	# verify the sub-command script exists
 	if [ ! -e "$working_dir/git-le-$sub_command" ]; then
