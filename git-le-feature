@@ -3,9 +3,9 @@
 USAGE="feature <start|stop>"
 
 cmd_start() {
-	die "watwatwat"
+	die "watwatwat start"
 }
 
 cmd_stop() {
-	usage
+	die "watwatwat stop"
 }
