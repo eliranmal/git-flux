@@ -4,7 +4,7 @@ echo "- - - git-le setup - - -"
 
 repo_name="le-ui-gitflow"
 exec_files="git-le"
-script_files="git-le-feature gitle-common"
+script_files="gitle-common git-le-feature git-le-team"
 
 if [[ "$OSTYPE" == "linux-gnu" || "$OSTYPE" == "darwin"* ]]; then # linux / mac osx
 	INSTALL_PREFIX="/usr/local/bin"
@@ -50,13 +50,13 @@ case "$1" in
 			echo "the '$INSTALL_PREFIX' directory was not found. use the INSTALL_PREFIX environment variable to set it manually."
 			exit
 		fi
-		echo "installing git-le to $INSTALL_PREFIX"
 		if [ -d "$REPO_PATH" -a -d "$REPO_PATH/.git" ]; then
 			echo "using existing repo: $REPO_PATH"
 		else
 			echo "cloning repo from github to $repo_name"
 			git clone "$REPO_URL" "$repo_name"
 		fi
+		echo "installing git-le to $INSTALL_PREFIX"
 		install -v -d -m 0755 "$INSTALL_PREFIX"
 		for exec_file in $exec_files; do
 			install -v -m 0755 "$REPO_PATH/$exec_file" "$INSTALL_PREFIX"

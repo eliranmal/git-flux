@@ -1,0 +1,11 @@
+#!/usr/bin/env sh
+
+USAGE="feature <pull|push>"
+
+cmd_pull() {
+	die "watwatwat pull"
+}
+
+cmd_push() {
+	die "watwatwat push"
+}

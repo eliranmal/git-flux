@@ -2,7 +2,7 @@
 
 SUBDIRECTORY_OK="yes"
 USAGE="<feature|...> [action]"
-# long-usage is shown when using the `-h` flag
+# long-usage is shown (appended) when using the `-h` flag
 #LONG_USAGE="
 #heading
 #
