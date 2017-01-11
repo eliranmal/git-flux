@@ -6,6 +6,7 @@ repo_name="le-ui-gitflow"
 exec_files="git-le"
 script_files="git-le-feature gitle-common"
 
+# todo - try looking up the GIT_HOME and/or finding the git executable (whereis git) instead of os-sniffing
 if [[ "$OSTYPE" == "linux-gnu" || "$OSTYPE" == "darwin"* ]]; then # linux / mac osx
 	INSTALL_PREFIX="/usr/local/bin"
 elif [[ "$OSTYPE" == "msys" ]]; then # mingw
