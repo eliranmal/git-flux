@@ -2,14 +2,14 @@
 
 
 main() {
-	echo "- - - git-le setup - - -"
 	local repo_name="le-ui-gitflow"
 	local exec_files="git-le"
 	local script_files="gitle-common git-le-feature git-le-team"
+	local cmd_name="$1"
 	ensure_install_prefix
 	ensure_repo_url
 	ensure_repo_path
-	call_command "$1"
+	call_command "$cmd_name"
 }
 
 call_command() {	
@@ -36,7 +36,7 @@ usage() {
 
 do_uninstall() {
 	validate_install_prefix
-	echo "uninstalling git-le from $INSTALL_PREFIX"
+	echo "uninstalling git-le from '$INSTALL_PREFIX'"
 	for script_file in $script_files $exec_files; do
 		echo "rm -vf $INSTALL_PREFIX/$script_file"
 		rm -vf "$INSTALL_PREFIX/$script_file"
@@ -51,7 +51,7 @@ do_install() {
 		echo "cloning repo from github to '$repo_name'"
 		git clone "$REPO_URL" "$repo_name"
 	fi
-	echo "installing git-le to $INSTALL_PREFIX"
+	echo "installing git-le to '$INSTALL_PREFIX'"
 	install -v -d -m 0755 "$INSTALL_PREFIX"
 	for exec_file in $exec_files; do
 		install -v -m 0755 "$REPO_PATH/$exec_file" "$INSTALL_PREFIX"
@@ -75,9 +75,9 @@ ensure_repo_path() {
 
 ensure_install_prefix() {
 	if [ -z "$INSTALL_PREFIX" ]; then
-		if [[ "$OSTYPE" = "linux-gnu" || "$OSTYPE" = "darwin"* ]]; then # linux / mac osx
+		if [[ $OSTYPE = "linux-gnu" || $OSTYPE = "darwin"* ]]; then # linux / mac osx
 			INSTALL_PREFIX="/usr/local/bin"
-		elif [[ "$OSTYPE" = "msys" ]]; then # mingw
+		elif [[ $OSTYPE = "msys" ]]; then # mingw
 			INSTALL_PREFIX="$EXEPATH/usr/local/bin"
 		fi
 	fi
