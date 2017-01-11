@@ -1,38 +1,19 @@
 #!/usr/bin/env sh
 
-usage() {
-	echo
-	echo "usage: git le <sub_command>"
-	echo
-	echo "Available sub_commands are:"
-	echo "feature <action>  feature stuff"
-	echo
-}
-
-version() {
-	echo
-	echo "le git plugin v0.1.0"
-	echo
-}
+USAGE="<feature|...> <start|stop>"
 
 main() {
-	# no arguments, just show help and quit
+
+	# include git utilities lib
+	source "$(git --exec-path)/git-sh-setup"
+
+	# no arguments, just show usage and quit
 	if [ "$#" -lt 1 ]; then
-		usage; exit 1
+		usage
 	fi
 
 	# retrieve the sub-command and remove it from the arguments list
 	local sub_command="$1"; shift
-
-	# handle special cases (help/version)
-	case $sub_command in
-		"-h"|"--help")
-			usage; exit 0
-			;;
-		"-v"|"--version")
-			version; exit 0
-			;;
-	esac
 
 	local working_dir=$(dirname "$(echo "$0" | sed -e 's,\\,/,g')")
 	
@@ -41,10 +22,10 @@ main() {
 
 	# verify the sub-command script exists
 	if [ ! -e "$working_dir/git-le-$sub_command" ]; then
-		usage; exit 1
+		usage
 	fi
 
-	# include the sub-command script in the current shell
+	# include the sub-command script
 	source "$working_dir/git-le-$sub_command"
 
 
@@ -53,12 +34,12 @@ main() {
 
 	# verify the action exists
 	if [[ -z $action || $action = "help" ]]; then
-		usage; exit 0
+		usage
 	fi
 
 	# verify the action function is available
 	if ! exists "cmd_$action"; then
-		usage; exit 1
+		usage
 	fi
 
 	# delegate the sub_command to the appropriate action function
