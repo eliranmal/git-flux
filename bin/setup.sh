@@ -1,69 +1,96 @@
 #!/usr/bin/env bash
 
-echo "- - - git-le setup - - -"
 
-repo_name="le-ui-gitflow"
-exec_files="git-le"
-script_files="gitle-common git-le-feature git-le-team"
+main() {
+	echo "- - - git-le setup - - -"
+	local repo_name="le-ui-gitflow"
+	local exec_files="git-le"
+	local script_files="gitle-common git-le-feature git-le-team"
+	ensure_install_prefix
+	ensure_repo_url
+	ensure_repo_path
+	call_command "$1"
+}
 
-if [[ "$OSTYPE" == "linux-gnu" || "$OSTYPE" == "darwin"* ]]; then # linux / mac osx
-	INSTALL_PREFIX="/usr/local/bin"
-elif [[ "$OSTYPE" == "msys" ]]; then # mingw
-	INSTALL_PREFIX="$EXEPATH/usr/local/bin"
-fi
+call_command() {	
+	case "$1" in
+		help)
+			usage
+			;;
+		uninstall)
+			do_uninstall
+			;;
+		*)
+			do_install
+			;;
+	esac
+}
 
-if [ -z "$INSTALL_PREFIX" ]; then
-	echo "could not resolve install path prefix. use the INSTALL_PREFIX environment variable to set it manually."
-fi
+usage() {
+	echo "usage: [environment] setup.sh [install|uninstall]"
+	echo "environment:"
+	echo "   REPO_URL=$REPO_URL"
+	echo "   REPO_PATH=$REPO_PATH"
+	echo "   INSTALL_PREFIX=$INSTALL_PREFIX"
+}
 
-if [ -z "$REPO_URL" ]; then
-	REPO_URL="http://lpgithub.dev.lprnd.net/WebJedi/le-ui-gitflow.git"
-fi
+do_uninstall() {
+	validate_install_prefix
+	echo "uninstalling git-le from $INSTALL_PREFIX"
+	for script_file in $script_files $exec_files; do
+		echo "rm -vf $INSTALL_PREFIX/$script_file"
+		rm -vf "$INSTALL_PREFIX/$script_file"
+	done
+}
 
-if [ -z "$REPO_PATH" ]; then
-	REPO_PATH="$repo_name"
-fi
+do_install() {
+	validate_install_prefix
+	if [ -d "$REPO_PATH" -a -d "$REPO_PATH/.git" ]; then
+		echo "using existing repo in '$REPO_PATH'"
+	else
+		echo "cloning repo from github to '$repo_name'"
+		git clone "$REPO_URL" "$repo_name"
+	fi
+	echo "installing git-le to $INSTALL_PREFIX"
+	install -v -d -m 0755 "$INSTALL_PREFIX"
+	for exec_file in $exec_files; do
+		install -v -m 0755 "$REPO_PATH/$exec_file" "$INSTALL_PREFIX"
+	done
+	for script_file in $script_files; do
+		install -v -m 0644 "$REPO_PATH/$script_file" "$INSTALL_PREFIX"
+	done
+}
 
-case "$1" in
-	help)
-		echo "usage: [environment] setup.sh [install|uninstall]"
-		echo "environment:"
-		echo "   REPO_URL=$REPO_URL"
-		echo "   REPO_PATH=$REPO_PATH"
-		echo "   INSTALL_PREFIX=$INSTALL_PREFIX"
-		exit
-		;;
-	uninstall)
-		if [ ! -d "$INSTALL_PREFIX" ]; then
-			echo "the '$INSTALL_PREFIX' directory was not found. use the INSTALL_PREFIX environment variable to set it manually."
-			exit
+ensure_repo_url() {
+	if [ -z "$REPO_URL" ]; then
+		REPO_URL="http://lpgithub.dev.lprnd.net/WebJedi/le-ui-gitflow.git"
+	fi
+}
+
+ensure_repo_path() {
+	if [ -z "$REPO_PATH" ]; then
+		REPO_PATH="$repo_name"
+	fi
+}
+
+ensure_install_prefix() {
+	if [ -z "$INSTALL_PREFIX" ]; then
+		if [[ "$OSTYPE" = "linux-gnu" || "$OSTYPE" = "darwin"* ]]; then # linux / mac osx
+			INSTALL_PREFIX="/usr/local/bin"
+		elif [[ "$OSTYPE" = "msys" ]]; then # mingw
+			INSTALL_PREFIX="$EXEPATH/usr/local/bin"
 		fi
-		echo "uninstalling git-le from $INSTALL_PREFIX"
-		for script_file in $script_files $exec_files; do
-			echo "rm -vf $INSTALL_PREFIX/$script_file"
-			rm -vf "$INSTALL_PREFIX/$script_file"
-		done
-		exit
-		;;
-	*)
-		if [ ! -d "$INSTALL_PREFIX" ]; then
-			echo "the '$INSTALL_PREFIX' directory was not found. use the INSTALL_PREFIX environment variable to set it manually."
-			exit
-		fi
-		if [ -d "$REPO_PATH" -a -d "$REPO_PATH/.git" ]; then
-			echo "using existing repo: $REPO_PATH"
-		else
-			echo "cloning repo from github to $repo_name"
-			git clone "$REPO_URL" "$repo_name"
-		fi
-		echo "installing git-le to $INSTALL_PREFIX"
-		install -v -d -m 0755 "$INSTALL_PREFIX"
-		for exec_file in $exec_files; do
-			install -v -m 0755 "$REPO_PATH/$exec_file" "$INSTALL_PREFIX"
-		done
-		for script_file in $script_files; do
-			install -v -m 0644 "$REPO_PATH/$script_file" "$INSTALL_PREFIX"
-		done
-		exit
-		;;
-esac
+	fi
+}
+
+validate_install_prefix() {
+	if [ -z "$INSTALL_PREFIX" ]; then
+		echo "the install prefix path was not set. use the INSTALL_PREFIX environment variable to set it manually."
+		exit 1
+	elif [ ! -d "$INSTALL_PREFIX" ]; then
+		echo "the install prefix directory '$INSTALL_PREFIX' was not found."
+		exit 1
+	fi
+}
+
+main "$@"
