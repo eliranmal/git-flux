@@ -1,0 +1,7 @@
+#!/usr/bin/env sh
+
+USAGE="init"
+
+cmd_default() {
+	die "> default"
+}

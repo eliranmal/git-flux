@@ -1,5 +1,5 @@
 #!/usr/bin/env sh
 
-exists() {
+is_available() {
 	type $1 >/dev/null 2>&1;
 }

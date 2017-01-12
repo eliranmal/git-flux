@@ -3,9 +3,9 @@
 USAGE="feature <start|stop>"
 
 cmd_start() {
-	die "watwatwat start"
+	die "> start"
 }
 
 cmd_stop() {
-	die "watwatwat stop"
+	die "> stop"
 }

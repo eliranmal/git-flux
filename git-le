@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 SUBDIRECTORY_OK="yes"
-USAGE="<feature|team> [action]"
+USAGE="<init|feature|team> [action]"
 # long-usage is shown (appended) when using the `-h` flag
 #LONG_USAGE="
 #heading
@@ -14,11 +14,11 @@ USAGE="<feature|team> [action]"
 
 main() {
 
-	# include git utilities lib
+	# include git utilities library
 	source "$(git --exec-path)/git-sh-setup"
 
 	# no arguments, just show usage and abort
-	if [ "$#" -lt 1 ]; then
+	if [[ $# -lt 1 ]]; then
 		usage
 	fi
 
@@ -31,7 +31,7 @@ main() {
 	local sub_command="$1"; shift
 
 	# verify the sub-command script exists
-	if [ ! -e "$working_dir/git-le-$sub_command" ]; then
+	if [[ ! -e "$working_dir/git-le-$sub_command" ]]; then
 		usage
 	fi
 
@@ -41,9 +41,13 @@ main() {
 
 	# retrieve the action and remove it from the arguments list
 	local action="$1"; shift
+	
+	if [[ -z $action ]]; then
+		action="default"
+	fi
 
 	# verify the action function is available
-	if ! exists "cmd_$action"; then
+	if ! is_available "cmd_$action"; then
 		usage
 	fi
 
