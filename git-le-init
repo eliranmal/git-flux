@@ -1,7 +1,58 @@
 #!/usr/bin/env sh
 
+# note that the "✔" and "✘" characters will not show in git-bash (do we care?)
+
 USAGE="init"
 
 cmd_default() {
-	die "> default"
+	
+	echo
+	echo "initializing git-le"
+	echo
+	
+	local default_suggestion
+
+	default_suggestion="team_"
+	printf "team branch prefix? [$default_suggestion] "; read answer
+	local team_branch_prefix=${answer:-$default_suggestion}
+
+	printf "team branch suffix? "; read answer
+	if [[ -z $answer ]]; then
+		die "✘ team branch suffix is mandatory"
+	fi
+	local team_branch_suffix=$answer
+
+	default_suggestion="${team_branch_suffix}_"
+	printf "feature branch prefix? [$default_suggestion] "; read answer
+	local feature_branch_prefix=${answer:-$default_suggestion}
+
+	default_suggestion="integration"
+	printf "integration branch? [$default_suggestion] "; read answer
+	local integration_branch=${answer:-$default_suggestion}
+
+	default_suggestion="rc_"
+	printf "release candidate branch prefix? [$default_suggestion] "; read answer
+	local release_candidate_branch_prefix=${answer:-$default_suggestion}
+
+	default_suggestion="hf_"
+	printf "hot-fix branch prefix? [$default_suggestion] "; read answer
+	local hot_fix_branch_prefix=${answer:-$default_suggestion}
+
+	echo
+	echo "team branch: '$team_branch_prefix$team_branch_suffix'"
+	echo "feature branch prefix: '$feature_branch_prefix'"
+	echo "integration branch: '$integration_branch'"
+	echo "release candidate branch prefix: '$release_candidate_branch_prefix'"
+	echo "hot-fix branch prefix: '$hot_fix_branch_prefix'"
+	echo
+
+	printf "is this ok? [y/n] "; read answer
+	if [[ $answer = "y" ]]; then
+	#	git config --global gitle.branch.team $team_branch
+	#	git config --global gitle.branch.integration $integration_branch
+		echo "✔ all done!"
+	else
+		echo "initialization aborted"
+	fi
+	echo
 }
