@@ -4,39 +4,38 @@
 
 USAGE="init"
 
-cmd_default() {
-	
+cmd_default() {	
 	echo
 	echo "initializing git-le"
 	echo
 	
 	local default_suggestion
 
-	default_suggestion="team_"
-	printf "team branch prefix? [$default_suggestion] "; read answer
-	local team_branch_prefix=${answer:-$default_suggestion}
-
-	printf "team branch suffix? "; read answer
+	printf "team name? "; read answer
 	if [[ -z $answer ]]; then
-		die "✘ team branch suffix is mandatory"
+		die "✘ team name is mandatory"
 	fi
-	local team_branch_suffix=$answer
+	local team_branch_suffix=$(escape $answer)
 
 	default_suggestion="${team_branch_suffix}_"
 	printf "feature branch prefix? [$default_suggestion] "; read answer
-	local feature_branch_prefix=${answer:-$default_suggestion}
+	local feature_branch_prefix=$(escape ${answer:-$default_suggestion})
+
+	default_suggestion="team_"
+	printf "team branch prefix? [$default_suggestion] "; read answer
+	local team_branch_prefix=$(escape ${answer:-$default_suggestion})
 
 	default_suggestion="integration"
 	printf "integration branch? [$default_suggestion] "; read answer
-	local integration_branch=${answer:-$default_suggestion}
+	local integration_branch=$(escape ${answer:-$default_suggestion})
 
 	default_suggestion="rc_"
 	printf "release candidate branch prefix? [$default_suggestion] "; read answer
-	local release_candidate_branch_prefix=${answer:-$default_suggestion}
+	local release_candidate_branch_prefix=$(escape ${answer:-$default_suggestion})
 
 	default_suggestion="hf_"
 	printf "hot-fix branch prefix? [$default_suggestion] "; read answer
-	local hot_fix_branch_prefix=${answer:-$default_suggestion}
+	local hot_fix_branch_prefix=$(escape ${answer:-$default_suggestion})
 
 	echo
 	echo "team branch: '$team_branch_prefix$team_branch_suffix'"
@@ -50,9 +49,13 @@ cmd_default() {
 	if [[ $answer = "y" ]]; then
 	#	git config --global gitle.branch.team $team_branch
 	#	git config --global gitle.branch.integration $integration_branch
-		echo "✔ all done!"
+		echo "✔ all done! yay!"
 	else
-		echo "initialization aborted"
+		echo "✘ initialization aborted. i knew you'd chicken out."
 	fi
 	echo
+}
+
+escape() {
+	echo "$1" | sed 's/\([-]\)/_/g'
 }
