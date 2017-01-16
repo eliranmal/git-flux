@@ -2,7 +2,7 @@
 
 # note that the "✔" and "✘" characters will not show in git-bash (do we care?)
 
-USAGE="init"
+USAGE="init [-h]"
 
 LONG_USAGE="
 configures the le-git-flow environment. questions are:
