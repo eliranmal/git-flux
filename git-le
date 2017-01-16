@@ -16,7 +16,7 @@ main() {
 
 	# no arguments, just show usage and abort
 	if [[ $# -lt 1 ]]; then
-		usage
+		echo $USAGE; exit 0
 	fi
 
 	local working_dir=$(dirname "$(echo "$0" | sed -e 's,\\,/,g')")
@@ -29,7 +29,7 @@ main() {
 
 	# verify the sub-command script exists
 	if [[ ! -e "$working_dir/git-le-$sub_command" ]]; then
-		usage
+		echo $USAGE; exit 0
 	fi
 
 	# include the sub-command script
