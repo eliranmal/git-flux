@@ -64,7 +64,7 @@ this tool only supports bash/mingw32, so:
 note that you can use the `-h` flag anywhere to show full usage.
 
 
-### available commands
+### commands
 
 
 #### `init`
