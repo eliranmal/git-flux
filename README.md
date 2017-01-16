@@ -13,7 +13,7 @@ this tool only supports bash/mingw32, so:
 
 ## setup
 
-### install
+#### install
 
 - create a temporary directory (or use an existing one), and navigate to it:
   
@@ -42,7 +42,7 @@ this tool only supports bash/mingw32, so:
   ./setup.sh
   ```
 
-### uninstall
+#### uninstall
 
 - navigate to the temporary directory used during install:
   
@@ -64,29 +64,29 @@ this tool only supports bash/mingw32, so:
 note that you can use the `-h` flag anywhere to show full usage.
 
 
-### commands
+#### commands
 
 
-#### `init`
+##### `init`
 
 initializes the repository with information about branch names etc. 
 (this command has no actions).
 
 
-#### `feature`
+##### `feature`
 
 handles feature branches.
 
-##### available actions
+###### available actions
 
 - **`todo`**: some action...
 
 
-#### `team`
+##### `team`
 
 handles integration with the team branch.
 
-##### available actions
+###### available actions
 
 - **`todo`**: some action...
 
