@@ -5,59 +5,79 @@
 USAGE="init [-h]"
 
 LONG_USAGE="
-configures the le-git-flow environment. questions are:
+configures the le-git-flow environment.
 
 1) feature branch prefix?
-	a prefix for feature branch names, e.g. \"foo_\".
+	a prefix for feature branch names, e.g. \"foo\".
 2) team branch prefix?
-	your team's branch name prefix, defaults to \"team_\".
+	your team's branch name prefix, defaults to \"team\".
 3) team branch suffix?
 	your team's branch name suffix, e.g. \"foo\".
 4) integration branch?
 	the integration branch name, defaults to \"integration\".
 5) release candidate branch prefix?
-	a prefix for release candidate branch names, defaults to \"rc_\".
+	a prefix for release candidate branch names, defaults to \"rc\".
 6) hot-fix branch prefix?
-	a prefix for hot-fix branch names, defaults to \"hf_\".
+	a prefix for hot-fix branch names, defaults to \"hf\".
 
-please leave all defaults unchanged.
 
+- please leave all defaults unchanged.
+- the delimiter used to concatenate the prefixes/suffixes is the underscore character (\"_\").
+- any dashes in branch names will be replaced with underscores.
 "
 
 cmd_default() {	
 	echo
 	echo "initializing git-le"
 	echo
-	
+
+	git config --global --unset le-gitflow.initialized
+
 	local default_suggestion
+	local delimiter="_"
 
 	printf "feature branch prefix? "; read answer
 	if [[ -z $answer ]]; then
 		die "✘ feature branch prefix is mandatory"
 	fi
-	local feature_branch_prefix=$(escape $answer)
+	local feature_branch_prefix=$(escape_branch_name $answer)
 
-	default_suggestion="team_"
+	default_suggestion="team"
 	printf "team branch prefix? [$default_suggestion] "; read answer
-	local team_branch_prefix=$(escape ${answer:-$default_suggestion})
+	local team_branch_prefix=$(escape_branch_name ${answer:-$default_suggestion})
 
 	printf "team branch suffix? "; read answer
 	if [[ -z $answer ]]; then
 		die "✘ team branch suffix is mandatory"
 	fi
-	local team_branch_suffix=$(escape $answer)
+	local team_branch_suffix=$(escape_branch_name $answer)
+	
+	local team_branch="$team_branch_prefix$delimiter$team_branch_suffix"
+	if ! git_local_branch_exists "$team_branch"; then
+		die "✘ team branch '$team_branch' does not exist locally, you should create it first."
+	fi
+	if ! git_remote_branch_exists "origin/$team_branch"; then
+		die "✘ team branch '$team_branch' does not exist on the remote, you should create it first."
+	fi
 
 	default_suggestion="integration"
 	printf "integration branch? [$default_suggestion] "; read answer
-	local integration_branch=$(escape ${answer:-$default_suggestion})
+	local integration_branch=$(escape_branch_name ${answer:-$default_suggestion})
+	
+	if ! git_local_branch_exists "$integration_branch"; then
+		die "✘ integration branch '$integration_branch' does not exist locally, you should create it first."
+	fi
+	if ! git_remote_branch_exists "origin/$integration_branch"; then
+		die "✘ integration branch '$integration_branch' does not exist on the remote, you should create it first."
+	fi
 
-	default_suggestion="rc_"
+	default_suggestion="rc"
 	printf "release candidate branch prefix? [$default_suggestion] "; read answer
-	local release_candidate_branch_prefix=$(escape ${answer:-$default_suggestion})
+	local release_candidate_branch_prefix=$(escape_branch_name ${answer:-$default_suggestion})
 
-	default_suggestion="hf_"
+	default_suggestion="hf"
 	printf "hot-fix branch prefix? [$default_suggestion] "; read answer
-	local hot_fix_branch_prefix=$(escape ${answer:-$default_suggestion})
+	local hot_fix_branch_prefix=$(escape_branch_name ${answer:-$default_suggestion})
 
 	echo
 	echo "ℹ feature branch prefix: '$feature_branch_prefix'"
@@ -70,18 +90,18 @@ cmd_default() {
 
 	printf "is this ok? [y/n] "; read answer
 	if [[ $answer = "y" ]]; then
-		git config --global le-gitflow.branch-prefix.feature "$feature_branch_prefix"
-		git config --global le-gitflow.branch.team "$team_branch_prefix$team_branch_suffix"
+		git config --global le-gitflow.branch-prefix.feature "$feature_branch_prefix$delimiter"
+		git config --global le-gitflow.branch.team "$team_branch"
 		git config --global le-gitflow.branch.integration "$integration_branch"
-		git config --global le-gitflow.branch-prefix.rc "$release_candidate_branch_prefix"
-		git config --global le-gitflow.branch-prefix.hf "$hot_fix_branch_prefix"
+		git config --global le-gitflow.branch-prefix.rc "$release_candidate_branch_prefix$delimiter"
+		git config --global le-gitflow.branch-prefix.hf "$hot_fix_branch_prefix$delimiter"
+		git config --global le-gitflow.initialized "true"
 		echo "✔ all done! you're awesome!"
 	else
-		echo "✘ initialization aborted. i knew you'd chicken out."
+		die "✘ initialization aborted. i knew you'd chicken out."
 	fi
-	echo
 }
 
-escape() {
+escape_branch_name() {
 	echo "$1" | sed 's/-/_/g'
 }
