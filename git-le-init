@@ -1,6 +1,5 @@
 #!/usr/bin/env sh
 
-# note that the "✔" and "✘" characters will not show in git-bash (do we care?)
 
 USAGE="init [-h]"
 
@@ -26,7 +25,13 @@ configures the le-git-flow environment.
 - any dashes in branch names will be replaced with underscores.
 "
 
-cmd_default() {	
+
+cmd_default() {
+	initialize
+}
+
+
+initialize() {
 	echo
 	echo "initializing git-le"
 	echo
@@ -38,7 +43,7 @@ cmd_default() {
 
 	printf "feature branch prefix? "; read answer
 	if [[ -z $answer ]]; then
-		die "✘ feature branch prefix is mandatory"
+		fatal "feature branch prefix is mandatory"
 	fi
 	local feature_branch_prefix=$(escape_branch_name $answer)
 
@@ -48,16 +53,16 @@ cmd_default() {
 
 	printf "team branch suffix? "; read answer
 	if [[ -z $answer ]]; then
-		die "✘ team branch suffix is mandatory"
+		fatal "team branch suffix is mandatory"
 	fi
 	local team_branch_suffix=$(escape_branch_name $answer)
 	
 	local team_branch="$team_branch_prefix$delimiter$team_branch_suffix"
 	if ! git_local_branch_exists "$team_branch"; then
-		die "✘ team branch '$team_branch' does not exist locally, you should create it first."
+		fatal "team branch '$team_branch' does not exist locally, you should create it first."
 	fi
 	if ! git_remote_branch_exists "origin/$team_branch"; then
-		die "✘ team branch '$team_branch' does not exist on the remote, you should create it first."
+		fatal "team branch '$team_branch' does not exist on the remote, you should create it first."
 	fi
 
 	default_suggestion="integration"
@@ -65,10 +70,10 @@ cmd_default() {
 	local integration_branch=$(escape_branch_name ${answer:-$default_suggestion})
 	
 	if ! git_local_branch_exists "$integration_branch"; then
-		die "✘ integration branch '$integration_branch' does not exist locally, you should create it first."
+		fatal "integration branch '$integration_branch' does not exist locally, you should create it first."
 	fi
 	if ! git_remote_branch_exists "origin/$integration_branch"; then
-		die "✘ integration branch '$integration_branch' does not exist on the remote, you should create it first."
+		fatal "integration branch '$integration_branch' does not exist on the remote, you should create it first."
 	fi
 
 	default_suggestion="rc"
@@ -80,15 +85,16 @@ cmd_default() {
 	local hot_fix_branch_prefix=$(escape_branch_name ${answer:-$default_suggestion})
 
 	echo
-	echo "ℹ feature branch prefix: '$feature_branch_prefix'"
-	echo "ℹ team branch prefix: '$team_branch_prefix'"
-	echo "ℹ team branch suffix: '$team_branch_suffix'"
-	echo "ℹ integration branch: '$integration_branch'"
-	echo "ℹ release candidate branch prefix: '$release_candidate_branch_prefix'"
-	echo "ℹ hot-fix branch prefix: '$hot_fix_branch_prefix'"
+	inform "we've got all the answers:"
+	echo "feature branch prefix: '$feature_branch_prefix'"
+	echo "team branch prefix: '$team_branch_prefix'"
+	echo "team branch suffix: '$team_branch_suffix'"
+	echo "integration branch: '$integration_branch'"
+	echo "release candidate branch prefix: '$release_candidate_branch_prefix'"
+	echo "hot-fix branch prefix: '$hot_fix_branch_prefix'"
 	echo
 
-	printf "is this ok? [y/n] "; read answer
+	printf "is this ok? (y/n) "; read answer
 	if [[ $answer = "y" ]]; then
 		git config --global le-gitflow.branch-prefix.feature "$feature_branch_prefix$delimiter"
 		git config --global le-gitflow.branch.team "$team_branch"
@@ -96,9 +102,9 @@ cmd_default() {
 		git config --global le-gitflow.branch-prefix.rc "$release_candidate_branch_prefix$delimiter"
 		git config --global le-gitflow.branch-prefix.hf "$hot_fix_branch_prefix$delimiter"
 		git config --global le-gitflow.initialized "true"
-		echo "✔ all done! you're awesome!"
+		ok "all done! you're awesome!"
 	else
-		die "✘ initialization aborted. i knew you'd chicken out."
+		fatal "initialization aborted. i knew you'd chicken out."
 	fi
 }
 

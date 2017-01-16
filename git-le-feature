@@ -1,11 +1,56 @@
 #!/usr/bin/env sh
 
-USAGE="feature <start|stop>"
+
+USAGE="feature <start|stop> [branch]"
+
 
 cmd_start() {
-	die "> start"
+	if [[ -z $1 ]]; then
+		usage
+	fi
+	start "$@"
 }
 
 cmd_stop() {
-	die "> stop"
+	if [[ -z $1 ]]; then
+		usage
+	fi
+	stop "$@"
+}
+
+#cmd_update() {
+#	if [[ -z $1 ]]; then
+#		usage
+#	fi
+#	update "$@"
+#}
+
+
+start() {
+
+	# do some validations
+	validate_initialized
+	local feature_branch="$(git config --global le-gitflow.branch-prefix.feature)$1"
+	if git_local_branch_exists "$feature_branch"; then
+		fatal "local branch '$feature_branch' already exists, what the damn hell are you doing?"
+	fi
+
+	# validate working tree is clean
+	if ! git_is_clean_working_tree; then
+		fatal "working tree is not clean, please make sure all changes are commited" 
+	fi
+
+	# switch to team branch and update from the remote
+	git checkout "$(git config --global le-gitflow.branch.team)"
+	git pull
+	
+	# create the feature branch
+	git checkout -b "$feature_branch"
+	
+	# push the feature branch to the remote
+	git push --set-upstream origin "$feature_branch"
+}
+
+stop() {
+	die "> stopping $1"
 }
