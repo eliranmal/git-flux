@@ -37,12 +37,22 @@ is_available() {
 	type $1 >/dev/null 2>&1
 }
 
+escape_branch_name() {
+	echo "$1" | sed 's/-/_/g'
+}
+
 
 # validations
 
-validate_initialized() {
+validate_le_gitflow_initialized() {
 	if [[ -z $(git config --global le-gitflow.initialized) ]]; then
-		die "✘ le-gitflow is not initialized! you have to run \"git le init\" first."
+		fatal "le-gitflow is not initialized! you have to run \"git le init\" first."
+	fi
+}
+
+validate_git_clean_working_tree() {
+	if ! git_is_clean_working_tree; then
+		fatal "working tree is not clean, please make sure all changes are commited." 
 	fi
 }
 

@@ -107,7 +107,3 @@ initialize() {
 		fatal "initialization aborted. i knew you'd chicken out."
 	fi
 }
-
-escape_branch_name() {
-	echo "$1" | sed 's/-/_/g'
-}
