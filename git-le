@@ -14,9 +14,6 @@ USAGE="<init|feature|team> [action]"
 
 main() {
 
-	# include git utilities library
-	source "$(git --exec-path)/git-sh-setup"
-
 	# no arguments, just show usage and abort
 	if [[ $# -lt 1 ]]; then
 		usage
@@ -37,7 +34,10 @@ main() {
 
 	# include the sub-command script
 	source "$working_dir/git-le-$sub_command"
-
+    
+	# include git utilities library 
+	# (loaded after the sub-command script to enable setting usage/long-usage in the sub-command beforehand)
+	source "$(git --exec-path)/git-sh-setup"
 
 	# retrieve the action and remove it from the arguments list
 	local action="$1"; shift

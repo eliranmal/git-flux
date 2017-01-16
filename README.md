@@ -59,7 +59,17 @@ this tool only supports bash/mingw32, so:
 
 ## usage
 
-todo - document usage..
+    git le <command> [action] [-h]
+
+- you can use the `-h` flag anywhere to show full usage.
+- available commands:
+   - **`init`**: initializes the repository with information about 
+   branch names etc. (this command has no actions).
+   - **`feature`**: handles feature branches. available actions:
+      - **`todo`**: some action...
+   - **`team`**: handles integration with the team branch. available actions:
+      - **`todo`**: some action...
+
 
 
 

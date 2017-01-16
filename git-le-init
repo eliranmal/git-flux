@@ -4,6 +4,26 @@
 
 USAGE="init"
 
+LONG_USAGE="
+configures the le-git-flow environment. questions are:
+
+1) feature branch prefix?
+	a prefix for feature branch names, e.g. \"foo_\".
+2) team branch prefix?
+	your team's branch name prefix, defaults to \"team_\".
+3) team branch suffix?
+	your team's branch name suffix, e.g. \"foo\".
+4) integration branch?
+	the integration branch name, defaults to \"integration\".
+5) release candidate branch prefix?
+	a prefix for release candidate branch names, defaults to \"rc_\".
+6) hot-fix branch prefix?
+	a prefix for hot-fix branch names, defaults to \"hf_\".
+
+please leave all defaults unchanged.
+
+"
+
 cmd_default() {	
 	echo
 	echo "initializing git-le"
@@ -11,19 +31,21 @@ cmd_default() {
 	
 	local default_suggestion
 
-	printf "team name? "; read answer
+	printf "feature branch prefix? "; read answer
 	if [[ -z $answer ]]; then
-		die "✘ team name is mandatory"
+		die "✘ feature branch prefix is mandatory"
 	fi
-	local team_branch_suffix=$(escape $answer)
-
-	default_suggestion="${team_branch_suffix}_"
-	printf "feature branch prefix? [$default_suggestion] "; read answer
-	local feature_branch_prefix=$(escape ${answer:-$default_suggestion})
+	local feature_branch_prefix=$(escape $answer)
 
 	default_suggestion="team_"
 	printf "team branch prefix? [$default_suggestion] "; read answer
 	local team_branch_prefix=$(escape ${answer:-$default_suggestion})
+
+	printf "team branch suffix? "; read answer
+	if [[ -z $answer ]]; then
+		die "✘ team branch suffix is mandatory"
+	fi
+	local team_branch_suffix=$(escape $answer)
 
 	default_suggestion="integration"
 	printf "integration branch? [$default_suggestion] "; read answer
@@ -38,18 +60,22 @@ cmd_default() {
 	local hot_fix_branch_prefix=$(escape ${answer:-$default_suggestion})
 
 	echo
-	echo "team branch: '$team_branch_prefix$team_branch_suffix'"
-	echo "feature branch prefix: '$feature_branch_prefix'"
-	echo "integration branch: '$integration_branch'"
-	echo "release candidate branch prefix: '$release_candidate_branch_prefix'"
-	echo "hot-fix branch prefix: '$hot_fix_branch_prefix'"
+	echo "ℹ feature branch prefix: '$feature_branch_prefix'"
+	echo "ℹ team branch prefix: '$team_branch_prefix'"
+	echo "ℹ team branch suffix: '$team_branch_suffix'"
+	echo "ℹ integration branch: '$integration_branch'"
+	echo "ℹ release candidate branch prefix: '$release_candidate_branch_prefix'"
+	echo "ℹ hot-fix branch prefix: '$hot_fix_branch_prefix'"
 	echo
 
 	printf "is this ok? [y/n] "; read answer
 	if [[ $answer = "y" ]]; then
-	#	git config --global gitle.branch.team $team_branch
-	#	git config --global gitle.branch.integration $integration_branch
-		echo "✔ all done! yay!"
+		git config --global le-gitflow.branch-prefix.feature "$feature_branch_prefix"
+		git config --global le-gitflow.branch.team "$team_branch_prefix$team_branch_suffix"
+		git config --global le-gitflow.branch.integration "$integration_branch"
+		git config --global le-gitflow.branch-prefix.rc "$release_candidate_branch_prefix"
+		git config --global le-gitflow.branch-prefix.hf "$hot_fix_branch_prefix"
+		echo "✔ all done! you're awesome!"
 	else
 		echo "✘ initialization aborted. i knew you'd chicken out."
 	fi
@@ -57,5 +83,5 @@ cmd_default() {
 }
 
 escape() {
-	echo "$1" | sed 's/\([-]\)/_/g'
+	echo "$1" | sed 's/-/_/g'
 }
