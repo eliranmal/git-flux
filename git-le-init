@@ -104,6 +104,6 @@ initialize() {
 		git config --global le-gitflow.initialized "true"
 		ok "all done! you're awesome!"
 	else
-		fatal "initialization aborted. i knew you'd chicken out."
+		fatal "initialization aborted. now you'll have to do it all over again."
 	fi
 }

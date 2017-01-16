@@ -21,15 +21,14 @@ start() {
 
 	validate "$1"
 
-	local feature_branch="$(git config --global le-gitflow.branch-prefix.feature)$1"
+	local feature_branch="$(prefix_feature_branch $1)"
 	if git_local_branch_exists "$feature_branch"; then
 		fatal "local branch '$feature_branch' already exists, what the damn hell are you doing?"
 	fi
 
 	# todo - consider if/when updating from the team *remote* should be done
 	# switch to team branch and update from the remote
-	git checkout "$(git config --global le-gitflow.branch.team)"
-	git pull
+	git checkout "$(git config --global le-gitflow.branch.team)" && git pull
 	
 	# create the feature branch
 	git checkout -b "$feature_branch"
@@ -42,15 +41,28 @@ stop() {
 	
 	validate "$1"
 
-	local feature_branch="$(git config --global le-gitflow.branch-prefix.feature)$1"
-	if ! git_local_branch_exists "$feature_branch"; then
-		fatal "feature branch '$feature_branch' does not exist locally, cannot stop feature."
-	fi
-
-	printf "stopping the $1 feature will delete its local and remote branches, continue? (y/n) "; read answer
+	printf "stopping feature '$1' will delete its local and remote branches, continue? (y/n) "; read answer
 	if [[ $answer = "y" ]]; then
-		git branch -D "$feature_branch"
-		# todo - also delete remotely? e.g. git push --progress --porcelain origin :"$feature_branch"
+
+		local feature_branch="$(prefix_feature_branch $1)"
+
+		# todo - consider if/when updating from the team *remote* should be done
+		# switch to team branch and update from the remote
+		git checkout "$(git config --global le-gitflow.branch.team)" && git pull
+
+		# delete local branch
+		if git_local_branch_exists "$feature_branch"; then
+			git branch -D "$feature_branch"
+		fi
+
+		# delete remote branch
+		if git_remote_branch_exists "origin/$feature_branch"; then
+			git push --progress origin :"$feature_branch"
+		fi
+		
+		ok "feature '$1' stopped."
+	else
+		fatal "i knew you'd chicken out."
 	fi
 }
 
@@ -58,7 +70,7 @@ update() {
 
 	validate "$1"
 
-	local feature_branch="$(git config --global le-gitflow.branch-prefix.feature)$1"
+	local feature_branch="$(prefix_feature_branch $1)"
 	if ! git_local_branch_exists "$feature_branch"; then
 		fatal "feature branch '$feature_branch' does not exist locally, cannot update from team branch."
 	fi
@@ -84,7 +96,6 @@ validate() {
 	validate_git_clean_working_tree
 }
 
-# todo - utilize it
-#parse_branch_full_name() {
-#	"$(git config --global le-gitflow.branch-prefix.feature)$1"
-#}
+prefix_feature_branch() {
+	echo "$(git config --global le-gitflow.branch-prefix.feature)$1"
+}
