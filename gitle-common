@@ -6,19 +6,19 @@
 # note that all those unicode characters (✔, ✘ etc.) will not show in git-bash
 
 ok() {
-	echo "(✔) $1"
+	echo " ✔ $1"
 }
 
 inform() {
-	echo "(ℹ) $1"
+	echo " ℹ $1"
 }
 
 warn() {
-	echo "(✘) $1"
+	echo " ✘ $1"
 }
 
 fatal() {
-	die "(✘) $1"
+	die " ✘ $1"
 }
 
 

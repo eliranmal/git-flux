@@ -5,39 +5,25 @@ USAGE="feature <start|stop> [branch]"
 
 
 cmd_start() {
-	if [[ -z $1 ]]; then
-		usage
-	fi
-	start "$@"
+	start "$1"
 }
 
 cmd_stop() {
-	if [[ -z $1 ]]; then
-		usage
-	fi
-	stop "$@"
+	stop "$1"
 }
 
-#cmd_update() {
-#	if [[ -z $1 ]]; then
-#		usage
-#	fi
-#	update "$@"
-#}
+cmd_update() {
+	update "$1"
+}
 
 
 start() {
 
-	# do some validations
-	validate_initialized
+	validate "$1"
+
 	local feature_branch="$(git config --global le-gitflow.branch-prefix.feature)$1"
 	if git_local_branch_exists "$feature_branch"; then
 		fatal "local branch '$feature_branch' already exists, what the damn hell are you doing?"
-	fi
-
-	# validate working tree is clean
-	if ! git_is_clean_working_tree; then
-		fatal "working tree is not clean, please make sure all changes are commited" 
 	fi
 
 	# switch to team branch and update from the remote
@@ -52,5 +38,35 @@ start() {
 }
 
 stop() {
-	die "> stopping $1"
+	inform "stop not implemented yet... (you passed $1)"
+	fatal
+}
+
+update() {
+
+	validate "$1"
+
+	local feature_branch="$(git config --global le-gitflow.branch-prefix.feature)$1"
+	if ! git_local_branch_exists "$feature_branch"; then
+		fatal "local branch '$feature_branch' does not exist, cannot update from team branch."
+	fi
+	local current_branch="$(git_current_branch)";
+	if [[ $current_branch != $feature_branch ]]; then
+		fatal "current branch ('$current_branch') is not the requested feature branch ('$feature_branch'). switch back to your feature branch before updating from the team branch."
+	fi
+
+    git merge --no-edit --no-ff "$(git config --global le-gitflow.branch.team)"
+}
+
+validate() {
+
+	if [[ -z $1 ]]; then
+		usage
+	fi
+
+	validate_initialized
+
+	if ! git_is_clean_working_tree; then
+		fatal "working tree is not clean, please make sure all changes are commited" 
+	fi
 }
