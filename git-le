@@ -4,7 +4,7 @@
 # indicates this git command can run from within child directories of the git repo
 SUBDIRECTORY_OK="yes"
 # output for stdout when calling the usage() function
-USAGE="<init|feature|team> [action] [-h]"
+USAGE="<init|feature|team|integration> [action] [-h]"
 # appended to the usage output when using the `-h` flag
 LONG_USAGE="team-oriented git workflow commands. yep."
 
