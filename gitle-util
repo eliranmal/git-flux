@@ -15,5 +15,16 @@ is_available() {
 }
 
 lower_dashes() {
-	echo "$1" | sed 's/-/_/g'
+	local str="$(input_from_arg_or_stdin $1)"
+	echo "$str" | sed 's/-/_/g'
+}
+
+input_from_arg_or_stdin() {
+	local arg
+	if (( $# == 0 )) ; then
+		arg="$(< /dev/stdin)"
+	else
+		arg=$1
+	fi
+	echo "$arg"
 }

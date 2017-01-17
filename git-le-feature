@@ -8,15 +8,15 @@ LONG_USAGE="---"
 
 
 cmd_start() {
-	start "$(lower_dashes $1)"
+	start "$@"
 }
 
 cmd_stop() {
-	stop "$(lower_dashes $1)"
+	stop "$@"
 }
 
 cmd_update() {
-	update "$(lower_dashes $1)"
+	update "$@"
 }
 
 
@@ -24,7 +24,8 @@ start() {
 
 	validate_command "$1"
 
-	local feature_branch="$(prefix_feature_branch $1)"
+	local feature_branch="$(echo $1 | lower_dashes | prefix_feature_branch)"
+
 	if git_local_branch_exists "$feature_branch"; then
 		fatal "local branch '$feature_branch' already exists, what the damn hell are you doing?"
 	fi
@@ -46,7 +47,7 @@ stop() {
 	printf "stopping feature '$1' will delete its local and remote branches, continue? (y/n) "; read answer
 	if [[ $answer = "y" ]]; then
 
-		local feature_branch="$(prefix_feature_branch $1)"
+		local feature_branch="$(echo $1 | lower_dashes | prefix_feature_branch)"
 
 		# switch to the team branch and update from the remote
 		git checkout "$(git config --global le-gitflow.branch.team)" && git pull
@@ -71,7 +72,8 @@ update() {
 
 	validate_command "$1"
 
-	local feature_branch="$(prefix_feature_branch $1)"
+	local feature_branch="$(echo $1 | lower_dashes | prefix_feature_branch)"
+
 	if ! git_local_branch_exists "$feature_branch"; then
 		fatal "feature branch '$feature_branch' does not exist locally, cannot update from team branch."
 	fi
@@ -86,5 +88,7 @@ update() {
 }
 
 prefix_feature_branch() {
-	echo "$(git config --global le-gitflow.branch-prefix.feature)$1"
+	local prefix="$(git config --global le-gitflow.branch-prefix.feature)"
+	local feature="$(input_from_arg_or_stdin $1)"
+	echo "$prefix$feature"
 }
