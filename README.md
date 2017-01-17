@@ -61,7 +61,9 @@ this tool only supports bash/mingw32, so:
 
     git le <command> [action] [-h]
 
-note that you can use the `-h` flag anywhere to show full usage.
+#### flags
+
+- **`-h`**: shows the f***ing manual.
 
 
 #### commands
@@ -75,18 +77,22 @@ initializes the repository with information about branch names etc.
 
 ##### `feature`
 
-handles feature branches.
+start working on a new feature, stop working on it, and what have you.
 
-###### available actions
+###### actions
 
-- **`todo`**: some action...
+- **`start <feature-name>`**: create a new branch based on the team 
+branch, and switch to it.
+- **`stop <feature-name>`**: delete that old feature branch, and 
+its remote, too.
+- **`update <feature-name>`**: get the latest changes from the team branch.
 
 
 ##### `team`
 
 handles integration with the team branch.
 
-###### available actions
+###### actions
 
 - **`todo`**: some action...
 

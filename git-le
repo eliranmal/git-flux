@@ -1,15 +1,19 @@
 #!/usr/bin/env sh
 
+# can this git command run from within child directories of the git repo
 SUBDIRECTORY_OK="yes"
+# output for stdout when calling the usage() function
 USAGE="<init|feature|team> [action] [-h]"
-# long-usage is shown (appended) when using the `-h` flag
+# appended to the usage output when using the `-h` flag
 LONG_USAGE="
-heading
+                a tool for managing git workflows. yep.
 
-subheading
-
-
-content, content, content
+                     .__.__  ___.                                      
+_____    ______ ____ |__|__| \_ |__ _____    ____   ____   ___________ 
+\__  \  /  ___// ___\|  |  |  | __ \\__  \  /    \ /    \_/ __ \_  __ \
+ / __ \_\___ \\  \___|  |  |  | \_\ \/ __ \|   |  \   |  \  ___/|  | \/
+(____  /____  >\___  >__|__|  |___  (____  /___|  /___|  /\___  >__|   
+     \/     \/     \/             \/     \/     \/     \/     \/       
 "
 
 main() {
@@ -27,10 +31,6 @@ main() {
 	# retrieve the sub-command and remove it from the arguments list
 	local sub_command="$1"; shift
 
-	if [[ $sub_command = "--help" ]]; then
-		echo "$LONG_USAGE"; exit 0
-	fi
-
 	# verify the sub-command script exists
 	if [[ ! -e "$working_dir/git-le-$sub_command" ]]; then
 		echo "$USAGE"; exit 0
@@ -39,8 +39,8 @@ main() {
 	# include the sub-command script
 	source "$working_dir/git-le-$sub_command"
 
-	# include git utilities library 
-	# (loaded after the sub-command script to enable setting usage/long-usage in the sub-command beforehand)
+	# include git builtin library 
+	# (loaded here to allow the sub-command script to override usage/long-usage)
 	source "$(git --exec-path)/git-sh-setup"
 
 	# retrieve the action and remove it from the arguments list
@@ -48,8 +48,6 @@ main() {
 
 	if [[ -z $action ]]; then
 		action="default"
-	elif [[ $action = "--help" ]]; then
-		echo "$LONG_USAGE"; exit 0
 	fi
 
 	# verify the action function is available
