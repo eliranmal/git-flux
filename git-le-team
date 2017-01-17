@@ -1,13 +1,27 @@
 #!/usr/bin/env sh
 
 
-USAGE="team <pull|push>"
+USAGE="team <update> [-h]"
+LONG_USAGE="---"
 
 
-cmd_pull() {
-	ok "> pull"
-}
+cmd_update() {
+	echo "updating team..."
 
-cmd_push() {
-	ok "> push"
+	validate_git_clean_working_tree
+
+	local integration_branch="$(git config --global le-gitflow.branch.integration)"
+	local team_branch="$(git config --global le-gitflow.branch.team)"
+	echo "team branch name: '$team_branch'."
+
+	echo "switching to the integration branch and updating from the remote..."
+	git checkout "$integration_branch" >/dev/null 2>&1 && git pull >/dev/null 2>&1
+
+	echo "switching to the team branch and updating from the remote..."
+	git checkout "$team_branch" >/dev/null 2>&1 && git pull >/dev/null 2>&1
+
+	echo "merging changes from the integration branch..."
+    git merge --no-edit --no-ff "$integration_branch" >/dev/null 2>&1
+
+	ok "team was updated."
 }

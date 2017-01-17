@@ -37,11 +37,15 @@ main() {
 
 	# include git builtin library 
 	# this script have to be sourced after sourcing the sub-command script, to allow it to override USAGE/LONG_USAGE
-	# note that usage() expects the first argument to be `-h` when called, so shifting arguments changes the output
+	# note that usage() expects the first script argument to be `-h` when called, so shifting arguments can change the result
 	source "$(git --exec-path)/git-sh-setup"
 
 	# verify the action function is available
 	if is_available "cmd_$action"; then
+		# validate action prerequisites
+		if [[ $sub_command != "init" ]]; then
+			validate_le_gitflow_initialized
+		fi
 		# delegate to the sub-command action api
 		cmd_${action} "$@"
 	else
