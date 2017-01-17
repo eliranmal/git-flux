@@ -21,26 +21,31 @@ cmd_update() {
 
 
 start() {
+	echo "starting feature '$1'"
 
 	validate_command "$1"
 
 	local feature_branch="$(echo $1 | lower_dashes | prefix_feature_branch)"
+	echo "feature branch name: '$feature_branch'"
 
 	if git_local_branch_exists "$feature_branch"; then
 		fatal "local branch '$feature_branch' already exists, what the damn hell are you doing?"
 	fi
 
-	# switch to team branch and update from the remote
+	echo "switching to the team branch and updating from the remote"
 	git checkout "$(git config --global le-gitflow.branch.team)" >/dev/null 2>&1 && git pull >/dev/null 2>&1
 	
-	# create the feature branch
+	echo "creating the local feature branch and switching to it"
 	git checkout -b "$feature_branch" >/dev/null 2>&1
 	
-	# push the feature branch to the remote
+	echo "pushing the feature branch to the remote"
 	git push --set-upstream origin "$feature_branch" >/dev/null 2>&1
+
+	ok "feature '$1' was started. happy coding!"
 }
 
 stop() {
+	echo "stopping feature '$1'"
 	
 	validate_command "$1"
 
@@ -48,17 +53,18 @@ stop() {
 	if [[ $answer = "y" ]]; then
 
 		local feature_branch="$(echo $1 | lower_dashes | prefix_feature_branch)"
+		echo "feature branch name: '$feature_branch'"
 
-		# switch to the team branch and update from the remote
+		echo "switching to the team branch and updating from the remote"
 		git checkout "$(git config --global le-gitflow.branch.team)" >/dev/null 2>&1 && git pull >/dev/null 2>&1
 
-		# delete local branch
 		if git_local_branch_exists "$feature_branch"; then
+			echo "deleting local branch"
 			git branch -D "$feature_branch" >/dev/null 2>&1
 		fi
 
-		# delete remote branch
 		if git_remote_branch_exists "origin/$feature_branch"; then
+			echo "deleting remote branch"
 			git push --progress origin :"$feature_branch" >/dev/null 2>&1
 		fi
 		
@@ -69,22 +75,27 @@ stop() {
 }
 
 update() {
+	echo "updating feature '$1'"
 
 	validate_command "$1"
 
 	local feature_branch="$(echo $1 | lower_dashes | prefix_feature_branch)"
+	echo "feature branch name: '$feature_branch'"
 
 	if ! git_local_branch_exists "$feature_branch"; then
 		fatal "feature branch '$feature_branch' does not exist locally, cannot update from team branch."
 	fi
 
-	# switch to the team branch and update from the remote
+	echo "switching to the team branch and updating from the remote"
 	git checkout "$(git config --global le-gitflow.branch.team)" >/dev/null 2>&1 && git pull >/dev/null 2>&1
 	
-	# switch to the feature branch
+	echo "switching back to the feature branch"
 	git checkout "$feature_branch" >/dev/null 2>&1
 
+	echo "merging changes from the team branch"
     git merge --no-edit --no-ff "$(git config --global le-gitflow.branch.team)" >/dev/null 2>&1
+
+	ok "feature '$1' was updated."
 }
 
 prefix_feature_branch() {
