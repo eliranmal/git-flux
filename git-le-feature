@@ -8,15 +8,15 @@ LONG_USAGE=""
 
 
 cmd_start() {
-	start "$(escape_branch_name $1)"
+	start "$(lower_dashes $1)"
 }
 
 cmd_stop() {
-	stop "$(escape_branch_name $1)"
+	stop "$(lower_dashes $1)"
 }
 
 cmd_update() {
-	update "$(escape_branch_name $1)"
+	update "$(lower_dashes $1)"
 }
 
 

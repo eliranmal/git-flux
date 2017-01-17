@@ -1,5 +1,6 @@
 #!/usr/bin/env sh
 
+
 has() {
 	local item=$1; shift
 	echo " $@ " | grep -q " $(escape $item) "
@@ -13,6 +14,6 @@ is_available() {
 	type $1 >/dev/null 2>&1
 }
 
-escape_branch_name() {
+lower_dashes() {
 	echo "$1" | sed 's/-/_/g'
 }

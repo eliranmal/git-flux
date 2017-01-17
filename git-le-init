@@ -39,25 +39,25 @@ initialize() {
 	git config --global --unset le-gitflow.initialized
 
 	local default_suggestion
-	local delimiter="_"
+	local branch_delimiter="_"
 
 	printf "feature branch prefix? "; read answer
 	if [[ -z $answer ]]; then
 		fatal "feature branch prefix is mandatory"
 	fi
-	local feature_branch_prefix=$(escape_branch_name $answer)
+	local feature_branch_prefix=$(lower_dashes $answer)
 
 	default_suggestion="team"
 	printf "team branch prefix? [$default_suggestion] "; read answer
-	local team_branch_prefix=$(escape_branch_name ${answer:-$default_suggestion})
+	local team_branch_prefix=$(lower_dashes ${answer:-$default_suggestion})
 
 	printf "team branch suffix? "; read answer
 	if [[ -z $answer ]]; then
 		fatal "team branch suffix is mandatory"
 	fi
-	local team_branch_suffix=$(escape_branch_name $answer)
+	local team_branch_suffix=$(lower_dashes $answer)
 	
-	local team_branch="$team_branch_prefix$delimiter$team_branch_suffix"
+	local team_branch="$team_branch_prefix$branch_delimiter$team_branch_suffix"
 	if ! git_local_branch_exists "$team_branch"; then
 		fatal "team branch '$team_branch' does not exist locally, you should create it first."
 	fi
@@ -67,7 +67,7 @@ initialize() {
 
 	default_suggestion="integration"
 	printf "integration branch? [$default_suggestion] "; read answer
-	local integration_branch=$(escape_branch_name ${answer:-$default_suggestion})
+	local integration_branch=$(lower_dashes ${answer:-$default_suggestion})
 	
 	if ! git_local_branch_exists "$integration_branch"; then
 		fatal "integration branch '$integration_branch' does not exist locally, you should create it first."
@@ -78,11 +78,11 @@ initialize() {
 
 	default_suggestion="rc"
 	printf "release candidate branch prefix? [$default_suggestion] "; read answer
-	local release_candidate_branch_prefix=$(escape_branch_name ${answer:-$default_suggestion})
+	local release_candidate_branch_prefix=$(lower_dashes ${answer:-$default_suggestion})
 
 	default_suggestion="hf"
 	printf "hot-fix branch prefix? [$default_suggestion] "; read answer
-	local hot_fix_branch_prefix=$(escape_branch_name ${answer:-$default_suggestion})
+	local hot_fix_branch_prefix=$(lower_dashes ${answer:-$default_suggestion})
 
 	echo
 	inform "we've got all the answers:"
@@ -96,11 +96,11 @@ initialize() {
 
 	printf "is this ok? (y/n) "; read answer
 	if [[ $answer = "y" ]]; then
-		git config --global le-gitflow.branch-prefix.feature "$feature_branch_prefix$delimiter"
+		git config --global le-gitflow.branch-prefix.feature "$feature_branch_prefix$branch_delimiter"
 		git config --global le-gitflow.branch.team "$team_branch"
 		git config --global le-gitflow.branch.integration "$integration_branch"
-		git config --global le-gitflow.branch-prefix.rc "$release_candidate_branch_prefix$delimiter"
-		git config --global le-gitflow.branch-prefix.hf "$hot_fix_branch_prefix$delimiter"
+		git config --global le-gitflow.branch-prefix.rc "$release_candidate_branch_prefix$branch_delimiter"
+		git config --global le-gitflow.branch-prefix.hf "$hot_fix_branch_prefix$branch_delimiter"
 		git config --global le-gitflow.initialized "true"
 		ok "all done. you're awesome!"
 	else
