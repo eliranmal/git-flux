@@ -2,24 +2,8 @@
 
 working_dir=$(dirname "$(echo "$0" | sed -e 's,\\,/,g')")
 
+source "$working_dir/gitle-util"
 source "$working_dir/gitle-status"
 source "$working_dir/gitle-validation"
 source "$working_dir/gitle-gitlib"
 
-
-has() {
-	local item=$1; shift
-	echo " $@ " | grep -q " $(escape $item) "
-}
-
-escape() {
-	echo "$1" | sed 's/\([\.\$\*]\)/\\\1/g'
-}
-
-is_available() {
-	type $1 >/dev/null 2>&1
-}
-
-escape_branch_name() {
-	echo "$1" | sed 's/-/_/g'
-}
