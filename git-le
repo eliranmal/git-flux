@@ -1,5 +1,6 @@
 #!/usr/bin/env sh
 
+
 # can this git command run from within child directories of the git repo
 SUBDIRECTORY_OK="yes"
 # output for stdout when calling the usage() function
@@ -16,12 +17,10 @@ main() {
 	# include common utilities
 	source "$working_dir/gitle-common"
 
-	# retrieve the sub-command
 	local sub_command="$1";
 
-	# verify the sub-command script exists
+	# verify the sub-command script exists, and include it
 	if [[ -e "$working_dir/git-le-$sub_command" ]]; then
-		# include the sub-command script
 		source "$working_dir/git-le-$sub_command"
 	fi
 
@@ -30,7 +29,6 @@ main() {
 	# sub-command script, to allow it to override USAGE/LONG_USAGE
 	source "$(git --exec-path)/git-sh-setup"
 
-	# retrieve the action
 	local action="$2";
 
 	if [[ -z $action ]]; then
@@ -49,16 +47,3 @@ main() {
 }
 
 main "$@"
-
-
-
-#echo "first:"
-#echo "$1"
-#echo "second:"
-#echo "$2"
-#echo "third:"
-#echo "$3"
-#[[ -z $1 ]] && echo "1 is empty" || echo "1 is not empty"
-#[[ -z $2 ]] && echo "2 is empty" || echo "2 is not empty"
-#[[ -z $3 ]] && echo "3 is empty" || echo "3 is not empty"
-#source "$(git --exec-path)/git-sh-setup"

@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-# note that all those unicode characters (✔, ✘ etc.) will not show in git-bash
+# note that all those unicode characters (✔, ✘, ℹ) will not show in git-bash
 
 ok() {
 	echo " ✔ $1"

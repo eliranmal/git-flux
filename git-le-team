@@ -1,6 +1,8 @@
 #!/usr/bin/env sh
 
+
 USAGE="team <pull|push>"
+
 
 cmd_pull() {
 	ok "> pull"
