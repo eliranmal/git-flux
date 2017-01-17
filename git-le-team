@@ -3,9 +3,9 @@
 USAGE="team <pull|push>"
 
 cmd_pull() {
-	git pull ... # todo 	
+	ok "> pull"
 }
 
 cmd_push() {
-	die "> push"
+	ok "> push"
 }

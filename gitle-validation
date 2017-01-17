@@ -1,8 +1,21 @@
 #!/usr/bin/env sh
 
+                               
+validate_command() {
+	validate_arg "$1"
+	validate_le_gitflow_initialized
+	validate_git_clean_working_tree
+}
+
+validate_arg() {
+	if [[ -z $1 ]]; then
+		usage
+	fi
+}
+
 validate_le_gitflow_initialized() {
 	if [[ -z $(git config --global le-gitflow.initialized) ]]; then
-		fatal "le-gitflow is not initialized! you have to run \"git le init\" first."
+		fatal "le-gitflow is not initialized! you have to run 'git le init' first."
 	fi
 }
 

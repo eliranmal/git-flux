@@ -1,5 +1,7 @@
 #!/usr/bin/env sh
 
+# todo - consider if/when updating from the team *remote* should be done. look for these:
+# todo - git checkout "$(git config --global le-gitflow.branch.team)" && git pull
 
 USAGE="feature <start|stop> [branch]"
 LONG_USAGE=""
@@ -20,14 +22,13 @@ cmd_update() {
 
 start() {
 
-	validate "$1"
+	validate_command "$1"
 
 	local feature_branch="$(prefix_feature_branch $1)"
 	if git_local_branch_exists "$feature_branch"; then
 		fatal "local branch '$feature_branch' already exists, what the damn hell are you doing?"
 	fi
 
-	# todo - consider if/when updating from the team *remote* should be done
 	# switch to team branch and update from the remote
 	git checkout "$(git config --global le-gitflow.branch.team)" && git pull
 	
@@ -40,15 +41,14 @@ start() {
 
 stop() {
 	
-	validate "$1"
+	validate_command "$1"
 
 	printf "stopping feature '$1' will delete its local and remote branches, continue? (y/n) "; read answer
 	if [[ $answer = "y" ]]; then
 
 		local feature_branch="$(prefix_feature_branch $1)"
 
-		# todo - consider if/when updating from the team *remote* should be done
-		# switch to team branch and update from the remote
+		# switch to the team branch and update from the remote
 		git checkout "$(git config --global le-gitflow.branch.team)" && git pull
 
 		# delete local branch
@@ -69,32 +69,20 @@ stop() {
 
 update() {
 
-	validate "$1"
+	validate_command "$1"
 
 	local feature_branch="$(prefix_feature_branch $1)"
 	if ! git_local_branch_exists "$feature_branch"; then
 		fatal "feature branch '$feature_branch' does not exist locally, cannot update from team branch."
 	fi
+
+	# switch to the team branch and update from the remote
+	git checkout "$(git config --global le-gitflow.branch.team)" && git pull
 	
-	# todo - don't be petty: try to switch to the requested branch (and perhaps switch back)
-	local current_branch="$(git_current_branch)";
-	if [[ $current_branch != $feature_branch ]]; then
-		fatal "current branch '$current_branch' is not the requested feature branch ('$feature_branch'). \
-		switch back to your feature branch before updating from the team branch."
-	fi
+	# switch to the feature branch
+	git checkout "$feature_branch"
 
     git merge --no-edit --no-ff "$(git config --global le-gitflow.branch.team)"
-}
-
-validate() {
-
-	if [[ -z $1 ]]; then
-		usage
-	fi
-
-	validate_le_gitflow_initialized
-
-	validate_git_clean_working_tree
 }
 
 prefix_feature_branch() {

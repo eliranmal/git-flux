@@ -89,7 +89,7 @@ and switch to it.
 
 ##### `team`
 
-handles integration with the team branch.
+handles integration among team members.
 
 ###### actions
 
