@@ -3,26 +3,24 @@
 
 USAGE="init [-h]"
 
-LONG_USAGE="
-configures the le-git-flow environment.
+LONG_USAGE="configures the le-git-flow environment.
 
 1) feature branch prefix?
-	a prefix for feature branch names, e.g. \"foo\".
+	a prefix for feature branch names, e.g. 'foo'.
 2) team branch prefix?
-	your team's branch name prefix, defaults to \"team\".
+	your team's branch name prefix, defaults to 'team'.
 3) team branch suffix?
-	your team's branch name suffix, e.g. \"foo\".
+	your team's branch name suffix, e.g. 'foo'.
 4) integration branch?
-	the integration branch name, defaults to \"integration\".
+	the integration branch name, defaults to 'integration'.
 5) release candidate branch prefix?
-	a prefix for release candidate branch names, defaults to \"rc\".
+	a prefix for release candidate branch names, defaults to 'rc'.
 6) hot-fix branch prefix?
-	a prefix for hot-fix branch names, defaults to \"hf\".
+	a prefix for hot-fix branch names, defaults to 'hf'.
 
 
-- please leave all defaults unchanged.
-- the delimiter used to concatenate the prefixes/suffixes is the underscore character (\"_\").
-- any dashes in branch names will be replaced with underscores.
+- the delimiter used to concatenate the prefixes/suffixes is the underscore character ('_').
+- any dashes inside branch names will be replaced with underscores.
 "
 
 

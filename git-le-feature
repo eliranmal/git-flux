@@ -4,7 +4,7 @@
 # todo - git checkout "$(git config --global le-gitflow.branch.team)" && git pull
 
 USAGE="feature <start|stop> [branch]"
-LONG_USAGE=""
+LONG_USAGE="---"
 
 
 cmd_start() {

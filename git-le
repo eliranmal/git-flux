@@ -6,9 +6,8 @@ SUBDIRECTORY_OK="yes"
 # output for stdout when calling the usage() function
 USAGE="<init|feature|team> [action] [-h]"
 # appended to the usage output when using the `-h` flag
-LONG_USAGE="
-wat
-"
+LONG_USAGE="team-oriented git workflow commands. yep."
+
 
 main() {
 
@@ -19,27 +18,31 @@ main() {
 
 	local sub_command="$1";
 
+	# lose the sub-command arg only if it's not an `-h` flag, to not break long-usage
+	[[ -n $1 && $1 != "-h" ]] && shift
+
 	# verify the sub-command script exists, and include it
 	if [[ -e "$working_dir/git-le-$sub_command" ]]; then
 		source "$working_dir/git-le-$sub_command"
 	fi
 
-	# include git builtin library 
-	# this script have to be sourced before shifting arguments (shift breaks the use of `-h`), and after sourcing the 
-	# sub-command script, to allow it to override USAGE/LONG_USAGE
-	source "$(git --exec-path)/git-sh-setup"
+	local action="$1";
 
-	local action="$2";
+	# lose the action arg only if it's not an `-h` flag, to not break long-usage
+	[[ -n $1 && $1 != "-h" ]] && shift
 
 	if [[ -z $action ]]; then
 		action="default"
 	fi
 
+	# include git builtin library 
+	# this script have to be sourced after sourcing the sub-command script, to allow it to override USAGE/LONG_USAGE
+	# note that usage() expects the first argument to be `-h` when called, so shifting arguments changes the output
+	source "$(git --exec-path)/git-sh-setup"
+
 	# verify the action function is available
 	if is_available "cmd_$action"; then
-		# remove the sub-command and action from the arguments list
-		shift; shift
-		# delegate to the appropriate sub-command action
+		# delegate to the sub-command action api
 		cmd_${action} "$@"
 	else
 		usage
