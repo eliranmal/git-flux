@@ -94,15 +94,15 @@ initialize() {
 	echo
 
 	printf "is this ok? (y/n) "; read answer
-	if [[ $answer = "y" ]]; then
-		git config --global le-gitflow.branch-prefix.feature "$feature_branch_prefix$branch_delimiter"
-		git config --global le-gitflow.branch.team "$team_branch"
-		git config --global le-gitflow.branch.integration "$integration_branch"
-		git config --global le-gitflow.branch-prefix.rc "$release_candidate_branch_prefix$branch_delimiter"
-		git config --global le-gitflow.branch-prefix.hf "$hot_fix_branch_prefix$branch_delimiter"
-		git config --global le-gitflow.initialized "true"
-		ok "all done. you're awesome!"
-	else
+	if [[ $answer != "y" ]]; then
 		fatal "initialization aborted. better luck next time!"
 	fi
+
+	git config --global le-gitflow.branch-prefix.feature "$feature_branch_prefix$branch_delimiter"
+	git config --global le-gitflow.branch.team "$team_branch"
+	git config --global le-gitflow.branch.integration "$integration_branch"
+	git config --global le-gitflow.branch-prefix.rc "$release_candidate_branch_prefix$branch_delimiter"
+	git config --global le-gitflow.branch-prefix.hf "$hot_fix_branch_prefix$branch_delimiter"
+	git config --global le-gitflow.initialized "true"
+	ok "all done. you're awesome!"
 }
