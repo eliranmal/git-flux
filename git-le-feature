@@ -31,35 +31,35 @@ start() {
 	fi
 
 	# switch to team branch and update from the remote
-	git checkout "$(git config --global le-gitflow.branch.team)" && git pull
+	git checkout "$(git config --global le-gitflow.branch.team)" >/dev/null 2>&1 && git pull >/dev/null 2>&1
 	
 	# create the feature branch
-	git checkout -b "$feature_branch"
+	git checkout -b "$feature_branch" >/dev/null 2>&1
 	
 	# push the feature branch to the remote
-	git push --set-upstream origin "$feature_branch"
+	git push --set-upstream origin "$feature_branch" >/dev/null 2>&1
 }
 
 stop() {
 	
 	validate_command "$1"
 
-	printf "stopping feature '$1' will delete its local and remote branches, continue? (y/n) "; read answer
+	printf "this will delete the feature's local and remote branches, continue? (y/n) "; read answer
 	if [[ $answer = "y" ]]; then
 
 		local feature_branch="$(echo $1 | lower_dashes | prefix_feature_branch)"
 
 		# switch to the team branch and update from the remote
-		git checkout "$(git config --global le-gitflow.branch.team)" && git pull
+		git checkout "$(git config --global le-gitflow.branch.team)" >/dev/null 2>&1 && git pull >/dev/null 2>&1
 
 		# delete local branch
 		if git_local_branch_exists "$feature_branch"; then
-			git branch -D "$feature_branch"
+			git branch -D "$feature_branch" >/dev/null 2>&1
 		fi
 
 		# delete remote branch
 		if git_remote_branch_exists "origin/$feature_branch"; then
-			git push --progress origin :"$feature_branch"
+			git push --progress origin :"$feature_branch" >/dev/null 2>&1
 		fi
 		
 		ok "feature '$1' was stopped. RIP."
@@ -79,12 +79,12 @@ update() {
 	fi
 
 	# switch to the team branch and update from the remote
-	git checkout "$(git config --global le-gitflow.branch.team)" && git pull
+	git checkout "$(git config --global le-gitflow.branch.team)" >/dev/null 2>&1 && git pull >/dev/null 2>&1
 	
 	# switch to the feature branch
-	git checkout "$feature_branch"
+	git checkout "$feature_branch" >/dev/null 2>&1
 
-    git merge --no-edit --no-ff "$(git config --global le-gitflow.branch.team)"
+    git merge --no-edit --no-ff "$(git config --global le-gitflow.branch.team)" >/dev/null 2>&1
 }
 
 prefix_feature_branch() {
