@@ -85,6 +85,8 @@ start working on a new feature, stop working on it, and what have you.
 and switch to it.
 - **`stop <name>`**: delete that old feature branch, and its remote, too.
 - **`update <name>`**: get the latest changes from the team branch.
+- **`push <name>`**: push local changes to the remote.
+- **`pull <name>`**: pull remote changes to the local.
 
 
 ##### `team`

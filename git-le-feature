@@ -3,7 +3,7 @@
 
 # todo - consider if/when updating from the team *remote* should be done
 
-USAGE="feature <start|stop> [branch] [-h]"
+USAGE="feature <start|stop|update|push|pull> [branch] [-h]"
 LONG_USAGE="---"
 
 
