@@ -18,3 +18,27 @@ validate_git_clean_working_tree() {
 		fatal "working tree is not clean. please make sure all changes are commited, or stash them." 
 	fi
 }
+
+validate_git_local_branch_exists() {
+	if ! git_local_branch_exists "$1"; then
+		fatal "branch '$1' does not exist locally."
+	fi
+}
+
+validate_git_remote_branch_exists() {
+	if ! git_remote_branch_exists "origin/$1"; then
+		fatal "branch '$1' does not exist on the remote."
+	fi
+}
+
+validate_git_local_branch_not_exists() {
+	if git_local_branch_exists "$1"; then
+		fatal "branch '$1' already exists locally."
+	fi
+}
+
+validate_git_remote_branch_not_exists() {
+	if git_remote_branch_exists "origin/$1"; then
+		fatal "branch '$1' already exists on the remote."
+	fi
+}

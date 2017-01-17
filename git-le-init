@@ -6,11 +6,11 @@ USAGE="init [-h]"
 LONG_USAGE="configures the le-git-flow environment.
 
 1) feature branch prefix?
-	a prefix for feature branch names, e.g. 'foo'.
+	a prefix for feature branch names, e.g. 'foo' will result in feature branch names such as 'foo__my_awesome_feature'.
 2) team branch prefix?
 	your team's branch name prefix, defaults to 'team'.
 3) team branch suffix?
-	your team's branch name suffix, e.g. 'foo'.
+	your team's branch name suffix, e.g. 'foo_bar' will result in a team branch name like 'team__foo_bar'.
 4) integration branch?
 	the integration branch name, defaults to 'integration'.
 5) release candidate branch prefix?
@@ -19,7 +19,8 @@ LONG_USAGE="configures the le-git-flow environment.
 	a prefix for hot-fix branch names, defaults to 'hf'.
 
 
-- the delimiter used to concatenate the prefixes/suffixes is the underscore character ('_').
+notes:
+- the delimiter used to concatenate the prefixes is double-underscore ('__').
 - any dashes inside branch names will be replaced with underscores.
 "
 

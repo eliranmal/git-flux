@@ -19,6 +19,14 @@ cmd_update() {
 	update "$@"
 }
 
+cmd_push() {
+	push "$@"
+}
+
+cmd_pull() {
+	pull "$@"
+}
+
 
 start() {
 	echo "starting feature '$1'..."
@@ -28,11 +36,12 @@ start() {
 	local feature_branch="$(echo "$1" | lower_dashes | prefix_feature_branch)"
 	echo "feature branch name: '$feature_branch'."
 
-	if git_local_branch_exists "$feature_branch"; then
-		fatal "local branch '$feature_branch' already exists, what the damn hell are you doing?"
-	fi
+	validate_git_local_branch_not_exists "$feature_branch"
+	validate_git_remote_branch_not_exists "$feature_branch"
 
 	local team_branch="$(git config --global le-gitflow.branch.team)"
+	echo "team branch name: '$team_branch'."
+
 	echo "switching to the team branch and updating from the remote..."
 	git checkout "$team_branch" >/dev/null 2>&1 && git pull >/dev/null 2>&1
 	
@@ -50,30 +59,30 @@ stop() {
 	
 	validate_feature_action "$1"
 
-	printf "this will delete the feature's local and remote branches, continue? (y/n) "; read answer
-	if [[ $answer = "y" ]]; then
+	local feature_branch="$(echo "$1" | lower_dashes | prefix_feature_branch)"
+	echo "feature branch name: '$feature_branch'."
 
-		local feature_branch="$(echo "$1" | lower_dashes | prefix_feature_branch)"
-		echo "feature branch name: '$feature_branch'."
+	validate_git_local_branch_exists "$feature_branch"
+	validate_git_remote_branch_exists "$feature_branch"
 
-		local team_branch="$(git config --global le-gitflow.branch.team)"
-		echo "switching to the team branch and updating from the remote..."
-		git checkout "$team_branch" >/dev/null 2>&1 && git pull >/dev/null 2>&1
-
-		if git_local_branch_exists "$feature_branch"; then
-			echo "deleting local branch..."
-			git branch -D "$feature_branch" >/dev/null 2>&1
-		fi
-
-		if git_remote_branch_exists "origin/$feature_branch"; then
-			echo "deleting remote branch..."
-			git push --progress origin :"$feature_branch" >/dev/null 2>&1
-		fi
-		
-		ok "feature '$1' was stopped. RIP."
-	else
+	printf "the feature's local and remote branches will be deleted, so make sure your work is merged. continue? (y/n) "; read answer
+	if [[ $answer != "y" ]]; then
 		fatal "i knew you'd chicken out."
 	fi
+
+	local team_branch="$(git config --global le-gitflow.branch.team)"
+	echo "team branch name: '$team_branch'."
+
+	echo "switching to the team branch and updating from the remote..."
+	git checkout "$team_branch" >/dev/null 2>&1 && git pull >/dev/null 2>&1
+
+	echo "deleting the feature's local branch..."
+	git branch -D "$feature_branch" >/dev/null 2>&1
+
+	echo "deleting the feature's remote branch..."
+	git push origin :"$feature_branch" >/dev/null 2>&1
+	
+	ok "feature '$1' was stopped. RIP."
 }
 
 update() {
@@ -84,11 +93,11 @@ update() {
 	local feature_branch="$(echo "$1" | lower_dashes | prefix_feature_branch)"
 	echo "feature branch name: '$feature_branch'."
 
-	if ! git_local_branch_exists "$feature_branch"; then
-		fatal "feature branch '$feature_branch' does not exist locally, cannot update from team branch."
-	fi
+	validate_git_local_branch_exists "$feature_branch"
 
 	local team_branch="$(git config --global le-gitflow.branch.team)"
+	echo "team branch name: '$team_branch'."
+
 	echo "switching to the team branch and updating from the remote..."
 	git checkout "$team_branch" >/dev/null 2>&1 && git pull >/dev/null 2>&1
 	
@@ -100,6 +109,27 @@ update() {
 
 	ok "feature '$1' was updated."
 }
+
+push() {
+	echo "pushing feature '$1'..."
+
+	validate_feature_action "$1"
+
+	local feature_branch="$(echo "$1" | lower_dashes | prefix_feature_branch)"
+	echo "feature branch name: '$feature_branch'."
+
+	validate_git_remote_branch_exists "$feature_branch"
+	
+	echo "pushing local changes to the feature's remote branch..."
+	git push origin refs/heads/"$feature_branch":"$feature_branch" >/dev/null 2>&1
+
+	ok "feature '$1' was pushed."
+}
+
+pull() {
+	fatal "todo!"
+}
+
 
 prefix_feature_branch() {
 	local prefix="$(git config --global le-gitflow.branch-prefix.feature)"

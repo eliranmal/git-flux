@@ -41,16 +41,17 @@ main() {
 	source "$(git --exec-path)/git-sh-setup"
 
 	# verify the action function is available
-	if is_available "cmd_$action"; then
-		# validate action prerequisites
-		if [[ $sub_command != "init" ]]; then
-			validate_le_gitflow_initialized
-		fi
-		# delegate to the sub-command action api
-		cmd_${action} "$@"
-	else
+	if ! is_available "cmd_$action"; then
 		usage
 	fi
+
+	# validate action prerequisites
+	if [[ $sub_command != "init" ]]; then
+		validate_le_gitflow_initialized
+	fi
+
+	# delegate to the sub-command action api
+	cmd_${action} "$@"
 }
 
 main "$@"
