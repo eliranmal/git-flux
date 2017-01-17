@@ -81,11 +81,10 @@ start working on a new feature, stop working on it, and what have you.
 
 ###### actions
 
-- **`start <feature-name>`**: create a new branch based on the team 
-branch, and switch to it.
-- **`stop <feature-name>`**: delete that old feature branch, and 
-its remote, too.
-- **`update <feature-name>`**: get the latest changes from the team branch.
+- **`start <name>`**: create a new branch based on the team branch, 
+and switch to it.
+- **`stop <name>`**: delete that old feature branch, and its remote, too.
+- **`update <name>`**: get the latest changes from the team branch.
 
 
 ##### `team`
