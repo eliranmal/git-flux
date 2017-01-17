@@ -6,57 +6,59 @@ SUBDIRECTORY_OK="yes"
 USAGE="<init|feature|team> [action] [-h]"
 # appended to the usage output when using the `-h` flag
 LONG_USAGE="
-                a tool for managing git workflows. yep.
-
-                     .__.__  ___.                                      
-_____    ______ ____ |__|__| \_ |__ _____    ____   ____   ___________ 
-\__  \  /  ___// ___\|  |  |  | __ \\__  \  /    \ /    \_/ __ \_  __ \
- / __ \_\___ \\  \___|  |  |  | \_\ \/ __ \|   |  \   |  \  ___/|  | \/
-(____  /____  >\___  >__|__|  |___  (____  /___|  /___|  /\___  >__|   
-     \/     \/     \/             \/     \/     \/     \/     \/       
+wat
 "
 
 main() {
-
-	# no arguments, just show usage and abort
-	if [[ $# -lt 1 ]]; then
-		echo $USAGE; exit 0
-	fi
 
 	local working_dir=$(dirname "$(echo "$0" | sed -e 's,\\,/,g')")
 
 	# include common utilities
 	source "$working_dir/gitle-common"
 
-	# retrieve the sub-command and remove it from the arguments list
-	local sub_command="$1"; shift
+	# retrieve the sub-command
+	local sub_command="$1";
 
 	# verify the sub-command script exists
-	if [[ ! -e "$working_dir/git-le-$sub_command" ]]; then
-		echo "$USAGE"; exit 0
+	if [[ -e "$working_dir/git-le-$sub_command" ]]; then
+		# include the sub-command script
+		source "$working_dir/git-le-$sub_command"
 	fi
 
-	# include the sub-command script
-	source "$working_dir/git-le-$sub_command"
-
 	# include git builtin library 
-	# (loaded here to allow the sub-command script to override usage/long-usage)
+	# this script have to be sourced before shifting arguments (shift breaks the use of `-h`), and after sourcing the 
+	# sub-command script, to allow it to override USAGE/LONG_USAGE
 	source "$(git --exec-path)/git-sh-setup"
 
-	# retrieve the action and remove it from the arguments list
-	local action="$1"; shift
+	# retrieve the action
+	local action="$2";
 
 	if [[ -z $action ]]; then
 		action="default"
 	fi
 
 	# verify the action function is available
-	if ! is_available "cmd_$action"; then
+	if is_available "cmd_$action"; then
+		# remove the sub-command and action from the arguments list
+		shift; shift
+		# delegate to the appropriate sub-command action
+		cmd_${action} "$@"
+	else
 		usage
 	fi
-
-	# delegate to the appropriate sub-command action
-	cmd_${action} "$@"
 }
 
 main "$@"
+
+
+
+#echo "first:"
+#echo "$1"
+#echo "second:"
+#echo "$2"
+#echo "third:"
+#echo "$3"
+#[[ -z $1 ]] && echo "1 is empty" || echo "1 is not empty"
+#[[ -z $2 ]] && echo "2 is empty" || echo "2 is not empty"
+#[[ -z $3 ]] && echo "3 is empty" || echo "3 is not empty"
+#source "$(git --exec-path)/git-sh-setup"
