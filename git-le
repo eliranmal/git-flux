@@ -27,7 +27,7 @@ main() {
 	# retrieve the sub-command and remove it from the arguments list
 	local sub_command="$1"; shift
 
-	if [[ $sub_command = "--wat" ]]; then
+	if [[ $sub_command = "--help" ]]; then
 		echo "$LONG_USAGE"; exit 0
 	fi
 
@@ -48,7 +48,7 @@ main() {
 
 	if [[ -z $action ]]; then
 		action="default"
-	elif [[ $action = "--wat" ]]; then
+	elif [[ $action = "--help" ]]; then
 		echo "$LONG_USAGE"; exit 0
 	fi
 
