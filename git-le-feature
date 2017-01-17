@@ -105,7 +105,7 @@ update() {
 	git checkout "$feature_branch" >/dev/null 2>&1
 
 	echo "merging changes from the team branch..."
-    git merge --no-edit --no-ff "$team_branch" >/dev/null 2>&1
+	git merge --no-edit --no-ff "$team_branch" >/dev/null 2>&1
 
 	ok "feature '$1' was updated."
 }

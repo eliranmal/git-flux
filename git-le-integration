@@ -24,7 +24,7 @@ update() {
 	git checkout "$integration_branch" >/dev/null 2>&1 && git pull >/dev/null 2>&1
 
 	echo "merging changes from the master branch..."
-    git merge --no-edit --no-ff master >/dev/null 2>&1
+	git merge --no-edit --no-ff master >/dev/null 2>&1
 
 	ok "integration was updated."
 }
