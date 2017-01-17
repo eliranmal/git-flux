@@ -3,14 +3,14 @@
 SUBDIRECTORY_OK="yes"
 USAGE="<init|feature|team> [action] [-h]"
 # long-usage is shown (appended) when using the `-h` flag
-#LONG_USAGE="
-#heading
-#
-#subheading
-#
-#
-#content, content, content
-#"
+LONG_USAGE="
+heading
+
+subheading
+
+
+content, content, content
+"
 
 main() {
 
@@ -20,30 +20,36 @@ main() {
 	fi
 
 	local working_dir=$(dirname "$(echo "$0" | sed -e 's,\\,/,g')")
-	
+
 	# include common utilities
 	source "$working_dir/gitle-common"
 
 	# retrieve the sub-command and remove it from the arguments list
 	local sub_command="$1"; shift
 
+	if [[ $sub_command = "--wat" ]]; then
+		echo "$LONG_USAGE"; exit 0
+	fi
+
 	# verify the sub-command script exists
 	if [[ ! -e "$working_dir/git-le-$sub_command" ]]; then
-		echo $USAGE; exit 0
+		echo "$USAGE"; exit 0
 	fi
 
 	# include the sub-command script
 	source "$working_dir/git-le-$sub_command"
-    
+
 	# include git utilities library 
 	# (loaded after the sub-command script to enable setting usage/long-usage in the sub-command beforehand)
 	source "$(git --exec-path)/git-sh-setup"
 
 	# retrieve the action and remove it from the arguments list
 	local action="$1"; shift
-	
+
 	if [[ -z $action ]]; then
 		action="default"
+	elif [[ $action = "--wat" ]]; then
+		echo "$LONG_USAGE"; exit 0
 	fi
 
 	# verify the action function is available
@@ -51,7 +57,7 @@ main() {
 		usage
 	fi
 
-	# delegate the sub_command to the appropriate action function
+	# delegate to the appropriate sub-command action
 	cmd_${action} "$@"
 }
 

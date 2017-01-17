@@ -1,0 +1,52 @@
+#!/usr/bin/env sh
+
+
+git_local_branches() {
+	git branch --no-color | sed 's/^[* ] //'
+}
+
+git_remote_branches() {
+	git branch -r --no-color | sed 's/^[* ] //'
+}
+
+git_all_branches() {
+	( git branch --no-color; git branch -r --no-color) | sed 's/^[* ] //'
+}
+
+git_all_tags() {
+	git tag
+}
+
+git_current_branch() {
+	git branch --no-color | grep '^\* ' | grep -v 'no branch' | sed 's/^* //g'
+}
+
+git_is_clean_working_tree() {
+	if ! git diff --no-ext-diff --ignore-submodules --quiet --exit-code; then
+		return 1
+	elif ! git diff-index --cached --quiet --ignore-submodules HEAD --; then
+		return 2
+	else
+		return 0
+	fi
+}
+
+git_repo_is_headless() {
+	! git rev-parse --quiet --verify HEAD >/dev/null 2>&1
+}
+
+git_local_branch_exists() {
+	has $1 $(git_local_branches)
+}
+
+git_remote_branch_exists() {
+	has $1 $(git_remote_branches)
+}
+
+git_branch_exists() {
+	has $1 $(git_all_branches)
+}
+
+git_tag_exists() {
+	has $1 $(git_all_tags)
+}

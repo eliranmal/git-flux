@@ -2,6 +2,7 @@
 
 
 USAGE="feature <start|stop> [branch]"
+LONG_USAGE=""
 
 
 cmd_start() {
@@ -60,7 +61,7 @@ stop() {
 			git push --progress origin :"$feature_branch"
 		fi
 		
-		ok "feature '$1' stopped."
+		ok "feature '$1' was stopped. RIP."
 	else
 		fatal "i knew you'd chicken out."
 	fi

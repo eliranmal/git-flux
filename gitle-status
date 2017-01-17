@@ -1,0 +1,19 @@
+#!/usr/bin/env sh
+
+# note that all those unicode characters (✔, ✘ etc.) will not show in git-bash
+
+ok() {
+	echo " ✔ $1"
+}
+
+inform() {
+	echo " ℹ $1"
+}
+
+warn() {
+	echo " ✘ $1"
+}
+
+fatal() {
+	die " ✘ $1"
+}

@@ -4,7 +4,7 @@
 main() {
 	local repo_name="le-ui-gitflow"
 	local exec_files="git-le"
-	local script_files="gitle-common git-le-init git-le-feature git-le-team"
+	local script_files="gitle-common gitle-status gitle-validation gitle-gitlib git-le-init git-le-feature git-le-team"
 	local cmd_name="$1"
 	ensure_install_prefix
 	ensure_repo_url

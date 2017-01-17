@@ -102,8 +102,8 @@ initialize() {
 		git config --global le-gitflow.branch-prefix.rc "$release_candidate_branch_prefix$delimiter"
 		git config --global le-gitflow.branch-prefix.hf "$hot_fix_branch_prefix$delimiter"
 		git config --global le-gitflow.initialized "true"
-		ok "all done! you're awesome!"
+		ok "all done. you're awesome!"
 	else
-		fatal "initialization aborted. now you'll have to do it all over again."
+		fatal "initialization aborted. better luck next time!"
 	fi
 }
