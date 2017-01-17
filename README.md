@@ -63,7 +63,7 @@ this tool only supports bash/mingw32, so:
 
 #### flags
 
-- **`-h`**: shows the f***ing manual.
+- **`-h`**: shows the f***ing manual. works everywhere (context dependent).
 
 
 #### commands
@@ -89,11 +89,20 @@ and switch to it.
 
 ##### `team`
 
-handles integration among team members.
+handles integration among team members and their features.
 
 ###### actions
 
-- **`todo`**: some action...
+- **`update <name>`**: get the latest changes from the integration branch.
+
+
+##### `integration`
+
+handles integration among teams and their content.
+
+###### actions
+
+- **`update <name>`**: get the latest changes from the master branch.
 
 
 
