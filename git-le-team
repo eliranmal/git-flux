@@ -11,21 +11,21 @@ cmd_update() {
 
 
 update() {
-	echo "updating team..."
-
 	validate_git_clean_working_tree
+
+	log "updating team..."
 
 	local integration_branch="$(git config --global le-gitflow.branch.integration)"
 	local team_branch="$(git config --global le-gitflow.branch.team)"
-	echo "team branch name: '$team_branch'."
+	log "team branch name: '$team_branch'."
 
-	echo "switching to the integration branch and updating from the remote..."
+	log "switching to the integration branch and updating from the remote..."
 	git checkout "$integration_branch" >/dev/null 2>&1 && git pull >/dev/null 2>&1
 
-	echo "switching to the team branch and updating from the remote..."
+	log "switching to the team branch and updating from the remote..."
 	git checkout "$team_branch" >/dev/null 2>&1 && git pull >/dev/null 2>&1
 
-	echo "merging changes from the integration branch..."
+	log "merging changes from the integration branch..."
 	git merge --no-edit --no-ff "$integration_branch" >/dev/null 2>&1
 
 	ok "team was updated."

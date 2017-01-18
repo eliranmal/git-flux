@@ -1,0 +1,23 @@
+#!/usr/bin/env sh
+
+
+USAGE="hf <start|stop> [-h]"
+LONG_USAGE="---"
+
+
+cmd_start() {
+	start "$@"
+}
+
+cmd_stop() {
+	stop "$@"
+}
+
+
+start() {
+	fatal "todo!"
+}
+
+stop() {
+	fatal "todo!"
+}

@@ -31,14 +31,14 @@ cmd_default() {
 
 
 initialize() {
-	echo
-	echo "initializing git-le"
-	echo
+	log
+	log "initializing git-le"
+	log
 
 	git config --global --unset le-gitflow.initialized
 
 	local default_suggestion
-	local branch_delimiter="_"
+	local branch_prefix_delimiter="__"
 
 	printf "feature branch prefix? "; read answer
 	if [[ -z $answer ]]; then
@@ -56,24 +56,16 @@ initialize() {
 	fi
 	local team_branch_suffix=$(lower_dashes $answer)
 	
-	local team_branch="$team_branch_prefix$branch_delimiter$team_branch_suffix"
-	if ! git_local_branch_exists "$team_branch"; then
-		fatal "team branch '$team_branch' does not exist locally, you should create it first."
-	fi
-	if ! git_remote_branch_exists "origin/$team_branch"; then
-		fatal "team branch '$team_branch' does not exist on the remote, you should create it first."
-	fi
+	local team_branch="$team_branch_prefix$branch_prefix_delimiter$team_branch_suffix"
+	validate_git_local_branch_exists "$team_branch"
+	validate_git_remote_branch_exists "$team_branch"
 
 	default_suggestion="integration"
 	printf "integration branch? [$default_suggestion] "; read answer
 	local integration_branch=$(lower_dashes ${answer:-$default_suggestion})
 	
-	if ! git_local_branch_exists "$integration_branch"; then
-		fatal "integration branch '$integration_branch' does not exist locally, you should create it first."
-	fi
-	if ! git_remote_branch_exists "origin/$integration_branch"; then
-		fatal "integration branch '$integration_branch' does not exist on the remote, you should create it first."
-	fi
+	validate_git_local_branch_exists "$integration_branch"
+	validate_git_remote_branch_exists "$integration_branch"
 
 	default_suggestion="rc"
 	printf "release candidate branch prefix? [$default_suggestion] "; read answer
@@ -83,26 +75,26 @@ initialize() {
 	printf "hot-fix branch prefix? [$default_suggestion] "; read answer
 	local hot_fix_branch_prefix=$(lower_dashes ${answer:-$default_suggestion})
 
-	echo
+	log
 	inform "we've got all the answers:"
-	echo "feature branch prefix: '$feature_branch_prefix'"
-	echo "team branch prefix: '$team_branch_prefix'"
-	echo "team branch suffix: '$team_branch_suffix'"
-	echo "integration branch: '$integration_branch'"
-	echo "release candidate branch prefix: '$release_candidate_branch_prefix'"
-	echo "hot-fix branch prefix: '$hot_fix_branch_prefix'"
-	echo
+	log "feature branch prefix: '$feature_branch_prefix'"
+	log "team branch prefix: '$team_branch_prefix'"
+	log "team branch suffix: '$team_branch_suffix'"
+	log "integration branch: '$integration_branch'"
+	log "release candidate branch prefix: '$release_candidate_branch_prefix'"
+	log "hot-fix branch prefix: '$hot_fix_branch_prefix'"
+	log
 
 	printf "is this ok? (y/n) "; read answer
 	if [[ $answer != "y" ]]; then
 		fatal "initialization aborted. better luck next time!"
 	fi
 
-	git config --global le-gitflow.branch-prefix.feature "$feature_branch_prefix$branch_delimiter"
+	git config --global le-gitflow.branch-prefix.feature "$feature_branch_prefix$branch_prefix_delimiter"
 	git config --global le-gitflow.branch.team "$team_branch"
 	git config --global le-gitflow.branch.integration "$integration_branch"
-	git config --global le-gitflow.branch-prefix.rc "$release_candidate_branch_prefix$branch_delimiter"
-	git config --global le-gitflow.branch-prefix.hf "$hot_fix_branch_prefix$branch_delimiter"
+	git config --global le-gitflow.branch-prefix.rc "$release_candidate_branch_prefix$branch_prefix_delimiter"
+	git config --global le-gitflow.branch-prefix.hf "$hot_fix_branch_prefix$branch_prefix_delimiter"
 	git config --global le-gitflow.initialized "true"
 	ok "all done. you're awesome!"
 }

@@ -2,6 +2,10 @@
 
 # note that all those unicode characters (✔, ✘, ℹ) will not show in git-bash
 
+log() {
+	echo "   $1"
+}
+
 ok() {
 	echo " ✔ $1"
 }

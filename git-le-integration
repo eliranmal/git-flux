@@ -11,19 +11,19 @@ cmd_update() {
 
 
 update() {
-	echo "updating integration..."
-
 	validate_git_clean_working_tree
+
+	log "updating integration..."
 
 	local integration_branch="$(git config --global le-gitflow.branch.integration)"
 
-	echo "switching to the master branch and updating from the remote..."
+	log "switching to the master branch and updating from the remote..."
 	git checkout master >/dev/null 2>&1 && git pull >/dev/null 2>&1
 
-	echo "switching to the integration branch and updating from the remote..."
+	log "switching to the integration branch and updating from the remote..."
 	git checkout "$integration_branch" >/dev/null 2>&1 && git pull >/dev/null 2>&1
 
-	echo "merging changes from the master branch..."
+	log "merging changes from the master branch..."
 	git merge --no-edit --no-ff master >/dev/null 2>&1
 
 	ok "integration was updated."
