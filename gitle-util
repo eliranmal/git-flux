@@ -15,13 +15,13 @@ is_available() {
 }
 
 lower_dashes() {
-	local str="$(input_from_arg_or_stdin "$1")"
+	local str="$(input_from_arg_or_stdin $1)"
 	echo "$str" | sed 's/-/_/g'
 }
 
 input_from_arg_or_stdin() {
 	local arg
-	if (( $# == 0 )) ; then
+	if (( $# == 0 )) || [[ -z $1 ]]; then
 		arg="$(< /dev/stdin)"
 	else
 		arg=$1
