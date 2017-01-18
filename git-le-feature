@@ -35,8 +35,6 @@ start() {
 
 	local feature_branch="$(echo "$1" | lower_dashes | prefix_feature_branch)"
 	log "feature branch name: '$feature_branch'."
-	
-	exit 0
 
 	validate_git_local_branch_not_exists "$feature_branch"
 	validate_git_remote_branch_not_exists "$feature_branch"
