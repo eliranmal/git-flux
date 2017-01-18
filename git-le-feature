@@ -40,7 +40,6 @@ start() {
 	validate_git_remote_branch_not_exists "$feature_branch"
 
 	local team_branch="$(git config --global le-gitflow.branch.team)"
-	log "team branch name: '$team_branch'."
 
 	log "switching to the team branch and updating from the remote..."
 	git checkout "$team_branch" >/dev/null 2>&1 && git pull >/dev/null 2>&1
@@ -71,7 +70,6 @@ stop() {
 	fi
 
 	local team_branch="$(git config --global le-gitflow.branch.team)"
-	log "team branch name: '$team_branch'."
 
 	log "switching to the team branch and updating from the remote..."
 	git checkout "$team_branch" >/dev/null 2>&1 && git pull >/dev/null 2>&1
@@ -96,7 +94,6 @@ update() {
 	validate_git_local_branch_exists "$feature_branch"
 
 	local team_branch="$(git config --global le-gitflow.branch.team)"
-	log "team branch name: '$team_branch'."
 
 	log "switching to the team branch and updating from the remote..."
 	git checkout "$team_branch" >/dev/null 2>&1 && git pull >/dev/null 2>&1
@@ -105,7 +102,9 @@ update() {
 	git checkout "$feature_branch" >/dev/null 2>&1
 
 	log "merging changes from the team branch..."
-	git merge --no-edit --no-ff "$team_branch" >/dev/null 2>&1
+	git merge --no-edit "$team_branch" >/dev/null 2>&1 || {
+		fatal "conflicts were found during merge, resolve them in your favorite merge tool."		
+	}
 
 	ok "feature '$1' was updated."
 }

@@ -24,7 +24,9 @@ update() {
 	git checkout "$integration_branch" >/dev/null 2>&1 && git pull >/dev/null 2>&1
 
 	log "merging changes from the master branch..."
-	git merge --no-edit --no-ff master >/dev/null 2>&1
+	git merge --no-edit master >/dev/null 2>&1 || {
+		fatal "conflicts were found during merge, resolve them in your favorite merge tool."		
+	}
 
 	ok "integration was updated."
 }

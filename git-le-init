@@ -35,7 +35,7 @@ initialize() {
 	log "initializing git-le"
 	log
 
-	git config --global --unset le-gitflow.initialized
+	git config --global le-gitflow.initialized "false"
 
 	local default_suggestion
 	local branch_prefix_delimiter="__"
