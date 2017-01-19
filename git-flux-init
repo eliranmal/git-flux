@@ -43,28 +43,24 @@ initialize() {
 	# todo - 
 	# todo - 
 	# todo - 
-	# todo - * call this project git-flop
-	# todo - * describe the meaning in readme: it has scopes (e.g. "epic","team"), and it addresses some of the issues with git-flow
+	# todo - * describe in readme: git-flux model has scopes (e.g. "epic","team"), and it addresses some of the issues with git-flow
 	# todo - * create a gitflux-survey script to hold all logic found in git-flux-init
 	# todo - * talk with efim about the option to open-source it
 	# todo - 
 	# todo - 
 	# todo - 
 
-	# todo - add ask() to git-status:
-#	ask "feature branch prefix?"; read answer
-#	> ? feature branch prefix
-	printf "feature branch prefix? "; read answer
+	prompt "feature branch prefix?"; read answer
 	if [[ -z $answer ]]; then
 		fatal "feature branch prefix is mandatory"
 	fi
 	local feature_branch_prefix=$(lower_dashes $answer)
 
 	default_suggestion="team"
-	printf "team branch prefix? [$default_suggestion] "; read answer
+	prompt "team branch prefix? [$default_suggestion]"; read answer
 	local team_branch_prefix=$(lower_dashes ${answer:-$default_suggestion})
 
-	printf "team branch suffix? "; read answer
+	prompt "team branch suffix?"; read answer
 	if [[ -z $answer ]]; then
 		fatal "team branch suffix is mandatory"
 	fi
@@ -75,18 +71,18 @@ initialize() {
 	validate_git_remote_branch_exists "$team_branch"
 
 	default_suggestion="integration"
-	printf "integration branch? [$default_suggestion] "; read answer
+	prompt "integration branch? [$default_suggestion]"; read answer
 	local integration_branch=$(lower_dashes ${answer:-$default_suggestion})
 	
 	validate_git_local_branch_exists "$integration_branch"
 	validate_git_remote_branch_exists "$integration_branch"
 
 	default_suggestion="rc"
-	printf "release candidate branch prefix? [$default_suggestion] "; read answer
+	prompt "release candidate branch prefix? [$default_suggestion]"; read answer
 	local release_candidate_branch_prefix=$(lower_dashes ${answer:-$default_suggestion})
 
 	default_suggestion="hf"
-	printf "hot-fix branch prefix? [$default_suggestion] "; read answer
+	prompt "hot-fix branch prefix? [$default_suggestion]"; read answer
 	local hot_fix_branch_prefix=$(lower_dashes ${answer:-$default_suggestion})
 
 	log
@@ -99,7 +95,7 @@ initialize() {
 	log "hot-fix branch prefix: '$hot_fix_branch_prefix'"
 	log
 
-	printf "is this ok? (y/n) "; read answer
+	prompt "is this ok? (y/n)"; read answer
 	if [[ $answer != "y" ]]; then
 		fatal "initialization aborted. better luck next time!"
 	fi

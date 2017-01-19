@@ -64,7 +64,7 @@ stop() {
 	validate_git_local_branch_exists "$feature_branch"
 	validate_git_remote_branch_exists "$feature_branch"
 
-	printf "the feature's local and remote branches will be deleted, so make sure your work is merged. continue? (y/n) "; read answer
+	prompt "the feature's local and remote branches will be deleted, so make sure your work is merged. continue? (y/n)"; read answer
 	if [[ $answer != "y" ]]; then
 		fatal "i knew you'd chicken out."
 	fi

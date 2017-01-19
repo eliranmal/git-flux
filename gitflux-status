@@ -21,3 +21,7 @@ warn() {
 fatal() {
 	die " ✘ $1"
 }
+
+prompt() {
+	printf " ❯ %s " "$1" 
+}
