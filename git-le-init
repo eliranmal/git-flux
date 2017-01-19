@@ -38,8 +38,22 @@ initialize() {
 	git config --global le-gitflow.initialized "false"
 
 	local default_suggestion
-	local branch_prefix_delimiter="__"
+	local branch_prefix_delimiter="__" # todo - ask about the preferred delimiter as well
 
+	# todo - 
+	# todo - 
+	# todo - 
+	# todo - * call this project git-flop
+	# todo - * describe the meaning in readme: it has scopes (e.g. "epic","team"), and it addresses some of the issues with git-flow
+	# todo - * create a gitle-survey script to hold all logic found in git-le-init
+	# todo - * talk with efim about the option to open-source it
+	# todo - 
+	# todo - 
+	# todo - 
+
+	# todo - add ask() to git-status:
+#	ask "feature branch prefix?"; read answer
+#	> ? feature branch prefix
 	printf "feature branch prefix? "; read answer
 	if [[ -z $answer ]]; then
 		fatal "feature branch prefix is mandatory"
