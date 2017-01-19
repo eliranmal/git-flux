@@ -35,7 +35,7 @@ initialize() {
 	log "initializing git-le"
 	log
 
-	git config --global le-gitflow.initialized "false"
+	git config --global gitflux.initialized "false"
 
 	local default_suggestion
 	local branch_prefix_delimiter="__" # todo - ask about the preferred delimiter as well
@@ -104,11 +104,11 @@ initialize() {
 		fatal "initialization aborted. better luck next time!"
 	fi
 
-	git config --global le-gitflow.branch-prefix.feature "$feature_branch_prefix$branch_prefix_delimiter"
-	git config --global le-gitflow.branch.team "$team_branch"
-	git config --global le-gitflow.branch.integration "$integration_branch"
-	git config --global le-gitflow.branch-prefix.rc "$release_candidate_branch_prefix$branch_prefix_delimiter"
-	git config --global le-gitflow.branch-prefix.hf "$hot_fix_branch_prefix$branch_prefix_delimiter"
-	git config --global le-gitflow.initialized "true"
+	git config --global gitflux.branch-prefix.feature "$feature_branch_prefix$branch_prefix_delimiter"
+	git config --global gitflux.branch.team "$team_branch"
+	git config --global gitflux.branch.integration "$integration_branch"
+	git config --global gitflux.branch-prefix.rc "$release_candidate_branch_prefix$branch_prefix_delimiter"
+	git config --global gitflux.branch-prefix.hf "$hot_fix_branch_prefix$branch_prefix_delimiter"
+	git config --global gitflux.initialized "true"
 	ok "all done. you're awesome!"
 }

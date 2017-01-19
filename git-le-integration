@@ -15,7 +15,7 @@ update() {
 
 	log "updating integration..."
 
-	local integration_branch="$(git config --global le-gitflow.branch.integration)"
+	local integration_branch="$(git config --global gitflux.branch.integration)"
 
 	log "switching to the master branch and updating from the remote..."
 	git checkout master >/dev/null 2>&1 && git pull >/dev/null 2>&1

@@ -39,7 +39,7 @@ start() {
 	validate_git_local_branch_not_exists "$feature_branch"
 	validate_git_remote_branch_not_exists "$feature_branch"
 
-	local team_branch="$(git config --global le-gitflow.branch.team)"
+	local team_branch="$(git config --global gitflux.branch.team)"
 
 	log "switching to the team branch and updating from the remote..."
 	git checkout "$team_branch" >/dev/null 2>&1 && git pull >/dev/null 2>&1
@@ -69,7 +69,7 @@ stop() {
 		fatal "i knew you'd chicken out."
 	fi
 
-	local team_branch="$(git config --global le-gitflow.branch.team)"
+	local team_branch="$(git config --global gitflux.branch.team)"
 
 	log "switching to the team branch and updating from the remote..."
 	git checkout "$team_branch" >/dev/null 2>&1 && git pull >/dev/null 2>&1
@@ -93,7 +93,7 @@ update() {
 
 	validate_git_local_branch_exists "$feature_branch"
 
-	local team_branch="$(git config --global le-gitflow.branch.team)"
+	local team_branch="$(git config --global gitflux.branch.team)"
 
 	log "switching to the team branch and updating from the remote..."
 	git checkout "$team_branch" >/dev/null 2>&1 && git pull >/dev/null 2>&1
@@ -131,7 +131,7 @@ pull() {
 
 
 prefix_feature_branch() {
-	local prefix="$(git config --global le-gitflow.branch-prefix.feature)"
+	local prefix="$(git config --global gitflux.branch-prefix.feature)"
 	local feature="$(input_from_arg_or_stdin $1)"
 	echo "$prefix$feature"
 }

@@ -8,8 +8,8 @@ validate_arg() {
 }
 
 validate_le_gitflow_initialized() {
-	if [[ $(git config --global le-gitflow.initialized) != "true" ]]; then
-		fatal "le-gitflow is not initialized. you have to run 'git le init' first."
+	if [[ $(git config --global gitflux.initialized) != "true" ]]; then
+		fatal "gitflux is not initialized. you have to run 'git le init' first."
 	fi
 }
 

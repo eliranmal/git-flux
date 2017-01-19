@@ -15,8 +15,8 @@ update() {
 
 	log "updating team..."
 
-	local integration_branch="$(git config --global le-gitflow.branch.integration)"
-	local team_branch="$(git config --global le-gitflow.branch.team)"
+	local integration_branch="$(git config --global gitflux.branch.integration)"
+	local team_branch="$(git config --global gitflux.branch.team)"
 	log "team branch name: '$team_branch'."
 
 	log "switching to the integration branch and updating from the remote..."
