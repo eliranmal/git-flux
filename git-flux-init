@@ -3,7 +3,7 @@
 
 USAGE="init [-h]"
 
-LONG_USAGE="configures the le-git-flow environment.
+LONG_USAGE="configures the git-flux environment.
 
 1) feature branch prefix?
 	a prefix for feature branch names, e.g. 'foo' will result in feature branch names such as 'foo__my_awesome_feature'.
@@ -32,7 +32,7 @@ cmd_default() {
 
 initialize() {
 	log
-	log "initializing git-le"
+	log "initializing git-flux"
 	log
 
 	git config --global gitflux.initialized "false"
@@ -45,7 +45,7 @@ initialize() {
 	# todo - 
 	# todo - * call this project git-flop
 	# todo - * describe the meaning in readme: it has scopes (e.g. "epic","team"), and it addresses some of the issues with git-flow
-	# todo - * create a gitflux-survey script to hold all logic found in git-le-init
+	# todo - * create a gitflux-survey script to hold all logic found in git-flux-init
 	# todo - * talk with efim about the option to open-source it
 	# todo - 
 	# todo - 

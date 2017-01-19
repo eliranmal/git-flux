@@ -2,9 +2,9 @@
 
 
 main() {
-	local repo_name="le-ui-gitflow"
-	local exec_files="git-le"
-	local script_files="gitflux-common gitflux-util gitflux-status gitflux-validation gitflux-gitlib git-le-init git-le-feature git-le-team git-le-integration"
+	local repo_name="git-flux"
+	local exec_files="git-flux"
+	local script_files="gitflux-common gitflux-util gitflux-status gitflux-validation gitflux-gitlib git-flux-init git-flux-feature git-flux-team git-flux-integration"
 	local cmd_name="$1"
 	ensure_install_prefix
 	ensure_repo_url
@@ -36,7 +36,7 @@ usage() {
 
 do_uninstall() {
 	validate_install_prefix
-	echo "uninstalling git-le from '$INSTALL_PREFIX'"
+	echo "uninstalling git-flux from '$INSTALL_PREFIX'"
 	for script_file in $script_files $exec_files; do
 		echo "rm -vf $INSTALL_PREFIX/$script_file"
 		rm -vf "$INSTALL_PREFIX/$script_file"
@@ -51,7 +51,7 @@ do_install() {
 		echo "cloning repo from github to '$repo_name'"
 		git clone "$REPO_URL" "$repo_name"
 	fi
-	echo "installing git-le to '$INSTALL_PREFIX'"
+	echo "installing git-flux to '$INSTALL_PREFIX'"
 	install -v -d -m 0755 "$INSTALL_PREFIX"
 	for exec_file in $exec_files; do
 		install -v -m 0755 "$REPO_PATH/$exec_file" "$INSTALL_PREFIX"
@@ -63,7 +63,7 @@ do_install() {
 
 ensure_repo_url() {
 	if [ -z "$REPO_URL" ]; then
-		REPO_URL="http://lpgithub.dev.lprnd.net/WebJedi/le-ui-gitflow.git"
+		REPO_URL="http://lpgithub.dev.lprnd.net/WebJedi/git-flux.git"
 	fi
 }
 

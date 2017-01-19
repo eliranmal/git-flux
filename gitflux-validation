@@ -7,9 +7,9 @@ validate_arg() {
 	fi
 }
 
-validate_le_gitflow_initialized() {
+validate_git_flux_initialized() {
 	if [[ $(git config --global gitflux.initialized) != "true" ]]; then
-		fatal "gitflux is not initialized. you have to run 'git le init' first."
+		fatal "git-flux is not initialized. you have to run 'git flux init' first."
 	fi
 }
 

@@ -22,8 +22,8 @@ main() {
 	[[ -n $1 && $1 != "-h" ]] && shift
 
 	# verify the sub-command script exists, and include it
-	if [[ -e "$working_dir/git-le-$sub_command" ]]; then
-		source "$working_dir/git-le-$sub_command"
+	if [[ -e "$working_dir/git-flux-$sub_command" ]]; then
+		source "$working_dir/git-flux-$sub_command"
 	fi
 
 	local action="$1";
@@ -47,7 +47,7 @@ main() {
 
 	# validate action prerequisites
 	if [[ $sub_command != "init" ]]; then
-		validate_le_gitflow_initialized
+		validate_git_flux_initialized
 	fi
 
 	# delegate to the sub-command action api
