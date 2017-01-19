@@ -59,7 +59,7 @@ this tool only supports bash/mingw32, so:
 
 ## usage
 
-    git flux <command> [action] [-h]
+    git flux <sub-command> [action] [-h]
 
 #### flags
 
@@ -72,7 +72,7 @@ this tool only supports bash/mingw32, so:
 ##### `init`
 
 initializes the repository with information about branch names etc. 
-(this command has no actions).
+(this sub-command has no actions).
 
 
 ##### `feature`
