@@ -45,7 +45,7 @@ initialize() {
 	# todo - 
 	# todo - * call this project git-flop
 	# todo - * describe the meaning in readme: it has scopes (e.g. "epic","team"), and it addresses some of the issues with git-flow
-	# todo - * create a gitle-survey script to hold all logic found in git-le-init
+	# todo - * create a gitflux-survey script to hold all logic found in git-le-init
 	# todo - * talk with efim about the option to open-source it
 	# todo - 
 	# todo - 

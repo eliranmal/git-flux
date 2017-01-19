@@ -1,9 +1,0 @@
-#!/usr/bin/env sh
-
-working_dir=$(dirname "$(echo "$0" | sed -e 's,\\,/,g')")
-
-source "$working_dir/gitle-util"
-source "$working_dir/gitle-status"
-source "$working_dir/gitle-validation"
-source "$working_dir/gitle-gitlib"
-

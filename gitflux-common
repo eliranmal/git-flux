@@ -1,0 +1,9 @@
+#!/usr/bin/env sh
+
+working_dir=$(dirname "$(echo "$0" | sed -e 's,\\,/,g')")
+
+source "$working_dir/gitflux-util"
+source "$working_dir/gitflux-status"
+source "$working_dir/gitflux-validation"
+source "$working_dir/gitflux-gitlib"
+

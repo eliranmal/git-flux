@@ -14,7 +14,7 @@ main() {
 	local working_dir=$(dirname "$(echo "$0" | sed -e 's,\\,/,g')")
 
 	# include common utilities
-	source "$working_dir/gitle-common"
+	source "$working_dir/gitflux-common"
 
 	local sub_command="$1";
 
