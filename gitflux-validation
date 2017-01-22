@@ -21,13 +21,13 @@ validate_git_clean_working_tree() {
 
 validate_git_local_branch_exists() {
 	if ! git_local_branch_exists "$1"; then
-		fatal "branch '$1' does not exist locally."
+		fatal "branch '$1' must exist locally."
 	fi
 }
 
 validate_git_remote_branch_exists() {
 	if ! git_remote_branch_exists "origin/$1"; then
-		fatal "branch '$1' does not exist on the remote."
+		fatal "branch '$1' must exist on the remote."
 	fi
 }
 
