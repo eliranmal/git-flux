@@ -1,0 +1,62 @@
+#!/usr/bin/env sh
+
+action_start() {
+
+	local command="$1"; shift
+	local prefix="$1"; shift
+	local base_branch="$1"; shift
+
+	local name="$1"
+	local base_branch_override="$2"
+	
+	local branch="$prefix$name"
+
+	if [[ -n $base_branch_override ]]; then
+		base_branch=$base_branch_override
+	fi
+
+	validate_git_clean_working_tree
+	validate_arg "$name"
+	
+	validate_git_local_branch_not_exists "$branch"
+	validate_git_remote_branch_not_exists "$branch"
+	
+	validate_git_local_branch_exists "$base_branch"
+	validate_git_remote_branch_exists "$base_branch"
+
+	io_log_info "starting $command '$name'..."
+
+	# save the base for the 'finish' command
+	local git_conf_subsection="$(printf "%s" "$branch" | sed 's@\([\\\"]\)@\\\1@g' )" # '\' and '"' are not allowed in git config subsection names
+	git config --global gitflux-branch-refs."$git_conf_subsection".base "$base_branch"
+
+	io_log "switching to base branch '$base_branch'..."
+	git checkout "$base_branch" >/dev/null 2>&1 && {
+		io_log "switched to '$base_branch'"
+	} || {
+		io_status_fatal "switching to '$base_branch' failed"
+	}
+
+	io_log "updating '$base_branch' from the remote..."
+	git pull >/dev/null 2>&1 && {
+		io_log "'$base_branch' updated from the remote"
+	} || {
+		io_status_fatal "updating '$base_branch' from the remote failed"
+	}
+	
+	io_log "creating the '$branch' local branch and switching to it..."
+	git checkout -b "$branch" >/dev/null 2>&1 && {
+		io_log "the '$branch' branch was created and is now the current branch"
+	} || {
+		io_status_fatal "creating '$branch' failed"
+	}
+
+	io_log "pushing '$branch' to the remote..."
+	git push --set-upstream origin "$branch" >/dev/null 2>&1 && {
+		io_log "'$branch' pushed to the remote"
+	} || {
+		io_status_fatal "pushing '$branch' to the remote failed"
+	}
+
+	io_log_ok "$command '$name' is now started. happy coding!"
+}

@@ -77,14 +77,14 @@ initializes the repository with information about branch names etc.
 
 ##### `feature`
 
-start working on a new feature, stop working on it, and what have you.
+start working on a new feature, finish working on it, and what have you.
 
 ###### actions
 
 - **`start <name>`**: create a new branch based on the team branch, 
 and switch to it.
-- **`stop <name>`**: delete that old feature branch, and its remote, too.
-- **`update <name>`**: get the latest changes from the team branch.
+- **`finish <name>`**: delete that old feature branch, and its remote, too.
+- **`sync <name>`**: get the latest changes from the team branch.
 - **`push <name>`**: push local changes to the remote.
 - **`pull <name>`**: pull remote changes to the local.
 
@@ -95,7 +95,7 @@ handles integration among team members and their features.
 
 ###### actions
 
-- **`update <name>`**: get the latest changes from the integration branch.
+- **`sync <name>`**: get the latest changes from the integration branch.
 
 
 ##### `integration`
@@ -104,12 +104,19 @@ handles integration among teams and their content.
 
 ###### actions
 
-- **`update <name>`**: get the latest changes from the master branch.
+- **`sync <name>`**: get the latest changes from the master branch.
 
 
+
+## gotcha's
+
+- if you `git rebase --onto` (which [you shouldn't][2]), bad stuff will happen. 
+why? because the branch base (for `start`ed features, teams, etc.) is 
+saved to the git config, and not dynamically resolved by git.
 
 
 
 
 
 [1]: https://git-scm.com/download/win
+[2]: https://git-scm.com/book/en/v2/Git-Branching-Rebasing#_rebase_peril

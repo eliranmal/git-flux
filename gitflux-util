@@ -14,11 +14,6 @@ is_available() {
 	type $1 >/dev/null 2>&1
 }
 
-lower_dashes() {
-	local str="$(input_from_arg_or_stdin $1)"
-	echo "$str" | sed 's/-/_/g'
-}
-
 input_from_arg_or_stdin() {
 	local arg
 	if (( $# == 0 )) || [[ -z $1 ]]; then

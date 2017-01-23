@@ -1,32 +1,32 @@
 #!/usr/bin/env sh
 
 
-USAGE="integration <update> [-h]"
+USAGE="integration <sync> [-h]"
 LONG_USAGE="---"
 
 
-cmd_update() {
-	update "$@"
+cmd_sync() {
+	sync "$@"
 }
 
 
-update() {
+sync() {
 	validate_git_clean_working_tree
 
-	log "updating integration..."
+	io_log "updating integration..."
 
 	local integration_branch="$(git config --global gitflux.branch.integration)"
 
-	log "switching to the master branch and updating from the remote..."
+	io_log "switching to the master branch and updating from the remote..."
 	git checkout master >/dev/null 2>&1 && git pull >/dev/null 2>&1
 
-	log "switching to the integration branch and updating from the remote..."
+	io_log "switching to the integration branch and updating from the remote..."
 	git checkout "$integration_branch" >/dev/null 2>&1 && git pull >/dev/null 2>&1
 
-	log "merging changes from the master branch..."
+	io_log "merging changes from the master branch..."
 	git merge --no-edit master >/dev/null 2>&1 || {
-		fatal "conflicts were found during merge, resolve them in your favorite merge tool."		
+		io_status_fatal "conflicts were found during merge, resolve them in your favorite merge tool."		
 	}
 
-	ok "integration was updated."
+	io_log_ok "integration was updated."
 }

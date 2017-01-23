@@ -6,15 +6,18 @@ main() {
 	local exec_files="git-flux"
 	local script_files="
 	gitflux-util
-	gitflux-status
+	gitflux-io
 	gitflux-gitlib
 	gitflux-validation
 	gitflux-survey
+	gitflux-action
 	gitflux-common
 	git-flux-init
 	git-flux-feature
 	git-flux-team
 	git-flux-integration
+	git-flux-rc
+	git-flux-hf
 	"
 	local cmd_name="$1"
 	ensure_install_prefix

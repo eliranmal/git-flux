@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 
-USAGE="hf <start|stop> [-h]"
+USAGE="hf <start> [-h]"
 LONG_USAGE="---"
 
 
@@ -9,15 +9,8 @@ cmd_start() {
 	start "$@"
 }
 
-cmd_stop() {
-	stop "$@"
-}
-
 
 start() {
-	fatal "todo!"
-}
-
-stop() {
-	fatal "todo!"
+	# create a branch with base "master/[$tag]"
+	io_status_fatal "todo!"
 }

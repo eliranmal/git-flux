@@ -1,34 +1,50 @@
 #!/usr/bin/env sh
 
 
-USAGE="team <update> [-h]"
+USAGE="team <sync> [-h]"
 LONG_USAGE="---"
 
 
-cmd_update() {
-	update "$@"
+cmd_join() {
+	join "$@"
+}
+
+cmd_leave() {
+	leave "$@"
+}
+
+cmd_sync() {
+	sync "$@"
 }
 
 
-update() {
+join() {
+	io_status_fatal "todo!"
+}
+
+leave() {
+	io_status_fatal "todo!"
+}
+
+sync() {
 	validate_git_clean_working_tree
 
-	log "updating team..."
+	io_log "updating team..."
 
 	local integration_branch="$(git config --global gitflux.branch.integration)"
 	local team_branch="$(git config --global gitflux.branch.team)"
-	log "team branch name: '$team_branch'."
+	io_log "team branch name: '$team_branch'."
 
-	log "switching to the integration branch and updating from the remote..."
+	io_log "switching to the integration branch and updating from the remote..."
 	git checkout "$integration_branch" >/dev/null 2>&1 && git pull >/dev/null 2>&1
 
-	log "switching to the team branch and updating from the remote..."
+	io_log "switching to the team branch and updating from the remote..."
 	git checkout "$team_branch" >/dev/null 2>&1 && git pull >/dev/null 2>&1
 
-	log "merging changes from the integration branch..."
+	io_log "merging changes from the integration branch..."
     git merge --no-edit "$integration_branch" >/dev/null 2>&1 || {
-		fatal "conflicts were found during merge, resolve them in your favorite merge tool."		
+		io_status_fatal "conflicts were found during merge, resolve them in your favorite merge tool."		
 	}
 
-	ok "team was updated."
+	io_log_ok "team was updated."
 }

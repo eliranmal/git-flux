@@ -1,0 +1,56 @@
+#!/usr/bin/env sh
+
+# all those unicode characters (✔, ✘ etc.) may not show in git-bash, f*** that.
+
+io_log() {
+	io_print "   " "$@"
+}
+
+io_log_ok() {
+	io_print " ✔ " "$@"
+}
+
+io_log_info() {
+	io_print " ℹ " "$@"
+}
+
+io_log_star() {
+	io_print " ★ " "$@"
+}
+
+io_log_warn() {
+	io_print " ✘ " "$@" >&2
+}
+
+io_status_fatal() {
+	die "$(io_print " ✘ " "$@")" >&2
+}
+
+io_prompt() {
+	local question="$1"
+	local default_suggestion="$2"
+	if [[ -n $default_suggestion ]]; then
+		question="${question} [$default_suggestion]"
+	fi
+	# use -p instead of sending the question to stdout, as this function will probably be 
+	# called in a $(subshell), so printing to stdout won't work as expected
+	read -r -p "$(printf " ？%s " "$question")" answer
+	if [[ -n $default_suggestion ]]; then
+		answer=${answer:-$default_suggestion}
+	fi
+	echo "$answer"
+}
+
+io_print() {
+	local margin="$1"
+	local body="$2"
+	local pad="$3"
+	local message="$margin$body"
+	if [[ -n $pad && $pad = true ]]; then
+		echo "
+$message
+"
+	else
+		echo "$message"
+	fi
+}
