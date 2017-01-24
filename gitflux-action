@@ -29,16 +29,9 @@ action_start() {
 
 	io_log_info "starting '$name'..."
 
-	io_log "switching to base branch '$base_branch'..."
 	git_checkout "$base_branch"
-
-	io_log "updating '$base_branch' from the remote..."
 	git_pull
-	
-	io_log "creating the '$branch' local branch and switching to it..."
 	git_create_branch "$branch"
-
-	io_log "pushing '$branch' to the remote..."
 	git_push_new_branch "$branch"
 
 	io_log_ok "'$name' is started. happy coding!"
@@ -68,13 +61,8 @@ action_finish() {
 
 	io_log_info "finishing '$name'..."
 
-	io_log "switching to base branch '$base_branch'..."
 	git_checkout "$base_branch"
-
-	io_log "deleting the '$branch' local branch..."
 	git_delete_local_branch "$branch"
-
-	io_log "deleting the '$branch' remote branch..."
 	git_delete_remote_branch "$branch"
 
 	# delete the base from config, we're not gonna need it anymore
@@ -103,19 +91,10 @@ action_sync() {
 
 	io_log_info "syncing '$name' with the base..."
 
-	io_log "switching to base branch '$base_branch'..."
 	git_checkout "$base_branch"
-
-	io_log "updating '$base_branch' from the remote..."
 	git_pull
-
-	io_log "switching to branch '$branch'..."
 	git_checkout "$branch"
-
-	io_log "updating '$branch' from the remote..."
 	git_pull
-
-	io_log "merging changes from the '$base_branch' base branch..."
 	git_merge "$base_branch"
 
 	io_log_ok "'$name' is synced with the base."
