@@ -9,6 +9,12 @@
    - ~~generalize prompting in the terminal to encapsulate all that 
    verbosity in git-flux-init~~
    - ~~talk about the option to open-source it~~
+   - unit tests: explore these libs (ordered by # of stars in github)
+      - [bats][1]
+      - [assert.sh][2]
+      - [shunit2][3]
+      - [epoxy][4]
+      - [bashtest][5]
 
 - document:
    - an overview of the git-flux model, specifically the levels.
@@ -18,7 +24,7 @@
 
 - exposure:
    - document it well
-   - write tests (how to do this in bash? what's the convention?)
+   - write unit tests
    - search/replace any hard references to the repo url
    - update the docs on setup to use the enterprise form:
    ```sh
@@ -27,3 +33,13 @@
        -O -L https://lpgithub.dev.lprnd.net/raw/eliranm/git-flux/master/bin/setup.sh
    ```
    - write a blog post (contact vladi regarding the dev-blogs platform)
+
+
+
+
+
+[1]: https://github.com/sstephenson/bats
+[2]: https://github.com/lehmannro/assert.sh
+[3]: https://github.com/kward/shunit2
+[4]: https://github.com/spbnick/epoxy
+[5]: https://github.com/pahaz/bashtest
