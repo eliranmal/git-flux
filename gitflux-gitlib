@@ -100,12 +100,21 @@ git_create_branch() {
 	}
 }
 
+git_push() {
+	local ref="$1"
+	git push origin "$ref" >/dev/null 2>&1 && {
+		io_log_ok "'$ref' pushed to the remote" 1
+	} || {
+		io_status_fatal "pushing '$ref' to the remote failed" 1
+	}
+}
+
 git_push_new_branch() {
 	local branch="$1"
 	git push --set-upstream origin "$branch" >/dev/null 2>&1 && {
-		io_log_ok "'$branch' pushed to the remote" 1
+		io_log_ok "new branch '$branch' pushed to the remote" 1
 	} || {
-		io_status_fatal "pushing '$branch' to the remote failed" 1
+		io_status_fatal "pushing new branch '$branch' to the remote failed" 1
 	}
 }
 
@@ -116,5 +125,14 @@ git_merge() {
 	} || {
 		io_status_fatal "conflicts were found during the merge from '$branch', resolve them in your favorite merge tool" 1
 	}
+}
 
+git_tag() {
+	local tag="$1"
+	local message="$2"
+	git tag -a $tag -m $message >/dev/null 2>&1 && {
+		io_log_ok "tag '$tag' created" 1
+	} || {
+		io_status_fatal "creating tag '$tag' failed" 1
+	}
 }

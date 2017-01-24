@@ -1,16 +1,12 @@
 #!/usr/bin/env sh
 
 
-USAGE="hf <start> [-h]"
+USAGE="hf <start> <version> [-h]"
 LONG_USAGE="---"
 
 
 cmd_start() {
-	start "$@"
-}
-
-
-start() {
 	# create a branch with base "master/[$tag]"
+#	action_start "" "master" "$@"
 	io_status_fatal "todo!"
 }
