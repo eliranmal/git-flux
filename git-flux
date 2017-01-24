@@ -10,6 +10,11 @@ LONG_USAGE="team-oriented git workflow commands. yep."
 
 
 main() {
+	
+	# a little nice backdoor for debugging :)
+	if [[ $1 = "debug" ]]; then
+		set -x; shift
+	fi
 
 	local working_dir=$(dirname "$(echo "$0" | sed -e 's,\\,/,g')")
 
