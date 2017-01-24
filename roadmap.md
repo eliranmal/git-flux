@@ -9,8 +9,8 @@
    - ~~talk about the option to open-source it~~
 
 - document:
-   - the git-flux model, specifically the levels. also elaborate on 
-   teams and the ability to switch teams with the `join` action
+   - an overview of the git-flux model, specifically the levels.
+   - elaborate on teams and the ability to switch teams with the `join` action
    - the fact that git-flux addresses some of the issues in git-flow 
    (e.g. we never use `--no-ff`, all merges are done with default strategy)
 
