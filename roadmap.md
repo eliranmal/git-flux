@@ -2,6 +2,7 @@
 # future plans
 
 - todo:
+   - redirect builtin commands stderr to an `error.log` file
    - introduce 'epic' level, capable of aggregating teams *or* features
    - ~~allow overriding the base branch in the 'feature' subcommand~~
    - ~~generalize prompting in the terminal to encapsulate all that 
