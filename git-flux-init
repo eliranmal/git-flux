@@ -29,7 +29,7 @@ cmd_default() {
 initialize() {
 	io_log "- - - git-flux initializer - - -" "pad"
 
-	git config --global gitflux.initialized "false"
+	git config --global gitflux.initialized false
 
 	local prefix_delimiter="/"
 	
@@ -47,7 +47,7 @@ initialize() {
 	git config --global gitflux.prefix.rc "$release_candidate_prefix"
 	git config --global gitflux.prefix.hf "$hot_fix_prefix"
 	git config --global gitflux.branch.integration "$integration_branch"
-	git config --global gitflux.initialized "true"
+	git config --global gitflux.initialized true
 	
 	io_log_ok "all done. you're awesome!" "pad"
 }

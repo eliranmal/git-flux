@@ -1,66 +1,32 @@
 #!/usr/bin/env sh
 
 
-USAGE="team <sync> [-h]"
+USAGE="team <create|destroy|sync|join> [-h]"
 LONG_USAGE="---"
 
 
 cmd_create() {
-	create "$@"
+	action_start "$(git config --global gitflux.prefix.team)" "$(git config --global gitflux.branch.integration)" "$@"
 }
 
 cmd_destroy() {
-	destroy "$@"
-}
-
-cmd_join() {
-	join "$@"
-}
-
-cmd_leave() {
-	leave "$@"
+	action_finish "$(git config --global gitflux.prefix.team)" "$@"
 }
 
 cmd_sync() {
-	sync "$@"
+	action_sync "$(git config --global gitflux.prefix.team)" "$@"
 }
 
+cmd_join() {
 
-create() {
-	io_status_fatal "todo!"
-}
+	# todo - check for existing feature branches that belong to the old team, and prompt user
 
-destroy() {
-	io_status_fatal "todo!"
-}
+	local name="$1"
 
-join() {
-	io_status_fatal "todo!"
-}
-
-leave() {
-	io_status_fatal "todo!"
-}
-
-sync() {
-	validate_git_clean_working_tree
-
-	io_log "updating team..."
-
-	local integration_branch="$(git config --global gitflux.branch.integration)"
-	local team_branch="$(git config --global gitflux.branch.team)"
-	io_log "team branch name: '$team_branch'."
-
-	io_log "switching to the integration branch and updating from the remote..."
-	git checkout "$integration_branch" >/dev/null 2>&1 && git pull >/dev/null 2>&1
-
-	io_log "switching to the team branch and updating from the remote..."
-	git checkout "$team_branch" >/dev/null 2>&1 && git pull >/dev/null 2>&1
-
-	io_log "merging changes from the integration branch..."
-    git merge --no-edit "$integration_branch" >/dev/null 2>&1 || {
-		io_status_fatal "conflicts were found during merge, resolve them in your favorite merge tool."		
-	}
-
-	io_log_ok "team was updated."
+	validate_mandatory_arg "$name"
+	
+	local prefix="$(git config --global gitflux.prefix.team)"
+	local branch="$prefix$name"
+	
+	git config --global gitflux.branch.team "$branch"
 }

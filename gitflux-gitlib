@@ -55,6 +55,7 @@ git_config_escape_subsection() {
 	printf "%s" "$1" | sed 's@\([\\\"]\)@\\\1@g' # '\' and '"' are not allowed in git config subsection names
 }
 
+
 git_checkout() {
 	local branch="$1"
 	git checkout "$branch" >/dev/null 2>&1 && {
@@ -106,4 +107,14 @@ git_push_new_branch() {
 	} || {
 		io_status_fatal "pushing '$branch' to the remote failed" 1
 	}
+}
+
+git_merge() {
+	local branch="$1"
+	git merge --no-edit "$branch" >/dev/null 2>&1 && {
+		io_log_ok "merged from '$branch'" 1
+	} || {
+		io_status_fatal "conflicts were found during the merge from '$branch', resolve them in your favorite merge tool" 1
+	}
+
 }

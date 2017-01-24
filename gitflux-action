@@ -4,17 +4,17 @@ action_start() {
 
 	local prefix="$1"
 	local base_branch="$2"
-
 	local name="$3"
 	local base_branch_override="$4"
 	
+	validate_arg "$name"
+
 	local branch="$prefix$name"
 
 	if [[ -n $base_branch_override ]]; then
 		base_branch=$base_branch_override
 	fi
 
-	validate_arg "$name"
 	validate_git_clean_working_tree
 	
 	validate_git_local_branch_not_exists "$branch"
@@ -24,7 +24,7 @@ action_start() {
 	validate_git_remote_branch_exists "$base_branch"
 
 	# save the base to config for the 'finish' command
-	git config --global gitflux-branch-refs."$(git_config_escape_subsection "$branch")".base "$base_branch"
+	git config --global gitflux-branch-base."$(git_config_escape_subsection "$branch")".ref "$base_branch"
 
 	io_log_info "starting '$name'..."
 
@@ -40,18 +40,19 @@ action_start() {
 	io_log "pushing '$branch' to the remote..."
 	git_push_new_branch "$branch"
 
-	io_log_star "'$name' is started. happy coding!"
+	io_log_ok "'$name' is started. happy coding!"
 }
 
 action_finish() {
 
 	local prefix="$1"
 	local name="$2"
+
+	validate_mandatory_arg "$name"
 	
 	local branch="$prefix$name"
-	local base_branch="$(git config --global gitflux-branch-refs."$(git_config_escape_subsection "$branch")".base)"
+	local base_branch="$(git config --global gitflux-branch-base."$(git_config_escape_subsection "$branch")".ref)"
 
-	validate_arg "$name"
 	validate_git_clean_working_tree
 		
 	validate_git_local_branch_exists "$branch"
@@ -76,7 +77,45 @@ action_finish() {
 	git_delete_remote_branch "$branch"
 
 	# delete the base from config, we're not gonna need it anymore
-	git config --global --unset gitflux-branch-refs."$(git_config_escape_subsection "$branch")".base "$base_branch"
+	git config --global --remove-section gitflux-branch-base."$(git_config_escape_subsection "$branch")"
 	
-	io_log_star "'$name' is finished. RIP."
+	io_log_ok "'$name' is finished. RIP."
+}
+
+action_sync() {
+
+	local prefix="$1"
+	local name="$2"
+
+	validate_mandatory_arg "$name"
+	
+	local branch="$prefix$name"
+	local base_branch="$(git config --global gitflux-branch-base."$(git_config_escape_subsection "$branch")".ref)"
+
+	validate_git_clean_working_tree
+	
+	validate_git_local_branch_exists "$branch"
+	validate_git_remote_branch_exists "$branch"
+	
+	validate_git_local_branch_exists "$base_branch"
+	validate_git_remote_branch_exists "$base_branch"
+
+	io_log_info "syncing '$name' with the base..."
+
+	io_log "switching to base branch '$base_branch'..."
+	git_checkout "$base_branch"
+
+	io_log "updating '$base_branch' from the remote..."
+	git_pull
+
+	io_log "switching to branch '$branch'..."
+	git_checkout "$branch"
+
+	io_log "updating '$branch' from the remote..."
+	git_pull
+
+	io_log "merging changes from the '$base_branch' base branch..."
+	git_merge "$base_branch"
+
+	io_log_ok "'$name' is synced with the base."
 }

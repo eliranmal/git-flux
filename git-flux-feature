@@ -6,88 +6,13 @@ LONG_USAGE="---"
 
 
 cmd_start() {
-	start "$@"
-}
-
-cmd_finish() {
-	finish "$@"
-}
-
-cmd_sync() {
-	sync "$@"
-}
-
-cmd_push() {
-	push "$@"
-}
-
-cmd_pull() {
-	pull "$@"
-}
-
-
-start() {
 	action_start "$(git config --global gitflux.prefix.feature)" "$(git config --global gitflux.branch.team)" "$@"
 }
 
-finish() {
+cmd_finish() {
 	action_finish "$(git config --global gitflux.prefix.feature)" "$@"
 }
 
-sync() {
-	validate_feature_action "$1"
-
-	io_log_info "syncing feature '$1'..."
-
-	local branch_name="$(prefix_branch_name "$1")"
-	io_log "branch name: '$branch_name'."
-
-	validate_git_local_branch_exists "$branch_name"
-
-	local team_branch="$(git config --global gitflux.branch.team)"
-
-	io_log "switching to the team branch and updating from the remote..."
-	git checkout "$team_branch" >/dev/null 2>&1 && git pull >/dev/null 2>&1 && {
-		io_log "team branch updated from the remote"
-	}
-	
-	io_log "switching back to the feature branch..."
-	git checkout "$branch_name" >/dev/null 2>&1
-
-	io_log "merging changes from the team branch..."
-	git merge --no-edit "$team_branch" >/dev/null 2>&1 || {
-		io_status_fatal "conflicts were found during merge, resolve them in your favorite merge tool."		
-	}
-
-	io_log_ok "feature '$1' was updated."
-}
-
-push() {
-	validate_feature_action "$1"
-
-	io_log "pushing feature '$1'..."
-
-	local branch_name="$(prefix_branch_name "$1")"
-	io_log "branch name: '$branch_name'."
-
-	validate_git_remote_branch_exists "$branch_name"
-	
-	io_log "pushing local changes to the feature's remote branch..."
-	git push origin refs/heads/"$branch_name":"$branch_name" >/dev/null 2>&1
-
-	io_log_ok "feature '$1' was pushed."
-}
-
-pull() {
-	io_status_fatal "todo!"
-}
-
-
-prefix_branch_name() {
-	echo "$(git config --global gitflux.prefix.feature)$1"
-}
-
-validate_feature_action() {
-	validate_arg "$1"
-	validate_git_clean_working_tree
+cmd_sync() {
+	action_sync "$(git config --global gitflux.prefix.feature)" "$@"
 }

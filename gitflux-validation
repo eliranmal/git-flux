@@ -1,14 +1,14 @@
 #!/usr/bin/env sh
 
 
-validate_arg() {
+validate_mandatory_arg() {
 	if [[ -z $1 ]]; then
 		usage
 	fi
 }
 
 validate_git_flux_initialized() {
-	if [[ $(git config --global gitflux.initialized) != "true" ]]; then
+	if [[ $(git config --global gitflux.initialized) != true ]]; then
 		io_status_fatal "git-flux is not initialized. you have to run 'git flux init' first."
 	fi
 }
