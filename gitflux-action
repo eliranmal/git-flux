@@ -62,7 +62,7 @@ action_finish() {
 	# delete the base from config, we're not gonna need it anymore
 	git config --global --unset gitflux-branch-refs."$(git_config_escape_subsection "$branch")".base "$base_branch"
 
-	local answer=$(io_prompt "$name's local and remote branches will be deleted, so make sure your work is merged. continue? (y/n)")
+	local answer=$(io_prompt "$name's local and remote branches will be deleted, forever. continue? (y/n)")
 	if [[ $answer != "y" ]]; then
 		io_status_fatal "i knew you'd chicken out."
 	fi
