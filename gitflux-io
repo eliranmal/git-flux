@@ -44,12 +44,21 @@ io_prompt() {
 io_print() {
 	local margin="$1"
 	local body="$2"
-	local pad="$3"
+	local space=$3 # intentionally don't quote this arg for now
 	local message="$margin$body"
-	if [[ -n $pad && $pad = true ]]; then
+	# 'pad' means add a new line at the top and bottom
+	if [[ $space = "pad" ]]; then
 		echo "
 $message
 "
+	# when passing a number, it is used as the desired number of indent levels
+	elif [[ $space =~ [123] ]]; then
+		local indent=""
+		until (( $space == 0 )); do
+			indent="   $indent"
+			let space-=1
+		done
+		echo "$indent$message"
 	else
 		echo "$message"
 	fi

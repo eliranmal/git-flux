@@ -49,5 +49,5 @@ initialize() {
 	git config --global gitflux.branch.integration "$integration_branch"
 	git config --global gitflux.initialized "true"
 	
-	io_log_ok "all done. you're awesome!" true
+	io_log_ok "all done. you're awesome!" "pad"
 }

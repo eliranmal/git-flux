@@ -5,6 +5,14 @@ USAGE="team <sync> [-h]"
 LONG_USAGE="---"
 
 
+cmd_create() {
+	create "$@"
+}
+
+cmd_destroy() {
+	destroy "$@"
+}
+
 cmd_join() {
 	join "$@"
 }
@@ -17,6 +25,14 @@ cmd_sync() {
 	sync "$@"
 }
 
+
+create() {
+	io_status_fatal "todo!"
+}
+
+destroy() {
+	io_status_fatal "todo!"
+}
 
 join() {
 	io_status_fatal "todo!"

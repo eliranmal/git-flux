@@ -2,11 +2,11 @@
 
 action_start() {
 
-	local prefix="$1"; shift
-	local base_branch="$1"; shift
+	local prefix="$1"
+	local base_branch="$2"
 
-	local name="$1"
-	local base_branch_override="$2"
+	local name="$3"
+	local base_branch_override="$4"
 	
 	local branch="$prefix$name"
 
@@ -14,8 +14,8 @@ action_start() {
 		base_branch=$base_branch_override
 	fi
 
-	validate_git_clean_working_tree
 	validate_arg "$name"
+	validate_git_clean_working_tree
 	
 	validate_git_local_branch_not_exists "$branch"
 	validate_git_remote_branch_not_exists "$branch"
@@ -23,12 +23,10 @@ action_start() {
 	validate_git_local_branch_exists "$base_branch"
 	validate_git_remote_branch_exists "$base_branch"
 
-	io_log_info "starting '$name'..."
+	# save the base to config for the 'finish' command
+	git config --global gitflux-branch-refs."$(git_config_escape_subsection "$branch")".base "$base_branch"
 
-	# todo - use this in the 'finish' command
-	# save the base for the 'finish' command
-	local git_conf_subsection="$(printf "%s" "$branch" | sed 's@\([\\\"]\)@\\\1@g' )" # '\' and '"' are not allowed in git config subsection names
-	git config --global gitflux-branch-refs."$git_conf_subsection".base "$base_branch"
+	io_log_info "starting '$name'..."
 
 	io_log "switching to base branch '$base_branch'..."
 	git_checkout "$base_branch"
@@ -47,27 +45,29 @@ action_start() {
 
 action_finish() {
 
-	local prefix="$1"; shift
-	local base_branch="$1"; shift
-
-	local name="$1"
-	local base_branch_override="$2"
+	local prefix="$1"
+	local name="$2"
 	
 	local branch="$prefix$name"
+	local base_branch="$(git config --global gitflux-branch-refs."$(git_config_escape_subsection "$branch")".base)"
 
-	if [[ -n $base_branch_override ]]; then
-		base_branch=$base_branch_override
-	fi
+	validate_arg "$name"
+	validate_git_clean_working_tree
 		
 	validate_git_local_branch_exists "$branch"
 	validate_git_remote_branch_exists "$branch"
+	
+	validate_git_local_branch_exists "$base_branch"
 
-	io_log_info "finishing '$name'..."
+	# delete the base from config, we're not gonna need it anymore
+	git config --global --unset gitflux-branch-refs."$(git_config_escape_subsection "$branch")".base "$base_branch"
 
 	local answer=$(io_prompt "the feature's local and remote branches will be deleted, so make sure your work is merged. continue? (y/n)")
 	if [[ $answer != "y" ]]; then
 		io_status_fatal "i knew you'd chicken out."
 	fi
+
+	io_log_info "finishing '$name'..."
 
 	io_log "switching to base branch '$base_branch'..."
 	git_checkout "$base_branch"

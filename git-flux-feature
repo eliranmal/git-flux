@@ -1,8 +1,6 @@
 #!/usr/bin/env sh
 
 
-# todo - consider if/when updating from the team *remote* should be done (git pull)
-
 USAGE="feature <start|finish|sync|push|pull> <name> [base] [-h]"
 LONG_USAGE="---"
 
@@ -33,7 +31,7 @@ start() {
 }
 
 finish() {
-	action_finish "$(git config --global gitflux.prefix.feature)" "$(git config --global gitflux.branch.team)" "$@"
+	action_finish "$(git config --global gitflux.prefix.feature)" "$@"
 }
 
 sync() {
