@@ -77,7 +77,7 @@ do_install() {
 
 ensure_repo_url() {
 	if [ -z "$REPO_URL" ]; then
-		REPO_URL="http://lpgithub.dev.lprnd.net/WebJedi/git-flux.git"
+		REPO_URL="http://lpgithub.dev.lprnd.net/eliranm/git-flux.git"
 	fi
 }
 

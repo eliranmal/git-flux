@@ -27,7 +27,7 @@ this tool only supports bash/mingw32, so:
   ```sh
   curl -H 'Authorization: token 8ba9fcb4212fd9ba15371d60af1c3d10c73b5522' \
       -H 'Accept: application/vnd.github.v3.raw' \
-      -O -L https://lpgithub.dev.lprnd.net/raw/WebJedi/git-flux/master/bin/setup.sh
+      -O -L https://lpgithub.dev.lprnd.net/raw/eliranm/git-flux/master/bin/setup.sh
   ```
 
 - (*nix only) grant it with execute permissions:
