@@ -54,7 +54,7 @@ action_finish() {
 	local base_branch="$(git config --global gitflux-branch-base."$(git_config_escape_subsection "$branch")".ref)"
 
 	validate_git_clean_working_tree
-		
+
 	validate_git_local_branch_exists "$branch"
 	validate_git_remote_branch_exists "$branch"
 	

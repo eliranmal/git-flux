@@ -28,5 +28,8 @@ cmd_join() {
 	local prefix="$(git config --global gitflux.prefix.team)"
 	local branch="$prefix$name"
 	
+	validate_git_local_branch_exists "$branch"
+	validate_git_remote_branch_exists "$branch"
+	
 	git config --global gitflux.branch.team "$branch"
 }
