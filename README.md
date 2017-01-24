@@ -110,9 +110,9 @@ handles integration among teams and their content.
 
 ## gotcha's
 
-- if you `git rebase --onto` (which [you shouldn't][2]), bad stuff will happen. 
-why? because the branch base (for `start`ed features, teams, etc.) is 
-saved to the git config, and not dynamically resolved by git.
+- if you `git rebase --onto` (which [you shouldn't][2]), bad stuff will 
+happen. why? because the branch base (for `start`ed features, `create`ed 
+teams, etc.) is saved to the git config, and not dynamically resolved via git.
 
 
 
