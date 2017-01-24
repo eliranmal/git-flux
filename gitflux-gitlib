@@ -58,6 +58,7 @@ git_config_escape_subsection() {
 
 git_checkout() {
 	local branch="$1"
+	io_log "switching to '$branch'..."
 	git checkout "$branch" >/dev/null 2>&1 && {
 		io_log_ok "switched to '$branch'" 1
 	} || {
@@ -67,6 +68,7 @@ git_checkout() {
 
 git_delete_local_branch() {
 	local branch="$1"
+	io_log "deleting the '$branch' local branch..."
 	git branch -D "$branch" >/dev/null 2>&1 && {
 		io_log_ok "'$branch' deleted locally" 1
 	} || {
@@ -76,6 +78,7 @@ git_delete_local_branch() {
 
 git_delete_remote_branch() {
 	local branch="$1"
+	io_log "deleting the '$branch' remote branch..."
 	git push origin :"$branch" >/dev/null 2>&1 && {
 		io_log_ok "'$branch' deleted remotely" 1
 	} || {
@@ -84,6 +87,7 @@ git_delete_remote_branch() {
 }
 
 git_pull() {
+	io_log "updating from the remote..."
 	git pull >/dev/null 2>&1 && {
 		io_log_ok "updated from the remote" 1
 	} || {
@@ -93,6 +97,7 @@ git_pull() {
 
 git_create_branch() {
 	local branch="$1"
+	io_log "creating the '$branch' local branch and switching to it..."
 	git checkout -b "$branch" >/dev/null 2>&1 && {
 		io_log_ok "'$branch' was created and is now the current branch" 1
 	} || {
@@ -102,6 +107,7 @@ git_create_branch() {
 
 git_push() {
 	local ref="$1"
+	io_log "pushing '$ref' to the remote..."
 	git push origin "$ref" >/dev/null 2>&1 && {
 		io_log_ok "'$ref' pushed to the remote" 1
 	} || {
@@ -111,15 +117,17 @@ git_push() {
 
 git_push_new_branch() {
 	local branch="$1"
+	io_log "pushing new branch '$branch' to the remote..."
 	git push --set-upstream origin "$branch" >/dev/null 2>&1 && {
-		io_log_ok "new branch '$branch' pushed to the remote" 1
+		io_log_ok "'$branch' pushed to the remote" 1
 	} || {
-		io_status_fatal "pushing new branch '$branch' to the remote failed" 1
+		io_status_fatal "pushing '$branch' to the remote failed" 1
 	}
 }
 
 git_merge() {
 	local branch="$1"
+	io_log "merging changes from '$branch'..."
 	git merge --no-edit "$branch" >/dev/null 2>&1 && {
 		io_log_ok "merged from '$branch'" 1
 	} || {
@@ -130,7 +138,8 @@ git_merge() {
 git_tag() {
 	local tag="$1"
 	local message="$2"
-	git tag -a $tag -m $message >/dev/null 2>&1 && {
+	io_log "creating tag '$tag'..."
+	git tag -a "$tag" -m "$message" >/dev/null 2>&1 && {
 		io_log_ok "tag '$tag' created" 1
 	} || {
 		io_status_fatal "creating tag '$tag' failed" 1
