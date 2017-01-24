@@ -7,7 +7,7 @@ action_start() {
 	local name="$3"
 	local base_branch_override="$4"
 	
-	validate_arg "$name"
+	validate_mandatory_arg "$name"
 
 	local branch="$prefix$name"
 
