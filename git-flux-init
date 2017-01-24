@@ -27,7 +27,7 @@ cmd_default() {
 
 
 initialize() {
-	io_log "- - - git-flux initializer - - -" true
+	io_log "- - - git-flux initializer - - -" "pad"
 
 	git config --global gitflux.initialized "false"
 
@@ -38,6 +38,7 @@ initialize() {
 	local release_candidate_prefix=$(io_prompt "release candidate prefix" "rc$prefix_delimiter")
 	local hot_fix_prefix=$(io_prompt "hot-fix prefix" "hf$prefix_delimiter")
 	local integration_branch=$(io_prompt "integration branch" "integration")
+	
 	validate_git_local_branch_exists "$integration_branch"
 	validate_git_remote_branch_exists "$integration_branch"
 
