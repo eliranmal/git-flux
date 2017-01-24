@@ -50,3 +50,57 @@ git_branch_exists() {
 git_tag_exists() {
 	has $1 $(git_all_tags)
 }
+
+
+git_checkout() {
+	local branch="$1"
+	git checkout "$branch" >/dev/null 2>&1 && {
+		io_log_ok "   switched to '$branch'"
+	} || {
+		io_status_fatal "   switching to '$branch' failed"
+	}
+}
+
+git_delete_local_branch() {
+	local branch="$1"
+	git branch -D "$branch" >/dev/null 2>&1 && {
+		io_log_ok "   '$branch' deleted locally"
+	} || {
+		io_status_fatal "   delete of local '$branch' failed"
+	}
+}
+
+git_delete_remote_branch() {
+	local branch="$1"
+	git push origin :"$branch" >/dev/null 2>&1 && {
+		io_log_ok "   '$branch' deleted remotely"
+	} || {
+		io_status_fatal "   delete of remote '$branch' failed"
+	}
+}
+
+git_pull() {
+	git pull >/dev/null 2>&1 && {
+		io_log_ok "   updated from the remote"
+	} || {
+		io_status_fatal "   updating from the remote failed"
+	}
+}
+
+git_create_branch() {
+	local branch="$1"
+	git checkout -b "$branch" >/dev/null 2>&1 && {
+		io_log "   '$branch' was created and is now the current branch"
+	} || {
+		io_status_fatal "   creating '$branch' failed"
+	}
+}
+
+git_push_new_branch() {
+	local branch="$1"
+	git push --set-upstream origin "$branch" >/dev/null 2>&1 && {
+		io_log "   '$branch' pushed to the remote"
+	} || {
+		io_status_fatal "   pushing '$branch' to the remote failed"
+	}
+}

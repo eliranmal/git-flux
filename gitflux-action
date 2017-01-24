@@ -2,7 +2,6 @@
 
 action_start() {
 
-	local command="$1"; shift
 	local prefix="$1"; shift
 	local base_branch="$1"; shift
 
@@ -24,39 +23,60 @@ action_start() {
 	validate_git_local_branch_exists "$base_branch"
 	validate_git_remote_branch_exists "$base_branch"
 
-	io_log_info "starting $command '$name'..."
+	io_log_info "starting '$name'..."
 
+	# todo - use this in the 'finish' command
 	# save the base for the 'finish' command
 	local git_conf_subsection="$(printf "%s" "$branch" | sed 's@\([\\\"]\)@\\\1@g' )" # '\' and '"' are not allowed in git config subsection names
 	git config --global gitflux-branch-refs."$git_conf_subsection".base "$base_branch"
 
 	io_log "switching to base branch '$base_branch'..."
-	git checkout "$base_branch" >/dev/null 2>&1 && {
-		io_log "switched to '$base_branch'"
-	} || {
-		io_status_fatal "switching to '$base_branch' failed"
-	}
+	git_checkout "$base_branch"
 
 	io_log "updating '$base_branch' from the remote..."
-	git pull >/dev/null 2>&1 && {
-		io_log "'$base_branch' updated from the remote"
-	} || {
-		io_status_fatal "updating '$base_branch' from the remote failed"
-	}
+	git_pull
 	
 	io_log "creating the '$branch' local branch and switching to it..."
-	git checkout -b "$branch" >/dev/null 2>&1 && {
-		io_log "the '$branch' branch was created and is now the current branch"
-	} || {
-		io_status_fatal "creating '$branch' failed"
-	}
+	git_create_branch "$branch"
 
 	io_log "pushing '$branch' to the remote..."
-	git push --set-upstream origin "$branch" >/dev/null 2>&1 && {
-		io_log "'$branch' pushed to the remote"
-	} || {
-		io_status_fatal "pushing '$branch' to the remote failed"
-	}
+	git_push_new_branch "$branch"
 
-	io_log_ok "$command '$name' is now started. happy coding!"
+	io_log_star "'$name' is started. happy coding!"
+}
+
+action_finish() {
+
+	local prefix="$1"; shift
+	local base_branch="$1"; shift
+
+	local name="$1"
+	local base_branch_override="$2"
+	
+	local branch="$prefix$name"
+
+	if [[ -n $base_branch_override ]]; then
+		base_branch=$base_branch_override
+	fi
+		
+	validate_git_local_branch_exists "$branch"
+	validate_git_remote_branch_exists "$branch"
+
+	io_log_info "finishing '$name'..."
+
+	local answer=$(io_prompt "the feature's local and remote branches will be deleted, so make sure your work is merged. continue? (y/n)")
+	if [[ $answer != "y" ]]; then
+		io_status_fatal "i knew you'd chicken out."
+	fi
+
+	io_log "switching to base branch '$base_branch'..."
+	git_checkout "$base_branch"
+
+	io_log "deleting the feature's local branch..."
+	git_delete_local_branch "$branch"
+
+	io_log "deleting the feature's remote branch..."
+	git_delete_remote_branch "$branch"
+	
+	io_log_star "'$name' is finished. RIP."
 }
