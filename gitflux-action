@@ -119,3 +119,32 @@ action_sync() {
 
 	io_log_ok "'$name' is synced with the base."
 }
+
+action_switch() {
+
+	# todo - check for existing feature branches that belong to the old base, and prompt user (maybe also ask if they want to rebase them?)
+
+	local prefix="$1"
+	local key="$2"
+	local name="$3"
+
+	validate_mandatory_arg "$name"
+	
+	local base="$prefix$name"
+	
+	validate_git_local_branch_exists "$base"
+	validate_git_remote_branch_exists "$base"
+
+	io_log_info "switching $key..."
+
+	local old_base="$(git config --global gitflux.branch."$key")"
+	if [[ $base = $old_base ]]; then
+		io_status_fatal "already in '$base', nothing to do"
+	fi
+	
+	io_log "old base is '$old_base', new is '$base'"
+
+	git config --global gitflux.branch."$key" "$base"
+
+	io_log_ok "$key is switched."
+}
