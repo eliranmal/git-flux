@@ -41,6 +41,15 @@ io_prompt() {
 	echo "$answer"
 }
 
+io_confirm() {
+	local question="$1"
+	local exit_message="$2"
+	local answer=$(io_prompt "$question (y/n)")
+	if [[ $answer != "y" ]]; then
+		io_status_fatal "$exit_message"
+	fi
+}
+
 io_print() {
 	local margin="$1"
 	local body="$2"
