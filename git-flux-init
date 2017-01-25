@@ -22,11 +22,6 @@ here are the questions you'd have to answer:
 
 
 cmd_default() {
-	initialize
-}
-
-
-initialize() {
 	io_log "- - - git-flux initializer - - -" "pad"
 
 	git config --global gitflux.initialized false
