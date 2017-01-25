@@ -52,7 +52,7 @@ git_tag_exists() {
 }
 
 git_config_escape_subsection() {
-	printf "%s" "$1" | sed 's@\([\\\"]\)@\\\1@g' # '\' and '"' are not allowed in git config subsection names
+	printf "%s" "$1" | sed 's@\([\\\"]\)@\\\1@g' # '\' and '"' must be escaped in git config subsection names
 }
 
 
