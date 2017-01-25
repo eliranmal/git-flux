@@ -2,6 +2,7 @@
 # future plans
 
 - todo:
+   - create 'gitflux-config' wrapper
    - consider delegating `sync` operations all the way up the bases tree
    - redirect builtin commands stderr to an `error.log` file
    - introduce 'epic' level, capable of aggregating teams *or* features
