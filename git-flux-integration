@@ -6,30 +6,9 @@ LONG_USAGE="---"
 
 
 cmd_sync() {
-	sync "$@"
-}
-
-
-sync() {
-
-# todo - revisit this to use the action_sync api
-
-#	validate_git_clean_working_tree
-#
-#	io_log "updating integration..."
-#
-#	local integration_branch="$(git config --global --get gitflux.branch.integration)"
-#
-#	io_log "switching to the master branch and updating from the remote..."
-#	git checkout master >/dev/null 2>&1 && git pull >/dev/null 2>&1
-#
-#	io_log "switching to the integration branch and updating from the remote..."
-#	git checkout "$integration_branch" >/dev/null 2>&1 && git pull >/dev/null 2>&1
-#
-#	io_log "merging changes from the master branch..."
-#	git merge --no-edit master >/dev/null 2>&1 || {
-#		io_status_fatal "conflicts were found during merge, resolve them in your favorite merge tool."		
-#	}
-#
-#	io_log_ok "integration was updated."
+	local branch="$(git_config_get "gitflux.branch.integration")"
+	local base="master"
+	io_log "syncing '$branch' with '$base'..."
+	sync_branch_with_base "$branch" "$base"
+	io_log_ok "'$branch' is in sync with '$base'."
 }
