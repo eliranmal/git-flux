@@ -6,11 +6,12 @@ LONG_USAGE="---"
 
 
 cmd_start() {
-	# todo - revisit this to adapt to the new create_branch_from_base api
-#	local next_version="$1"
-#	create_branch_from_base "$(git_config_get "gitflux.prefix.rc")" "$(git_config_get "gitflux.branch.integration")" "$next_version"
+	validate_mandatory_arg "$1"
+	io_log "starting release candidate '$1'..."
+	create_branch_from_base "$(git_config_get "gitflux.prefix.rc")$1" "$(git_config_get "gitflux.branch.integration")"
+	io_log_ok "'$1' is created. congrats!"
 
-	exit 0
+	# optional tagging of RC forks, it's here should we need it sometime
 #	local tag="v${next_version}-rc"
 #	validate_git_tag_not_exists "$tag"
 #	git_tag $tag "version '$next_version' release candidate"
