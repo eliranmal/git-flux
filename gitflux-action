@@ -21,7 +21,7 @@ create_branch_from_base() {
 	git_push_new_branch "$branch"
 
 	# save the base to config for the 'finish' command
-	git config --global gitflux-branch-base."$(git_config_escape_subsection "$branch")".ref "$base_branch"
+	git_config_set "gitflux-branch-base.$(git_config_escape_subsection "$branch").ref" "$base_branch"
 }
 
 destroy_branch_from_base() {

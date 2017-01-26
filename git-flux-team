@@ -61,7 +61,7 @@ cmd_join() {
 
 	io_log "leaving '$old_team_branch', joining '$new_team_branch'..."
 
-	git config --global gitflux.branch.team "$new_team"
+	git_config_set "gitflux.branch.team" "$new_team_branch"
 
 	io_log_ok "team is switched. welcome aboard!"
 }

@@ -24,7 +24,7 @@ here are the questions you'd have to answer:
 cmd_default() {
 	io_log "- - - git-flux initializer - - -" "pad"
 
-	git config --global gitflux.initialized false
+	git_config_set "gitflux.initialized" false
 
 	local prefix_delimiter="/"
 	
@@ -36,12 +36,12 @@ cmd_default() {
 	
 	validate_git_local_and_remote_branches_exist "$integration_branch"
 
-	git config --global gitflux.prefix.feature "$feature_prefix"
-	git config --global gitflux.prefix.team "$team_prefix"
-	git config --global gitflux.prefix.rc "$release_candidate_prefix"
-	git config --global gitflux.prefix.hf "$hot_fix_prefix"
-	git config --global gitflux.branch.integration "$integration_branch"
-	git config --global gitflux.initialized true
+	git_config_set "gitflux.prefix.feature" "$feature_prefix"
+	git_config_set "gitflux.prefix.team" "$team_prefix"
+	git_config_set "gitflux.prefix.rc" "$release_candidate_prefix"
+	git_config_set "gitflux.prefix.hf" "$hot_fix_prefix"
+	git_config_set "gitflux.branch.integration" "$integration_branch"
+	git_config_set "gitflux.initialized" true
 	
 	io_log_ok "all done. you're awesome!" "pad"
 }

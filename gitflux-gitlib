@@ -157,6 +157,12 @@ git_tag() {
 # - - - - -  git config - - - - - #
 
 
+git_config_set() {
+	local namespace="$1"
+	local value="$2"
+	git config --global "$namespace" "$value"
+}
+
 git_config_get_subsections_by_value() {
 	local section="$1"
 	local key="$2"
