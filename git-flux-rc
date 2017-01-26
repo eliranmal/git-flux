@@ -9,7 +9,7 @@ cmd_start() {
 	validate_mandatory_arg "$1"
 	io_log "starting release candidate '$1'..."
 	create_branch_from_base "$(git_config_get "gitflux.prefix.rc")$1" "$(git_config_get "gitflux.branch.integration")"
-	io_log_ok "'$1' is created. congrats!"
+	io_log_ok "release candidate '$1' is created. congrats!"
 
 	# optional tagging of RC forks, it's here should we need it sometime
 #	local tag="v${next_version}-rc"

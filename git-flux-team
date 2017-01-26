@@ -11,7 +11,7 @@ cmd_create() {
 	validate_mandatory_arg "$1"
 	io_log "creating team '$1'..."
 	create_branch_from_base "$(git_config_get "gitflux.prefix.team")$1" "$(git_config_get "gitflux.branch.integration")" "$2"
-	io_log_ok "'$1' is created. congrats!"
+	io_log_ok "team '$1' is created. congrats!"
 }
 
 # todo - consider another name for this action, some suggestions:
@@ -21,14 +21,14 @@ cmd_destroy() {
 	io_confirm "the local and remote branches of '$1' will be deleted, forever! continue?" "i knew you'd chicken out."
 	io_log "destroying team '$1'..."
 	destroy_branch_from_base "$(git_config_get "gitflux.prefix.team")$1"
-	io_log_ok "'$1' is destroyed. so long!"
+	io_log_ok "team '$1' is destroyed. so long!"
 }
 
 cmd_sync() {
 	validate_mandatory_arg "$1"
 	io_log "syncing '$1' with the base..."
 	sync_branch_with_base "$(git_config_get "gitflux.prefix.team")$1"
-	io_log_ok "'$1' is in sync with the base."
+	io_log_ok "team '$1' is in sync with the base."
 }
 
 cmd_join() {
@@ -60,10 +60,10 @@ cmd_join() {
 
 	git_config_set "gitflux.branch.team" "$new_team_branch"
 
-	io_log_ok "team is switched. welcome aboard!"
+	io_log_ok "team switched. welcome aboard!"
 }
 
-# alias
+# 'join' alias
 cmd_switch() {
 	cmd_join "$@"
 }
