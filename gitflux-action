@@ -45,8 +45,14 @@ destroy_branch_from_base() {
 sync_branch_with_base() {
 
 	local branch="$1"
+	local base_branch_override="$2"
 
-	local base_branch="$(git_config_get "gitflux-branch-base.$(git_config_escape_subsection "$branch").ref")"
+	local base_branch
+	if [[ -n $base_branch_override ]]; then
+		base_branch="$base_branch_override"
+	else
+		base_branch="$(git_config_get "gitflux-branch-base.$(git_config_escape_subsection "$branch").ref")"
+	fi
 
 	validate_git_clean_working_tree
 	validate_git_local_and_remote_branches_exist "$branch"	
