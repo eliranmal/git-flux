@@ -167,7 +167,7 @@ git_config_get_subsections_by_value() {
 	local section="$1"
 	local key="$2"
 	local filter_value="$3"	
-	local all_subsections
+	local subsection_list
 	local matching_lines="$(git config --global --get-regexp "$section"'\..*\.'"$key")"
 	while read -r line
 	do
@@ -182,11 +182,11 @@ git_config_get_subsections_by_value() {
 			# strip down key prefix "gitflux-branch-base." and suffix ".ref" to get the branch name
 			local subsection="$(echo "$line" | cut -d ' ' -f 1 | sed -e 's,'"$section"'\.\(.*\)\.'"$key"',\1,')"
 			if [[ -n $subsection ]]; then
-				all_subsections="$all_subsections $subsection"
+				subsection_list="$subsection_list $subsection"
 			fi
 		fi
 		
 	done <<< "$matching_lines"
 
-	echo "$all_subsections"
+	echo "$subsection_list"
 }
