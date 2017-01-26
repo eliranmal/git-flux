@@ -38,20 +38,20 @@ cmd_join() {
 	validate_mandatory_arg "$1"
 	io_log "switching teams..."
 
-	local new_team="$(git config --global --get gitflux.prefix.team)$1"
-	local old_team="$(git config --global --get gitflux.branch.team)"
+	local new_team_branch="$(git config --global --get gitflux.prefix.team)$1"
+	local old_team_branch="$(git config --global --get gitflux.branch.team)"
 
-	validate_git_local_and_remote_branches_exist "$new_team"
+	validate_git_local_and_remote_branches_exist "$new_team_branch"
 	
-	if [[ $new_team = $old_team ]]; then
-		io_status_fatal "'$new_team' is the current team, nothing to do."
+	if [[ $new_team_branch = $old_team_branch ]]; then
+		io_status_fatal "'$new_team_branch' is the current team, nothing to do."
 	fi
 
 	# relevant when switching teams, not when joining a team for the first time
-	if [[ -n $old_team ]]; then
-		validate_git_local_and_remote_branches_exist "$old_team"
+	if [[ -n $old_team_branch ]]; then
+		validate_git_local_and_remote_branches_exist "$old_team_branch"
 		
-		local old_team_feature_branches="$(git_config_get_subsections_by_value "gitflux-branch-base" "ref" "$old_team")"
+		local old_team_feature_branches="$(git_config_get_subsections_by_value "gitflux-branch-base" "ref" "$old_team_branch")"
 		if [[ -n $old_team_feature_branches ]]; then
 			io_log_info "there are still some unfinished features on the current team, here are their branches:
 	$old_team_feature_branches"
@@ -59,7 +59,7 @@ cmd_join() {
 		fi
 	fi
 
-	io_log "leaving '$old_team', joining '$new_team'..."
+	io_log "leaving '$old_team_branch', joining '$new_team_branch'..."
 
 	git config --global gitflux.branch.team "$new_team"
 
