@@ -28,6 +28,6 @@ cmd_finish() {
 cmd_sync() {
 	validate_mandatory_arg "$1"
 	io_log "syncing '$1' with the base..."
-	sync_branch_with_base "$(git config --global gitflux.prefix.feature)$1"
+	sync_branch_with_base "$(git config --global --get gitflux.prefix.feature)$1"
 	io_log_ok "'$1' is in sync with the base."
 }
