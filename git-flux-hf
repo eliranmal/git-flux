@@ -7,6 +7,6 @@ LONG_USAGE="---"
 
 cmd_start() {
 	# create a branch with base "master/[$tag]"
-#	action_start "" "master" "$@"
+#	create_branch_from_base "" "master" "$@"
 	io_status_fatal "todo!"
 }

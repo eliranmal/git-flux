@@ -1,130 +1,60 @@
 #!/usr/bin/env sh
 
 
-action_start() {
+create_branch_from_base() {
 
-	local prefix="$1"
+	local branch="$1"
 	local base_branch="$2"
-	local name="$3"
-	local base_branch_override="$4"
-	
-	validate_mandatory_arg "$name"
-
-	local branch="$prefix$name"
+	local base_branch_override="$3"
 
 	if [[ -n $base_branch_override ]]; then
 		base_branch=$base_branch_override
 	fi
 
 	validate_git_clean_working_tree
-	
-	validate_git_local_branch_not_exists "$branch"
-	validate_git_remote_branch_not_exists "$branch"
-	
-	validate_git_local_branch_exists "$base_branch"
-	validate_git_remote_branch_exists "$base_branch"
-
-	# save the base to config for the 'finish' command
-	git config --global gitflux-branch-base."$(git_config_escape_subsection "$branch")".ref "$base_branch"
-
-	io_log_info "starting '$name'..."
+	validate_git_local_and_remote_branches_dont_exist "$branch"
+	validate_git_local_and_remote_branches_exist "$base_branch"
 
 	git_checkout "$base_branch"
 	git_pull
 	git_create_branch "$branch"
 	git_push_new_branch "$branch"
 
-	io_log_ok "'$name' is started. happy coding!"
+	# save the base to config for the 'finish' command
+	git config --global gitflux-branch-base."$(git_config_escape_subsection "$branch")".ref "$base_branch"
 }
 
-action_finish() {
+destroy_branch_from_base() {
 
-	local prefix="$1"
-	local name="$2"
-
-	validate_mandatory_arg "$name"
+	local branch="$1"
 	
-	local branch="$prefix$name"
-	local base_branch="$(git config --global gitflux-branch-base."$(git_config_escape_subsection "$branch")".ref)"
+	local base_branch="$(git config --global --get gitflux-branch-base."$(git_config_escape_subsection "$branch")".ref)"
 
 	validate_git_clean_working_tree
-
-	validate_git_local_branch_exists "$branch"
-	validate_git_remote_branch_exists "$branch"
-	
+	validate_git_local_and_remote_branches_exist "$branch"
 	validate_git_local_branch_exists "$base_branch"
-
-	local answer=$(io_prompt "$name's local and remote branches will be deleted, forever. continue? (y/n)")
-	if [[ $answer != "y" ]]; then
-		io_status_fatal "i knew you'd chicken out."
-	fi
-
-	io_log_info "finishing '$name'..."
 
 	git_checkout "$base_branch"
 	git_delete_local_branch "$branch"
 	git_delete_remote_branch "$branch"
 
 	# delete the base from config, we're not gonna need it anymore
-	git config --global --remove-section gitflux-branch-base."$(git_config_escape_subsection "$branch")"
-	
-	io_log_ok "'$name' is finished. RIP."
+	git config --global --remove-section gitflux-branch-base."$(git_config_escape_subsection "$branch")"	
 }
 
-action_sync() {
+sync_branch_with_base() {
 
-	local prefix="$1"
-	local name="$2"
+	local branch="$1"
 
-	validate_mandatory_arg "$name"
-	
-	local branch="$prefix$name"
-	local base_branch="$(git config --global gitflux-branch-base."$(git_config_escape_subsection "$branch")".ref)"
+	local base_branch="$(git config --global --get gitflux-branch-base."$(git_config_escape_subsection "$branch")".ref)"
 
 	validate_git_clean_working_tree
-	
-	validate_git_local_branch_exists "$branch"
-	validate_git_remote_branch_exists "$branch"
-	
-	validate_git_local_branch_exists "$base_branch"
-	validate_git_remote_branch_exists "$base_branch"
-
-	io_log_info "syncing '$name' with the base..."
+	validate_git_local_and_remote_branches_exist "$branch"	
+	validate_git_local_and_remote_branches_exist "$base_branch"
 
 	git_checkout "$base_branch"
 	git_pull
 	git_checkout "$branch"
 	git_pull
 	git_merge "$base_branch"
-
-	io_log_ok "'$name' is synced with the base."
-}
-
-action_switch() {
-
-	# todo - check for existing feature branches that belong to the old base, and prompt user (maybe also ask if they want to rebase them?)
-
-	local prefix="$1"
-	local key="$2"
-	local name="$3"
-
-	validate_mandatory_arg "$name"
-	
-	local base="$prefix$name"
-	
-	validate_git_local_branch_exists "$base"
-	validate_git_remote_branch_exists "$base"
-
-	io_log_info "switching $key..."
-
-	local old_base="$(git config --global gitflux.branch."$key")"
-	if [[ $base = $old_base ]]; then
-		io_status_fatal "already in '$base', nothing to do"
-	fi
-	
-	io_log "old base is '$old_base', new is '$base'"
-
-	git config --global gitflux.branch."$key" "$base"
-
-	io_log_ok "$key is switched."
 }

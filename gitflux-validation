@@ -8,7 +8,7 @@ validate_mandatory_arg() {
 }
 
 validate_git_flux_initialized() {
-	if [[ $(git config --global gitflux.initialized) != true ]]; then
+	if [[ $(git config --global --get gitflux.initialized) != true ]]; then
 		io_status_fatal "git-flux is not initialized. you have to run 'git flux init' first."
 	fi
 }
@@ -25,22 +25,32 @@ validate_git_local_branch_exists() {
 	fi
 }
 
-validate_git_local_branch_not_exists() {
-	if git_local_branch_exists "$1"; then
-		io_status_fatal "branch '$1' already exists locally."
-	fi
-}
-
 validate_git_remote_branch_exists() {
 	if ! git_remote_branch_exists "origin/$1"; then
 		io_status_fatal "branch '$1' don't exist on the remote."
 	fi
 }
 
-validate_git_remote_branch_not_exists() {
+validate_git_local_branch_dont_exist() {
+	if git_local_branch_exists "$1"; then
+		io_status_fatal "branch '$1' already exists locally."
+	fi
+}
+
+validate_git_remote_branch_dont_exist() {
 	if git_remote_branch_exists "origin/$1"; then
 		io_status_fatal "branch '$1' already exists on the remote."
 	fi
+}
+
+validate_git_local_and_remote_branches_exist() {
+	validate_git_local_branch_exists "$1"
+	validate_git_remote_branch_exists "$1"
+}
+
+validate_git_local_and_remote_branches_dont_exist() {
+	validate_git_local_branch_dont_exist "$1"
+	validate_git_remote_branch_dont_exist "$1"
 }
 
 validate_git_tag_exists() {

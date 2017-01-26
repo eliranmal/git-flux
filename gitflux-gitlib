@@ -52,8 +52,13 @@ git_tag_exists() {
 }
 
 git_config_escape_subsection() {
-	printf "%s" "$1" | sed 's@\([\\\"]\)@\\\1@g' # '\' and '"' must be escaped in git config subsection names
+	printf "%s" "$1" | sed 's,\([\\\"]\),\\\1,g' # '\' and '"' must be escaped in git config subsection names
 }
+
+
+
+
+# - - - - -  actions (safe) - - - - - #
 
 
 git_checkout() {
@@ -144,4 +149,38 @@ git_tag() {
 	} || {
 		io_status_fatal "creating tag '$tag' failed" 1
 	}
+}
+
+
+
+
+# - - - - -  git config - - - - - #
+
+
+git_config_get_subsections_by_value() {
+	local section="$1"
+	local key="$2"
+	local filter_value="$3"	
+	local all_subsections
+	local matching_lines="$(git config --global --get-regexp "$section"'\..*\.'"$key")"
+	while read -r line
+	do
+		# example lines:
+		# gitflux-branch-base.team/superstars.ref integration
+		# gitflux-branch-base.rc/0.0.201.ref integration
+
+		# take the value as base branch
+		local value="$(echo "$line" | cut -d ' ' -f 2)"
+		# if any of the bases is the current base, collect its branch into a list used to prompt the user later
+		if [[ $value = $filter_value ]]; then
+			# strip down key prefix "gitflux-branch-base." and suffix ".ref" to get the branch name
+			local subsection="$(echo "$line" | cut -d ' ' -f 1 | sed -e 's,'"$section"'\.\(.*\)\.'"$key"',\1,')"
+			if [[ -n $subsection ]]; then
+				all_subsections="$all_subsections $subsection"
+			fi
+		fi
+		
+	done <<< "$matching_lines"
+
+	echo "$all_subsections"
 }

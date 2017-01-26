@@ -1,22 +1,72 @@
 #!/usr/bin/env sh
 
 
-USAGE="team <create|destroy|sync|join> [-h]"
+USAGE="team <create|destroy|sync|join> <name> [-h]"
 LONG_USAGE="---"
 
 
+# todo - consider another name for this action, some suggestions:
+# todo - huddle, assemble, gather
 cmd_create() {
-	action_start "$(git config --global gitflux.prefix.team)" "$(git config --global gitflux.branch.integration)" "$@"
+	validate_mandatory_arg "$1"
+	io_log "creating team '$1'..."
+	create_branch_from_base \
+		"$(git config --global --get gitflux.prefix.team)$1" \
+		"$(git config --global --get gitflux.branch.integration)" \
+		"$2"
+	io_log_ok "'$1' is created. congrats!"
 }
 
+# todo - consider another name for this action, some suggestions:
+# todo - dissemble, disband, break, disassemble, scatter
 cmd_destroy() {
-	action_finish "$(git config --global gitflux.prefix.team)" "$@"
+	validate_mandatory_arg "$1"
+	io_confirm "the local and remote branches of '$1' will be deleted, forever! continue?" "i knew you'd chicken out."
+	io_log "destroying team '$1'..."
+	destroy_branch_from_base "$(git config --global --get gitflux.prefix.team)$1"
+	io_log_ok "'$1' is destroyed. so long!"
 }
 
 cmd_sync() {
-	action_sync "$(git config --global gitflux.prefix.team)" "$@"
+	validate_mandatory_arg "$1"
+	io_log "syncing '$1' with the base..."
+	sync_branch_with_base "$(git config --global --get gitflux.prefix.team)$1"
+	io_log_ok "'$1' is in sync with the base."
 }
 
 cmd_join() {
-	action_switch "$(git config --global gitflux.prefix.team)" "team" "$@"
+	validate_mandatory_arg "$1"
+	io_log "switching teams..."
+
+	local new_team="$(git config --global --get gitflux.prefix.team)$1"
+	local old_team="$(git config --global --get gitflux.branch.team)"
+
+	validate_git_local_and_remote_branches_exist "$new_team"
+	
+	if [[ $new_team = $old_team ]]; then
+		io_status_fatal "'$new_team' is the current team, nothing to do."
+	fi
+
+	# relevant when switching teams, not when joining a team for the first time
+	if [[ -n $old_team ]]; then
+		validate_git_local_and_remote_branches_exist "$old_team"
+		
+		local old_team_feature_branches="$(git_config_get_subsections_by_value "gitflux-branch-base" "ref" "$old_team")"
+		if [[ -n $old_team_feature_branches ]]; then
+			io_log_info "there are still some unfinished features on the current team, here are their branches:
+	$old_team_feature_branches"
+			io_confirm "ignore them and continue with the team switch?" "aborting, see ya later."
+		fi
+	fi
+
+	io_log "leaving '$old_team', joining '$new_team'..."
+
+	git config --global gitflux.branch.team "$new_team"
+
+	io_log_ok "team is switched. welcome aboard!"
+}
+
+# alias
+cmd_switch() {
+	cmd_join "$@"
 }

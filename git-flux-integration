@@ -11,22 +11,22 @@ cmd_sync() {
 
 
 sync() {
-	validate_git_clean_working_tree
-
-	io_log "updating integration..."
-
-	local integration_branch="$(git config --global gitflux.branch.integration)"
-
-	io_log "switching to the master branch and updating from the remote..."
-	git checkout master >/dev/null 2>&1 && git pull >/dev/null 2>&1
-
-	io_log "switching to the integration branch and updating from the remote..."
-	git checkout "$integration_branch" >/dev/null 2>&1 && git pull >/dev/null 2>&1
-
-	io_log "merging changes from the master branch..."
-	git merge --no-edit master >/dev/null 2>&1 || {
-		io_status_fatal "conflicts were found during merge, resolve them in your favorite merge tool."		
-	}
-
-	io_log_ok "integration was updated."
+#	validate_git_clean_working_tree
+#
+#	io_log "updating integration..."
+#
+#	local integration_branch="$(git config --global --get gitflux.branch.integration)"
+#
+#	io_log "switching to the master branch and updating from the remote..."
+#	git checkout master >/dev/null 2>&1 && git pull >/dev/null 2>&1
+#
+#	io_log "switching to the integration branch and updating from the remote..."
+#	git checkout "$integration_branch" >/dev/null 2>&1 && git pull >/dev/null 2>&1
+#
+#	io_log "merging changes from the master branch..."
+#	git merge --no-edit master >/dev/null 2>&1 || {
+#		io_status_fatal "conflicts were found during merge, resolve them in your favorite merge tool."		
+#	}
+#
+#	io_log_ok "integration was updated."
 }

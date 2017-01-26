@@ -34,8 +34,7 @@ cmd_default() {
 	local hot_fix_prefix=$(io_prompt "hot-fix prefix" "hf$prefix_delimiter")
 	local integration_branch=$(io_prompt "integration branch" "integration")
 	
-	validate_git_local_branch_exists "$integration_branch"
-	validate_git_remote_branch_exists "$integration_branch"
+	validate_git_local_and_remote_branches_exist "$integration_branch"
 
 	git config --global gitflux.prefix.feature "$feature_prefix"
 	git config --global gitflux.prefix.team "$team_prefix"

@@ -7,10 +7,10 @@ LONG_USAGE="---"
 
 cmd_start() {
 	local next_version="$1"
-	action_start "$(git config --global gitflux.prefix.rc)" "$(git config --global gitflux.branch.integration)" "$next_version"
+	create_branch_from_base "$(git config --global --get gitflux.prefix.rc)" "$(git config --global --get gitflux.branch.integration)" "$next_version"
 
-	local tag="v${next_version}-rc"
-	validate_git_tag_not_exists "$tag"
-	git_tag $tag "version '$next_version' release candidate"
-	git_push $tag
+#	local tag="v${next_version}-rc"
+#	validate_git_tag_not_exists "$tag"
+#	git_tag $tag "version '$next_version' release candidate"
+#	git_push $tag
 }
