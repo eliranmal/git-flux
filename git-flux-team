@@ -10,10 +10,7 @@ LONG_USAGE="---"
 cmd_create() {
 	validate_mandatory_arg "$1"
 	io_log "creating team '$1'..."
-	create_branch_from_base \
-		"$(git config --global --get gitflux.prefix.team)$1" \
-		"$(git config --global --get gitflux.branch.integration)" \
-		"$2"
+	create_branch_from_base "$(git_config_get "gitflux.prefix.team")$1" "$(git_config_get "gitflux.branch.integration")" "$2"
 	io_log_ok "'$1' is created. congrats!"
 }
 
@@ -23,14 +20,14 @@ cmd_destroy() {
 	validate_mandatory_arg "$1"
 	io_confirm "the local and remote branches of '$1' will be deleted, forever! continue?" "i knew you'd chicken out."
 	io_log "destroying team '$1'..."
-	destroy_branch_from_base "$(git config --global --get gitflux.prefix.team)$1"
+	destroy_branch_from_base "$(git_config_get "gitflux.prefix.team")$1"
 	io_log_ok "'$1' is destroyed. so long!"
 }
 
 cmd_sync() {
 	validate_mandatory_arg "$1"
 	io_log "syncing '$1' with the base..."
-	sync_branch_with_base "$(git config --global --get gitflux.prefix.team)$1"
+	sync_branch_with_base "$(git_config_get "gitflux.prefix.team")$1"
 	io_log_ok "'$1' is in sync with the base."
 }
 
@@ -38,8 +35,8 @@ cmd_join() {
 	validate_mandatory_arg "$1"
 	io_log "switching teams..."
 
-	local new_team_branch="$(git config --global --get gitflux.prefix.team)$1"
-	local old_team_branch="$(git config --global --get gitflux.branch.team)"
+	local new_team_branch="$(git_config_get "gitflux.prefix.team")$1"
+	local old_team_branch="$(git_config_get "gitflux.branch.team")"
 
 	validate_git_local_and_remote_branches_exist "$new_team_branch"
 	

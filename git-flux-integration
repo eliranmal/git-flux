@@ -11,6 +11,9 @@ cmd_sync() {
 
 
 sync() {
+
+# todo - revisit this to use the action_sync api
+
 #	validate_git_clean_working_tree
 #
 #	io_log "updating integration..."

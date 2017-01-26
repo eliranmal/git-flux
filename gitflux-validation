@@ -8,7 +8,7 @@ validate_mandatory_arg() {
 }
 
 validate_git_flux_initialized() {
-	if [[ $(git config --global --get gitflux.initialized) != true ]]; then
+	if [[ $(git_config_get "gitflux.initialized") != true ]]; then
 		io_status_fatal "git-flux is not initialized. you have to run 'git flux init' first."
 	fi
 }

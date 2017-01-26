@@ -51,10 +51,6 @@ git_tag_exists() {
 	has $1 $(git_all_tags)
 }
 
-git_config_escape_subsection() {
-	printf "%s" "$1" | sed 's,\([\\\"]\),\\\1,g' # '\' and '"' must be escaped in git config subsection names
-}
-
 
 
 
@@ -157,6 +153,11 @@ git_tag() {
 # - - - - -  git config - - - - - #
 
 
+git_config_get() {
+	local namespace="$1"
+	echo "$(git config --global --get "$namespace")"
+}
+
 git_config_set() {
 	local namespace="$1"
 	local value="$2"
@@ -189,4 +190,8 @@ git_config_get_subsections_by_value() {
 	done <<< "$matching_lines"
 
 	echo "$subsection_list"
+}
+
+git_config_escape_subsection() {
+	printf "%s" "$1" | sed 's,\([\\\"]\),\\\1,g' # '\' and '"' must be escaped in git config subsection names
 }

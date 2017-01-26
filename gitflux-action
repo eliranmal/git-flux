@@ -28,7 +28,7 @@ destroy_branch_from_base() {
 
 	local branch="$1"
 	
-	local base_branch="$(git config --global --get gitflux-branch-base."$(git_config_escape_subsection "$branch")".ref)"
+	local base_branch="$(git_config_get "gitflux-branch-base.$(git_config_escape_subsection "$branch").ref")"
 
 	validate_git_clean_working_tree
 	validate_git_local_and_remote_branches_exist "$branch"
@@ -46,7 +46,7 @@ sync_branch_with_base() {
 
 	local branch="$1"
 
-	local base_branch="$(git config --global --get gitflux-branch-base."$(git_config_escape_subsection "$branch")".ref)"
+	local base_branch="$(git_config_get "gitflux-branch-base.$(git_config_escape_subsection "$branch").ref")"
 
 	validate_git_clean_working_tree
 	validate_git_local_and_remote_branches_exist "$branch"	

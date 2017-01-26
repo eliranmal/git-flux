@@ -7,13 +7,10 @@ LONG_USAGE="---"
 
 cmd_start() {
 	validate_mandatory_arg "$1"
-
 	io_log "starting feature '$1'..."
-
-	local branch="$(git config --global --get gitflux.prefix.feature)$1"
-	local base_branch="$(git config --global --get gitflux.branch.team)"
+	local branch="$(git_config_get "gitflux.prefix.feature")$1"
+	local base_branch="$(git_config_get "gitflux.branch.team")"
 	create_branch_from_base "$branch" "$base_branch" "$2"
-
 	io_log_ok "'$1' is started. happy coding!"
 }
 
@@ -21,13 +18,13 @@ cmd_finish() {
 	validate_mandatory_arg "$1"
 	io_confirm "the local and remote branches of '$1' will be deleted, forever! continue?" "i knew you'd chicken out."
 	io_log "finishing feature '$1'..."
-	destroy_branch_from_base "$(git config --global --get gitflux.prefix.feature)$1"
+	destroy_branch_from_base "$(git_config_get "gitflux.prefix.feature")$1"
 	io_log_ok "'$1' is finished. RIP."
 }
 
 cmd_sync() {
 	validate_mandatory_arg "$1"
 	io_log "syncing '$1' with the base..."
-	sync_branch_with_base "$(git config --global --get gitflux.prefix.feature)$1"
+	sync_branch_with_base "$(git_config_get "gitflux.prefix.feature")$1"
 	io_log_ok "'$1' is in sync with the base."
 }
