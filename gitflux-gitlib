@@ -168,6 +168,7 @@ git_config_get_subsections_by_value() {
 	local key="$2"
 	local filter_value="$3"	
 	local subsection_list
+	
 	local matching_lines="$(git config --global --get-regexp "$section"'\..*\.'"$key")"
 	while read -r line
 	do
@@ -185,7 +186,6 @@ git_config_get_subsections_by_value() {
 				subsection_list="$subsection_list $subsection"
 			fi
 		fi
-		
 	done <<< "$matching_lines"
 
 	echo "$subsection_list"
