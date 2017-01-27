@@ -17,6 +17,8 @@ cmd_create() {
 # todo - consider another name for this action, some suggestions:
 # todo - dissemble, disband, break, disassemble, scatter
 cmd_destroy() {
+	# todo - what to do after team is destroyed? move to another team? 
+	# todo - probably should lookup if other teams are available, and if not, delete the branch.team ref from config
 	validate_mandatory_arg "$1"
 	io_confirm "the local and remote branches of '$1' will be deleted, forever! continue?" "i knew you'd chicken out."
 	io_log "destroying team '$1'..."
@@ -47,6 +49,7 @@ cmd_join() {
 		io_status_fatal "'$new_team' is the current team, nothing to do."
 	fi
 
+	# todo - should this block be used in 'finish' as well?
 	# relevant when switching teams, not when joining a team for the first time
 	if [[ -n $old_team_branch ]]; then
 		validate_git_local_and_remote_branches_exist "$old_team_branch"

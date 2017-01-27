@@ -2,6 +2,7 @@
 # future plans
 
 - todo:
+   - integrate hub for pull-requests
    - prompt for creating new integration branch on init
    - ~~create 'gitflux-config' wrapper~~
    - consider delegating `sync` operations all the way up the bases tree

@@ -101,16 +101,6 @@ git_pull() {
 	}
 }
 
-git_create_branch() {
-	local branch="$1"
-	io_log "creating the '$branch' local branch..."
-	git checkout -b "$branch" >/dev/null 2>&1 && {
-		io_log_ok "'$branch' created and checked out" 1
-	} || {
-		io_status_fatal "creation of '$branch' failed" 1
-	}
-}
-
 git_push() {
 	local ref="$1"
 	io_log "pushing '$ref' to the remote..."
@@ -118,6 +108,16 @@ git_push() {
 		io_log_ok "'$ref' pushed" 1
 	} || {
 		io_status_fatal "push of '$ref' failed" 1
+	}
+}
+
+git_create_branch() {
+	local branch="$1"
+	io_log "creating the '$branch' local branch..."
+	git checkout -b "$branch" >/dev/null 2>&1 && {
+		io_log_ok "'$branch' created and checked out" 1
+	} || {
+		io_status_fatal "creation of '$branch' failed" 1
 	}
 }
 

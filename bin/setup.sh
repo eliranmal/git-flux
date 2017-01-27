@@ -6,18 +6,18 @@ main() {
 	local repo_name="git-flux"
 	local exec_files="git-flux"
 	local script_files="
-	gitflux-util
-	gitflux-io
-	gitflux-gitlib
-	gitflux-validation
-	gitflux-action
-	gitflux-common
-	git-flux-init
-	git-flux-feature
-	git-flux-team
-	git-flux-integration
-	git-flux-rc
-	git-flux-hf
+		gitflux-util
+		gitflux-io
+		gitflux-gitlib
+		gitflux-validation
+		gitflux-action
+		gitflux-common
+		git-flux-init
+		git-flux-feature
+		git-flux-team
+		git-flux-integration
+		git-flux-rc
+		git-flux-hf
 	"
 	ensure_install_prefix
 	ensure_repo_url

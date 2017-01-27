@@ -27,8 +27,7 @@ io_status_fatal() {
 }
 
 io_prompt() {
-	local question="$1"
-	local default_suggestion="$2"
+	local question="$1"; default_suggestion="$2"
 	if [[ -n $default_suggestion ]]; then
 		question="${question} [$default_suggestion]"
 	fi
@@ -42,30 +41,25 @@ io_prompt() {
 }
 
 io_confirm() {
-	local question="$1"
-	local exit_message="$2"
+	local question="$1"; local exit_message="$2"; local non_fatal="$3"
 	local answer=$(io_prompt "$question (y/n)")
 	if [[ $answer != "y" ]]; then
-		io_status_fatal "$exit_message"
+		if [[ $non_fatal = true ]]; then
+			io_log_info "$exit_message"
+		else
+			io_status_fatal "$exit_message"
+		fi
 	fi
 }
 
 io_print() {
-	local margin="$1"
-	local body="$2"
-	local space=$3 # intentionally don't quote this arg for now
+	local margin="$1"; local body="$2"; local indent_level=$3 # intentionally don't quote indent_level
 	local message="$margin$body"
-	# 'pad' means add a new line at the top and bottom
-	if [[ $space = "pad" ]]; then
-		echo "
-$message
-"
-	# when passing a number, it is used as the desired number of indent levels
-	elif [[ $space =~ [123] ]]; then
+	if [[ $indent_level =~ [123] ]]; then
 		local indent=""
-		until (( $space == 0 )); do
+		until (( $indent_level == 0 )); do
 			indent="   $indent"
-			let space-=1
+			let indent_level-=1
 		done
 		echo "$indent$message"
 	else
