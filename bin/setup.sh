@@ -2,6 +2,7 @@
 
 
 main() {
+	local cmd_name="$1"
 	local repo_name="git-flux"
 	local exec_files="git-flux"
 	local script_files="
@@ -9,7 +10,6 @@ main() {
 	gitflux-io
 	gitflux-gitlib
 	gitflux-validation
-	gitflux-survey
 	gitflux-action
 	gitflux-common
 	git-flux-init
@@ -19,7 +19,6 @@ main() {
 	git-flux-rc
 	git-flux-hf
 	"
-	local cmd_name="$1"
 	ensure_install_prefix
 	ensure_repo_url
 	ensure_repo_path
