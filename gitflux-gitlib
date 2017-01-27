@@ -157,32 +157,34 @@ git_create_tag() {
 # - - - - -  git config - - - - - #
 
 
+git_config_section="gitflux"
+
 git_config_get() {
 	local namespace="$1"
-	echo "$(git config --global --get "$namespace")"
+	echo "$(git config --global --get "$git_config_section.$namespace")"
 }
 
 git_config_set() {
 	local namespace="$1"; local value="$2"
-	git config --global "$namespace" "$value"
+	git config --global "$git_config_section.$namespace" "$value"
 }
 
 git_config_remove_section() {
 	local namespace="$1"
-	git config --global --remove-section "$namespace"	
+	git config --global --remove-section "$git_config_section.$namespace"	
 }
 
 git_config_get_subsections_by_value() {
-	local section="$1"; local key="$2"; local value="$3"; local prefix="$4"
+	local key="$1"; local value="$2"; local prefix="$3"
 	local subsection_list; local config_value; local config_subsection
-	local config_lines="$(git config --global --get-regexp "$section"'\..*\.'"$key")"
+	local config_lines="$(git config --global --get-regexp "$git_config_section"'\..*\.'"$key")"
 	while read -r line; do
 		# extract the config value
 		config_value="$(echo "$line" | cut -d ' ' -f 2)"
 		# if it does not match the passed value filter, abort this line
 		[[ -n $value && $config_value != $value ]] && continue
 		# strip down the section and key name to get the subsection
-		config_subsection="$(echo "$line" | cut -d ' ' -f 1 | sed -e 's,'"$section"'\.\(.*\)\.'"$key"',\1,')"
+		config_subsection="$(echo "$line" | cut -d ' ' -f 1 | sed -e 's,'"$git_config_section"'\.\(.*\)\.'"$key"',\1,')"
 		# strip down the prefix, if passed
 		if [[ -n $prefix ]]; then
 			config_subsection="$(echo "$config_subsection" | sed -e 's,'"$prefix"'\(.*\),\1,')"

@@ -21,7 +21,7 @@ create_branch_from_base() {
 	git_push_new_branch "$branch"
 
 	# save the base to config for the 'finish' command
-	git_config_set "gitflux.$(git_config_escape_subsection "branch:$branch").base" "$base_branch"
+	git_config_set "$(git_config_escape_subsection "branch:$branch").base" "$base_branch"
 }
 
 create_branch_from_tag() {
@@ -36,12 +36,12 @@ create_branch_from_tag() {
 	git_push_new_branch "$branch"
 
 	# save the base to config for the 'finish' command
-	git_config_set "gitflux.$(git_config_escape_subsection "branch:$branch").base" "$tag"
+	git_config_set "$(git_config_escape_subsection "branch:$branch").base" "$tag"
 }
 
 destroy_branch_from_base() {
-	local branch="$1"	
-	local base_branch="$(git_config_get "gitflux.$(git_config_escape_subsection "branch:$branch").base")"
+	local branch="$1"
+	local base_branch="$(git_config_get "$(git_config_escape_subsection "branch:$branch").base")"
 
 	validate_git_clean_working_tree
 	validate_git_local_and_remote_branches_exist "$branch"
@@ -52,7 +52,23 @@ destroy_branch_from_base() {
 	git_delete_remote_branch "$branch"
 
 	# delete the base from config, we're not gonna need it anymore
-	git_config_remove_section "gitflux.$(git_config_escape_subsection "branch:$branch")"	
+	git_config_remove_section "$(git_config_escape_subsection "branch:$branch")"
+}
+
+destroy_branch_from_tag() {
+	local branch="$1"
+	local tag="$(git_config_get "$(git_config_escape_subsection "branch:$branch").base")"
+
+	validate_git_clean_working_tree
+	validate_git_local_and_remote_branches_exist "$branch"
+	validate_git_tag_exists "$tag"
+
+	git_checkout "$tag"
+	git_delete_local_branch "$branch"
+	git_delete_remote_branch "$branch"
+
+	# delete the base from config, we're not gonna need it anymore
+	git_config_remove_section "$(git_config_escape_subsection "branch:$branch")"
 }
 
 sync_branch_with_base() {
@@ -62,7 +78,7 @@ sync_branch_with_base() {
 	if [[ -n $base_override ]]; then
 		base_branch="$base_override"
 	else
-		base_branch="$(git_config_get "gitflux.$(git_config_escape_subsection "branch:$branch").base")"
+		base_branch="$(git_config_get "$(git_config_escape_subsection "branch:$branch").base")"
 	fi
 
 	validate_git_clean_working_tree

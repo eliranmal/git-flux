@@ -6,7 +6,7 @@ LONG_USAGE="---"
 
 
 cmd_sync() {
-	local branch="$(git_config_get "gitflux.branch.integration")"
+	local branch="$(git_config_get "branch.integration")"
 	local base="master"
 	io_log "syncing '$branch' with '$base'..."
 	sync_branch_with_base "$branch" "$base"

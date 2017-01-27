@@ -8,14 +8,14 @@ validate_mandatory_arg() {
 }
 
 validate_git_flux_initialized() {
-	if [[ $(git_config_get "gitflux.initialized") != true ]]; then
+	if [[ $(git_config_get "initialized") != true ]]; then
 		io_status_fatal "git-flux is not initialized. you have to run 'git flux init' first."
 	fi
 }
 
 validate_git_clean_working_tree() {
 	if ! git_is_clean_working_tree; then
-		io_status_fatal "working tree is not clean. please make sure all changes are commited, or stash them." 
+		io_status_fatal "working tree is not clean. make sure all changes are commited, or stash them." 
 	fi
 }
 

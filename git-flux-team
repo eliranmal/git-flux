@@ -10,7 +10,7 @@ LONG_USAGE="---"
 cmd_create() {
 	validate_mandatory_arg "$1"
 	io_log "creating team '$1'..."
-	create_branch_from_base "$(git_config_get "gitflux.prefix.team")$1" "$(git_config_get "gitflux.branch.integration")" "$2"
+	create_branch_from_base "$(git_config_get "prefix.team")$1" "$(git_config_get "branch.integration")" "$2"
 	io_log_ok "team '$1' is created. congrats!"
 }
 
@@ -20,14 +20,14 @@ cmd_destroy() {
 	validate_mandatory_arg "$1"
 	io_confirm "the local and remote branches of '$1' will be deleted, forever! continue?" "i knew you'd chicken out."
 	io_log "destroying team '$1'..."
-	destroy_branch_from_base "$(git_config_get "gitflux.prefix.team")$1"
+	destroy_branch_from_base "$(git_config_get "prefix.team")$1"
 	io_log_ok "team '$1' is destroyed. so long!"
 }
 
 cmd_sync() {
 	validate_mandatory_arg "$1"
 	io_log "syncing '$1' with the base..."
-	sync_branch_with_base "$(git_config_get "gitflux.prefix.team")$1"
+	sync_branch_with_base "$(git_config_get "prefix.team")$1"
 	io_log_ok "team '$1' is in sync with the base."
 }
 
@@ -35,9 +35,9 @@ cmd_join() {
 	validate_mandatory_arg "$1"
 	io_log "switching teams..."
 
-	local prefix="$(git_config_get "gitflux.prefix.team")"
+	local prefix="$(git_config_get "prefix.team")"
 	local new_team_branch="$prefix$1"
-	local old_team_branch="$(git_config_get "gitflux.branch.team")"
+	local old_team_branch="$(git_config_get "branch.team")"
 
 	validate_git_local_and_remote_branches_exist "$new_team_branch"
 	
@@ -49,7 +49,7 @@ cmd_join() {
 	if [[ -n $old_team_branch ]]; then
 		validate_git_local_and_remote_branches_exist "$old_team_branch"
 		
-		local old_team_feature_branches="$(git_config_get_subsections_by_value "gitflux" "base" "$old_team_branch" "branch:")"
+		local old_team_feature_branches="$(git_config_get_subsections_by_value "base" "$old_team_branch" "branch:")"
 		if [[ -n $old_team_feature_branches ]]; then
 			# strip prefix to get the team name
 			local old_team="$(echo "$old_team_branch" | sed -e 's,'^"$prefix"',,')"
@@ -62,7 +62,7 @@ cmd_join() {
 	io_log "leaving '$old_team_branch', joining '$new_team_branch'..."
 
 	git_checkout "$new_team_branch"
-	git_config_set "gitflux.branch.team" "$new_team_branch"
+	git_config_set "branch.team" "$new_team_branch"
 
 	io_log_ok "team switched. welcome aboard!"
 }

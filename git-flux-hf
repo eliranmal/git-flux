@@ -1,19 +1,21 @@
 #!/usr/bin/env sh
 
 
-USAGE="hf <start> <version> [-h]"
+USAGE="hf <start|finish> <version> [-h]"
 LONG_USAGE="---"
 
 
 cmd_start() {
 	validate_mandatory_arg "$1"
 	io_log "starting hot-fix '$1'..."
-	local branch="$(git_config_get "gitflux.prefix.hf")$1"
-	local tag="$(git_tag_template "$1")"
-	create_branch_from_tag "$branch" "$tag"
+	create_branch_from_tag "$(git_config_get "prefix.hf")$1" "$(git_tag_template "$1")"
 	io_log_ok "hot-fix '$1' is started. good luck!"
 }
 
 cmd_finish() {
-	io_status_fatal
+	validate_mandatory_arg "$1"
+	io_confirm "the local and remote branches of '$1' will be deleted, forever! continue?" "i knew you'd chicken out."
+	io_log "finishing hot-fix '$1'..."
+	destroy_branch_from_tag "$(git_config_get "prefix.hf")$1"
+	io_log_ok "hot-fix '$1' is finished. goodbye!"
 }
