@@ -51,6 +51,11 @@ git_tag_exists() {
 	has $1 $(git_all_tags)
 }
 
+git_tag_template() {
+	local version="$1"; local suffix="$2"
+	# todo - decide what the template will be
+	printf "v%s%s" "$version" "$suffix"
+}
 
 
 
@@ -59,11 +64,11 @@ git_tag_exists() {
 
 git_checkout() {
 	local branch="$1"
-	io_log "switching to '$branch'..."
+	io_log "checking out '$branch'..."
 	git checkout "$branch" >/dev/null 2>&1 && {
-		io_log_ok "switched to '$branch'" 1
+		io_log_ok "'$branch' checked out" 1
 	} || {
-		io_status_fatal "switching to '$branch' failed" 1
+		io_status_fatal "checkout of '$branch' failed" 1
 	}
 }
 
@@ -71,9 +76,9 @@ git_delete_local_branch() {
 	local branch="$1"
 	io_log "deleting the '$branch' local branch..."
 	git branch -D "$branch" >/dev/null 2>&1 && {
-		io_log_ok "'$branch' deleted locally" 1
+		io_log_ok "'$branch' deleted" 1
 	} || {
-		io_status_fatal "delete of local '$branch' failed" 1
+		io_status_fatal "delete of '$branch' failed" 1
 	}
 }
 
@@ -81,28 +86,28 @@ git_delete_remote_branch() {
 	local branch="$1"
 	io_log "deleting the '$branch' remote branch..."
 	git push origin :"$branch" >/dev/null 2>&1 && {
-		io_log_ok "'$branch' deleted remotely" 1
+		io_log_ok "'$branch' deleted" 1
 	} || {
-		io_status_fatal "delete of remote '$branch' failed" 1
+		io_status_fatal "deletion of '$branch' failed" 1
 	}
 }
 
 git_pull() {
-	io_log "updating from the remote..."
+	io_log "pulling from the remote..."
 	git pull >/dev/null 2>&1 && {
-		io_log_ok "updated from the remote" 1
+		io_log_ok "pulled ok" 1
 	} || {
-		io_status_fatal "updating from the remote failed" 1
+		io_status_fatal "pull failed" 1
 	}
 }
 
 git_create_branch() {
 	local branch="$1"
-	io_log "creating the '$branch' local branch and switching to it..."
+	io_log "creating the '$branch' local branch..."
 	git checkout -b "$branch" >/dev/null 2>&1 && {
-		io_log_ok "'$branch' was created and is now the current branch" 1
+		io_log_ok "'$branch' created and checked out" 1
 	} || {
-		io_status_fatal "creating '$branch' failed" 1
+		io_status_fatal "creation of '$branch' failed" 1
 	}
 }
 
@@ -110,9 +115,9 @@ git_push() {
 	local ref="$1"
 	io_log "pushing '$ref' to the remote..."
 	git push origin "$ref" >/dev/null 2>&1 && {
-		io_log_ok "'$ref' pushed to the remote" 1
+		io_log_ok "'$ref' pushed" 1
 	} || {
-		io_status_fatal "pushing '$ref' to the remote failed" 1
+		io_status_fatal "push of '$ref' failed" 1
 	}
 }
 
@@ -120,9 +125,9 @@ git_push_new_branch() {
 	local branch="$1"
 	io_log "pushing new branch '$branch' to the remote..."
 	git push --set-upstream origin "$branch" >/dev/null 2>&1 && {
-		io_log_ok "'$branch' pushed to the remote" 1
+		io_log_ok "'$branch' pushed" 1
 	} || {
-		io_status_fatal "pushing '$branch' to the remote failed" 1
+		io_status_fatal "push of '$branch' failed" 1
 	}
 }
 
@@ -136,14 +141,13 @@ git_merge() {
 	}
 }
 
-git_tag() {
-	local tag="$1"
-	local message="$2"
+git_create_tag() {
+	local tag="$1"; local message="$2"
 	io_log "creating tag '$tag'..."
 	git tag -a "$tag" -m "$message" >/dev/null 2>&1 && {
-		io_log_ok "tag '$tag' created" 1
+		io_log_ok "'$tag' created" 1
 	} || {
-		io_status_fatal "creating tag '$tag' failed" 1
+		io_status_fatal "creation of '$tag' failed" 1
 	}
 }
 
@@ -159,37 +163,35 @@ git_config_get() {
 }
 
 git_config_set() {
-	local namespace="$1"
-	local value="$2"
+	local namespace="$1"; local value="$2"
 	git config --global "$namespace" "$value"
 }
 
+git_config_remove_section() {
+	local namespace="$1"
+	git config --global --remove-section "$namespace"	
+}
+
 git_config_get_subsections_by_value() {
-	local section="$1"
-	local key="$2"
-	local filter_value="$3"	
-	local subsection_list
-	
-	local matching_lines="$(git config --global --get-regexp "$section"'\..*\.'"$key")"
-	while read -r line
-	do
-		# example lines:
-		# gitflux-branch-base.team/superstars.ref integration
-		# gitflux-branch-base.rc/0.0.201.ref integration
-
-		# take the value as base branch
-		local value="$(echo "$line" | cut -d ' ' -f 2)"
-		# if any of the bases is the current base, collect its branch into a list used to prompt the user later
-		if [[ $value = $filter_value ]]; then
-			# strip down key prefix "gitflux-branch-base." and suffix ".ref" to get the branch name
-			local subsection="$(echo "$line" | cut -d ' ' -f 1 | sed -e 's,'"$section"'\.\(.*\)\.'"$key"',\1,')"
-			if [[ -n $subsection ]]; then
-				subsection_list="$subsection_list $subsection"
-			fi
+	local section="$1"; local key="$2"; local value="$3"; local prefix="$4"
+	local subsection_list; local config_value; local config_subsection
+	local config_lines="$(git config --global --get-regexp "$section"'\..*\.'"$key")"
+	while read -r line; do
+		# extract the config value
+		config_value="$(echo "$line" | cut -d ' ' -f 2)"
+		# if it does not match the passed value filter, abort this line
+		[[ -n $value && $config_value != $value ]] && continue
+		# strip down the section and key name to get the subsection
+		config_subsection="$(echo "$line" | cut -d ' ' -f 1 | sed -e 's,'"$section"'\.\(.*\)\.'"$key"',\1,')"
+		# strip down the prefix, if passed
+		if [[ -n $prefix ]]; then
+			config_subsection="$(echo "$config_subsection" | sed -e 's,'"$prefix"'\(.*\),\1,')"
 		fi
-	done <<< "$matching_lines"
-
-	echo "$subsection_list"
+		# add subsection to the result list
+		subsection_list="$subsection_list $config_subsection"
+	done <<< "$config_lines"
+	# remove leading spaces and send to stdout
+	echo "$subsection_list" | sed -e 's,^ *,,'
 }
 
 git_config_escape_subsection() {

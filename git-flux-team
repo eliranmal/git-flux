@@ -35,7 +35,8 @@ cmd_join() {
 	validate_mandatory_arg "$1"
 	io_log "switching teams..."
 
-	local new_team_branch="$(git_config_get "gitflux.prefix.team")$1"
+	local prefix="$(git_config_get "gitflux.prefix.team")"
+	local new_team_branch="$prefix$1"
 	local old_team_branch="$(git_config_get "gitflux.branch.team")"
 
 	validate_git_local_and_remote_branches_exist "$new_team_branch"
@@ -48,16 +49,19 @@ cmd_join() {
 	if [[ -n $old_team_branch ]]; then
 		validate_git_local_and_remote_branches_exist "$old_team_branch"
 		
-		local old_team_feature_branches="$(git_config_get_subsections_by_value "gitflux-branch-base" "ref" "$old_team_branch")"
+		local old_team_feature_branches="$(git_config_get_subsections_by_value "gitflux" "base" "$old_team_branch" "branch:")"
 		if [[ -n $old_team_feature_branches ]]; then
-			io_log_info "there are still some unfinished features on the current team, here are their branches:
-	$old_team_feature_branches"
-			io_confirm "ignore them and continue with the team switch?" "aborting, see ya later."
+			# strip prefix to get the team name
+			local old_team="$(echo "$old_team_branch" | sed -e 's,'^"$prefix"',,')"
+			io_log_info "feature branches of the '$old_team' team were found:"
+			io_log "$old_team_feature_branches" 1
+			io_confirm "ignore them and continue?" "aborting, see ya later."
 		fi
 	fi
 
 	io_log "leaving '$old_team_branch', joining '$new_team_branch'..."
 
+	git_checkout "$new_team_branch"
 	git_config_set "gitflux.branch.team" "$new_team_branch"
 
 	io_log_ok "team switched. welcome aboard!"

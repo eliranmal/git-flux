@@ -12,8 +12,8 @@ cmd_start() {
 	io_log_ok "release candidate '$1' is created. congrats!"
 
 	# optional tagging of RC forks, it's here should we need it sometime
-#	local tag="v${next_version}-rc"
+#	local tag="$(git_tag_template "$next_version" "-rc")"
 #	validate_git_tag_not_exists "$tag"
-#	git_tag $tag "version '$next_version' release candidate"
+#	git_create_tag $tag "version '$next_version' release candidate"
 #	git_push $tag
 }

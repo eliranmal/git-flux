@@ -6,7 +6,14 @@ LONG_USAGE="---"
 
 
 cmd_start() {
-	# create a branch with base "master/[$tag]"
-#	create_branch_from_base "" "master" "$@"
-	io_status_fatal "todo!"
+	validate_mandatory_arg "$1"
+	io_log "starting hot-fix '$1'..."
+	local branch="$(git_config_get "gitflux.prefix.hf")$1"
+	local tag="$(git_tag_template "$1")"
+	create_branch_from_tag "$branch" "$tag"
+	io_log_ok "hot-fix '$1' is started. good luck!"
+}
+
+cmd_finish() {
+	io_status_fatal
 }
