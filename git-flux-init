@@ -8,7 +8,8 @@ LONG_USAGE="configures the git-flux environment with an interactive survey.
 here are the questions you'd have to answer:
 
 ★ feature prefix?
-	a prefix for feature branch names, e.g. 'foo/' will result in feature branch names like 'foo/my_awesome_feature'.
+	a prefix for feature branch names, e.g. 'foo/' will result in feature branch names \
+like 'foo/my_awesome_feature'. defaults to 'feature/'
 ★ team prefix?
 	your team's branch name prefix, defaults to 'team/'.
 ★ release candidate prefix?

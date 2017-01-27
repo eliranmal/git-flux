@@ -13,3 +13,7 @@ escape() {
 is_available() {
 	type $1 >/dev/null 2>&1
 }
+
+strip_prefix() {
+	echo "$1" | sed -e 's,^'"$2"',,'
+}
