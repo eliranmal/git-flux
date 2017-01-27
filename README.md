@@ -1,6 +1,6 @@
 # git-flux
 
-> provides git commands for fluent workflow
+> git commands for fluent, team-oriented workflow
 
 
 ## prerequisites
