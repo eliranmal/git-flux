@@ -3,9 +3,16 @@
 
 USAGE="integration <sync> [-h]"
 
-LONG_USAGE="available actions:
+LONG_USAGE="
+${t_bold}${t_fg_magenta}integration${t_off}
+-----------
 
-   ${t_bold}sync${t_off}
+handle sync of the integration branch.
+
+
+${t_bold}available actions:${t_off}
+
+   ${t_bold}sync <name>${t_off}
       pulls changes from the base branch, i.e. 'master', into the integration branch.
  "
 
