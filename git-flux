@@ -16,8 +16,10 @@ USAGE="<init|feature|team|integration|rc|hf> [action] [-h]"
 
 # appended to the usage output when using the `-h` flag (can be overridden in each action)
 LONG_USAGE="
+${t_bold}\
 git-flux
---------
+--------\
+${t_off}
 
 git commands for fluent, team-oriented workflow.
 
