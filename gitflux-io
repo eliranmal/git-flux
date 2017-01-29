@@ -1,5 +1,22 @@
 #!/usr/bin/env sh
 
+
+main() {
+	# initialize text styling
+	t_bold=$(tput bold)
+	t_reset=$(tput sgr0)
+	if (( $(tput colors) >= 8 )); then
+		t_fg_red=$(tput setaf 1)
+		t_fg_green=$(tput setaf 2)
+		t_fg_yellow=$(tput setaf 3)
+		t_fg_blue=$(tput setaf 4)
+		t_fg_magenta=$(tput setaf 5)
+		t_fg_cyan=$(tput setaf 6)
+		t_fg_white=$(tput setaf 7)
+    fi
+}
+
+
 # all those unicode characters (✔, ✘ etc.) may not show in git-bash, f*** that.
 
 io_log() {
@@ -34,21 +51,14 @@ io_prompt() {
 	# use -p instead of sending the question to stdout, as this function will probably be 
 	# called in a $(subshell), so printing to stdout won't work as expected
 	read -r -p "$(printf " ？%s " "$question")" answer
-	if [[ -n $default_suggestion ]]; then
-		answer=${answer:-$default_suggestion}
-	fi
-	echo "$answer"
+	echo "${answer:-$default_suggestion}"
 }
 
 io_confirm() {
-	local question="$1"; local exit_message="$2"; local non_fatal="$3"
+	local question="$1"; local exit_message="$2";
 	local answer=$(io_prompt "$question (y/n)")
 	if [[ $answer != "y" ]]; then
-		if [[ $non_fatal = true ]]; then
-			io_log_info "$exit_message"
-		else
-			io_status_fatal "$exit_message"
-		fi
+		io_status_fatal "$exit_message"
 	fi
 }
 
@@ -66,3 +76,6 @@ io_print() {
 		echo "$message"
 	fi
 }
+
+
+main "$@"

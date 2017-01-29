@@ -92,6 +92,12 @@ git_delete_remote_branch() {
 	}
 }
 
+git_delete_local_and_remote_branches() {
+	local branch="$1"
+	git_delete_local_branch "$branch"
+	git_delete_remote_branch "$branch"
+}
+
 git_pull() {
 	io_log "pulling from the remote..."
 	git pull >/dev/null 2>&1 && {
@@ -109,6 +115,12 @@ git_push() {
 	} || {
 		io_status_fatal "push of '$ref' failed" 1
 	}
+}
+
+git_create_and_push_branch() {
+	local branch="$1"
+	git_create_branch "$branch"
+	git_push_new_branch "$branch"
 }
 
 git_create_branch() {

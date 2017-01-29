@@ -2,7 +2,13 @@
 
 
 USAGE="integration <sync> [-h]"
-LONG_USAGE="---"
+
+LONG_USAGE="available actions:
+
+   ${t_bold}sync${t_reset}
+      pulls changes from the base branch, i.e. 'master', into the integration branch.
+ 
+"
 
 
 cmd_sync() {

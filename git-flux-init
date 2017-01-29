@@ -4,29 +4,26 @@
 USAGE="init [-h]"
 
 LONG_USAGE="configures the git-flux environment with an interactive survey.
-
 here are the questions you'd have to answer:
 
-★ feature prefix?
-	a prefix for feature branch names, defaults to 'feature/'. for example, 'foo/' \
+   feature prefix?
+      a prefix for feature branch names, defaults to 'feature/'. for example, 'foo/' \
 will result in feature branch names like 'foo/my_awesome_feature'.
-★ team prefix?
-	your team's branch name prefix, defaults to 'team/'.
-★ release candidate prefix?
-	a prefix for release candidate branch names, defaults to 'rc/'.
-★ hot-fix prefix?
-	a prefix for hot-fix branch names, defaults to 'hf/'.
-★ integration branch?
-	the long-lived integration branch's name, defaults to 'integration'. \
-if this branch don't exist, it will be created.
+   team prefix?
+      your team's branch name prefix, defaults to 'team/'.
+   release candidate prefix?
+      a prefix for release candidate branch names, defaults to 'rc/'.
+   hot-fix prefix?
+      a prefix for hot-fix branch names, defaults to 'hf/'.
+   integration branch?
+      the long-lived integration branch name, serves as base to team branches. \
+if this branch don't exist, it will be created. defaults to 'integration'.
 
 "
 
 
 cmd_default() {
-	io_log
-	io_log "- - - git-flux initializer - - -"
-	io_log
+	io_log; io_log "- - - git-flux initializer - - -"; io_log
 
 	git_config_set "initialized" false
 
@@ -41,15 +38,9 @@ cmd_default() {
 	# no need to check the remote branch exists, we'd wanna set it as the upstream anyways
 	if ! git_local_branch_exists "$integration_branch"; then
 		io_log_info "'$integration_branch' branch not found locally."
-		git_create_branch "$integration_branch"
-		git_push_new_branch "$integration_branch"
+		git_create_and_push_branch "$integration_branch"
 	fi
 
-	# todo - do it for them..
-	io_log
-	io_log_info "when the initializer is done, go on and set up your team: \
-if you already have a team branch on the repository, run 'git flux team join <name>' to switch to it, \
-otherwise, run 'git flux team create <name>' to create it"
 
 	git_config_set "prefix.feature" "$feature_prefix"
 	git_config_set "prefix.team" "$team_prefix"
@@ -58,6 +49,5 @@ otherwise, run 'git flux team create <name>' to create it"
 	git_config_set "branch.integration" "$integration_branch"
 	git_config_set "initialized" true
 	
-	io_log
-	io_log_ok "all done. you're awesome!" "pad"
+	io_log; io_log_ok "all done. you're awesome!"; io_log
 }
