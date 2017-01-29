@@ -18,7 +18,7 @@ will result in feature branch names like 'foo/my_awesome_feature'.
    integration branch?
       the long-lived integration branch name, serves as base to team branches. \
 if this branch don't exist, it will be created. defaults to 'integration'.
-
+ 
 "
 
 

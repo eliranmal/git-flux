@@ -5,10 +5,9 @@ USAGE="integration <sync> [-h]"
 
 LONG_USAGE="available actions:
 
-   ${t_bold}sync${t_reset}
+   ${t_bold}sync${t_off}
       pulls changes from the base branch, i.e. 'master', into the integration branch.
- 
-"
+ "
 
 
 cmd_sync() {

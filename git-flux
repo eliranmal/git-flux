@@ -1,12 +1,44 @@
 #!/usr/bin/env sh
 
 
+working_dir=$(dirname "$(echo "$0" | sed -e 's,\\,/,g')")
+
+# include common utilities first, to be able to use the text formatter with usage/long-usage messages
+source "$working_dir/gitflux-common"
+
+
+
 # indicates this git command can run from within child directories of the git repo
 SUBDIRECTORY_OK="yes"
-# output for stdout when calling the usage() function
-USAGE="<init|feature|team|integration> [action] [-h]"
-# appended to the usage output when using the `-h` flag
-LONG_USAGE="team-oriented git workflow commands. yep."
+
+# output for stdout when calling the usage() function (can be overridden in each action)
+USAGE="<init|feature|team|integration|rc|hf> [action] [-h]"
+
+# appended to the usage output when using the `-h` flag (can be overridden in each action)
+LONG_USAGE="git commands for fluent, team-oriented workflow.
+
+available subcommands:
+
+   ${t_bold}init${t_off}
+      initialize the git-flux configuration survey.
+
+   ${t_bold}feature${t_off}
+      handle feature level actions.
+
+   ${t_bold}team${t_off}
+      handle team level actions.
+
+   ${t_bold}integration${t_off}
+      handle the sync of the integration branch.
+
+   ${t_bold}rc${t_off}
+      handle starting and finishing release-candidate branches.
+
+   ${t_bold}hf${t_off}
+      handle starting and finishing hot-fix branches.
+
+please refer to each subcommand's help menu for an in-depth description of its actions (e.g. 'git flux init -h').
+ "
 
 
 main() {
@@ -15,11 +47,6 @@ main() {
 	if [[ $1 = "debug" ]]; then
 		set -x; shift
 	fi
-
-	local working_dir=$(dirname "$(echo "$0" | sed -e 's,\\,/,g')")
-
-	# include common utilities
-	source "$working_dir/gitflux-common"
 
 	local sub_command="$1";
 

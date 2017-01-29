@@ -6,6 +6,7 @@ main() {
 	local repo_name="git-flux"
 	local exec_files="git-flux"
 	local script_files="
+		gitflux-text
 		gitflux-util
 		gitflux-io
 		gitflux-gitlib

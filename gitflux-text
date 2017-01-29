@@ -1,0 +1,16 @@
+#!/usr/bin/env sh
+
+
+# text formatting utilities
+
+t_bold=$(tput bold)
+t_off=$(tput sgr0)
+if (( $(tput colors) >= 8 )); then
+	t_fg_red=$(tput setaf 1)
+	t_fg_green=$(tput setaf 2)
+	t_fg_yellow=$(tput setaf 3)
+	t_fg_blue=$(tput setaf 4)
+	t_fg_magenta=$(tput setaf 5)
+	t_fg_cyan=$(tput setaf 6)
+	t_fg_white=$(tput setaf 7)
+fi
