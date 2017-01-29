@@ -23,6 +23,11 @@ ${t_bold}available actions:${t_off}
 
    ${t_bold}sync <name>${t_off}
       sync an existing team with its base branch (the integration branch).
+
+   ${t_bold}join <name>${t_off}
+      join a team for the first time, or switch teams to another team.
+      after this, all new features will be based on the new team.
+      aliases: ${t_bold}switch${t_off}.
  "
 
 
