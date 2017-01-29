@@ -42,6 +42,7 @@ available subcommands:
    ${t_bold}${t_fg_red}hf${t_off}
       handle start and finish of hot-fixes.
 
+
 please refer to each subcommand's help menu for an in-depth description of its actions (e.g. 'git flux init -h').
  "
 # ^ single space on the last line of long-usage is used to add a line-break
