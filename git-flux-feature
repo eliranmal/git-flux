@@ -13,12 +13,12 @@ handle feature level actions.
 ${t_bold}available actions:${t_off}
 
    ${t_bold}start <name> [base]${t_off}
-      start a new feature: create a local branch and push it to the remote.
+      start a new feature; create a local branch and push it to the remote.
       the branch name will be composed of the pre-configured feature-prefix and the passed ${t_bold}name${t_off}.
       pass an optional ${t_bold}base${t_off} to set a custom base for the branch (default ${t_bold}base${t_off} is the current team branch).
 
    ${t_bold}finish <name>${t_off}
-      finish an existing feature: delete its local and remote branches, for good.
+      finish an existing feature; delete its local and remote branches, for good.
 
    ${t_bold}sync <name>${t_off}
       sync an existing feature with its base branch, usually the current team branch, unless otherwise set when the feature was started.

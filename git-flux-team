@@ -2,24 +2,45 @@
 
 
 USAGE="team <create|destroy|sync|join> <name> [-h]"
-LONG_USAGE="---"
+
+LONG_USAGE="
+${t_bold}${t_fg_yellow}team${t_off}
+----
+
+handle team level actions.
 
 
-# aliases
+${t_bold}available actions:${t_off}
 
-cmd_gather() { cmd_create "$@" }
-cmd_scatter() { cmd_destroy "$@" }
-cmd_huddle() { cmd_create "$@" }
-cmd_break() { cmd_destroy "$@" }
-cmd_assemble() { cmd_create "$@" }
-cmd_disassemble() { cmd_destroy "$@" }
-cmd_switch() { cmd_join "$@" }
+   ${t_bold}create <name>${t_off}
+      start a new team; create a local branch and push it to the remote.
+      the branch name will be composed of the pre-configured team-prefix and the passed ${t_bold}name${t_off}.
+      aliases: ${t_bold}assemble${t_off}, ${t_bold}gather${t_off}, ${t_bold}huddle${t_off}.
+
+   ${t_bold}destroy <name>${t_off}
+      destroy an existing team; delete its local and remote branches, for good.
+      aliases: ${t_bold}disassemble${t_off}, ${t_bold}scatter${t_off}, ${t_bold}break${t_off}.
+
+   ${t_bold}sync <name>${t_off}
+      sync an existing team with its base branch (the integration branch).
+ "
+
+
+# aliases 
+
+cmd_assemble() { cmd_create "$@"; }
+cmd_gather() { cmd_create "$@"; }
+cmd_huddle() { cmd_create "$@"; }
+cmd_disassemble() { cmd_destroy "$@"; }
+cmd_scatter() { cmd_destroy "$@"; }
+cmd_break() { cmd_destroy "$@"; }
+cmd_switch() { cmd_join "$@"; }
 
 
 cmd_create() {
 	validate_mandatory_arg "$1"
 	io_log "creating team '$1'..."
-	create_branch_from_base "$(git_config_get "prefix.team")$1" "$(git_config_get "branch.integration")" "$2"
+	create_branch_from_base "$(git_config_get "prefix.team")$1" "$(git_config_get "branch.integration")"
 	io_log_ok "team '$1' is created. congrats!"
 }
 
