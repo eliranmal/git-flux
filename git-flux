@@ -12,7 +12,7 @@ source "$working_dir/gitflux-common"
 SUBDIRECTORY_OK="yes"
 
 # output for stdout when calling the usage() function (can be overridden in each action)
-USAGE="<init|feature|team|integration|rc|hf> [action] [-h]"
+USAGE="<init|feature|team|integration|rc|hf> [action] [...action-args] [-h]"
 
 # appended to the usage output when using the `-h` flag (can be overridden in each action)
 LONG_USAGE="
@@ -43,7 +43,7 @@ ${t_bold}available subcommands:${t_off}
       handle start and finish of hot-fixes.
 
 
-please refer to each subcommand's help menu for an in-depth description of its actions (e.g. 'git flux init -h').
+refer to each subcommand's help menu for an in-depth description of its actions (e.g. 'git flux init -h').
  "
 # ^ single space on the last line of long-usage is used to add a line-break
 
