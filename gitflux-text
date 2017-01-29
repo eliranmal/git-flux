@@ -3,8 +3,9 @@
 
 # text formatting utilities
 
-t_bold=$(tput bold)
 t_off=$(tput sgr0)
+t_bold=$(tput bold)
+t_under=$(tput smul)
 if (( $(tput colors) >= 8 )); then
 	t_fg_red=$(tput setaf 1)
 	t_fg_green=$(tput setaf 2)

@@ -4,12 +4,11 @@
 USAGE="init [-h]"
 
 LONG_USAGE="
-${t_bold}\
-init
-----\
-${t_off}
+${t_bold}init${t_off}
+----
 
 configures the git-flux environment with an interactive survey.
+
 
 here are the questions you'd have to answer:
 
