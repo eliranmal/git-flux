@@ -2,6 +2,8 @@
 # future plans
 
 - todo:
+   - add `update` command to setup.sh, that deletes the local repo to 
+   avoid the installer cache
    - integrate hub for pull-requests with proper base (not master)
    - ~~prompt for creating new integration branch on init~~
    - ~~create 'gitflux-config' wrapper~~
