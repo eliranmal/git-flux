@@ -7,7 +7,7 @@ LONG_USAGE="
 ${t_bold}${t_fg_yellow}team${t_off}
 ----
 
-handle team level actions.
+handle integration across team members and their features.
 
 
 ${t_bold}available actions:${t_off}

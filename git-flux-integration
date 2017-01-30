@@ -7,7 +7,7 @@ LONG_USAGE="
 ${t_bold}${t_fg_magenta}integration${t_off}
 -----------
 
-handle sync of the integration branch.
+handle integration across teams.
 
 
 ${t_bold}available actions:${t_off}

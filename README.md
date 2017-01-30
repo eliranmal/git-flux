@@ -77,8 +77,8 @@ configures the git-flux environment with an interactive survey.
 here are the questions you'd have to answer:
 
 - feature prefix?  
-a prefix for feature branch names, defaults to 'feature/'. for example, 
-'foo/' will result in feature branch names like 'foo/my_awesome_feature'.
+a prefix for feature branch names, defaults to 'feature/'. 
+for example, 'foo/' will result in feature branch names like 'foo/my_awesome_feature'.
 
 - team prefix?  
 your team's branch name prefix, defaults to 'team/'.
@@ -90,9 +90,8 @@ a prefix for release candidate branch names, defaults to 'rc/'.
 a prefix for hot-fix branch names, defaults to 'hf/'.
 
 - integration branch?  
-the long-lived integration branch name, defaults to 'integration'. this 
-branch serves as the base to all team branches, and will be created if 
-it does not already exist.
+the long-lived integration branch name, defaults to 'integration'. 
+this branch serves as the base to all team branches, and will be created if it does not already exist.
  
 
 (this sub-command has no actions).
@@ -100,34 +99,82 @@ it does not already exist.
 
 ##### `feature`
 
-start working on a new feature, finish working on it, and what have you.
+handle feature level actions.
 
 ###### actions
 
-- **`start <name>`**: create a new branch based on the team branch, 
-and switch to it.
-- **`finish <name>`**: delete that old feature branch, and its remote, too.
-- **`sync <name>`**: get the latest changes from the team branch.
-- **`push <name>`**: push local changes to the remote.
-- **`pull <name>`**: pull remote changes to the local.
+- **`start <name> [base]`**  
+start a new feature; create a local branch and push it to the remote.
+the branch name will be composed of the pre-configured feature prefix and the passed **name**.
+pass an optional **base** to set a custom base for the branch (default **base** is the current team branch).
+
+**`finish <name>`**  
+finish an existing feature; delete its local and remote branches, for good.
+
+- **`sync <name>`**  
+sync an existing feature with its base branch, usually the current team branch, unless otherwise set when the feature was started.
 
 
 ##### `team`
 
-handles integration among team members and their features.
+handle integration across team members and their features.
 
 ###### actions
 
-- **`sync <name>`**: get the latest changes from the integration branch.
+- **`create <name>`**  
+start a new team; create a local branch and push it to the remote.
+the branch name will be composed of the pre-configured team prefix and the passed **`name`**.
+aliases: **`assemble`**, **`gather`**, **`huddle`**.
+
+- **`destroy <name>`**  
+destroy an existing team; delete its local and remote branches, for good.
+aliases: **`disassemble`**, **`scatter`**, **`break`**.
+
+- **`sync <name>`**  
+sync an existing team with its base branch (the integration branch).
+
+- **`join <name>`**  
+join a team for the first time, or switch teams to another team.
+after this, all new features will be based on the new team.
+aliases: **`switch`**.
 
 
 ##### `integration`
 
-handles integration among teams and their content.
+handle integration across teams.
 
 ###### actions
 
-- **`sync <name>`**: get the latest changes from the master branch.
+- **`sync <name>`**  
+pulls changes from the base branch, i.e. 'master', into the integration branch.
+
+
+##### `rc`
+
+handle lifecycle of release-candidates.
+
+###### actions
+
+- **`start <next-version>`**  
+start a release-candidate; create a local branch and push it to the remote.
+the branch name will be composed of the pre-configured release-candidate prefix and the passed **`next-version`**.
+
+- **`finish <next-version>`**  
+finish an existing release-candidate; delete its local and remote branches, for good.
+
+
+##### `hf`
+
+handle lifecycle of hot-fixes.
+
+###### actions
+
+- **`start <version>`**  
+start a hot-fix; create a local branch and push it to the remote.
+the branch name will be composed of the pre-configured hot-fix prefix and the passed **`version`**.
+
+- **`finish <version>`**  
+finish an existing release-candidate; delete its local and remote branches, for good.
 
 
 

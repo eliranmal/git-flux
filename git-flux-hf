@@ -7,7 +7,7 @@ LONG_USAGE="
 ${t_bold}${t_fg_red}hf${t_off}
 --
 
-handle start and finish of hot-fixes.
+handle lifecycle of hot-fixes.
 
 
 ${t_bold}available actions:${t_off}

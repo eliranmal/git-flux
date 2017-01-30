@@ -13,8 +13,8 @@ configures the git-flux environment with an interactive survey.
 here are the questions you'd have to answer:
 
    ${t_bold}${t_fg_blue}feature${t_off}${t_bold} prefix?${t_off}
-      a prefix for feature branch names, defaults to 'feature/'. for example, 'foo/' \
-will result in feature branch names like 'foo/my_awesome_feature'.
+      a prefix for feature branch names, defaults to 'feature/'. 
+      for example, 'foo/' will result in feature branch names like 'foo/my_awesome_feature'.
 
    ${t_bold}${t_fg_yellow}team${t_off}${t_bold} prefix?${t_off}
       your team's branch name prefix, defaults to 'team/'.
@@ -26,8 +26,8 @@ will result in feature branch names like 'foo/my_awesome_feature'.
       a prefix for hot-fix branch names, defaults to 'hf/'.
 
    ${t_bold}${t_fg_magenta}integration${t_off}${t_bold} branch?${t_off}
-      the long-lived integration branch name, defaults to 'integration'. this branch \
-serves as the base to all team branches, and will be created if it does not already exist.
+      the long-lived integration branch name, defaults to 'integration'. 
+      this branch serves as the base to all team branches, and will be created if it does not already exist.
  "
 
 

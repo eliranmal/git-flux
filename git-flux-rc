@@ -7,7 +7,7 @@ LONG_USAGE="
 ${t_bold}${t_fg_green}rc${t_off}
 --
 
-handle start and finish of release-candidates.
+handle lifecycle of release-candidates.
 
 
 ${t_bold}available actions:${t_off}
