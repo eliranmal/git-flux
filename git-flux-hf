@@ -2,7 +2,23 @@
 
 
 USAGE="hf <start|finish> <version> [-h]"
-LONG_USAGE="---"
+
+LONG_USAGE="
+${t_bold}${t_fg_red}hf${t_off}
+--
+
+handle start and finish of hot-fixes.
+
+
+${t_bold}available actions:${t_off}
+
+   ${t_bold}start <version>${t_off}
+      start a hot-fix; create a local branch and push it to the remote.
+      the branch name will be composed of the pre-configured hot-fix prefix and the passed ${t_bold}version${t_off}.
+
+   ${t_bold}finish <version>${t_off}
+      finish an existing release-candidate; delete its local and remote branches, for good.
+ "
 
 
 cmd_start() {

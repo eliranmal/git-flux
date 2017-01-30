@@ -2,7 +2,23 @@
 
 
 USAGE="rc <start|finish> <next-version> [-h]"
-LONG_USAGE="---"
+
+LONG_USAGE="
+${t_bold}${t_fg_green}rc${t_off}
+--
+
+handle start and finish of release-candidates.
+
+
+${t_bold}available actions:${t_off}
+
+   ${t_bold}start <next-version>${t_off}
+      start a release-candidate; create a local branch and push it to the remote.
+      the branch name will be composed of the pre-configured release-candidate prefix and the passed ${t_bold}next-version${t_off}.
+
+   ${t_bold}finish <next-version>${t_off}
+      finish an existing release-candidate; delete its local and remote branches, for good.
+ "
 
 
 cmd_start() {

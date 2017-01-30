@@ -14,7 +14,7 @@ ${t_bold}available actions:${t_off}
 
    ${t_bold}create <name>${t_off}
       start a new team; create a local branch and push it to the remote.
-      the branch name will be composed of the pre-configured team-prefix and the passed ${t_bold}name${t_off}.
+      the branch name will be composed of the pre-configured team prefix and the passed ${t_bold}name${t_off}.
       aliases: ${t_bold}assemble${t_off}, ${t_bold}gather${t_off}, ${t_bold}huddle${t_off}.
 
    ${t_bold}destroy <name>${t_off}
