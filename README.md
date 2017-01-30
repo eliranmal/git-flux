@@ -77,7 +77,6 @@ configures the git-flux environment with an interactive survey.
 here are the questions you'd have to answer:
 
 - feature prefix?
-
    a prefix for feature branch names, defaults to 'feature/'. for example, 
 'foo/' will result in feature branch names like 'foo/my_awesome_feature'.
 
