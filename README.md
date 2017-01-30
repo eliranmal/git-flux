@@ -77,16 +77,16 @@ configures the git-flux environment with an interactive survey.
 here are the questions you'd have to answer:
 
 - feature prefix?
-   a prefix for feature branch names, defaults to 'feature/'. for example, 
+a prefix for feature branch names, defaults to 'feature/'. for example, 
 'foo/' will result in feature branch names like 'foo/my_awesome_feature'.
 
 - team prefix?
    your team's branch name prefix, defaults to 'team/'.
 
-- release candidate prefix?
-   a prefix for release candidate branch names, defaults to 'rc/'.
+- release candidate prefix?  
+a prefix for release candidate branch names, defaults to 'rc/'.
 
-- hot-fix prefix?
+- hot-fix prefix?  
    a prefix for hot-fix branch names, defaults to 'hf/'.
 
 - integration branch?
