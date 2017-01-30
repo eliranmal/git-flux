@@ -46,6 +46,7 @@ cmd_create() {
 	validate_mandatory_arg "$1"
 	io_log "creating team '$1'..."
 	create_branch_from_base "$(git_config_get "prefix.team")$1" "$(git_config_get "branch.integration")"
+	git_config_set "branch.team" "$new_team_branch"
 	io_log_ok "team '$1' is created. congrats!"
 }
 
