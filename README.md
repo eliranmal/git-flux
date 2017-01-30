@@ -9,7 +9,8 @@
 this tool only supports bash/mingw32, so:
 
 - *nix users, just fire up the terminal. you're good to go.
-- windows ppl, open your [git-bash][1] as *administrator*, please.
+- windows ppl, open your [git-bash][1] *as administrator*, please 
+(does it open up in `U:\`? [this might help][3]).
 
 
 ## setup
@@ -62,7 +63,8 @@ this tool only supports bash/mingw32, so:
 
 #### flags
 
-- **`-h`**: shows the f***ing manual. works everywhere (context dependent).
+- **`-h`**: shows the f***ing manual. works everywhere, and context 
+dependent. this means you can `git flux -h`, and also `git flux feature -h`.
 
 
 #### sub-commands
@@ -117,5 +119,8 @@ teams, etc.) is saved to the git config, and not dynamically resolved via git.
 
 
 
+
+
 [1]: https://git-scm.com/download/win
 [2]: https://git-scm.com/book/en/v2/Git-Branching-Rebasing#_rebase_peril
+[3]: https://danlimerick.wordpress.com/2011/07/11/git-for-windows-tip-setting-home-and-the-startup-directory/
