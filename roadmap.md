@@ -2,11 +2,11 @@
 # future plans
 
 - todo:
-   - integrate hub for pull-requests
-   - prompt for creating new integration branch on init
+   - integrate hub for pull-requests with proper base (not master)
+   - ~~prompt for creating new integration branch on init~~
    - ~~create 'gitflux-config' wrapper~~
    - consider delegating `sync` operations all the way up the bases tree
-   - redirect builtin commands stderr to an `error.log` file
+   - redirect builtin commands stderr/stdout to a `*.log` file
    - introduce 'epic' level, capable of aggregating teams *or* features
    - ~~allow overriding the base branch in the 'feature' subcommand~~
    - ~~generalize prompting in the terminal to encapsulate all that 
@@ -20,6 +20,7 @@
       - [bashtest][5]
 
 - document:
+   - don't duplicate docs of commands, just refer users to the `-h` flag
    - an overview of the git-flux model, specifically the levels.
    - elaborate on teams and the ability to switch teams with the `join` action
    - the fact that git-flux addresses some of the issues in git-flow 
@@ -28,6 +29,7 @@
 - exposure:
    - document it well
    - write unit tests
+   - migrate repository to the public organization
    - search/replace any hard references to the repo url
    - update the docs on setup to use the enterprise form:
    ```sh
