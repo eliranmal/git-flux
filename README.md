@@ -63,8 +63,9 @@ this tool only supports bash/mingw32, so:
 
 #### flags
 
-- **`-h`**: shows the f***ing manual. works everywhere, and context 
-dependent. this means you can `git flux -h`, and also `git flux feature -h`.
+- **`-h`**  
+shows the f***ing manual. works everywhere, and context dependent. 
+this means you can `git flux -h`, and also `git flux feature -h`.
 
 
 #### sub-commands
