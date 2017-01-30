@@ -66,9 +66,9 @@ git_checkout() {
 	local branch="$1"
 	io_log "checking out '$branch'..."
 	git checkout "$branch" >/dev/null 2>&1 && {
-		io_log_ok "'$branch' checked out" 1
+		io_log_ok "checked out" 1
 	} || {
-		io_status_fatal "checkout of '$branch' failed" 1
+		io_status_fatal "checkout failed" 1
 	}
 }
 
@@ -76,9 +76,9 @@ git_delete_local_branch() {
 	local branch="$1"
 	io_log "deleting the '$branch' local branch..."
 	git branch -D "$branch" >/dev/null 2>&1 && {
-		io_log_ok "'$branch' deleted" 1
+		io_log_ok "deleted ok" 1
 	} || {
-		io_status_fatal "delete of '$branch' failed" 1
+		io_status_fatal "delete failed" 1
 	}
 }
 
@@ -86,9 +86,9 @@ git_delete_remote_branch() {
 	local branch="$1"
 	io_log "deleting the '$branch' remote branch..."
 	git push origin :"$branch" >/dev/null 2>&1 && {
-		io_log_ok "'$branch' deleted" 1
+		io_log_ok "deleted ok" 1
 	} || {
-		io_status_fatal "deletion of '$branch' failed" 1
+		io_status_fatal "delete failed" 1
 	}
 }
 
@@ -108,12 +108,12 @@ git_pull() {
 }
 
 git_push() {
-	local ref="$1"
+	local ref="$1" # ref can be 'branch' or 'tag'
 	io_log "pushing '$ref' to the remote..."
 	git push origin "$ref" >/dev/null 2>&1 && {
-		io_log_ok "'$ref' pushed" 1
+		io_log_ok "pushed ok" 1
 	} || {
-		io_status_fatal "push of '$ref' failed" 1
+		io_status_fatal "push failed" 1
 	}
 }
 
@@ -127,9 +127,9 @@ git_create_branch() {
 	local branch="$1"
 	io_log "creating the '$branch' local branch..."
 	git checkout -b "$branch" >/dev/null 2>&1 && {
-		io_log_ok "'$branch' created and checked out" 1
+		io_log_ok "created and checked out" 1
 	} || {
-		io_status_fatal "creation of '$branch' failed" 1
+		io_status_fatal "create failed" 1
 	}
 }
 
@@ -137,9 +137,9 @@ git_push_new_branch() {
 	local branch="$1"
 	io_log "pushing new branch '$branch' to the remote..."
 	git push --set-upstream origin "$branch" >/dev/null 2>&1 && {
-		io_log_ok "'$branch' pushed" 1
+		io_log_ok "pushed ok" 1
 	} || {
-		io_status_fatal "push of '$branch' failed" 1
+		io_status_fatal "push failed" 1
 	}
 }
 
@@ -147,9 +147,9 @@ git_merge() {
 	local branch="$1"
 	io_log "merging changes from '$branch'..."
 	git merge --no-edit "$branch" >/dev/null 2>&1 && {
-		io_log_ok "merged from '$branch'" 1
+		io_log_ok "merged ok" 1
 	} || {
-		io_status_fatal "conflicts were found during the merge from '$branch', resolve them in your favorite merge tool" 1
+		io_status_fatal "conflicts were found during the merge, resolve them in your favorite merge tool" 1
 	}
 }
 
@@ -157,9 +157,9 @@ git_create_tag() {
 	local tag="$1"; local message="$2"
 	io_log "creating tag '$tag'..."
 	git tag -a "$tag" -m "$message" >/dev/null 2>&1 && {
-		io_log_ok "'$tag' created" 1
+		io_log_ok "created ok" 1
 	} || {
-		io_status_fatal "creation of '$tag' failed" 1
+		io_status_fatal "create failed" 1
 	}
 }
 
