@@ -44,9 +44,12 @@ cmd_default() {
 	local hot_fix_prefix=$(io_prompt "hot-fix prefix" "hf$prefix_delimiter")
 	local integration_branch=$(io_prompt "integration branch" "integration")
 
+	io_log; io_log_info "looking for the integration branch '$integration_branch'..."
 	# no need to check the remote branch exists, we'd wanna set it as the upstream anyways
-	if ! git_local_branch_exists "$integration_branch"; then
-		io_log_info "'$integration_branch' branch not found locally."
+	if git_local_branch_exists "$integration_branch"; then
+		io_log_ok "branch found locally."
+	else
+		io_log_warn "branch not found locally."
 		git_create_and_push_branch "$integration_branch"
 	fi
 
