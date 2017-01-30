@@ -2,6 +2,8 @@
 # future plans
 
 - todo:
+   - in debug mode, redirect stdout/stderr to `debug.log` to enable sending 
+   these logs for investigations of problems (and to not pollute the terminal out)
    - add `update` command to setup.sh, that deletes the local repo to 
    avoid the installer cache
    - integrate hub for pull-requests with proper base (not master)
