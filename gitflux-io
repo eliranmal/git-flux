@@ -8,23 +8,24 @@ io_log() {
 }
 
 io_log_ok() {
-	io_print " ✔ " "$@"
+	io_print "${t_fg_darkgreen} ✔ ${t_off}" "$@"
 }
 
 io_log_info() {
-	io_print " ℹ " "$@"
+	io_print "${t_fg_darkblue} ℹ ${t_off}" "$@"
 }
 
 io_log_star() {
-	io_print " ★ " "$@"
+	io_print "${t_fg_darkpurple} ★ ${t_off}" "$@"
 }
 
 io_log_warn() {
-	io_print " ✘ " "$@" >&2
+	io_print "${t_fg_darkorange} ✘ ${t_off}" "$@" >&2
 }
 
 io_status_fatal() {
-	die "$(io_print " ✘ " "$@")" >&2
+	die "$(io_print "${t_fg_darkred} ✘ ${t_off}" "$@")
+" >&2
 }
 
 io_prompt() {
@@ -34,7 +35,7 @@ io_prompt() {
 	fi
 	# use -p instead of sending the question to stdout, as this function will probably be 
 	# called in a $(subshell), so printing to stdout won't work as expected
-	read -r -p "$(printf " ？%s " "$question")" answer
+	read -r -p "$(printf "${t_fg_darkyellow} ？${t_off}%s " "$question")" answer
 	echo "${answer:-$default_suggestion}"
 }
 
@@ -48,15 +49,11 @@ io_confirm() {
 
 io_print() {
 	local margin="$1"; local body="$2"; local indent_level=$3 # intentionally don't quote indent_level
-	local message="$margin$body"
+	local message="$margin$body"; local indent=""
 	if [[ $indent_level =~ [123] ]]; then
-		local indent=""
-		until (( $indent_level == 0 )); do
+		for (( n=$indent_level; n > 0; n-- )); do
 			indent="   $indent"
-			let indent_level-=1
 		done
-		echo "$indent$message"
-	else
-		echo "$message"
 	fi
+	echo "$indent$message"
 }

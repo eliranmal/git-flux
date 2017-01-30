@@ -13,6 +13,7 @@ cmd_start() {
 }
 
 cmd_finish() {
+	# todo - exclude package.json, shrinkwrap.json, pom.xml when merging back
 	validate_mandatory_arg "$1"
 	io_confirm "the local and remote branches of '$1' will be deleted, forever! continue?" "i knew you'd chicken out."
 	io_log "finishing hot-fix '$1'..."
