@@ -58,7 +58,7 @@ this tool only supports bash/mingw32, so:
 
 ## usage
 
-    git flux <sub-command> [action] [-h]
+    git flux <sub-command> [action] [action-args...] [-h]
 
 #### flags
 
