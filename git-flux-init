@@ -27,7 +27,7 @@ will result in feature branch names like 'foo/my_awesome_feature'.
 
    ${t_bold}${t_fg_magenta}integration${t_off}${t_bold} branch?${t_off}
       the long-lived integration branch name, defaults to 'integration'. this branch \
-serves as the base to all team branches, and will be created if it does not exist already.
+serves as the base to all team branches, and will be created if it does not already exist.
  "
 
 
