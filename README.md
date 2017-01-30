@@ -9,7 +9,7 @@
 this tool only supports bash/mingw32, so:
 
 - *nix users, just fire up the terminal. you're good to go.
-- windows ppl, open your [git-bash][1], please.
+- windows ppl, open your [git-bash][1] as *administrator*, please.
 
 
 ## setup

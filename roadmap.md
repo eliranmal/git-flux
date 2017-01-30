@@ -23,6 +23,11 @@
       - [epoxy][4]
       - [bashtest][5]
 
+- fix:
+   - running commands without an assigned team (by team join or team create) 
+   will fail as `branch.team` is not registered in the config.
+   - git bash fails to install if not opened as admin (just update readme).
+
 - document:
    - don't duplicate docs of commands, just refer users to the `-h` flag
    - an overview of the git-flux model, specifically the levels.
