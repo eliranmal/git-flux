@@ -8,9 +8,12 @@
 
 this tool only supports bash/mingw32, so:
 
-- *nix users, just fire up the terminal. you're good to go.
-- windows people, open your [git-bash][1] *'as administrator'*, please. 
-(BTW, does it open up in `U:\`? [this might help][3]).
+**mac/linux users**  
+just fire up the terminal. you're good to go.
+
+**windows people**  
+open your [git-bash][1] *'as administrator'*, please.  
+(by the way, does it open up in `U:\`? [this might help][3]).
 
 
 ## setup
@@ -30,7 +33,7 @@ this tool only supports bash/mingw32, so:
   curl -O https://raw.githubusercontent.com/eliranmal/git-flux/master/bin/setup.sh
   ```
 
-- (*nix only) grant it with execute permissions:
+- (mac/linux only) grant it with execute permissions:
   
   ```sh
   chmod +x setup.sh
