@@ -26,7 +26,8 @@
 - fix:
    - running commands without an assigned team (by team join or team create) 
    will fail as `branch.team` is not registered in the config.
-   - git bash fails to install if not opened as admin (just update readme).
+   - ~~git bash fails to install if not opened as admin (just update readme).~~
+   - why does intellij's terminal not recognizing `git flux` on windows?
 
 - document:
    - don't duplicate docs of commands, just refer users to the `-h` flag
