@@ -82,7 +82,7 @@ a prefix for feature branch names, defaults to 'feature/'.
 for example, 'foo/' will result in feature branch names like 'foo/my_awesome_feature'.
 
 - **team prefix?**  
-your team's branch name prefix, defaults to 'team/'.
+a prefix for team branch names, defaults to 'team/'.
 
 - **release candidate prefix?**  
 a prefix for release candidate branch names, defaults to 'rc/'.

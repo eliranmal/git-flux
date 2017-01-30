@@ -17,7 +17,7 @@ here are the questions you'd have to answer:
       for example, 'foo/' will result in feature branch names like 'foo/my_awesome_feature'.
 
    ${t_bold}${t_fg_yellow}team${t_off}${t_bold} prefix?${t_off}
-      your team's branch name prefix, defaults to 'team/'.
+      a prefix for team branch names, defaults to 'team/'.
 
    ${t_bold}${t_fg_green}release candidate${t_off}${t_bold} prefix?${t_off}
       a prefix for release candidate branch names, defaults to 'rc/'.
