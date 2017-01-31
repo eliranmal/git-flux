@@ -28,7 +28,9 @@ ${t_bold}available actions:${t_off}
 cmd_start() {
 	validate_mandatory_arg "$1"
 	io_log "starting feature '$1'..."
-	create_branch_from_base "$(git_config_get "prefix.feature")$1" "$(git_config_get "branch.team")" "$2"
+	local team_branch="$(git_config_get "branch.team")"
+	[[ -z $team_branch && -z $2 ]] && io_status_fatal "no base found, set up a team first, or pass another base to this command."
+	create_branch_from_base "$(git_config_get "prefix.feature")$1" "$team_branch" "$2"
 	io_log_ok "feature '$1' is started. happy coding!"
 }
 

@@ -47,9 +47,9 @@ cmd_default() {
 	io_log; io_log_info "looking for the integration branch '$integration_branch'..."
 	# no need to check the remote branch exists, we'd wanna set it as the upstream anyways
 	if git_local_branch_exists "$integration_branch"; then
-		io_log_ok "branch found locally." 1
+		io_log_ok "branch found locally" 1
 	else
-		io_log_warn "branch not found locally." 1
+		io_log_warn "branch not found locally" 1
 		git_create_and_push_branch "$integration_branch"
 	fi
 
