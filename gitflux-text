@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 
-# ansi-based little text formatters.
+# little ansi-based text formatters.
 
 
 t_off=$(tput sgr0)
@@ -28,5 +28,5 @@ if (( $tput_colors >= 8 )); then
 fi
 
 # uncomment the following line to see what it does:
-# "text can be ${t_bold}bold${t_off}, ${t_under}underlined${t_off}, or colored in ${t_fg_yellow}yellow${t_off} or ${t_fg_blue}blue${t_off}"
+# echo "text can be ${t_bold}bold${t_off}, ${t_under}underlined${t_off}, or colored in ${t_fg_yellow}yellow${t_off} or ${t_fg_blue}blue${t_off}"
 # yay!
