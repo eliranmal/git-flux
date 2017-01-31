@@ -1,12 +1,17 @@
 #!/usr/bin/env sh
 
 
-# text formatting utilities. use them in strings like: "${t_bold}bold text here${t_off}, just normal text. ${t_fg_yellow}this text is yellow${t_off}"
+# ansi-based text formatting utilities. use them in strings like: 
+# "${t_bold}bold text${t_off}, just normal text. ${t_fg_yellow}this text is yellow${t_off}"
+# yay!
+
 
 t_off=$(tput sgr0)
 t_bold=$(tput bold)
 t_under=$(tput smul)
-if (( $(tput colors) >= 8 )); then
+
+tput_colors=$(tput colors)
+if (( $tput_colors >= 8 )); then
 	t_fg_red=$(tput setaf 1)
 	t_fg_green=$(tput setaf 2)
 	t_fg_yellow=$(tput setaf 3)
@@ -14,10 +19,14 @@ if (( $(tput colors) >= 8 )); then
 	t_fg_magenta=$(tput setaf 5)
 	t_fg_cyan=$(tput setaf 6)
 	t_fg_white=$(tput setaf 7)
-	t_fg_darkgreen=$(tput setaf 34)
+fi
+if (( $tput_colors >= 128 )); then
 	t_fg_darkblue=$(tput setaf 32)
-	t_fg_darkpurple=$(tput setaf 98)
-	t_fg_darkorange=$(tput setaf 166)
+	t_fg_darkgreen=$(tput setaf 34)
 	t_fg_darkred=$(tput setaf 88)
+	t_fg_darkpurple=$(tput setaf 98)
+fi
+if (( $tput_colors >= 256 )); then
+	t_fg_darkorange=$(tput setaf 166)
 	t_fg_darkyellow=$(tput setaf 221)
 fi
