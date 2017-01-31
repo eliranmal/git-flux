@@ -3,7 +3,7 @@
 
 main() {
 	local cmd_name="$1"
-	local repo_name="git-flux"
+	local clone_dir="./git-flux"
 	local exec_files="git-flux"
 	local script_files="
 		gitflux-text
@@ -59,13 +59,13 @@ do_install() {
 	if [[ -n $REPO_PATH ]]; then
 		setup_repo_path="$REPO_PATH"
 	else
-		setup_repo_path="$repo_name"
+		setup_repo_path="$clone_dir"
 	fi
 	if [[ -d $setup_repo_path && -d "$setup_repo_path/.git" ]]; then
 		echo "using existing repo in '$setup_repo_path'"
 	else
-		echo "cloning repo from github to '$repo_name'"
-		git clone "$REPO_URL" "$repo_name"
+		echo "cloning repo from github to '$clone_dir'"
+		git clone "$REPO_URL" "$clone_dir"
 	fi
 	echo "installing git-flux to '$INSTALL_PREFIX'"
 	install -v -d -m 0755 "$INSTALL_PREFIX"
@@ -87,19 +87,12 @@ do_uninstall() {
 }
 
 do_update() {
-	if [[ -z $WAT ]]; then
-		echo "-z WAT"
-	else
-		echo "! -z WAT"
+	do_uninstall
+	if [[ -z $REPO_PATH ]]; then # working on our cloned repo, not the user's repo, it's safe to delete
+		echo "rm -rf ..."
+#		rm -rf ...
 	fi
-	if [[ -d $WAT ]]; then
-		echo "-d WAT"
-	else
-		echo "! -d WAT"
-	fi
-#	do_uninstall
-#	rm -rf ""
-#	do_install
+	do_install
 }
 
 ensure_repo_url() {
