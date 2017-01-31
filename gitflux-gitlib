@@ -120,7 +120,7 @@ git_push() {
 git_create_and_push_branch() {
 	local branch="$1"
 	git_create_branch "$branch"
-	git_push_new_branch "$branch"
+	git_push_set_upstream "$branch"
 }
 
 git_create_branch() {
@@ -133,7 +133,7 @@ git_create_branch() {
 	}
 }
 
-git_push_new_branch() {
+git_push_set_upstream() {
 	local branch="$1"
 	io_log "pushing new branch '$branch' to the remote..."
 	git push --set-upstream origin "$branch" >/dev/null 2>&1 && {
