@@ -55,18 +55,18 @@ do_install() {
 	validate_install_prefix
 	local setup_repo_path
 	if is_git_repo "$REPO_PATH"; then # user passed a local repo path, and it's a valid git repo
-		echo "using repo from environment variable in '$REPO_PATH'"
+		log "using repo from environment variable in '$REPO_PATH'"
 		setup_repo_path="$REPO_PATH"
 	else # installer is in charge of figuring out the repo path
 		if is_git_repo "$clone_dir"; then # we already have a cloned repo from a previous installation
-			echo "using existing repo in '$clone_dir'"
+			log "using existing repo in '$clone_dir'"
 		else # first-time installation, go fish
-			echo "cloning repo from github into '$clone_dir'"
+			log "cloning repo from github into '$clone_dir'"
 			git clone "$REPO_URL" "$clone_dir"
 		fi
 		setup_repo_path="$clone_dir"
 	fi
-	echo "installing git-flux to '$INSTALL_PREFIX'"
+	log "installing git-flux to '$INSTALL_PREFIX'"
 	install -v -d -m 0755 "$INSTALL_PREFIX"
 	for exec_file in $exec_files; do
 		install -v -m 0755 "$setup_repo_path/$exec_file" "$INSTALL_PREFIX"
@@ -78,9 +78,9 @@ do_install() {
 
 do_uninstall() {
 	validate_install_prefix
-	echo "uninstalling git-flux from '$INSTALL_PREFIX'"
+	log "uninstalling git-flux from '$INSTALL_PREFIX'"
 	for script_file in $script_files $exec_files; do
-		echo "rm -vf $INSTALL_PREFIX/$script_file"
+		log "removing $INSTALL_PREFIX/$script_file"
 		rm -vf "$INSTALL_PREFIX/$script_file"
 	done
 }
@@ -88,7 +88,7 @@ do_uninstall() {
 do_update() {
 	do_uninstall
 	if is_git_repo "$clone_dir"; then # we already have a cloned repo from a previous installation
-		echo "removing existing repo in '$clone_dir'"
+		log "removing existing repo in '$clone_dir'"
 		rm -rf "$clone_dir"
 	fi
 	do_install
@@ -112,16 +112,20 @@ ensure_install_prefix() {
 
 validate_install_prefix() {
 	if [[ -z $INSTALL_PREFIX ]]; then
-		echo "the install prefix path was not set. use the INSTALL_PREFIX environment variable to set it manually."
+		log "the install prefix path was not set. use the INSTALL_PREFIX environment variable to set it manually."
 		exit 1
 	elif [[ ! -d $INSTALL_PREFIX ]]; then
-		echo "the install prefix directory '$INSTALL_PREFIX' was not found."
+		log "the install prefix directory '$INSTALL_PREFIX' was not found."
 		exit 1
 	fi
 }
 
 is_git_repo() {
 	[[ -d $1 && -d "$1/.git" ]]
+}
+
+log() {
+	echo " > $1"
 }
 
 main "$@"
