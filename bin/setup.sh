@@ -54,13 +54,20 @@ environment:
 do_install() {
 	validate_install_prefix
 	local setup_repo_path
-	if [[ -d $REPO_PATH && -d "$REPO_PATH/.git" ]]; then
-		echo "using existing repo in '$REPO_PATH'"
+	if [[ -d $REPO_PATH && -d "$REPO_PATH/.git" ]]
+	then # user passed her own repo path, and it's a valid git repo
+		echo "using repo from environment variable in '$REPO_PATH'"
 		setup_repo_path="$REPO_PATH"
-	else
-		echo "cloning repo from github into '$clone_dir'"
-		git clone "$REPO_URL" "$clone_dir"
-		setup_repo_path="$clone_dir"
+	else # installer is in charge of figuring out the repo path
+		if [[ -d $clone_dir && -d "$clone_dir/.git" ]]
+		then # we already have a cloned repo from a previous installation
+			echo "using existing repo in '$clone_dir'"
+			setup_repo_path="$clone_dir"
+		else # first-time installation, go fish
+			echo "cloning repo from github into '$clone_dir'"
+			git clone "$REPO_URL" "$clone_dir"
+			setup_repo_path="$clone_dir"
+		fi
 	fi
 	echo "installing git-flux to '$INSTALL_PREFIX'"
 	install -v -d -m 0755 "$INSTALL_PREFIX"
@@ -83,6 +90,7 @@ do_uninstall() {
 
 do_update() {
 	do_uninstall
+	# todo - what to do?
 	if [[ -z $REPO_PATH ]]; then # working on our cloned repo, not the user's repo, it's safe to delete
 		echo "rm -rf ..."
 #		rm -rf ...
