@@ -1,9 +1,7 @@
 #!/usr/bin/env sh
 
 
-# ansi-based text formatting utilities. use them in strings like: 
-# "${t_bold}bold text${t_off}, just normal text. ${t_fg_yellow}this text is yellow${t_off}"
-# yay!
+# ansi-based little text formatters.
 
 
 t_off=$(tput sgr0)
@@ -28,3 +26,7 @@ if (( $tput_colors >= 8 )); then
 		t_fg_darkyellow=$(tput setaf 221)
 	fi
 fi
+
+# uncomment the following line to see what it does:
+# "text can be ${t_bold}bold${t_off}, ${t_under}underlined${t_off}, or colored in ${t_fg_yellow}yellow${t_off} or ${t_fg_blue}blue${t_off}"
+# yay!
