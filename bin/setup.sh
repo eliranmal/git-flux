@@ -88,7 +88,7 @@ do_uninstall() {
 do_update() {
 	do_uninstall
 	if is_git_repo "$clone_dir"; then # we already have a cloned repo from a previous installation
-		echo "rm -rf $clone_dir"
+		echo "removing existing repo in '$clone_dir'"
 		rm -rf "$clone_dir"
 	fi
 	do_install
