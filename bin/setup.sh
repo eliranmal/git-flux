@@ -89,12 +89,11 @@ do_uninstall() {
 
 do_update() {
 	do_uninstall
-
 	if [[ -d $clone_dir && -d "$clone_dir/.git" ]]
 	then # we already have a cloned repo from a previous installation
 		echo "rm -rf $clone_dir"
+		rm -rf "$clone_dir"
 	fi
-
 	do_install
 }
 
