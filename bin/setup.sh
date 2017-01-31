@@ -54,18 +54,13 @@ environment:
 do_install() {
 	validate_install_prefix
 	local setup_repo_path
-	# todo - this check is redundant if we're checking -d later
-	# todo - turn this condition to a default assignment (${foo:-$bar})
-	if [[ -n $REPO_PATH ]]; then
+	if [[ -d $REPO_PATH && -d "$REPO_PATH/.git" ]]; then
+		echo "using existing repo in '$REPO_PATH'"
 		setup_repo_path="$REPO_PATH"
 	else
-		setup_repo_path="$clone_dir"
-	fi
-	if [[ -d $setup_repo_path && -d "$setup_repo_path/.git" ]]; then
-		echo "using existing repo in '$setup_repo_path'"
-	else
-		echo "cloning repo from github to '$clone_dir'"
+		echo "cloning repo from github into '$clone_dir'"
 		git clone "$REPO_URL" "$clone_dir"
+		setup_repo_path="$clone_dir"
 	fi
 	echo "installing git-flux to '$INSTALL_PREFIX'"
 	install -v -d -m 0755 "$INSTALL_PREFIX"
