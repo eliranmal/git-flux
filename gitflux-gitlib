@@ -62,6 +62,8 @@ git_tag_template() {
 # - - - - -  actions (safe) - - - - - #
 
 
+# todo - try to DRY up the && {} || {} stuff with command piping: (command) | func
+
 git_checkout() {
 	local branch="$1"
 	io_log "checking out '$branch'..."
@@ -117,12 +119,6 @@ git_push() {
 	}
 }
 
-git_create_and_push_branch() {
-	local branch="$1"
-	git_create_branch "$branch"
-	git_push_set_upstream "$branch"
-}
-
 git_create_branch() {
 	local branch="$1"
 	io_log "creating the '$branch' local branch..."
@@ -141,6 +137,26 @@ git_push_set_upstream() {
 	} || {
 		io_status_fatal "push / align failed" 1
 	}
+}
+
+git_create_and_push_branch() {
+	local branch="$1"
+	git_create_branch "$branch"
+	git_push_set_upstream "$branch"
+}
+
+git_ensure_branch() {
+	local branch="$1"
+	io_log "looking for '$branch' locally..."
+	# no need to check the remote branch exists, we'd wanna set it as the upstream anyways
+	if git_local_branch_exists "$branch"; then
+		io_log_ok "found" 1
+		git_checkout "$branch"
+	else
+		io_log_info "not found" 1
+		git_create_branch "$branch"
+	fi
+	git_push_set_upstream "$branch"
 }
 
 git_merge() {
