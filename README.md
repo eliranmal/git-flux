@@ -21,8 +21,9 @@ open your [git-bash][1] *'as administrator'*, please.
 all setup commands should run in a separate, designated directory, so 
 either create a temporary directory or use an existing one.
 
-the command descriptions all assume the current directory is that directory.
-  
+the command descriptions below all assume the current directory is that 
+directory, so first of all:
+
 ```sh
 mkdir ~/tmp
 cd ~/tmp
