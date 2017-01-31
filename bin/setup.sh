@@ -80,7 +80,6 @@ do_uninstall() {
 	validate_install_prefix
 	log "uninstalling git-flux from '$INSTALL_PREFIX'"
 	for script_file in $script_files $exec_files; do
-		log "removing $INSTALL_PREFIX/$script_file"
 		rm -vf "$INSTALL_PREFIX/$script_file"
 	done
 }
