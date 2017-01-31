@@ -22,7 +22,6 @@ main() {
 	"
 	ensure_install_prefix
 	ensure_repo_url
-	ensure_repo_path
 	call_command "$cmd_name"
 }
 
@@ -54,8 +53,16 @@ environment:
 
 do_install() {
 	validate_install_prefix
-	if [[ -d $REPO_PATH && -d "$REPO_PATH/.git" ]]; then
-		echo "using existing repo in '$REPO_PATH'"
+	local setup_repo_path
+	# todo - this check is redundant if we're checking -d later
+	# todo - turn this condition to a default assignment (${foo:-$bar})
+	if [[ -n $REPO_PATH ]]; then
+		setup_repo_path="$REPO_PATH"
+	else
+		setup_repo_path="$repo_name"
+	fi
+	if [[ -d $setup_repo_path && -d "$setup_repo_path/.git" ]]; then
+		echo "using existing repo in '$setup_repo_path'"
 	else
 		echo "cloning repo from github to '$repo_name'"
 		git clone "$REPO_URL" "$repo_name"
@@ -63,10 +70,10 @@ do_install() {
 	echo "installing git-flux to '$INSTALL_PREFIX'"
 	install -v -d -m 0755 "$INSTALL_PREFIX"
 	for exec_file in $exec_files; do
-		install -v -m 0755 "$REPO_PATH/$exec_file" "$INSTALL_PREFIX"
+		install -v -m 0755 "$setup_repo_path/$exec_file" "$INSTALL_PREFIX"
 	done
 	for script_file in $script_files; do
-		install -v -m 0644 "$REPO_PATH/$script_file" "$INSTALL_PREFIX"
+		install -v -m 0644 "$setup_repo_path/$script_file" "$INSTALL_PREFIX"
 	done
 }
 
@@ -80,18 +87,24 @@ do_uninstall() {
 }
 
 do_update() {
-	echo "not implemented"
+	if [[ -z $WAT ]]; then
+		echo "-z WAT"
+	else
+		echo "! -z WAT"
+	fi
+	if [[ -d $WAT ]]; then
+		echo "-d WAT"
+	else
+		echo "! -d WAT"
+	fi
+#	do_uninstall
+#	rm -rf ""
+#	do_install
 }
 
 ensure_repo_url() {
 	if [[ -z $REPO_URL ]]; then
 		REPO_URL="http://github.com/eliranmal/git-flux.git"
-	fi
-}
-
-ensure_repo_path() {
-	if [[ -z $REPO_PATH ]]; then
-		REPO_PATH="$repo_name"
 	fi
 }
 
