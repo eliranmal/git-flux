@@ -19,14 +19,12 @@ if (( $tput_colors >= 8 )); then
 	t_fg_magenta=$(tput setaf 5)
 	t_fg_cyan=$(tput setaf 6)
 	t_fg_white=$(tput setaf 7)
-fi
-if (( $tput_colors >= 128 )); then
-	t_fg_darkblue=$(tput setaf 32)
-	t_fg_darkgreen=$(tput setaf 34)
-	t_fg_darkred=$(tput setaf 88)
-	t_fg_darkpurple=$(tput setaf 98)
-fi
-if (( $tput_colors >= 256 )); then
-	t_fg_darkorange=$(tput setaf 166)
-	t_fg_darkyellow=$(tput setaf 221)
+	if (( $tput_colors >= 256 )); then
+		t_fg_darkblue=$(tput setaf 32)
+		t_fg_darkgreen=$(tput setaf 34)
+		t_fg_darkred=$(tput setaf 88)
+		t_fg_darkpurple=$(tput setaf 98)
+		t_fg_darkorange=$(tput setaf 166)
+		t_fg_darkyellow=$(tput setaf 221)
+	fi
 fi
