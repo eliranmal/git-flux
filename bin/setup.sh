@@ -3,7 +3,7 @@
 
 main() {
 	local cmd_name="$1"
-	local repo_name="git-flux"
+	local clone_dir="./git-flux"
 	local exec_files="git-flux"
 	local script_files="
 		gitflux-text
@@ -22,7 +22,6 @@ main() {
 	"
 	ensure_install_prefix
 	ensure_repo_url
-	ensure_repo_path
 	call_command "$cmd_name"
 }
 
@@ -30,6 +29,9 @@ call_command() {
 	case "$1" in
 		help)
 			usage
+			;;
+		update)
+			do_update
 			;;
 		uninstall)
 			do_uninstall
@@ -41,54 +43,64 @@ call_command() {
 }
 
 usage() {
-	echo "usage: [environment] setup.sh [install|uninstall]"
-	echo "environment:"
-	echo "   REPO_URL=$REPO_URL"
-	echo "   REPO_PATH=$REPO_PATH"
-	echo "   INSTALL_PREFIX=$INSTALL_PREFIX"
-}
-
-do_uninstall() {
-	validate_install_prefix
-	echo "uninstalling git-flux from '$INSTALL_PREFIX'"
-	for script_file in $script_files $exec_files; do
-		echo "rm -vf $INSTALL_PREFIX/$script_file"
-		rm -vf "$INSTALL_PREFIX/$script_file"
-	done
+	echo "\
+usage: [environment] setup.sh [install|uninstall|update]
+environment:
+   REPO_URL=$REPO_URL
+   REPO_PATH=$REPO_PATH
+   INSTALL_PREFIX=$INSTALL_PREFIX"
 }
 
 do_install() {
 	validate_install_prefix
-	if [ -d "$REPO_PATH" -a -d "$REPO_PATH/.git" ]; then
-		echo "using existing repo in '$REPO_PATH'"
-	else
-		echo "cloning repo from github to '$repo_name'"
-		git clone "$REPO_URL" "$repo_name"
+	local setup_repo_path
+	if is_git_repo "$REPO_PATH"; then # user passed a local repo path, and it's a valid git repo
+		log "using repo from environment variable in '$REPO_PATH'"
+		setup_repo_path="$REPO_PATH"
+	else # installer is in charge of figuring out the repo path
+		if is_git_repo "$clone_dir"; then # we already have a cloned repo from a previous installation
+			log "using existing repo in '$clone_dir'"
+		else # first-time installation, go fish
+			log "cloning repo from github into '$clone_dir'"
+			git clone "$REPO_URL" "$clone_dir"
+		fi
+		setup_repo_path="$clone_dir"
 	fi
-	echo "installing git-flux to '$INSTALL_PREFIX'"
+	log "installing git-flux to '$INSTALL_PREFIX'"
 	install -v -d -m 0755 "$INSTALL_PREFIX"
 	for exec_file in $exec_files; do
-		install -v -m 0755 "$REPO_PATH/$exec_file" "$INSTALL_PREFIX"
+		install -v -m 0755 "$setup_repo_path/$exec_file" "$INSTALL_PREFIX"
 	done
 	for script_file in $script_files; do
-		install -v -m 0644 "$REPO_PATH/$script_file" "$INSTALL_PREFIX"
+		install -v -m 0644 "$setup_repo_path/$script_file" "$INSTALL_PREFIX"
 	done
 }
 
+do_uninstall() {
+	validate_install_prefix
+	log "uninstalling git-flux from '$INSTALL_PREFIX'"
+	for script_file in $script_files $exec_files; do
+		rm -vf "$INSTALL_PREFIX/$script_file"
+	done
+}
+
+do_update() {
+	do_uninstall
+	if is_git_repo "$clone_dir"; then # we already have a cloned repo from a previous installation
+		log "removing existing repo in '$clone_dir'"
+		rm -rf "$clone_dir"
+	fi
+	do_install
+}
+
 ensure_repo_url() {
-	if [ -z "$REPO_URL" ]; then
+	if [[ -z $REPO_URL ]]; then
 		REPO_URL="http://github.com/eliranmal/git-flux.git"
 	fi
 }
 
-ensure_repo_path() {
-	if [ -z "$REPO_PATH" ]; then
-		REPO_PATH="$repo_name"
-	fi
-}
-
 ensure_install_prefix() {
-	if [ -z "$INSTALL_PREFIX" ]; then
+	if [[ -z $INSTALL_PREFIX ]]; then
 		if [[ $OSTYPE = "linux-gnu" || $OSTYPE = "darwin"* ]]; then # linux / mac osx
 			INSTALL_PREFIX="/usr/local/bin"
 		elif [[ $OSTYPE = "msys" ]]; then # mingw
@@ -98,13 +110,21 @@ ensure_install_prefix() {
 }
 
 validate_install_prefix() {
-	if [ -z "$INSTALL_PREFIX" ]; then
-		echo "the install prefix path was not set. use the INSTALL_PREFIX environment variable to set it manually."
+	if [[ -z $INSTALL_PREFIX ]]; then
+		log "the install prefix path was not set. use the INSTALL_PREFIX environment variable to set it manually."
 		exit 1
-	elif [ ! -d "$INSTALL_PREFIX" ]; then
-		echo "the install prefix directory '$INSTALL_PREFIX' was not found."
+	elif [[ ! -d $INSTALL_PREFIX ]]; then
+		log "the install prefix directory '$INSTALL_PREFIX' was not found."
 		exit 1
 	fi
+}
+
+is_git_repo() {
+	[[ -d $1 && -d "$1/.git" ]]
+}
+
+log() {
+	echo " > $1"
 }
 
 main "$@"
