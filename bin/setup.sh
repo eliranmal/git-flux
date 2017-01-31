@@ -54,13 +54,11 @@ environment:
 do_install() {
 	validate_install_prefix
 	local setup_repo_path
-	if [[ -d $REPO_PATH && -d "$REPO_PATH/.git" ]]
-	then # user passed a local repo path, and it's a valid git repo
+	if is_git_repo "$REPO_PATH"; then # user passed a local repo path, and it's a valid git repo
 		echo "using repo from environment variable in '$REPO_PATH'"
 		setup_repo_path="$REPO_PATH"
 	else # installer is in charge of figuring out the repo path
-		if [[ -d $clone_dir && -d "$clone_dir/.git" ]]
-		then # we already have a cloned repo from a previous installation
+		if is_git_repo "$clone_dir"; then # we already have a cloned repo from a previous installation
 			echo "using existing repo in '$clone_dir'"
 		else # first-time installation, go fish
 			echo "cloning repo from github into '$clone_dir'"
@@ -89,8 +87,7 @@ do_uninstall() {
 
 do_update() {
 	do_uninstall
-	if [[ -d $clone_dir && -d "$clone_dir/.git" ]]
-	then # we already have a cloned repo from a previous installation
+	if is_git_repo "$clone_dir"; then # we already have a cloned repo from a previous installation
 		echo "rm -rf $clone_dir"
 		rm -rf "$clone_dir"
 	fi
@@ -121,6 +118,10 @@ validate_install_prefix() {
 		echo "the install prefix directory '$INSTALL_PREFIX' was not found."
 		exit 1
 	fi
+}
+
+is_git_repo() {
+	[[ -d $1 && -d "$1/.git" ]]
 }
 
 main "$@"
