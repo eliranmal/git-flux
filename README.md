@@ -18,20 +18,11 @@ open your [git-bash][1] *'as administrator'*, please.
 
 ## setup
 
-all setup commands should run in a separate, designated directory, so 
-either create a temporary directory or use an existing one.
-
-the command descriptions below all assume the current directory is that 
-directory, so first of all:
+#### install
 
 ```sh
 mkdir ~/tmp
 cd ~/tmp
-```
-
-#### install
-
-```sh
 curl -O https://raw.githubusercontent.com/eliranmal/git-flux/master/bin/setup.sh
 chmod +x setup.sh
 ./setup.sh
@@ -42,12 +33,14 @@ chmod +x setup.sh
 #### uninstall
 
 ```sh
+cd ~/tmp
 ./setup.sh uninstall
 ```
 
 #### update
 
 ```sh
+cd ~/tmp
 ./setup.sh update
 ```
 

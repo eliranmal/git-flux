@@ -36,6 +36,7 @@ destroy_branch_from_base() {
 	local base_branch="$(git_config_get "$(git_config_escape_subsection "branch:$branch").base")"
 
 	validate_git_clean_working_tree
+	# todo - don't validate that - ensure we delete these branches instead (quite-fail wherever possible)
 	validate_git_local_and_remote_branches_exist "$branch"
 	validate_git_local_branch_exists "$base_branch"
 
