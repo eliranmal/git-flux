@@ -8,23 +8,19 @@ t_off=$(tput sgr0)
 t_bold=$(tput bold)
 t_under=$(tput smul)
 
-tput_colors=$(tput colors)
-if (( $tput_colors >= 8 )); then
-	t_fg_red=$(tput setaf 1)
-	t_fg_green=$(tput setaf 2)
-	t_fg_yellow=$(tput setaf 3)
-	t_fg_blue=$(tput setaf 4)
-	t_fg_magenta=$(tput setaf 5)
-	t_fg_cyan=$(tput setaf 6)
-	t_fg_white=$(tput setaf 7)
-	if (( $tput_colors >= 256 )); then
-		t_fg_darkblue=$(tput setaf 32)
-		t_fg_darkgreen=$(tput setaf 34)
-		t_fg_darkred=$(tput setaf 88)
-		t_fg_darkpurple=$(tput setaf 98)
-		t_fg_darkorange=$(tput setaf 166)
-		t_fg_darkyellow=$(tput setaf 221)
-	fi
+if (( $(tput colors) >= 256 )); then
+	t_fg_red=$(tput setaf 167)
+	t_fg_green=$(tput setaf 107)
+	t_fg_yellow=$(tput setaf 179)
+	t_fg_blue=$(tput setaf 74)
+	t_fg_magenta=$(tput setaf 182)
+	t_fg_cyan=$(tput setaf 30)
+	t_fg_lightred=$(tput setaf 174)
+	t_fg_lightgreen=$(tput setaf 191)
+	t_fg_lightyellow=$(tput setaf 222)
+	t_fg_lightblue=$(tput setaf 153)
+	t_fg_lightmagenta=$(tput setaf 219)
+	t_fg_lightcyan=$(tput setaf 116)
 fi
 
 # uncomment the following line to see what it does:
