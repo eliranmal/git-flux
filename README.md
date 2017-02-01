@@ -112,11 +112,11 @@ handle integration across team members and their features.
 
 - **`create <name>`**  
 start a new team; create a local branch and push it to the remote.
-the branch name will be composed of the pre-configured team prefix and the passed **`name`**.
+the branch name will be composed of the pre-configured team prefix and the passed **`name`**.  
 aliases: **`assemble`**, **`gather`**, **`huddle`**.
 
 - **`destroy <name>`**  
-destroy an existing team; delete its local and remote branches, for good.
+destroy an existing team; delete its local and remote branches, for good.  
 aliases: **`disassemble`**, **`scatter`**, **`break`**.
 
 - **`sync <name>`**  
@@ -124,7 +124,7 @@ sync an existing team with its base branch (the integration branch).
 
 - **`join <name>`**  
 join a team for the first time, or switch teams to another team.
-after this, all new features will be based on the new team.
+after this, all new features will be based on the new team.  
 aliases: **`switch`**.
 
 
