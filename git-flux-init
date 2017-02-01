@@ -32,7 +32,7 @@ here are the questions you'd have to answer:
 
 
 cmd_default() {
-	io_log; io_log_stars "${t_bold}git-flux initializer${t_off}"; io_log
+	io_log; io_log_banner "git-flux initializer"; io_log
 
 	git_config_set "initialized" false
 
