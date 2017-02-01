@@ -51,6 +51,7 @@ git_tag_exists() {
 	has $1 $(git_all_tags)
 }
 
+# todo - lose this and add question to init to request tag prefix
 git_tag_template() {
 	local version="$1"; local suffix="$2"
 	# todo - decide what the template will be
@@ -153,7 +154,7 @@ git_ensure_branch() {
 		io_log_ok "found" 1
 		git_checkout "$branch"
 	else
-		io_log_info "not found" 1
+		io_log_warn "not found" 1
 		git_create_branch "$branch"
 	fi
 	git_push_set_upstream "$branch"

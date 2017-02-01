@@ -8,23 +8,23 @@ io_log() {
 }
 
 io_log_ok() {
-	io_print "${t_fg_darkgreen} ✔ ${t_off}" "$@"
+	io_print "${t_fg_green} ✔ ${t_off}" "$@"
 }
 
 io_log_info() {
-	io_print "${t_fg_darkblue} ℹ ${t_off}" "$@"
+	io_print "${t_fg_blue} ℹ ${t_off}" "$@"
 }
 
-io_log_star() {
-	io_print "${t_fg_darkpurple} ★ ${t_off}" "$@"
+io_log_stars() {
+	io_print "${t_fg_magenta} ★ ${t_off}" "$@" 1 "${t_fg_magenta} ★ ${t_off}"
 }
 
 io_log_warn() {
-	io_print "${t_fg_darkorange} ✘ ${t_off}" "$@" >&2
+	io_print "${t_fg_yellow} ✘ ${t_off}" "$@" >&2
 }
 
 io_status_fatal() {
-	die "$(io_print "${t_fg_darkred} ✘ ${t_off}" "$@")
+	die "$(io_print "${t_fg_red} ✘ ${t_off}" "$@")
 " >&2
 }
 
@@ -35,7 +35,7 @@ io_prompt() {
 	fi
 	# use -p instead of sending the question to stdout, as this function will probably be 
 	# called in a $(subshell), so printing to stdout won't work as expected
-	read -r -p "$(printf "${t_fg_darkyellow} ？${t_off}%s " "$question")" answer
+	read -r -p "$(printf "${t_fg_yellow} ？${t_off}%s " "$question")" answer
 	echo "${answer:-$default_suggestion}"
 }
 
@@ -48,12 +48,12 @@ io_confirm() {
 }
 
 io_print() {
-	local margin="$1"; local body="$2"; local indent_level=$3 # intentionally don't quote indent_level
-	local message="$margin$body"; local indent=""
+	local margin="$1"; local body="$2"; local indent_level=$3; local end_margin="$4"
+	local indent=""
 	if [[ $indent_level =~ [123] ]]; then
 		for (( n=$indent_level; n > 0; n-- )); do
 			indent="   $indent"
 		done
 	fi
-	echo "$indent$message"
+	echo "$indent$margin$body$end_margin"
 }
