@@ -131,11 +131,11 @@ git_create_branch() {
 
 git_push_set_upstream() {
 	local branch="$1"
-	io_log "pushing '$branch' to the remote / aligning with upstream..."
+	io_log "pushing '$branch' to the remote and setting upstream..."
 	git push --set-upstream origin "$branch" >/dev/null 2>&1 && {
-		io_log_ok "pushed / aligned ok" 1
+		io_log_ok "pushed ok" 1
 	} || {
-		io_status_fatal "push / align failed" 1
+		io_status_fatal "push failed" 1
 	}
 }
 
