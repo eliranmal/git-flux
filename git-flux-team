@@ -54,9 +54,9 @@ cmd_destroy() {
 	# todo - what to do after team is destroyed? move to another team? 
 	# todo - probably should lookup if other teams are available, and if not, delete the branch.team ref from config
 	validate_mandatory_arg "$1"
-	io_log; io_confirm "the local and remote branches of '$1' will be deleted, forever! continue?" "i knew you'd chicken out."
 	io_log; destroy_branch_from_base "$(git_config_get "prefix.team")$1"
-	io_log; io_log_ok "team '$1' is destroyed. so long!"; io_log
+	git_config_unset "branch.team" "$branch"
+	io_log; io_log_ok "team '$1' is gone. so long!"; io_log
 }
 
 cmd_sync() {

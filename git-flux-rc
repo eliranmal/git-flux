@@ -35,7 +35,6 @@ cmd_start() {
 
 cmd_finish() {
 	validate_mandatory_arg "$1"
-	io_log; io_confirm "the local and remote branches of '$1' will be deleted, forever! continue?" "i knew you'd chicken out."
 	io_log; destroy_branch_from_base "$(git_config_get "prefix.rc")$1"
 	io_log; io_log_ok "release candidate '$1' is finished. goodbye!"; io_log
 }

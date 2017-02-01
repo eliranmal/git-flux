@@ -197,6 +197,11 @@ git_config_set() {
 	git config --global "$git_config_section.$namespace" "$value"
 }
 
+git_config_unset() {
+	local namespace="$1"
+	git config --global --unset "$git_config_section.$namespace"
+}
+
 git_config_remove_section() {
 	local namespace="$1"
 	git config --global --remove-section "$git_config_section.$namespace"	

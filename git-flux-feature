@@ -29,7 +29,8 @@ cmd_start() {
 	validate_mandatory_arg "$1"
 	local team_branch="$(git_config_get "branch.team")"
 	if [[ -z $team_branch && -z $2 ]]; then
-		io_log; io_status_fatal "no base found, set up a team first, or pass another base to this command."
+		io_log; io_status_fatal "no base found!
+      set up a team first with 'git flux team create' or 'git flux team join', or pass the base to this command."
 	fi
 	io_log; create_branch_from_base "$(git_config_get "prefix.feature")$1" "$team_branch" "$2"
 	io_log; io_log_ok "feature '$1' is started. happy coding!"; io_log
@@ -37,7 +38,6 @@ cmd_start() {
 
 cmd_finish() {
 	validate_mandatory_arg "$1"
-	io_log; io_confirm "the local and remote branches of '$1' will be deleted, forever! continue?" "i knew you'd chicken out."
 	io_log; destroy_branch_from_base "$(git_config_get "prefix.feature")$1"
 	io_log; io_log_ok "feature '$1' is finished. RIP."; io_log
 }
