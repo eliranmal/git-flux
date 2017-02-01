@@ -20,7 +20,6 @@ ${t_bold}available actions:${t_off}
 cmd_sync() {
 	local branch="$(git_config_get "branch.integration")"
 	local base="master"
-	io_log "syncing '$branch' with '$base'..."
-	sync_branch_with_base "$branch" "$base"
-	io_log_ok "'$branch' is in sync with '$base'."
+	io_log ; sync_branch_with_base "$branch" "$base"
+	io_log; io_log_ok "'$branch' is in sync with '$base'."; io_log
 }

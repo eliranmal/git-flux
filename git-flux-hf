@@ -23,16 +23,14 @@ ${t_bold}available actions:${t_off}
 
 cmd_start() {
 	validate_mandatory_arg "$1"
-	io_log "starting hot-fix '$1'..."
-	create_branch_from_tag "$(git_config_get "prefix.hf")$1" "$(git_tag_template "$1")"
-	io_log_ok "hot-fix '$1' is started. good luck!"
+	io_log; create_branch_from_tag "$(git_config_get "prefix.hf")$1" "$(git_tag_template "$1")"
+	io_log; io_log_ok "hot-fix '$1' is started. good luck!"; io_log
 }
 
 cmd_finish() {
 	# todo - exclude package.json, shrinkwrap.json, pom.xml when merging back
 	validate_mandatory_arg "$1"
-	io_confirm "the local and remote branches of '$1' will be deleted, forever! continue?" "i knew you'd chicken out."
-	io_log "finishing hot-fix '$1'..."
-	destroy_branch_from_tag "$(git_config_get "prefix.hf")$1"
-	io_log_ok "hot-fix '$1' is finished. goodbye!"
+	io_log; io_confirm "the local and remote branches of '$1' will be deleted, forever! continue?" "i knew you'd chicken out."
+	io_log; destroy_branch_from_tag "$(git_config_get "prefix.hf")$1"
+	io_log; io_log_ok "hot-fix '$1' is finished. goodbye!"; io_log
 }

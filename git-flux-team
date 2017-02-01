@@ -44,33 +44,29 @@ cmd_switch() { cmd_join "$@"; }
 
 cmd_create() {
 	validate_mandatory_arg "$1"
-	io_log "creating team '$1'..."
 	local branch="$(git_config_get "prefix.team")$1"
-	create_branch_from_base "$branch" "$(git_config_get "branch.integration")"
+	io_log; create_branch_from_base "$branch" "$(git_config_get "branch.integration")"
 	git_config_set "branch.team" "$branch"
-	io_log_ok "team '$1' is created. congrats!"
+	io_log; io_log_ok "team '$1' is created. congrats!"; io_log
 }
 
 cmd_destroy() {
 	# todo - what to do after team is destroyed? move to another team? 
 	# todo - probably should lookup if other teams are available, and if not, delete the branch.team ref from config
 	validate_mandatory_arg "$1"
-	io_confirm "the local and remote branches of '$1' will be deleted, forever! continue?" "i knew you'd chicken out."
-	io_log "destroying team '$1'..."
-	destroy_branch_from_base "$(git_config_get "prefix.team")$1"
-	io_log_ok "team '$1' is destroyed. so long!"
+	io_log; io_confirm "the local and remote branches of '$1' will be deleted, forever! continue?" "i knew you'd chicken out."
+	io_log; destroy_branch_from_base "$(git_config_get "prefix.team")$1"
+	io_log; io_log_ok "team '$1' is destroyed. so long!"; io_log
 }
 
 cmd_sync() {
 	validate_mandatory_arg "$1"
-	io_log "syncing '$1' with the base..."
-	sync_branch_with_base "$(git_config_get "prefix.team")$1"
-	io_log_ok "team '$1' is in sync with the base."
+	io_log; sync_branch_with_base "$(git_config_get "prefix.team")$1"
+	io_log; io_log_ok "team '$1' is in sync with the base."; io_log
 }
 
 cmd_join() {
 	validate_mandatory_arg "$1"
-	io_log "switching teams..."
 
 	local prefix="$(git_config_get "prefix.team")"
 	local new_team_branch="$prefix$1"
@@ -81,7 +77,7 @@ cmd_join() {
 	validate_git_local_and_remote_branches_exist "$new_team_branch"
 	
 	if [[ $new_team_branch = $old_team_branch ]]; then
-		io_status_fatal "'$new_team' is the current team, nothing to do."
+		io_log; io_status_fatal "'$new_team' is the current team, nothing to do."
 	fi
 
 	# todo - should this block be used in 'finish' as well?
@@ -92,16 +88,15 @@ cmd_join() {
 		local old_team_feature_branches="$(git_config_get_subsections_by_value "base" "$old_team_branch" "branch:")"
 		if [[ -n $old_team_feature_branches ]]; then
 			# strip prefix to get the team name
-			io_log_info "feature branches of the '$old_team' team were found:"
+			io_log; io_log_info "feature branches of the '$old_team' team were found:"
 			io_log "$old_team_feature_branches" 1
 			io_confirm "ignore them and continue?" "aborting, see ya later."
 		fi
 	fi
 
-	io_log "leaving '$old_team', joining '$new_team'..."
-
+	io_log
 	git_checkout "$new_team_branch"
 	git_config_set "branch.team" "$new_team_branch"
 
-	io_log_ok "team switched. welcome aboard!"
+	io_log; io_log_ok "team switched. welcome aboard!"; io_log
 }
