@@ -43,7 +43,7 @@ io_confirm() {
 	local question="$1"; local exit_message="$2";
 	local answer=$(io_prompt "$question (y/n)")
 	if [[ $answer != "y" ]]; then
-		io_status_fatal "$exit_message"
+		io_status_fatal "$exit_message" 1
 	fi
 }
 
