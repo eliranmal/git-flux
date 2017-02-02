@@ -51,13 +51,6 @@ git_tag_exists() {
 	has $1 $(git_all_tags)
 }
 
-# todo - lose this and add question to init to request tag prefix
-git_tag_template() {
-	local version="$1"; local suffix="$2"
-	# todo - decide what the template will be
-	printf "v%s%s" "$version" "$suffix"
-}
-
 
 
 # - - - - -  actions (safe) - - - - - #

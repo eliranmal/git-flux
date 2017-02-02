@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 
-USAGE="hf <start|finish> <version> [-h]"
+USAGE="hf <start|finish> <name> [tag] [-h]"
 
 LONG_USAGE="
 ${t_bold}${t_fg_red}hf${t_off}
@@ -12,18 +12,19 @@ handle lifecycle of hot-fixes.
 
 ${t_bold}available actions:${t_off}
 
-   ${t_bold}start <version>${t_off}
+   ${t_bold}start <name> <tag>${t_off}
       start a hot-fix; create a local branch and push it to the remote.
-      the branch name will be composed of the pre-configured hot-fix prefix and the passed ${t_bold}version${t_off}.
+      the branch name will be composed of the pre-configured hot-fix prefix and the passed ${t_bold}name${t_off}.
+      the passed ${t_bold}tag${t_off} will be used as the branch base.
 
-   ${t_bold}finish <version>${t_off}
+   ${t_bold}finish <name>${t_off}
       finish an existing release-candidate; delete its local and remote branches, for good.
  "
 
 
 cmd_start() {
-	validate_mandatory_arg "$1"
-	io_log; create_branch_from_tag "$(git_config_get "prefix.hf")$1" "$(git_tag_template "$1")"
+	validate_mandatory_arg "$1"; validate_mandatory_arg "$2"
+	io_log; create_branch_from_tag "$(git_config_get "prefix.hf")$1" "$2"
 	io_log; io_log_ok "hot-fix '$1' is started. good luck!"; io_log
 }
 

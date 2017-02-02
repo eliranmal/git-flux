@@ -144,11 +144,11 @@ handle lifecycle of release-candidates.
 
 ###### actions
 
-- **`start <next-version>`**  
+- **`start <name>`**  
 start a release-candidate; create a local branch and push it to the remote.
-the branch name will be composed of the pre-configured release-candidate prefix and the passed **`next-version`**.
+the branch name will be composed of the pre-configured release-candidate prefix and the passed **`name`**.
 
-- **`finish <next-version>`**  
+- **`finish <name>`**  
 finish an existing release-candidate; delete its local and remote branches, for good.
 
 
@@ -158,11 +158,12 @@ handle lifecycle of hot-fixes.
 
 ###### actions
 
-- **`start <version>`**  
+- **`start <name> <tag>`**  
 start a hot-fix; create a local branch and push it to the remote.
-the branch name will be composed of the pre-configured hot-fix prefix and the passed **`version`**.
+the branch name will be composed of the pre-configured hot-fix prefix and the passed **`name`**.
+the passed **`tag`** will be used as the branch base.
 
-- **`finish <version>`**  
+- **`finish <name>`**  
 finish an existing release-candidate; delete its local and remote branches, for good.
 
 
