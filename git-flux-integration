@@ -3,14 +3,13 @@
 
 USAGE="integration <sync> [-h]"
 
-LONG_USAGE="
-${t_bold}${t_fg_magenta}integration${t_off}
+LONG_USAGE="${t_bold}${t_fg_magenta}integration${t_off}
 -----------
 
 handle integration across teams.
 
 
-${t_bold}available actions:${t_off}
+${t_under}available actions${t_off}
 
    ${t_bold}sync <name>${t_off}
       pulls changes from the base branch, i.e. 'master', into the integration branch.
@@ -18,6 +17,7 @@ ${t_bold}available actions:${t_off}
 
 
 cmd_sync() {
+	USAGE="integration sync [-h]"
 	local branch="$(git_config_get "branch.integration")"
 	local base="master"
 	io_log ; sync_branch_with_base "$branch" "$base"

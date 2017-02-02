@@ -1,10 +1,12 @@
 #!/usr/bin/env sh
 
 
-validate_mandatory_arg() {
-	if [[ -z $1 ]]; then
-		usage
-	fi
+require_args() {
+	for arg; do
+		if [[ -z $arg ]]; then
+			usage
+		fi
+	done
 }
 
 validate_git_flux_initialized() {

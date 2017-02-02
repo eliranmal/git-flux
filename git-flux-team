@@ -3,14 +3,13 @@
 
 USAGE="team <create|destroy|sync|join> <name> [-h]"
 
-LONG_USAGE="
-${t_bold}${t_fg_yellow}team${t_off}
+LONG_USAGE="${t_bold}${t_fg_yellow}team${t_off}
 ----
 
 handle integration across team members and their features.
 
 
-${t_bold}available actions:${t_off}
+${t_under}available actions${t_off}
 
    ${t_bold}create <name>${t_off}
       start a new team; create a local branch and push it to the remote.
@@ -43,7 +42,9 @@ cmd_switch() { cmd_join "$@"; }
 
 
 cmd_create() {
-	validate_mandatory_arg "$1"
+	# todo - how to treat aliases in usage?
+	USAGE="team create|assemble|gather|huddle <name> [-h]"
+	require_args "$1"
 	local branch="$(git_config_get "prefix.team")$1"
 	io_log; create_branch_from_base "$branch" "$(git_config_get "branch.integration")"
 	git_config_set "branch.team" "$branch"
@@ -51,22 +52,25 @@ cmd_create() {
 }
 
 cmd_destroy() {
-	# todo - what to do after team is destroyed? move to another team? 
-	# todo - probably should lookup if other teams are available, and if not, delete the branch.team ref from config
-	validate_mandatory_arg "$1"
+	# todo - how to treat aliases in usage?
+	USAGE="team destroy|disassemble|scatter|break <name> [-h]"
+	require_args "$1"
 	io_log; destroy_branch_from_base "$(git_config_get "prefix.team")$1"
 	git_config_unset "branch.team" "$branch"
 	io_log; io_log_ok "team '$1' is gone. so long!"; io_log
 }
 
 cmd_sync() {
-	validate_mandatory_arg "$1"
+	USAGE="team sync <name> [-h]"
+	require_args "$1"
 	io_log; sync_branch_with_base "$(git_config_get "prefix.team")$1"
 	io_log; io_log_ok "team '$1' is in sync with the base."; io_log
 }
 
 cmd_join() {
-	validate_mandatory_arg "$1"
+	# todo - how to treat aliases in usage?
+	USAGE="team join|switch <name> [-h]"
+	require_args "$1"
 
 	local prefix="$(git_config_get "prefix.team")"
 	local new_team_branch="$prefix$1"

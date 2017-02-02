@@ -3,14 +3,13 @@
 
 USAGE="rc <start|finish> <name> [-h]"
 
-LONG_USAGE="
-${t_bold}${t_fg_green}rc${t_off}
+LONG_USAGE="${t_bold}${t_fg_green}rc${t_off}
 --
 
 handle lifecycle of release-candidates.
 
 
-${t_bold}available actions:${t_off}
+${t_under}available actions${t_off}
 
    ${t_bold}start <name>${t_off}
       start a release-candidate; create a local branch and push it to the remote.
@@ -22,13 +21,15 @@ ${t_bold}available actions:${t_off}
 
 
 cmd_start() {
-	validate_mandatory_arg "$1"
+	USAGE="rc start <name> [-h]"
+	require_args "$1"
 	io_log; create_branch_from_base "$(git_config_get "prefix.rc")$1" "$(git_config_get "branch.integration")"
 	io_log; io_log_ok "release candidate '$1' is created. congrats!"; io_log
 }
 
 cmd_finish() {
-	validate_mandatory_arg "$1"
+	USAGE="rc finish <name> [-h]"
+	require_args "$1"
 	io_log; destroy_branch_from_base "$(git_config_get "prefix.rc")$1"
 	io_log; io_log_ok "release candidate '$1' is finished. goodbye!"; io_log
 }
