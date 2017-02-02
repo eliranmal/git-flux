@@ -22,9 +22,13 @@ create_branch_from_tag() {
 
 	validate_git_clean_working_tree
 	validate_git_local_and_remote_branches_dont_exist "$branch"
+
+	# fetch remote tag refs
+	git_checkout "master"
+	git_pull
+
 	validate_git_tag_exists "$tag"
 
-	git_pull
 	git_checkout "$tag"
 	git_create_and_push_branch "$branch"
 
