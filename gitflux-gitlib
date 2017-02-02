@@ -68,7 +68,9 @@ git_tag_template() {
 git_checkout() {
 	local branch="$1"
 	io_log "checking out '$branch'..."
-	git checkout "$branch" >/dev/null 2>&1 && {
+	
+	# todo - continue this (issue #2)
+	git checkout "$branch" 2>>${err_log} 1>/dev/null && {
 		io_log_ok "checked out" 1
 	} || {
 		io_status_fatal "checkout failed" 1
