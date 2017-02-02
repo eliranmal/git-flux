@@ -52,7 +52,8 @@ destroy_branch_from_base() {
 }
 
 destroy_branch_from_tag() {
-	io_log; io_confirm "local and remote branches will be deleted, forever! continue?" "i knew you'd chicken out."
+	io_confirm "local and remote branches will be deleted, forever! continue?" "i knew you'd chicken out."
+	io_log 
 
 	local branch="$1"
 	local tag="$(git_config_get "$(git_config_escape_subsection "branch:$branch").base")"
