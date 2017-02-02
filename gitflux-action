@@ -24,6 +24,7 @@ create_branch_from_tag() {
 	validate_git_local_and_remote_branches_dont_exist "$branch"
 	validate_git_tag_exists "$tag"
 
+	git_pull
 	git_checkout "$tag"
 	git_create_and_push_branch "$branch"
 
