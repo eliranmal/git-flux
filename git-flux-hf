@@ -40,7 +40,7 @@ cmd_long_usage_start() {
 cmd_long_usage_finish() {
 	printf "\
    ${t_bold}$(cmd_usage_finish)${t_off}
-      finish an existing release-candidate; delete its local and remote branches, for good.
+      finish an existing hot-fix; delete its local and remote branches, for good.
  "
 }
 
