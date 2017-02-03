@@ -9,9 +9,9 @@ require_args() {
 	done
 }
 
-validate_git_flux_initialized() {
+require_gitflux_initialized() {
 	if [[ $(git_config_get "initialized") != true ]]; then
-		io_status_fatal "git-flux is not initialized. run 'git flux init' to fix this."
+		io_log; io_status_fatal "git-flux is not initialized. run 'git flux init' to fix this."
 	fi
 }
 

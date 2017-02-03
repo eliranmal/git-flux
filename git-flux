@@ -95,7 +95,7 @@ main() {
 
 	# validate action prerequisites
 	if [[ $sub_command != "init" ]]; then
-		validate_git_flux_initialized
+		require_gitflux_initialized
 	fi
 
 	# delegate to the sub-command action api
