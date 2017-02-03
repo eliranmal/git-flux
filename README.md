@@ -53,7 +53,8 @@ cd ~/tmp
 
 - **`-h`**  
 shows the f***ing manual. works everywhere, and context dependent. 
-this means you can `git flux -h`, and also `git flux feature -h`.
+this means you can `git flux -h`, and also `git flux feature -h` or 
+`git flux feature start -h`.
 
 
 #### sub-commands
