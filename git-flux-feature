@@ -58,7 +58,6 @@ cmd_long_usage_sync() {
 
 
 cmd_start() {
-	USAGE="feature start <name> [base] [-h]"
 	require_args "$1"
 	local team_branch="$(git_config_get "branch.team")"
 	if [[ -z $team_branch && -z $2 ]]; then
@@ -70,14 +69,12 @@ cmd_start() {
 }
 
 cmd_finish() {
-	USAGE="feature finish <name> [-h]"
 	require_args "$1"
 	io_log; destroy_branch_from_base "$(git_config_get "prefix.feature")$1"
 	io_log; io_log_ok "feature '$1' is finished. RIP."; io_log
 }
 
 cmd_sync() {
-	USAGE="feature sync <name> [-h]"
 	require_args "$1"
 	io_log; sync_branch_with_base "$(git_config_get "prefix.feature")$1"
 	io_log; io_log_ok "feature '$1' is in sync with the base."; io_log
