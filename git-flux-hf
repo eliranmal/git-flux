@@ -2,7 +2,15 @@
 
 
 cmd_usage_default() {
-	printf "hf <start|finish> <name> [tag] [-h]"
+	printf "<start|finish> <name> [tag]"
+}
+
+cmd_usage_start() {
+	printf "start <name> <tag>"
+}
+
+cmd_usage_finish() {
+	printf "finish <name>"
 }
 
 cmd_long_usage_default() {
@@ -20,13 +28,9 @@ $(cmd_long_usage_finish)
 "
 }
 
-cmd_usage_start() {
-	printf "hf start <name> <tag> [-h]"
-}
-
 cmd_long_usage_start() {
 	printf "\
-   ${t_bold}start <name> <tag>${t_off}
+   ${t_bold}$(cmd_usage_start)${t_off}
       start a hot-fix; create a local branch and push it to the remote.
       the branch name will be composed of the pre-configured hot-fix prefix and the passed ${t_bold}name${t_off}.
       the passed ${t_bold}tag${t_off} will be used as the branch base.
@@ -35,7 +39,7 @@ cmd_long_usage_start() {
 
 cmd_long_usage_finish() {
 	printf "\
-   ${t_bold}finish <name>${t_off}
+   ${t_bold}$(cmd_usage_finish)${t_off}
       finish an existing release-candidate; delete its local and remote branches, for good.
  "
 }
@@ -47,7 +51,6 @@ cmd_start() {
 }
 
 cmd_finish() {
-	USAGE="hf finish <name> [-h]"
 	require_args "$1"
 	io_log; destroy_branch_from_tag "$(git_config_get "prefix.hf")$1"
 	io_log; io_log_ok "hot-fix '$1' is finished. goodbye!"; io_log

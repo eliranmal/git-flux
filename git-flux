@@ -76,7 +76,7 @@ main() {
 	
 	# explicitly override usage/long-usage from the loaded sub-command per action
 	if is_available "cmd_usage_$action"; then
-		USAGE=$(cmd_usage_${action})
+		USAGE="$sub_command $(cmd_usage_${action}) [-h]"
 	fi
 	if is_available "cmd_long_usage_$action"; then
 		LONG_USAGE=$(cmd_long_usage_${action})
