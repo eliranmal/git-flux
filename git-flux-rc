@@ -1,34 +1,56 @@
 #!/usr/bin/env sh
 
 
-USAGE="rc <start|finish> <name> [-h]"
+cmd_usage_default() {
+	printf "rc <start|finish> <name> [-h]"
+}
 
-LONG_USAGE="
+cmd_usage_start() {
+	printf "rc start <name> [-h]"
+}
+
+cmd_usage_finish() {
+	printf "rc finish <name> [-h]"
+}
+
+cmd_long_usage_default() {
+	printf "\
 ${t_bold}${t_fg_green}rc${t_off}
 --
 
 handle lifecycle of release-candidates.
 
 
-${t_bold}available actions:${t_off}
+${t_under}available actions${t_off}
 
-   ${t_bold}start <name>${t_off}
+$(cmd_long_usage_start)
+$(cmd_long_usage_finish)
+"
+}
+
+cmd_long_usage_start() {
+	printf "\
+   ${t_bold}$(cmd_usage_start)${t_off}
       start a release-candidate; create a local branch and push it to the remote.
       the branch name will be composed of the pre-configured release-candidate prefix and the passed ${t_bold}name${t_off}.
+ "
+}
 
-   ${t_bold}finish <name>${t_off}
+cmd_long_usage_finish() {
+	printf "\
+   ${t_bold}$(cmd_usage_finish)${t_off}
       finish an existing release-candidate; delete its local and remote branches, for good.
  "
-
+}
 
 cmd_start() {
-	validate_mandatory_arg "$1"
+	require_args "$1"
 	io_log; create_branch_from_base "$(git_config_get "prefix.rc")$1" "$(git_config_get "branch.integration")"
 	io_log; io_log_ok "release candidate '$1' is created. congrats!"; io_log
 }
 
 cmd_finish() {
-	validate_mandatory_arg "$1"
+	require_args "$1"
 	io_log; destroy_branch_from_base "$(git_config_get "prefix.rc")$1"
 	io_log; io_log_ok "release candidate '$1' is finished. goodbye!"; io_log
 }

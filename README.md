@@ -53,7 +53,8 @@ cd ~/tmp
 
 - **`-h`**  
 shows the f***ing manual. works everywhere, and context dependent. 
-this means you can `git flux -h`, and also `git flux feature -h`.
+this means you can `git flux -h`, and also `git flux feature -h` or 
+`git flux feature start -h`.
 
 
 #### sub-commands
@@ -164,7 +165,7 @@ the branch name will be composed of the pre-configured hot-fix prefix and the pa
 the passed **`tag`** will be used as the branch base.
 
 - **`finish <name>`**  
-finish an existing release-candidate; delete its local and remote branches, for good.
+finish an existing hot-fix; delete its local and remote branches, for good.
 
 
 

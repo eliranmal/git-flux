@@ -1,9 +1,12 @@
 #!/usr/bin/env sh
 
 
-USAGE="init [-h]"
+cmd_usage_default() {
+	printf "init [-h]"
+}
 
-LONG_USAGE="
+cmd_long_usage_default() {
+	printf "\
 ${t_bold}init${t_off}
 ----
 
@@ -29,6 +32,7 @@ here are the questions you'd have to answer:
       the long-lived integration branch name, defaults to 'integration'. 
       this branch serves as the base to all team branches, and will be created if it does not already exist.
  "
+}
 
 
 cmd_default() {
