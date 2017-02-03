@@ -1,9 +1,29 @@
 #!/usr/bin/env sh
 
 
-USAGE="team <create|destroy|sync|join> <name> [-h]"
+cmd_usage_default() {
+	printf "<create|destroy|sync|join> <name>"
+}
 
-LONG_USAGE="${t_bold}${t_fg_yellow}team${t_off}
+cmd_usage_create() {
+	printf "create <name>"
+}
+
+cmd_usage_destroy() {
+	printf "destroy <name>"
+}
+
+cmd_usage_join() {
+	printf "join <name>"
+}
+
+cmd_usage_sync() {
+	printf "sync <name>"
+}
+
+cmd_long_usage_default() {
+	printf "\
+${t_bold}${t_fg_yellow}team${t_off}
 ----
 
 handle integration across team members and their features.
@@ -11,23 +31,45 @@ handle integration across team members and their features.
 
 ${t_under}available actions${t_off}
 
-   ${t_bold}create <name>${t_off}
+$(cmd_long_usage_create)
+$(cmd_long_usage_destroy)
+$(cmd_long_usage_join)
+$(cmd_long_usage_sync)
+"
+}
+
+cmd_long_usage_create() {
+	printf "\
+   ${t_bold}$(cmd_usage_create)${t_off}
       start a new team; create a local branch and push it to the remote.
       the branch name will be composed of the pre-configured team prefix and the passed ${t_bold}name${t_off}.
       aliases: ${t_bold}assemble${t_off}, ${t_bold}gather${t_off}, ${t_bold}huddle${t_off}.
+ "
+}
 
-   ${t_bold}destroy <name>${t_off}
+cmd_long_usage_destroy() {
+	printf "\
+   ${t_bold}$(cmd_usage_destroy)${t_off}
       destroy an existing team; delete its local and remote branches, for good.
       aliases: ${t_bold}disassemble${t_off}, ${t_bold}scatter${t_off}, ${t_bold}break${t_off}.
+ "
+}
 
-   ${t_bold}sync <name>${t_off}
-      sync an existing team with its base branch (the integration branch).
-
-   ${t_bold}join <name>${t_off}
+cmd_long_usage_join() {
+	printf "\
+   ${t_bold}$(cmd_usage_join)${t_off}
       join a team for the first time, or switch teams to another team.
       after this, all new features will be based on the new team.
       aliases: ${t_bold}switch${t_off}.
  "
+}
+
+cmd_long_usage_sync() {
+	printf "\
+   ${t_bold}$(cmd_usage_sync)${t_off}
+      sync an existing team with its base branch (the integration branch).
+ "
+}
 
 
 # aliases 
@@ -42,8 +84,6 @@ cmd_switch() { cmd_join "$@"; }
 
 
 cmd_create() {
-	# todo - how to treat aliases in usage?
-	USAGE="team create|assemble|gather|huddle <name> [-h]"
 	require_args "$1"
 	local branch="$(git_config_get "prefix.team")$1"
 	io_log; create_branch_from_base "$branch" "$(git_config_get "branch.integration")"
@@ -52,8 +92,6 @@ cmd_create() {
 }
 
 cmd_destroy() {
-	# todo - how to treat aliases in usage?
-	USAGE="team destroy|disassemble|scatter|break <name> [-h]"
 	require_args "$1"
 	io_log; destroy_branch_from_base "$(git_config_get "prefix.team")$1"
 	git_config_unset "branch.team" "$branch"
@@ -61,15 +99,12 @@ cmd_destroy() {
 }
 
 cmd_sync() {
-	USAGE="team sync <name> [-h]"
 	require_args "$1"
 	io_log; sync_branch_with_base "$(git_config_get "prefix.team")$1"
 	io_log; io_log_ok "team '$1' is in sync with the base."; io_log
 }
 
 cmd_join() {
-	# todo - how to treat aliases in usage?
-	USAGE="team join|switch <name> [-h]"
 	require_args "$1"
 
 	local prefix="$(git_config_get "prefix.team")"
