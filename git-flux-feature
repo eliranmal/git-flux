@@ -2,19 +2,19 @@
 
 
 cmd_usage_default() {
-	printf "<start|finish|sync> <name> [base]"
+	printf "feature <start|finish|sync> <name> [base] [-h]"
 }
 
 cmd_usage_start() {
-	printf "start <name> [base]"
+	printf "feature start <name> [base] [-h]"
 }
 
 cmd_usage_finish() {
-	printf "finish <name>"
+	printf "feature finish <name> [-h]"
 }
 
 cmd_usage_sync() {
-	printf "sync <name>"
+	printf "feature sync <name> [-h]"
 }
 
 cmd_long_usage_default() {

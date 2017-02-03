@@ -2,15 +2,15 @@
 
 
 cmd_usage_default() {
-	printf "<start|finish> <name> [tag]"
+	printf "hf <start|finish> <name> [tag] [-h]"
 }
 
 cmd_usage_start() {
-	printf "start <name> <tag>"
+	printf "hf start <name> <tag> [-h]"
 }
 
 cmd_usage_finish() {
-	printf "finish <name>"
+	printf "hf finish <name> [-h]"
 }
 
 cmd_long_usage_default() {

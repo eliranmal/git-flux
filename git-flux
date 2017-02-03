@@ -22,7 +22,7 @@ ${t_bold}git-flux${t_off}
 git commands for fluent, team-oriented workflow.
 
 
-${t_bold}available subcommands:${t_off}
+${t_under}available subcommands${t_off}
 
    ${t_bold}init${t_off}
       initialize the git-flux configuration survey.
@@ -76,10 +76,10 @@ main() {
 	
 	# explicitly override usage/long-usage from the loaded sub-command per action
 	if is_available "cmd_usage_$action"; then
-		USAGE="$sub_command $(cmd_usage_${action}) [-h]"
+		USAGE="$(cmd_usage_${action})"
 	fi
 	if is_available "cmd_long_usage_$action"; then
-		LONG_USAGE=$(cmd_long_usage_${action})
+		LONG_USAGE="$(cmd_long_usage_${action})"
 	fi
 
 	# include git builtin library 

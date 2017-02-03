@@ -2,15 +2,15 @@
 
 
 cmd_usage_default() {
-	printf "<start|finish> <name>"
+	printf "rc <start|finish> <name> [-h]"
 }
 
 cmd_usage_start() {
-	printf "start <name>"
+	printf "rc start <name> [-h]"
 }
 
 cmd_usage_finish() {
-	printf "finish <name>"
+	printf "rc finish <name> [-h]"
 }
 
 cmd_long_usage_default() {

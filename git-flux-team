@@ -2,23 +2,23 @@
 
 
 cmd_usage_default() {
-	printf "<create|destroy|sync|join> <name>"
+	printf "team <create|destroy|sync|join> <name> [-h]"
 }
 
 cmd_usage_create() {
-	printf "create <name>"
+	printf "team create <name> [-h]"
 }
 
 cmd_usage_destroy() {
-	printf "destroy <name>"
+	printf "team destroy <name> [-h]"
 }
 
 cmd_usage_join() {
-	printf "join <name>"
+	printf "team join <name> [-h]"
 }
 
 cmd_usage_sync() {
-	printf "sync <name>"
+	printf "team sync <name> [-h]"
 }
 
 cmd_long_usage_default() {

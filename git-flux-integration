@@ -2,11 +2,11 @@
 
 
 cmd_usage_default() {
-	printf "<sync>"
+	printf "integration <sync> [-h]"
 }
 
 cmd_usage_sync() {
-	printf "sync"
+	printf "integration sync [-h]"
 }
 
 cmd_long_usage_default() {
