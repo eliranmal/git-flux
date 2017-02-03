@@ -164,7 +164,7 @@ the branch name will be composed of the pre-configured hot-fix prefix and the pa
 the passed **`tag`** will be used as the branch base.
 
 - **`finish <name>`**  
-finish an existing release-candidate; delete its local and remote branches, for good.
+finish an existing hot-fix; delete its local and remote branches, for good.
 
 
 
