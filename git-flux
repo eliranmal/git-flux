@@ -83,8 +83,9 @@ main() {
 	fi
 
 	# include git builtin library 
-	# this script have to be sourced after sourcing the sub-command script, to allow it to override USAGE/LONG_USAGE
-	# note that usage() expects the first script argument to be `-h` when called, so shifting arguments can change the result
+	# this script have to be sourced after overriding USAGE/LONG_USAGE.
+	# note that to output long-usage, usage() expects the first script argument to be `-h` when called, 
+	# so shifting arguments can change the result.
 	source "$(git --exec-path)/git-sh-setup"
 
 	# verify the action function is available
