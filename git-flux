@@ -16,30 +16,30 @@ USAGE="<init|feature|team|integration|rc|hf> [action] [action-args...] [-h]"
 
 # appended to the usage output when using the `-h` flag (can be overridden in each action)
 LONG_USAGE="
-${t_bold}git-flux${t_off}
+${t_bold}git-flux${t_bold_off}
 --------
 
 git commands for fluent, team-oriented workflow.
 
 
-${t_under}available subcommands${t_off}
+${t_under}available subcommands${t_under_off}
 
-   ${t_bold}init${t_off}
+   ${t_bold}init${t_bold_off}
       initialize the git-flux configuration survey.
 
-   ${t_bold}${t_fg_blue}feature${t_off}
+   ${t_bold}${t_fg_blue}feature${t_fg_off}${t_bold_off}
       handle feature level actions.
 
-   ${t_bold}${t_fg_yellow}team${t_off}
+   ${t_bold}${t_fg_yellow}team${t_fg_off}${t_bold_off}
       handle integration across team members and their features.
 
-   ${t_bold}${t_fg_magenta}integration${t_off}
+   ${t_bold}${t_fg_magenta}integration${t_fg_off}${t_bold_off}
       handle integration across teams.
 
-   ${t_bold}${t_fg_green}rc${t_off}
+   ${t_bold}${t_fg_green}rc${t_fg_off}${t_bold_off}
       handle lifecycle of release-candidates.
 
-   ${t_bold}${t_fg_red}hf${t_off}
+   ${t_bold}${t_fg_red}hf${t_fg_off}${t_bold_off}
       handle lifecycle of hot-fixes.
 
 

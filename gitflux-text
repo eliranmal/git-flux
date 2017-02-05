@@ -1,31 +1,107 @@
 #!/usr/bin/env sh
 
 
-# little ansi-based text formatters.
+# 
+# little text formatters for ansi or markdown.
+# 
+# 
+# environment:
+#   [FORMAT=ansi|markdown]
+# 
+# 
+# usage:
+# 
+# include the available tags within strings.
+# tags must be closed with the appropriate t_*_off tag for the markdown formatter to work properly.
+# 
+# 
+# examples:
+# 
+# echo "this text will be ${t_bold}bold${t_bold_off}"
+# echo "text can be ${t_under}underlined${t_under_off} as well"
+# echo "color text in ${t_fg_yellow}yellow${t_fg_off} or ${t_fg_blue}blue${t_fg_off}"
+# 
+# 
+# caveats:
+# 
+# - t_bold cannot be nested and must be the outermost tag, as t_bold_off will reset any other style.
+# 
 
-if [[ -n $FORMAT && $FORMAT = false ]]; then
-	return;
-fi
 
-t_off=$(tput sgr0)
-t_bold=$(tput bold)
-t_under=$(tput smul)
+init_ansi() {
 
-if (( $(tput colors) >= 256 )); then
-	t_fg_red=$(tput setaf 167)
-	t_fg_green=$(tput setaf 107)
-	t_fg_yellow=$(tput setaf 179)
-	t_fg_blue=$(tput setaf 74)
-	t_fg_magenta=$(tput setaf 182)
-	t_fg_cyan=$(tput setaf 30)
-	t_fg_lightred=$(tput setaf 174)
-	t_fg_lightgreen=$(tput setaf 191)
-	t_fg_lightyellow=$(tput setaf 222)
-	t_fg_lightblue=$(tput setaf 153)
-	t_fg_lightmagenta=$(tput setaf 219)
-	t_fg_lightcyan=$(tput setaf 116)
-fi
+	[[ -t 2 ]] && { # in a terminal session
+	
+	    t_bold=$(       tput bold   || tput md      )
+	    t_bold_off=$(   tput sgr0                   )
+	    t_italic=$(     tput sitm   || tput ZH      )
+	    t_italic_off=$( tput ritm   || tput ZR      )
+	    t_under=$(      tput smul   || tput us      )
+	    t_under_off=$(  tput rmul   || tput ue      )
+		t_strike=$'\033[9m'
+		t_strike_off=$'\033[29m'
+		
+		t_fg_off=$(                 tput setaf 0    || tput AF 0    )
+		if (( $(tput colors) >= 256 )); then
+			t_fg_red=$(             tput setaf 167  || tput AF 167  )
+			t_fg_green=$(           tput setaf 107  || tput AF 107  )
+			t_fg_yellow=$(          tput setaf 179  || tput AF 179  )
+			t_fg_blue=$(            tput setaf 74   || tput AF 74   )
+			t_fg_magenta=$(         tput setaf 182  || tput AF 182  )
+			t_fg_cyan=$(            tput setaf 30   || tput AF 30   )
+			t_fg_lightred=$(        tput setaf 174  || tput AF 174  )
+			t_fg_lightgreen=$(      tput setaf 191  || tput AF 191  )
+			t_fg_lightyellow=$(     tput setaf 222  || tput AF 222  )
+			t_fg_lightblue=$(       tput setaf 153  || tput AF 153  )
+			t_fg_lightmagenta=$(    tput setaf 219  || tput AF 219  )
+			t_fg_lightcyan=$(       tput setaf 116  || tput AF 116  )
+		elif (( $(tput colors) >= 8 )); then
+		    t_fg_red=$(             tput setaf 1    || tput AF 1    )
+		    t_fg_green=$(           tput setaf 2    || tput AF 2    )
+		    t_fg_yellow=$(          tput setaf 3    || tput AF 3    )
+		    t_fg_blue=$(            tput setaf 4    || tput AF 4    )
+		    t_fg_magenta=$(         tput setaf 5    || tput AF 5    )
+		    t_fg_cyan=$(            tput setaf 6    || tput AF 6    )
+		    t_fg_lightred=$t_fg_red
+		    t_fg_lightgreen=$t_fg_green
+		    t_fg_lightyellow=$t_fg_yellow
+		    t_fg_lightblue=$t_fg_blue
+		    t_fg_lightmagenta=$t_fg_magenta
+		    t_fg_lightcyan=$t_fg_cyan
+		fi
+	
+	} 2>/dev/null ||: # protect from "unknown terminfo capability" errors 
 
-# uncomment the following line to see what it does:
-# echo "text can be ${t_bold}bold${t_off}, ${t_under}underlined${t_off}, or colored in ${t_fg_yellow}yellow${t_off} or ${t_fg_blue}blue${t_off}"
-# yay!
+}
+
+init_markdown() {
+	echo "not implemented"
+}
+
+main() {
+	case "$FORMAT" in
+		ansi)
+			init_ansi
+			;;
+		markdown)
+			;;
+		*)
+			init_ansi
+			;;
+	esac
+}
+
+main
+
+
+
+#echo "- - - testing formatters - - -"
+#echo "normal text"
+#echo "${t_bold}bold${t_bold_off}"
+#echo "${t_strike}strikethrough${t_strike_off}"
+#echo "${t_italic}italic${t_italic_off}"
+#echo "${t_under}underline${t_under_off}"
+#echo "${t_fg_yellow}yellow${t_fg_off}, ${t_fg_blue}blue${t_fg_off}"
+#echo "${t_fg_lightyellow}lightyellow${t_fg_off}, ${t_fg_lightblue}lightblue${t_fg_off}"
+#exit
+#

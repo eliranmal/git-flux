@@ -7,7 +7,7 @@ cmd_usage_default() {
 
 cmd_long_usage_default() {
 	printf "\
-${t_bold}init${t_off}
+${t_bold}init${t_bold_off}
 ----
 
 configures the git-flux environment with an interactive survey.
@@ -15,20 +15,20 @@ configures the git-flux environment with an interactive survey.
 
 here are the questions you'd have to answer:
 
-   ${t_bold}${t_fg_blue}feature${t_off}${t_bold} prefix?${t_off}
+   ${t_bold}${t_fg_blue}feature${t_fg_off} prefix?${t_bold_off}
       a prefix for feature branch names, defaults to 'feature/'. 
       for example, 'foo/' will result in feature branch names like 'foo/my_awesome_feature'.
 
-   ${t_bold}${t_fg_yellow}team${t_off}${t_bold} prefix?${t_off}
+   ${t_bold}${t_fg_yellow}team${t_fg_off} prefix?${t_bold_off}
       a prefix for team branch names, defaults to 'team/'.
 
-   ${t_bold}${t_fg_green}release candidate${t_off}${t_bold} prefix?${t_off}
+   ${t_bold}${t_fg_green}release candidate${t_fg_off} prefix?${t_bold_off}
       a prefix for release candidate branch names, defaults to 'rc/'.
 
-   ${t_bold}${t_fg_red}hot-fix${t_off}${t_bold} prefix?${t_off}
+   ${t_bold}${t_fg_red}hot-fix${t_fg_off} prefix?${t_bold_off}
       a prefix for hot-fix branch names, defaults to 'hf/'.
 
-   ${t_bold}${t_fg_magenta}integration${t_off}${t_bold} branch?${t_off}
+   ${t_bold}${t_fg_magenta}integration${t_fg_off} branch?${t_bold_off}
       the long-lived integration branch name, defaults to 'integration'. 
       this branch serves as the base to all team branches, and will be created if it does not already exist.
  "

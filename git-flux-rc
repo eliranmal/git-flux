@@ -15,13 +15,13 @@ cmd_usage_finish() {
 
 cmd_long_usage_default() {
 	printf "\
-${t_bold}${t_fg_green}rc${t_off}
+${t_bold}${t_fg_green}rc${t_fg_off}${t_bold_off}
 --
 
 handle lifecycle of release-candidates.
 
 
-${t_under}available actions${t_off}
+${t_under}available actions${t_under_off}
 
 $(cmd_long_usage_start)
 $(cmd_long_usage_finish)
@@ -30,15 +30,15 @@ $(cmd_long_usage_finish)
 
 cmd_long_usage_start() {
 	printf "\
-   ${t_bold}$(cmd_usage_start)${t_off}
+   ${t_bold}$(cmd_usage_start)${t_bold_off}
       start a release-candidate; create a local branch and push it to the remote.
-      the branch name will be composed of the pre-configured release-candidate prefix and the passed ${t_bold}name${t_off}.
+      the branch name will be composed of the pre-configured release-candidate prefix and the passed ${t_bold}name${t_bold_off}.
  "
 }
 
 cmd_long_usage_finish() {
 	printf "\
-   ${t_bold}$(cmd_usage_finish)${t_off}
+   ${t_bold}$(cmd_usage_finish)${t_bold_off}
       finish an existing release-candidate; delete its local and remote branches, for good.
  "
 }
