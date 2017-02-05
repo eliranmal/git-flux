@@ -3,6 +3,9 @@
 
 # little ansi-based text formatters.
 
+if [[ -n $FORMAT && $FORMAT = false ]]; then
+	return;
+fi
 
 t_off=$(tput sgr0)
 t_bold=$(tput bold)
