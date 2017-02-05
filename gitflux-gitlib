@@ -115,8 +115,9 @@ git_push() {
 
 git_create_branch() {
 	local branch="$1"
+	local remote="${2:+origin/$2}" # remote name is optional
 	io_log "creating the '$branch' local branch..."
-	git checkout -b "$branch" >/dev/null 2>&1 && {
+	git checkout -b "$branch" ${remote} >/dev/null 2>&1 && {
 		io_log_ok "created and checked out" 1
 	} || {
 		io_status_fatal "create failed" 1
@@ -141,16 +142,28 @@ git_create_and_push_branch() {
 
 git_ensure_branch() {
 	local branch="$1"
-	io_log "looking for '$branch' locally..."
-	# no need to check the remote branch exists, we'd wanna set it as the upstream anyways
-	if git_local_branch_exists "$branch"; then
+	io_log "looking for '$branch' remote branch..."
+	if git_remote_branch_exists "origin/$branch"; then
 		io_log_ok "found" 1
-		git_checkout "$branch"
+		io_log "looking for '$branch' local branch..."
+		if git_local_branch_exists "$branch"; then
+			io_log_ok "found" 1
+			return
+		else
+			io_log_warn "not found" 1
+			git_create_branch "$branch" "$branch"
+		fi
 	else
 		io_log_warn "not found" 1
-		git_create_branch "$branch"
+		io_log "looking for '$branch' local branch..."
+		if git_local_branch_exists "$branch"; then
+			io_log_ok "found" 1
+		else
+			io_log_warn "not found" 1
+			git_create_branch "$branch"
+		fi
+		git_push_set_upstream "$branch"
 	fi
-	git_push_set_upstream "$branch"
 }
 
 git_merge() {
