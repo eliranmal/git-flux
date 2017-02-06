@@ -19,6 +19,7 @@ main() {
 		git-flux-integration
 		git-flux-rc
 		git-flux-hf
+		git-flux-search
 	"
 	ensure_install_prefix
 	ensure_repo_url

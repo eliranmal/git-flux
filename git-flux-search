@@ -1,0 +1,21 @@
+#!/usr/bin/env sh
+
+
+cmd_usage_default() {
+	printf "search <term> [-h]"
+}
+
+cmd_long_usage_default() {
+	printf "\
+${t_bold}search${t_off}
+------
+
+searches for a text term inside code revisions in the history.
+ "
+}
+
+cmd_default() {
+	require_args "$1"
+	git_search "$1"
+	io_log
+}

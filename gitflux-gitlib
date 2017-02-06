@@ -51,6 +51,10 @@ git_tag_exists() {
 	has $1 $(git_all_tags)
 }
 
+git_search() {
+	git log --pretty=raw --no-color -S $1
+}
+
 
 
 # - - - - -  actions (safe) - - - - - #
