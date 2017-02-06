@@ -140,6 +140,33 @@ git_create_and_push_branch() {
 	git_push_set_upstream "$branch"
 }
 
+git_ensure_no_branch() {
+# todo ...
+#	local branch="$1"
+#	io_log "looking for '$branch' remote branch..."
+#	if git_remote_branch_exists "origin/$branch"; then
+#		io_log_ok "found" 1
+#		io_log "looking for '$branch' local branch..."
+#		if git_local_branch_exists "$branch"; then
+#			io_log_ok "found" 1
+#			return
+#		else
+#			io_log_warn "not found" 1
+#			git_create_branch "$branch" "$branch"
+#		fi
+#	else
+#		io_log_warn "not found" 1
+#		io_log "looking for '$branch' local branch..."
+#		if git_local_branch_exists "$branch"; then
+#			io_log_ok "found" 1
+#		else
+#			io_log_warn "not found" 1
+#			git_create_branch "$branch"
+#		fi
+#		git_push_set_upstream "$branch"
+#	fi
+}
+
 git_ensure_branch() {
 	local branch="$1"
 	io_log "looking for '$branch' remote branch..."
