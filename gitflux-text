@@ -2,11 +2,11 @@
 
 
 # 
-# little text formatters for ansi or markdown.
+# little text formatters for terminal or markdown.
 # 
 # 
 # environment:
-#   [FORMAT=ansi|markdown]
+#   [FORMAT=terminal|markdown]
 # 
 # 
 # usage:
@@ -28,7 +28,14 @@
 # 
 
 
-init_ansi() {
+
+# todo - how to describe lists? (in terminal) probably just pad lines with leading space
+# todo - fill in the gaps between the terminal and the markdown (e.g. markdown 
+# todo -    has `code`, terminal will return the bold style when using ${t_code}.
+# todo - also, describe headers (that has ------- underline in terminal text), 
+# todo -    (github) markdown already has this supported for H1/H2 (===/---), use it.
+
+init_terminal() {
 
 	[[ -t 2 ]] && { # in a terminal session
 	
@@ -75,18 +82,56 @@ init_ansi() {
 }
 
 init_markdown() {
-	echo "not implemented"
+	
+	    t_bold=$'**'
+	    t_bold_off=$'**'
+	    t_italic=$'_'
+	    t_italic_off=$'_'
+#	    t_under=
+#	    t_under_off=
+		t_strike=$'~~'
+		t_strike_off=$'~~'
+		
+		t_fg_off=$'<span>'
+		if (( $(tput colors) >= 256 )); then
+			t_fg_red=$(             tput setaf 167  || tput AF 167  )
+			t_fg_green=$(           tput setaf 107  || tput AF 107  )
+			t_fg_yellow=$(          tput setaf 179  || tput AF 179  )
+			t_fg_blue=$(            tput setaf 74   || tput AF 74   )
+			t_fg_magenta=$(         tput setaf 182  || tput AF 182  )
+			t_fg_cyan=$(            tput setaf 30   || tput AF 30   )
+			t_fg_lightred=$(        tput setaf 174  || tput AF 174  )
+			t_fg_lightgreen=$(      tput setaf 191  || tput AF 191  )
+			t_fg_lightyellow=$(     tput setaf 222  || tput AF 222  )
+			t_fg_lightblue=$(       tput setaf 153  || tput AF 153  )
+			t_fg_lightmagenta=$(    tput setaf 219  || tput AF 219  )
+			t_fg_lightcyan=$(       tput setaf 116  || tput AF 116  )
+		elif (( $(tput colors) >= 8 )); then
+		    t_fg_red=$(             tput setaf 1    || tput AF 1    )
+		    t_fg_green=$(           tput setaf 2    || tput AF 2    )
+		    t_fg_yellow=$(          tput setaf 3    || tput AF 3    )
+		    t_fg_blue=$(            tput setaf 4    || tput AF 4    )
+		    t_fg_magenta=$(         tput setaf 5    || tput AF 5    )
+		    t_fg_cyan=$(            tput setaf 6    || tput AF 6    )
+		    t_fg_lightred=$t_fg_red
+		    t_fg_lightgreen=$t_fg_green
+		    t_fg_lightyellow=$t_fg_yellow
+		    t_fg_lightblue=$t_fg_blue
+		    t_fg_lightmagenta=$t_fg_magenta
+		    t_fg_lightcyan=$t_fg_cyan
+		fi
+	
 }
 
 main() {
 	case "$FORMAT" in
-		ansi)
-			init_ansi
+		terminal)
+			init_terminal
 			;;
 		markdown)
 			;;
 		*)
-			init_ansi
+			init_terminal
 			;;
 	esac
 }
@@ -95,7 +140,7 @@ main
 
 
 
-#echo "- - - testing formatters - - -"
+#echo "- - - testing, testing - - -"
 #echo "normal text"
 #echo "${t_bold}bold${t_bold_off}"
 #echo "${t_strike}strikethrough${t_strike_off}"
