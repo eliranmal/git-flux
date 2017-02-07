@@ -28,7 +28,7 @@ validate_git_local_branch_exists() {
 }
 
 validate_git_remote_branch_exists() {
-	if ! git_remote_branch_exists "origin/$1"; then
+	if ! git_remote_branch_exists "$1"; then
 		io_status_fatal "branch '$1' doesn't exist on the remote."
 	fi
 }
@@ -40,7 +40,7 @@ validate_git_local_branch_dont_exist() {
 }
 
 validate_git_remote_branch_dont_exist() {
-	if git_remote_branch_exists "origin/$1"; then
+	if git_remote_branch_exists "$1"; then
 		io_status_fatal "branch '$1' already exists on the remote."
 	fi
 }

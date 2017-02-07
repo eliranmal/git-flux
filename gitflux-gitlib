@@ -35,12 +35,23 @@ git_repo_is_headless() {
 	! git rev-parse --quiet --verify HEAD >/dev/null 2>&1
 }
 
+git_can_prune() {
+	( git remote prune origin --dry-run)
+}
+
+git_prune() {
+	git remote prune origin >/dev/null 2>&1
+}
+
 git_local_branch_exists() {
 	has $1 $(git_local_branches)
 }
 
 git_remote_branch_exists() {
-	has $1 $(git_remote_branches)
+	if [[ -n $(git_can_prune) ]]; then
+		git_prune
+	fi
+	has "origin/$1" $(git_remote_branches)
 }
 
 git_branch_exists() {
@@ -53,10 +64,8 @@ git_tag_exists() {
 
 
 
-# - - - - -  actions (safe) - - - - - #
+# - - - - -  actions (verbose) - - - - - #
 
-
-# todo - try to DRY up the && {} || {} stuff with command piping: (command) | func
 
 git_checkout() {
 	local branch="$1"
@@ -119,26 +128,28 @@ git_create_and_push_branch() {
 	git_push_set_upstream "$branch"
 }
 
+git_ensure_no_branch() {
+	local branch="$1"
+	if ! git_local_branch_exists "$branch" && ! git_remote_branch_exists "$branch"; then
+		return 0
+	fi
+	if git_local_branch_exists "$branch"; then
+		git_delete_local_branch "$branch"
+	fi
+	if git_remote_branch_exists "$branch"; then
+		git_delete_remote_branch "$branch"
+	fi
+}
+
 git_ensure_branch() {
 	local branch="$1"
-	io_log "looking for '$branch' remote branch..."
-	if git_remote_branch_exists "origin/$branch"; then
-		io_log_ok "found" 1
-		io_log "looking for '$branch' local branch..."
-		if git_local_branch_exists "$branch"; then
-			io_log_ok "found" 1
-			return
-		else
-			io_log_warn "not found" 1
-			git_create_branch "$branch" "$branch"
-		fi
+	if git_local_branch_exists "$branch" && git_remote_branch_exists "$branch"; then
+		return 0
+	fi
+	if git_remote_branch_exists "$branch"; then
+		git_create_branch "$branch" "$branch"
 	else
-		io_log_warn "not found" 1
-		io_log "looking for '$branch' local branch..."
-		if git_local_branch_exists "$branch"; then
-			io_log_ok "found" 1
-		else
-			io_log_warn "not found" 1
+		if ! git_local_branch_exists "$branch"; then
 			git_create_branch "$branch"
 		fi
 		git_push_set_upstream "$branch"

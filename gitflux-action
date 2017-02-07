@@ -42,12 +42,10 @@ destroy_branch_from_base() {
 	local base_branch="$(git_config_get "$(git_config_escape_subsection "branch:$branch").base")"
 
 	validate_git_clean_working_tree
-	# todo - don't validate that - ensure we delete these branches instead (quite-fail wherever possible)
-	validate_git_local_and_remote_branches_exist "$branch"
 	validate_git_local_branch_exists "$base_branch"
 
 	git_checkout "$base_branch"
-	git_delete_local_and_remote_branches "$branch"
+	git_ensure_no_branch "$branch"
 
 	# delete the base from config, we're not gonna need it anymore
 	git_config_remove_section "$(git_config_escape_subsection "branch:$branch")"
@@ -61,11 +59,10 @@ destroy_branch_from_tag() {
 	local tag="$(git_config_get "$(git_config_escape_subsection "branch:$branch").base")"
 
 	validate_git_clean_working_tree
-	validate_git_local_and_remote_branches_exist "$branch"
 	validate_git_tag_exists "$tag"
 
 	git_checkout "$tag"
-	git_delete_local_and_remote_branches "$branch"
+	git_ensure_no_branch "$branch"
 
 	# delete the base from config, we're not gonna need it anymore
 	git_config_remove_section "$(git_config_escape_subsection "branch:$branch")"
