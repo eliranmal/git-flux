@@ -15,8 +15,7 @@ cmd_usage_finish() {
 
 cmd_long_usage_default() {
 	printf "\
-${t_bold}${t_fg_red}hf${t_fg_off}${t_bold_off}
---
+$(echo "hf" | t_heading | t_fg_red)
 
 handle lifecycle of hot-fixes.
 

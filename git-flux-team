@@ -23,8 +23,7 @@ cmd_usage_sync() {
 
 cmd_long_usage_default() {
 	printf "\
-${t_bold}${t_fg_yellow}team${t_fg_off}${t_bold_off}
-----
+$(echo "team" | t_heading | t_fg_team)
 
 handle integration across team members and their features.
 

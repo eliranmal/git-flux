@@ -15,8 +15,7 @@ cmd_usage_finish() {
 
 cmd_long_usage_default() {
 	printf "\
-${t_bold}${t_fg_green}rc${t_fg_off}${t_bold_off}
---
+$(echo "rc" | t_heading | t_fg_green)
 
 handle lifecycle of release-candidates.
 

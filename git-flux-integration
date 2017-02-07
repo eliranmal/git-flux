@@ -11,8 +11,7 @@ cmd_usage_sync() {
 
 cmd_long_usage_default() {
 	printf "\
-${t_bold}${t_fg_magenta}integration${t_fg_off}${t_bold_off}
------------
+$(echo "integration" | t_heading | t_fg_magenta)
 
 handle integration across teams.
 
