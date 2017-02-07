@@ -74,12 +74,9 @@ sync_branch_with_base() {
 	local base_branch=${base_override:-$base_default}
 
 	validate_git_clean_working_tree
+
 	validate_git_local_and_remote_branches_exist "$branch"	
 	validate_git_local_and_remote_branches_exist "$base_branch"
 
-	git_checkout "$base_branch"
-	git_pull
-	git_checkout "$branch"
-	git_pull
-	git_merge "$base_branch"
+	git_ensure_merged "$branch" "$base_branch"
 }
