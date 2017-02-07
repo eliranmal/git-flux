@@ -33,9 +33,12 @@ main() {
 		hf
 	"
 	
-	printf "%s" "$(env FORMAT=markdown git flux -h | cleanup)" >> ${usage_dir}/main.md
+#	local output_format="$FORMAT" # todo - pass in format?
+	local output_format="markdown"
+	
+	printf "%s" "$(env FORMAT=${output_format} git flux -h | cleanup)" >> ${usage_dir}/main.md
 	for cmd in ${commands}; do
-		printf "%s" "$(env FORMAT=markdown git flux ${cmd} -h | cleanup)" >> ${usage_dir}/${cmd}.md
+		printf "%s" "$(env FORMAT=${output_format} git flux ${cmd} -h | cleanup)" >> ${usage_dir}/${cmd}.md
 	done
 }
 
