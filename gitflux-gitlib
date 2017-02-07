@@ -62,6 +62,10 @@ git_tag_exists() {
 	has $1 $(git_all_tags)
 }
 
+git_is_different() {
+	( git diff "$1" "$2" --no-color)
+}
+
 
 
 # - - - - -  actions (verbose) - - - - - #
@@ -86,12 +90,6 @@ git_delete_remote_branch() {
 	io_log "deleting the '$branch' remote branch..."
 	git push origin :"$branch" >/dev/null 2>&1
 	io_status_logger $? "deleted ok" "delete failed"
-}
-
-git_delete_local_and_remote_branches() {
-	local branch="$1"
-	git_delete_local_branch "$branch"
-	git_delete_remote_branch "$branch"
 }
 
 git_pull() {
@@ -122,10 +120,19 @@ git_push_set_upstream() {
 	io_status_logger $? "pushed ok, upstream set" "push upstream failed"
 }
 
-git_create_and_push_branch() {
+git_ensure_branch() {
 	local branch="$1"
-	git_create_branch "$branch"
-	git_push_set_upstream "$branch"
+	if git_local_branch_exists "$branch" && git_remote_branch_exists "$branch"; then
+		return 0
+	fi
+	if git_remote_branch_exists "$branch"; then
+		git_create_branch "$branch" "$branch"
+	else
+		if ! git_local_branch_exists "$branch"; then
+			git_create_branch "$branch"
+		fi
+		git_push_set_upstream "$branch"
+	fi
 }
 
 git_ensure_no_branch() {
@@ -141,18 +148,14 @@ git_ensure_no_branch() {
 	fi
 }
 
-git_ensure_branch() {
-	local branch="$1"
-	if git_local_branch_exists "$branch" && git_remote_branch_exists "$branch"; then
-		return 0
-	fi
-	if git_remote_branch_exists "$branch"; then
-		git_create_branch "$branch" "$branch"
-	else
-		if ! git_local_branch_exists "$branch"; then
-			git_create_branch "$branch"
-		fi
-		git_push_set_upstream "$branch"
+git_ensure_merged() {
+	local branch="$1"; local base_branch="$2"
+	git_checkout "$base_branch"
+	git_pull
+	git_checkout "$branch"
+	git_pull
+	if [[ -n $(git_is_different "$branch" "$base_branch") ]]; then
+		git_merge "$base_branch"
 	fi
 }
 
