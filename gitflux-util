@@ -21,3 +21,22 @@ is_available() {
 strip_prefix() {
 	echo "$1" | sed -e 's,^'"$2"',,'
 }
+
+repeat() {
+    seq -f $1 -s '' $2; echo
+}
+
+# parses function input from stdin or passed arguments
+# usage:
+# local input=$(get_input "$@")
+get_input() {
+	local input
+	if [ -t 0 ]; then
+		if [ $# -gt 0 ]; then
+			input="$*"
+		fi
+	else
+		input=$(cat -)
+	fi
+	printf "%s" "$input"
+}

@@ -1,47 +1,43 @@
 #!/usr/bin/env bash
 
-usage_dir="./usage"
-main="${usage_dir}/main.txt"
 
-mkdir -p ${usage_dir}
+remove_usage_line() {
+	grep -v '^usage:.*$'
+}
 
-echo "" > $main
+squeeze_blanks() {
+	cat -s
+}
 
-#echo "$(env FORMAT=false git flux -h)" >> $main
-#
-#echo "
-#
-#---
-#
-#" >> $main
-
-raw_tput_bold="$(tput bold)"
-#printf 'raw_tput_bold: %s\n' $raw_tput_bold
-#echo "$raw_tput_bold"
-printf 'raw_tput_bold: %q\n' $raw_tput_bold
+cleanup() {
+	remove_usage_line | squeeze_blanks
+}
 
 
+main() {
+
+	local working_dir=$(dirname "$(echo "$0" | sed -e 's,\\,/,g')")
+	local usage_dir="$working_dir/../usage"
+
+	if [[ -d ${usage_dir} ]]; then
+		rm -rf ${usage_dir}
+	fi
+	mkdir -p ${usage_dir}
+	
+	local commands="
+		init
+		feature
+		team
+		integration
+		rc
+		hf
+	"
+	
+	printf "%s" "$(env FORMAT=markdown git flux -h | cleanup)" >> ${usage_dir}/main.md
+	for cmd in ${commands}; do
+		printf "%s" "$(env FORMAT=markdown git flux ${cmd} -h | cleanup)" >> ${usage_dir}/${cmd}.md
+	done
+}
 
 
-#tput_bold="$(printf '%q' "$(printf '%q' $raw_tput_bold | sed -e 's,[$'"'"'],,g')")"
-#tput_bold="$(printf '%q' $raw_tput_bold | sed -e 's,[$'"'"'],,g')"
-#tput_bold="$(printf '%q' $raw_tput_bold | sed -e 's,[$'"'"'],,g' | sed -e 's,[\[],\\&,g')"
-
-tput_bold="\x$(printf "$raw_tput_bold" | hexdump -e '1/1 "%x" 1/1 "%s"')"
-#tput_bold="\x$(printf "$raw_tput_bold" | hexdump -e '1/1 "%x" 1/1 "%_p"')"
-
-tput_bold="$(printf '%q' "$tput_bold")"
-#tput_bold="\x$tput_bold"
-
-echo "tput_bold: $tput_bold"
-
-
-#echo "$(git flux init -h | sed -e 's,'"$(printf '%q' $tput_bold)"',A,g')" >> $main
-echo "$(git flux init -h | sed -e 's,'"$tput_bold"',A,g')" >> $main
-
-#echo "$(git flux init -h | grep "$tput_bold")" >> $main
-
-#echo "$(git flux init -h | sed -e 's/[]\/$*.^|[]/\\&/g')" >> $main
-#echo "$(git flux init -h)" >> $main
-
-tput sgr0
+main
