@@ -5,6 +5,10 @@ git_local_branches() {
 	git branch --no-color | sed 's/^[* ] //'
 }
 
+git_merged_branches() {
+	git branch --no-color --merged | sed 's/^[* ] //'
+}
+
 git_remote_branches() {
 	git branch -r --no-color | sed 's/^[* ] //'
 }
@@ -15,6 +19,10 @@ git_all_branches() {
 
 git_all_tags() {
 	git tag
+}
+
+git_diff() {
+	git diff "$1" "$2" --no-color
 }
 
 git_current_branch() {
@@ -63,7 +71,11 @@ git_tag_exists() {
 }
 
 git_is_different() {
-	( git diff "$1" "$2" --no-color)
+	is $(git_diff "$@")
+}
+
+git_is_merged() {
+	has $1 $(git_merged_branches)
 }
 
 
@@ -154,7 +166,7 @@ git_ensure_merged() {
 	git_pull
 	git_checkout "$branch"
 	git_pull
-	if [[ -n $(git_is_different "$branch" "$base_branch") ]]; then
+	if git_is_different "$branch" "$base_branch" && ! git_is_merged "$base_branch"; then
 		git_merge "$base_branch"
 	fi
 }
