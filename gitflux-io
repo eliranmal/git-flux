@@ -28,6 +28,14 @@ io_status_fatal() {
 " >&2
 }
 
+io_status_logger() {
+	if (( $1 == 0 )); then
+		io_log_ok "$2" 1
+	else
+		io_status_fatal "$3" 1
+	fi
+}
+
 io_prompt() {
 	local question="$1"; default_suggestion="$2"
 	if [[ -n $default_suggestion ]]; then
