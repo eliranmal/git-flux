@@ -1,15 +1,17 @@
 #!/usr/bin/env sh
 
 
-validate_mandatory_arg() {
-	if [[ -z $1 ]]; then
-		usage
-	fi
+require_args() {
+	for arg; do
+		if [[ -z $arg ]]; then
+			usage
+		fi
+	done
 }
 
-validate_git_flux_initialized() {
+require_gitflux_initialized() {
 	if [[ $(git_config_get "initialized") != true ]]; then
-		io_status_fatal "git-flux is not initialized. run 'git flux init' to fix this."
+		io_log; io_status_fatal "git-flux is not initialized. run 'git flux init' to fix this."
 	fi
 }
 
@@ -21,13 +23,13 @@ validate_git_clean_working_tree() {
 
 validate_git_local_branch_exists() {
 	if ! git_local_branch_exists "$1"; then
-		io_status_fatal "branch '$1' don't exist locally."
+		io_status_fatal "branch '$1' doesn't exist locally."
 	fi
 }
 
 validate_git_remote_branch_exists() {
-	if ! git_remote_branch_exists "origin/$1"; then
-		io_status_fatal "branch '$1' don't exist on the remote."
+	if ! git_remote_branch_exists "$1"; then
+		io_status_fatal "branch '$1' doesn't exist on the remote."
 	fi
 }
 
@@ -38,7 +40,7 @@ validate_git_local_branch_dont_exist() {
 }
 
 validate_git_remote_branch_dont_exist() {
-	if git_remote_branch_exists "origin/$1"; then
+	if git_remote_branch_exists "$1"; then
 		io_status_fatal "branch '$1' already exists on the remote."
 	fi
 }
@@ -55,7 +57,7 @@ validate_git_local_and_remote_branches_dont_exist() {
 
 validate_git_tag_exists() {
 	if ! git_tag_exists "$1"; then
-		io_status_fatal "tag '$1' don't exist."
+		io_status_fatal "tag '$1' doesn't exist."
 	fi
 }
 

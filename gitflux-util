@@ -6,6 +6,10 @@ has() {
 	echo " $@ " | grep -q " $(escape $item) "
 }
 
+is() {
+	[[ -n $1 ]]
+}
+
 escape() {
 	echo "$1" | sed 's/\([\.\$\*]\)/\\\1/g'
 }

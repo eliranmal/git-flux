@@ -22,7 +22,7 @@ ${t_bold}git-flux${t_off}
 git commands for fluent, team-oriented workflow.
 
 
-${t_bold}available subcommands:${t_off}
+${t_under}available subcommands${t_off}
 
    ${t_bold}init${t_off}
       initialize the git-flux configuration survey.
@@ -70,13 +70,22 @@ main() {
 	# lose the action arg only if it's not an `-h` flag, to not break long-usage
 	[[ -n $1 && $1 != "-h" ]] && shift
 
-	if [[ -z $action ]]; then
+	if [[ -z $action || $action = "-h" ]]; then
 		action="default"
+	fi	
+	
+	# explicitly override usage/long-usage from the loaded sub-command per action
+	if is_available "cmd_usage_$action"; then
+		USAGE="$(cmd_usage_${action})"
+	fi
+	if is_available "cmd_long_usage_$action"; then
+		LONG_USAGE="$(cmd_long_usage_${action})"
 	fi
 
 	# include git builtin library 
-	# this script have to be sourced after sourcing the sub-command script, to allow it to override USAGE/LONG_USAGE
-	# note that usage() expects the first script argument to be `-h` when called, so shifting arguments can change the result
+	# this script have to be sourced after overriding USAGE/LONG_USAGE.
+	# note that to output long-usage, usage() expects the first script argument to be `-h` when called, 
+	# so shifting arguments can change the result.
 	source "$(git --exec-path)/git-sh-setup"
 
 	# verify the action function is available
@@ -86,7 +95,7 @@ main() {
 
 	# validate action prerequisites
 	if [[ $sub_command != "init" ]]; then
-		validate_git_flux_initialized
+		require_gitflux_initialized
 	fi
 
 	# delegate to the sub-command action api

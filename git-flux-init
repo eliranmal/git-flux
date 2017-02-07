@@ -1,9 +1,12 @@
 #!/usr/bin/env sh
 
 
-USAGE="init [-h]"
+cmd_usage_default() {
+	printf "init [-h]"
+}
 
-LONG_USAGE="
+cmd_long_usage_default() {
+	printf "\
 ${t_bold}init${t_off}
 ----
 
@@ -29,6 +32,7 @@ here are the questions you'd have to answer:
       the long-lived integration branch name, defaults to 'integration'. 
       this branch serves as the base to all team branches, and will be created if it does not already exist.
  "
+}
 
 
 cmd_default() {
@@ -43,9 +47,8 @@ cmd_default() {
 	local release_candidate_prefix=$(io_prompt "release candidate prefix" "rc$prefix_delimiter")
 	local hot_fix_prefix=$(io_prompt "hot-fix prefix" "hf$prefix_delimiter")
 	local integration_branch=$(io_prompt "integration branch" "integration")
-    # todo - request tag prefix
 
-	# todo - check git working tree
+	# todo - ensure git working tree clean?
 	io_log; git_ensure_branch "$integration_branch"
 
 	git_config_set "prefix.feature" "$feature_prefix"

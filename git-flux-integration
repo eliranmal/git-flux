@@ -1,21 +1,34 @@
 #!/usr/bin/env sh
 
 
-USAGE="integration <sync> [-h]"
+cmd_usage_default() {
+	printf "integration <sync> [-h]"
+}
 
-LONG_USAGE="
+cmd_usage_sync() {
+	printf "integration sync [-h]"
+}
+
+cmd_long_usage_default() {
+	printf "\
 ${t_bold}${t_fg_magenta}integration${t_off}
 -----------
 
 handle integration across teams.
 
 
-${t_bold}available actions:${t_off}
+${t_under}available actions${t_off}
 
-   ${t_bold}sync <name>${t_off}
+$(cmd_long_usage_sync)
+"
+}
+
+cmd_long_usage_sync() {
+	printf "\
+   ${t_bold}$(cmd_usage_sync)${t_off}
       pulls changes from the base branch, i.e. 'master', into the integration branch.
  "
-
+}
 
 cmd_sync() {
 	local branch="$(git_config_get "branch.integration")"

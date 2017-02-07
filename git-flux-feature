@@ -1,32 +1,64 @@
 #!/usr/bin/env sh
 
 
-USAGE="feature <start|finish|sync> <name> [base] [-h]"
+cmd_usage_default() {
+	printf "feature <start|finish|sync> <name> [base] [-h]"
+}
 
-LONG_USAGE="
+cmd_usage_start() {
+	printf "feature start <name> [base] [-h]"
+}
+
+cmd_usage_finish() {
+	printf "feature finish <name> [-h]"
+}
+
+cmd_usage_sync() {
+	printf "feature sync <name> [-h]"
+}
+
+cmd_long_usage_default() {
+	printf "\
 ${t_bold}${t_fg_blue}feature${t_off}
 -------
 
 handle feature level actions.
 
 
-${t_bold}available actions:${t_off}
+${t_under}available actions${t_off}
 
-   ${t_bold}start <name> [base]${t_off}
+$(cmd_long_usage_start)
+$(cmd_long_usage_finish)
+$(cmd_long_usage_sync)
+"
+}
+
+cmd_long_usage_start() {
+	printf "\
+   ${t_bold}$(cmd_usage_start)${t_off}
       start a new feature; create a local branch and push it to the remote.
       the branch name will be composed of the pre-configured feature prefix and the passed ${t_bold}name${t_off}.
       pass an optional ${t_bold}base${t_off} to set a custom base for the branch (default ${t_bold}base${t_off} is the current team branch).
+ "
+}
 
-   ${t_bold}finish <name>${t_off}
+cmd_long_usage_finish() {
+	printf "\
+   ${t_bold}$(cmd_usage_finish)${t_off}
       finish an existing feature; delete its local and remote branches, for good.
+ "
+}
 
-   ${t_bold}sync <name>${t_off}
+cmd_long_usage_sync() {
+	printf "\
+   ${t_bold}$(cmd_usage_sync)${t_off}
       sync an existing feature with its base branch, usually the current team branch, unless otherwise set when the feature was started.
  "
+}
 
 
 cmd_start() {
-	validate_mandatory_arg "$1"
+	require_args "$1"
 	local team_branch="$(git_config_get "branch.team")"
 	if [[ -z $team_branch && -z $2 ]]; then
 		io_log; io_status_fatal "no base found!
@@ -37,13 +69,13 @@ cmd_start() {
 }
 
 cmd_finish() {
-	validate_mandatory_arg "$1"
+	require_args "$1"
 	io_log; destroy_branch_from_base "$(git_config_get "prefix.feature")$1"
 	io_log; io_log_ok "feature '$1' is finished. RIP."; io_log
 }
 
 cmd_sync() {
-	validate_mandatory_arg "$1"
+	require_args "$1"
 	io_log; sync_branch_with_base "$(git_config_get "prefix.feature")$1"
 	io_log; io_log_ok "feature '$1' is in sync with the base."; io_log
 }
