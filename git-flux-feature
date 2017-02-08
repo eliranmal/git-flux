@@ -38,30 +38,24 @@ $(t_code_definition \
 "$(cmd_usage_start)" \
 "start a new feature; create a local branch and push it to the remote.
 the branch name will be composed of the pre-configured feature prefix and the passed $(t_code "name").
-pass an optional $(t_code "base") to set a custom base for the branch (default $(t_code "base") is the current team branch).
-" \
-)
- "
-#	printf "\
-#   $(cmd_usage_start | t_bold)
-#      start a new feature; create a local branch and push it to the remote.
-#      the branch name will be composed of the pre-configured feature prefix and the passed $(t_code "name").
-#      pass an optional $(t_code "base") to set a custom base for the branch (default $(t_code "base") is the current team branch).
-# "
+pass an optional $(t_code "base") to set a custom base for the branch (default $(t_code "base") is the current team branch)." \
+)"
 }
 
 cmd_long_usage_finish() {
 	printf "\
-   $(cmd_usage_finish | t_bold)
-      finish an existing feature; delete its local and remote branches, for good.
- "
+$(t_code_definition \
+"$(cmd_usage_finish)" \
+"finish an existing feature; delete its local and remote branches, for good." \
+)"
 }
 
 cmd_long_usage_sync() {
 	printf "\
-   $(cmd_usage_sync | t_bold)
-      sync an existing feature with its base branch, usually the current team branch, unless otherwise set when the feature was started.
- "
+$(t_code_definition \
+"$(cmd_usage_sync)" \
+"sync an existing feature with its base branch, usually the current team branch, unless otherwise set when the feature was started." \
+)"
 }
 
 

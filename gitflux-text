@@ -87,7 +87,7 @@ t_util_suffix() {
 t_util_indent() {
 	local margin=$1; shift
 	local input=$(get_input "$@")
-	printf "%s" "$input" | sed -e 's,^\(.*\),'"$margin"'\1,'
+	printf "%s" "$input" | sed -e 's,^\(.*\)$,'"$margin"'\1,'
 }
 
 t_util_underline() {
@@ -96,6 +96,11 @@ t_util_underline() {
 	local input=$(get_input "$@")
 	local underline="$(repeat ${char} ${#input})"
 	printf "%s%s\n%s" "$input" "$suffix" "$underline"
+}
+
+t_util_replace_tags() {
+	local from_tag="$1"; local from_tag_off="$2"; local to_tag="$3"; local to_tag_off="$4";
+	sed -e 's,'"$from_tag"'\([^'"$from_tag"']*\)'"$from_tag_off"','"$to_tag"'\1'"$to_tag_off"',g'
 }
 
 
@@ -118,7 +123,9 @@ t_init_terminal() {
 	_t_code_off=$_t_bold_off
 	
 	_t_list_item=' * '
+
 	_t_new_line="\n"
+	_t_line_break="$_t_new_line "
 	
 	_t_fg_off=$(                 tput setaf 0    || tput AF 0    )
 	if (( $(tput colors) >= 256 )); then
@@ -159,15 +166,15 @@ t_init_terminal() {
 		local title="$1"
 		local body="$2"
 		if [[ -z $body ]]; then
-			t_util_prefix "$_t_list_item" "$@"
+			t_util_prefix "$_t_list_item" "$title$_t_line_break"
 		else
-			t_util_wrap "$_t_bold$_t_list_item" "$_t_bold_off$_t_new_line" "$1"
-			shift; t_util_indent '      ' "$@"
+			t_util_wrap "$_t_bold$_t_list_item" "$_t_bold_off$_t_new_line" "$title"
+			t_util_indent '      ' "$body$_t_line_break"
 		fi
 	}
 	t_definition() {
 		t_util_prefix '   ' "$1" | t_util_wrap "$_t_bold" "$_t_bold_off$_t_new_line"
-		shift; t_util_indent '      ' "$@"
+		shift; t_util_indent '      ' "$@$_t_line_break"
 	}
 	t_code_definition() {
 		t_definition "$@"
@@ -188,7 +195,16 @@ t_init_markdown() {
 	_t_code_off=$_t_code
 	
 	_t_list_item='- '
-	_t_new_line="  \n"
+	_t_def_term='<dl>
+	<dt>'
+	_t_def_term_off='</dt>
+'
+	_t_def_desc='	<dd>'
+	_t_def_desc_off='</dd>
+</dl>
+'
+	_t_new_line="\n"
+	_t_line_break="  $_t_new_line"
 
 	t_heading() {
 		t_util_prefix '## ' "$1"
@@ -200,22 +216,18 @@ t_init_markdown() {
 		local title="$1"
 		local body="$2"
 		if [[ -z $body ]]; then
-			t_util_prefix "$_t_list_item" "$@"
+			t_util_prefix "$_t_list_item" "$title$_t_new_line"
 		else
-			t_util_wrap "$_t_list_item$_t_bold" "$_t_bold_off$_t_new_line" "$1"
-			shift; t_util_indent '  ' "$@"
+			t_util_wrap "$_t_list_item$_t_bold" "$_t_bold_off$_t_line_break" "$title"
+			t_util_indent '  ' "$body$_t_new_line"
 		fi
 	}
 	t_definition() {
-		t_util_wrap '<dl>
-	<dt>'  '</dt>
-' "$1"
-		shift; t_util_wrap '	<dd>' '</dd>
-</dl>
-' "$@"
+		t_util_wrap "$_t_def_term" "$_t_def_term_off" "$1" | t_util_replace_tags "$_t_code" "$_t_code_off" '<code>' '</code>'
+		shift; t_util_wrap "$_t_def_desc" "$_t_def_desc_off" "$@" | t_util_replace_tags "$_t_code" "$_t_code_off" '<code>' '</code>'
 	}
 	t_code_definition() {
-		local title="$(t_util_wrap '<code>' '</code>' "$1")"
+		local title="$(t_util_wrap "$_t_code" "$_t_code_off" "$1")"
 		shift; t_definition "$title" "$@"
 	}
 
@@ -223,24 +235,24 @@ t_init_markdown() {
 
 t_init_common() {
 
-	t_bold() {              t_util_wrap     "$_t_bold"          "$_t_bold_off"      "$@"; }
-	t_italic() {            t_util_wrap     "$_t_italic"        "$_t_italic_off"    "$@"; }
-	t_strike() {            t_util_wrap     "$_t_strike"        "$_t_strike_off"    "$@"; }
-	t_code() {              t_util_wrap     "$_t_code"          "$_t_code_off"      "$@"; }
-	t_under() {             t_util_wrap     "$_t_under"         "$_t_under_off"     "$@"; }
+	t_bold() {              t_util_wrap     "$_t_bold"              "$_t_bold_off"      "$@"; }
+	t_italic() {            t_util_wrap     "$_t_italic"            "$_t_italic_off"    "$@"; }
+	t_strike() {            t_util_wrap     "$_t_strike"            "$_t_strike_off"    "$@"; }
+	t_code() {              t_util_wrap     "$_t_code"              "$_t_code_off"      "$@"; }
+	t_under() {             t_util_wrap     "$_t_under"             "$_t_under_off"     "$@"; }
 
-	t_fg_red() {            t_util_wrap     "$_t_fg_red"            "$_t_fg_off"    "$@"; }
-	t_fg_green() {          t_util_wrap     "$_t_fg_green"          "$_t_fg_off"    "$@"; }
-	t_fg_yellow() {         t_util_wrap     "$_t_fg_yellow"         "$_t_fg_off"    "$@"; }
-	t_fg_blue() {           t_util_wrap     "$_t_fg_blue"           "$_t_fg_off"    "$@"; }
-	t_fg_magenta() {        t_util_wrap     "$_t_fg_magenta"        "$_t_fg_off"    "$@"; }
-	t_fg_cyan() {           t_util_wrap     "$_t_fg_cyan"           "$_t_fg_off"    "$@"; }
-	t_fg_lightred() {       t_util_wrap     "$_t_fg_lightred"       "$_t_fg_off"    "$@"; }
-	t_fg_lightgreen() {     t_util_wrap     "$_t_fg_lightgreen"     "$_t_fg_off"    "$@"; }
-	t_fg_lightyellow() {    t_util_wrap     "$_t_fg_lightyellow"    "$_t_fg_off"    "$@"; }
-	t_fg_lightblue() {      t_util_wrap     "$_t_fg_lightblue"      "$_t_fg_off"    "$@"; }
-	t_fg_lightmagenta() {   t_util_wrap     "$_t_fg_lightmagenta"   "$_t_fg_off"    "$@"; }
-	t_fg_lightcyan() {      t_util_wrap     "$_t_fg_lightcyan"      "$_t_fg_off"    "$@"; }
+	t_fg_red() {            t_util_wrap     "$_t_fg_red"            "$_t_fg_off"        "$@"; }
+	t_fg_green() {          t_util_wrap     "$_t_fg_green"          "$_t_fg_off"        "$@"; }
+	t_fg_yellow() {         t_util_wrap     "$_t_fg_yellow"         "$_t_fg_off"        "$@"; }
+	t_fg_blue() {           t_util_wrap     "$_t_fg_blue"           "$_t_fg_off"        "$@"; }
+	t_fg_magenta() {        t_util_wrap     "$_t_fg_magenta"        "$_t_fg_off"        "$@"; }
+	t_fg_cyan() {           t_util_wrap     "$_t_fg_cyan"           "$_t_fg_off"        "$@"; }
+	t_fg_lightred() {       t_util_wrap     "$_t_fg_lightred"       "$_t_fg_off"        "$@"; }
+	t_fg_lightgreen() {     t_util_wrap     "$_t_fg_lightgreen"     "$_t_fg_off"        "$@"; }
+	t_fg_lightyellow() {    t_util_wrap     "$_t_fg_lightyellow"    "$_t_fg_off"        "$@"; }
+	t_fg_lightblue() {      t_util_wrap     "$_t_fg_lightblue"      "$_t_fg_off"        "$@"; }
+	t_fg_lightmagenta() {   t_util_wrap     "$_t_fg_lightmagenta"   "$_t_fg_off"        "$@"; }
+	t_fg_lightcyan() {      t_util_wrap     "$_t_fg_lightcyan"      "$_t_fg_off"        "$@"; }
 
 }
 

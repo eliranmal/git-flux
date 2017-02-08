@@ -6,7 +6,7 @@ configures the git-flux environment with an interactive survey.
 here are the details you need to fill in:
 
 - **feature prefix**  
-  a prefix for feature branch names, defaults to `feature/`. 
+  a prefix for feature branch names, defaults to `feature/`.
   for example, `foo/` will result in feature branch names like `foo/my_awesome_feature`.
 
 - **team prefix**  
@@ -19,6 +19,5 @@ here are the details you need to fill in:
   a prefix for hot-fix branch names, defaults to `hf/`.
 
 - **integration branch**  
-  the long-lived integration branch name, defaults to `integration`. 
+  the long-lived integration branch name, defaults to `integration`.
   this branch serves as the base to all team branches, and will be created if it does not already exist.
- 
