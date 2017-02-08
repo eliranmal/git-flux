@@ -29,17 +29,19 @@ $(cmd_long_usage_finish)
 
 cmd_long_usage_start() {
 	printf "\
-   $(cmd_usage_start | t_bold)
-      start a release-candidate; create a local branch and push it to the remote.
-      the branch name will be composed of the pre-configured release-candidate prefix and the passed $(t_code "name").
- "
+$(t_code_definition \
+"$(cmd_usage_start)" \
+"start a release-candidate; create a local branch and push it to the remote.
+the branch name will be composed of the pre-configured release-candidate prefix and the passed $(t_code "name")." \
+)"
 }
 
 cmd_long_usage_finish() {
 	printf "\
-   $(cmd_usage_finish | t_bold)
-      finish an existing release-candidate; delete its local and remote branches, for good.
- "
+$(t_code_definition \
+"$(cmd_usage_finish)" \
+"finish an existing release-candidate; delete its local and remote branches, for good." \
+)"
 }
 
 cmd_start() {
