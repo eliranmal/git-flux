@@ -42,14 +42,28 @@
 # - _t_bold cannot be nested and must be the outermost tag, as _t_bold_off will 
 #   reset any other style.
 # 
+# 
+# references:
+# 
+# - the colors used here are based on the SMYCK color scheme (http://color.smyck.org/):
+# 
+#   red: #c75646
+#   green: #8eb33b
+#   yellow: #d0b03c
+#   blue: #72b3cc
+#   magenta: #c8a0d1
+#   cyan: #218693
+#   lightred: #e09690
+#   lightgreen: #cdee69
+#   lightyellow: #ffe377
+#   lightblue: #9cd9f0
+#   lightmagenta: #fbb1f9
+#   lightcyan: #77dfd8
+# 
+#   they were converted to their xterm-256 ansi equivalents with colortrans.py 
+#   (https://gist.github.com/MicahElliott/719710).
+# 
 
-
-
-# todo - how to describe lists? (in terminal) probably just pad lines with leading space
-# todo - fill in the gaps between the terminal and the markdown (e.g. markdown 
-# todo -    has `code`, terminal will return the bold style when using ${t_code}.
-# todo - also, describe headers (that has ------- underline in terminal text), 
-# todo -    (github) markdown already has this supported for H1/H2 (===/---), use it.
 
 
 t_util_wrap() {
@@ -172,21 +186,6 @@ t_init_markdown() {
 	
 	_t_list_item='- '
 	_t_new_line="  \n"
-
-	# colors could be possible with html, if they're not stripped down by the markdown parser. haven't tested it
-	_t_fg_off=$'</span>'
-	_t_fg_red=$'<span style="color: #c75646">'
-	_t_fg_green=$'<span style="color: #8eb33b">'
-	_t_fg_yellow=$'<span style="color: #d0b03c">'
-	_t_fg_blue=$'<span style="color: #72b3cc">'
-	_t_fg_magenta=$'<span style="color: #c8a0d1">'
-	_t_fg_cyan=$'<span style="color: #218693">'
-	_t_fg_lightred=$'<span style="color: #e09690">'
-	_t_fg_lightgreen=$'<span style="color: #cdee69">'
-	_t_fg_lightyellow=$'<span style="color: #ffe377">'
-	_t_fg_lightblue=$'<span style="color: #9cd9f0">'
-	_t_fg_lightmagenta=$'<span style="color: #fbb1f9">'
-	_t_fg_lightcyan=$'<span style="color: #77dfd8">'
 
 	t_heading() {
 		t_util_prefix   '### '      "$1"
