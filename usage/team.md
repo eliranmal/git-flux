@@ -3,7 +3,7 @@
 
 handle integration across team members and their features.
 
-available actions
+##### available actions
 
    **create <name> [-h]**
       start a new team; create a local branch and push it to the remote.

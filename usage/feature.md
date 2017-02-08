@@ -3,7 +3,7 @@
 
 handle feature level actions.
 
-available actions
+##### available actions
 
    **start <name> [base] [-h]**
       start a new feature; create a local branch and push it to the remote.
