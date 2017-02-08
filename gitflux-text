@@ -169,6 +169,9 @@ t_init_terminal() {
 		t_util_prefix '   ' "$1" | t_util_wrap "$_t_bold" "$_t_bold_off$_t_new_line"
 		shift; t_util_indent '      ' "$@"
 	}
+	t_code_definition() {
+		t_definition "$@"
+	}
 
 }
 
@@ -211,6 +214,11 @@ t_init_markdown() {
 </dl>
 ' "$@"
 	}
+	t_code_definition() {
+		local title="$(t_util_wrap '<code>' '</code>' "$1")"
+		shift; t_definition "$title" "$@"
+	}
+
 }
 
 t_init_common() {
