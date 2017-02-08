@@ -223,7 +223,6 @@ t_init_markdown() {
 
 t_init_common() {
 
-	# todo - do we need these "$@"? these functions are piped, so why explicitly pass in the arguments?
 	t_bold() {              t_util_wrap     "$_t_bold"          "$_t_bold_off"      "$@"; }
 	t_italic() {            t_util_wrap     "$_t_italic"        "$_t_italic_off"    "$@"; }
 	t_strike() {            t_util_wrap     "$_t_strike"        "$_t_strike_off"    "$@"; }
