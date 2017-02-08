@@ -25,4 +25,4 @@ pass an optional <code>base</code> to set a custom base for the branch (default 
 
 
 
-<sub><i>auto-generated with dox</i></sub>
+<sub align="right"><i>auto-generated with dox</i></sub>

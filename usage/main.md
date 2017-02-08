@@ -45,4 +45,4 @@ refer to each subcommand's help menu for an in-depth description of its actions 
 
 
 
-<sub><i>auto-generated with dox</i></sub>
+<sub align="right"><i>auto-generated with dox</i></sub>

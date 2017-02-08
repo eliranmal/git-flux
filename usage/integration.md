@@ -15,4 +15,4 @@ handle integration across teams.
 
 
 
-<sub><i>auto-generated with dox</i></sub>
+<sub align="right"><i>auto-generated with dox</i></sub>

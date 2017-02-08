@@ -27,4 +27,4 @@ here are the details you need to fill in:
 
 
 
-<sub><i>auto-generated with dox</i></sub>
+<sub align="right"><i>auto-generated with dox</i></sub>
