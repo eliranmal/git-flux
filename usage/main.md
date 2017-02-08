@@ -1,5 +1,5 @@
 
-    usage: git flux <init|feature|team|integration|rc|hf> [action] [action-args...] [-h]
+     git flux <init|feature|team|integration|rc|hf> [action] [action-args...] [-h]
 
 ## git-flux
 

@@ -1,5 +1,5 @@
 
-    usage: git flux team <create|destroy|sync|join> <name> [-h]
+     git flux team <create|destroy|sync|join> <name> [-h]
 
 ## team
 

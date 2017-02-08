@@ -6,7 +6,7 @@ remove_usage_line() {
 }
 
 format_usage_line() {
-	sed -e 'N' -e 's,\(usage:.*\)\(\n\)$,\2    \1\2,'
+	sed -e 'N' -e 's,usage:\(.*\)\(\n\)$,\2    \1\2,'
 }
 
 squeeze_blanks() {
