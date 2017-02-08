@@ -5,6 +5,7 @@ handle integration across teams.
 
 #### available actions
 
-   **sync [-h]**
-      pulls changes from the base branch, i.e. 'master', into the integration branch.
- 
+<dl>
+	<dt><code>sync [-h]</code></dt>
+	<dd>pulls changes from the base branch, i.e. 'master', into the integration branch.<br/></dd>
+</dl>

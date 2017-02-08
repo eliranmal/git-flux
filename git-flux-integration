@@ -24,9 +24,10 @@ $(cmd_long_usage_sync)
 
 cmd_long_usage_sync() {
 	printf "\
-   $(cmd_usage_sync | t_bold)
-      pulls changes from the base branch, i.e. 'master', into the integration branch.
- "
+$(t_code_definition \
+"$(cmd_usage_sync)" \
+"pulls changes from the base branch, i.e. 'master', into the integration branch." \
+)"
 }
 
 cmd_sync() {
