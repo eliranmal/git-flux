@@ -166,9 +166,9 @@ t_init_markdown() {
 	t_heading() {           t_util_prefix   '### '      "$1"; }
 	t_subheading() {        t_util_prefix   '##### '    "$1"; }
 	t_list_item() {         t_util_prefix   '- '       "$1"; }
-	t_list_item_title() {   t_util_wrap     "$_t_bold"  "$_t_bold_off" "$1" |   t_list_item; }
+	t_list_item_title() {   t_util_wrap     "- $_t_bold"  "$_t_bold_off  " "$1"; }
 	t_list_item_body() {    t_description   "$@"; }
-	t_term() {              t_util_wrap     "$_t_bold"  "$_t_bold_off"  "$1"; }
+	t_term() {              t_util_wrap     "$_t_bold"  "$_t_bold_off  "  "$1"; }
 	t_description() {       t_util_indent   '  '       "$@"; }
 
 	# colors could be possible with html, if they're not stripped down by the markdown parser. haven't tested it
