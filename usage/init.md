@@ -29,4 +29,4 @@ here are the details you need to fill in:
 
 <br/><br/>
 ---
-<sub><i>auto-generated with <b>dox</b></i></sub>
+<sup><i>auto-generated with <b>dox</b></i></sup>

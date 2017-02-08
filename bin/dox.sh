@@ -6,7 +6,7 @@ format_usage_line() {
 }
 
 attach_message() {
-	printf "%s\n\n\n\n%s\n%s\n%s" "$(cat -)" '<br/><br/>' '---' '<sub><i>auto-generated with <b>dox</b></i></sub>'
+	printf "%s\n\n\n\n%s\n%s\n%s" "$(cat -)" '<br/><br/>' '---' '<sup><i>auto-generated with <b>dox</b></i></sup>'
 }
 
 squeeze_blanks() {
