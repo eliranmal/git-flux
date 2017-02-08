@@ -11,7 +11,7 @@ git commands for fluent, team-oriented workflow.
 </dl>
 
 <dl>
-	<dt>feature</dt>
+	<dt>`feature`</dt>
 	<dd>handle feature level actions.</dd>
 </dl>
 
