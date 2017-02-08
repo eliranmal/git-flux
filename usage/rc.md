@@ -15,4 +15,7 @@ the branch name will be composed of the pre-configured release-candidate prefix 
 <dl>
 	<dt><code>finish &lt;name&gt; [-h]</code></dt>
 	<dd>finish an existing release-candidate; delete its local and remote branches, for good.<br/></dd>
-</dl>
+
+
+
+<sub>auto-generated with dox</sub>

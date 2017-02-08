@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
 
-remove_usage_line() {
-	grep -v '^usage:.*$'
-}
-
 format_usage_line() {
 	sed -e 'N' -e 's,usage:\(.*\)\(\n\)$,\2    \1\2,'
+}
+
+add_gen_message() {
+	printf "%s\n\n\n\n\n%s" "$(cat -)" "<sub>auto-generated with dox</sub>"
 }
 
 squeeze_blanks() {
@@ -14,8 +14,11 @@ squeeze_blanks() {
 }
 
 strip_down() {
-#	remove_usage_line | squeeze_blanks
-	format_usage_line | squeeze_blanks
+	squeeze_blanks
+}
+
+dress_up() {
+    format_usage_line | add_gen_message
 }
 
 
@@ -32,11 +35,11 @@ main() {
 	fi
 	mkdir -p ${output_dir}
 
-	printf "%s\n" "$(env FORMAT=${output_format} git flux -h | strip_down)" >> ${output_dir}/main.md
+	printf "%s\n" "$(env FORMAT=${output_format} git flux -h | strip_down | dress_up)" >> ${output_dir}/main.md
 	for path in ${working_dir}/../${file_prefix}*
 	do
 		local cmd="${path##*/$file_prefix}"
-		printf "%s\n" "$(env FORMAT=${output_format} git flux ${cmd} -h | strip_down)" >> ${output_dir}/${cmd}.md
+		printf "%s\n" "$(env FORMAT=${output_format} git flux ${cmd} -h | strip_down | dress_up)" >> ${output_dir}/${cmd}.md
 	done
 }
 

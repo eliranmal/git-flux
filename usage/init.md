@@ -22,3 +22,8 @@ here are the details you need to fill in:
 
 - **integration branch**  
   the long-lived integration branch name, defaults to `integration`.
+  this branch serves as the base to all team branches, and will be created if it does not already exist.
+
+
+
+<sub>auto-generated with dox</sub>
