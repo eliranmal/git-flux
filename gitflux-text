@@ -159,15 +159,15 @@ t_init_terminal() {
 		local title="$1"
 		local body="$2"
 		if [[ -z $body ]]; then
-			t_util_prefix   "$_t_list_item"       "$@"
+			t_util_prefix "$_t_list_item" "$@"
 		else
-			t_util_wrap     "$_t_bold$_t_list_item"  "$_t_bold_off$_t_new_line" "$1"
-			shift; t_util_indent   '      '    "$@"
+			t_util_wrap "$_t_bold$_t_list_item" "$_t_bold_off$_t_new_line" "$1"
+			shift; t_util_indent '      ' "$@"
 		fi
 	}
 	t_definition() {
-		t_util_prefix   '   '       "$1" | t_util_wrap     "$_t_bold"  "$_t_bold_off$_t_new_line"
-		shift; t_util_indent   '      '    "$@"
+		t_util_prefix '   ' "$1" | t_util_wrap "$_t_bold" "$_t_bold_off$_t_new_line"
+		shift; t_util_indent '      ' "$@"
 	}
 
 }
@@ -188,28 +188,28 @@ t_init_markdown() {
 	_t_new_line="  \n"
 
 	t_heading() {
-		t_util_prefix   '### '      "$1"
+		t_util_prefix '### ' "$1"
 	}
 	t_subheading() {
-		t_util_prefix   '##### '    "$1"
+		t_util_prefix '##### ' "$1"
 	}
 	t_list_item() {
 		local title="$1"
 		local body="$2"
 		if [[ -z $body ]]; then
-			t_util_prefix   "$_t_list_item"       "$@"
+			t_util_prefix "$_t_list_item" "$@"
 		else
-			t_util_wrap     "$_t_list_item$_t_bold"  "$_t_bold_off$_t_new_line" "$1"
-			shift; t_util_indent   '  '       "$@"
+			t_util_wrap "$_t_list_item$_t_bold" "$_t_bold_off$_t_new_line" "$1"
+			shift; t_util_indent '  ' "$@"
 		fi
 	}
 	t_definition() {
-		t_util_wrap     '<dl>
+		t_util_wrap '<dl>
 <dt>'  '</dt>
-'  "$1"
-		shift; t_util_wrap     '<dd>'  '</dd>
+' "$1"
+		shift; t_util_wrap '<dd>' '</dd>
 </dl>
-'  "$@"
+' "$@"
 	}
 }
 
