@@ -23,4 +23,4 @@ the passed <code>tag</code> will be used as the branch base.<br/></dd>
 
 ---
 
-<sub><i>auto-generated with <b>dox</b></i></sub>
+<br/><br/><sub><i>auto-generated with <b>dox</b></i></sub>

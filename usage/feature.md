@@ -27,4 +27,4 @@ pass an optional <code>base</code> to set a custom base for the branch (default 
 
 ---
 
-<sub><i>auto-generated with <b>dox</b></i></sub>
+<br/><br/><sub><i>auto-generated with <b>dox</b></i></sub>
