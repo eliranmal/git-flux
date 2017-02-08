@@ -44,4 +44,5 @@ refer to each subcommand's help menu for an in-depth description of its actions 
 
 
 
-<sub>auto-generated with dox</sub>
+
+<sub><i>auto-generated with dox</i></sub>

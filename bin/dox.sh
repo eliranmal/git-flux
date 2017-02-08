@@ -6,7 +6,7 @@ format_usage_line() {
 }
 
 add_gen_message() {
-	printf "%s\n\n\n\n\n%s" "$(cat -)" "<sub>auto-generated with dox</sub>"
+	printf "%s\n\n\n\n\n%s" "$(cat -)" "<sub><i>auto-generated with dox</i></sub>"
 }
 
 squeeze_blanks() {

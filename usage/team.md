@@ -30,4 +30,5 @@ aliases: <code>switch</code>.<br/></dd>
 
 
 
-<sub>auto-generated with dox</sub>
+
+<sub><i>auto-generated with dox</i></sub>

@@ -18,4 +18,5 @@ the branch name will be composed of the pre-configured release-candidate prefix 
 
 
 
-<sub>auto-generated with dox</sub>
+
+<sub><i>auto-generated with dox</i></sub>

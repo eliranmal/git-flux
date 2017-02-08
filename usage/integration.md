@@ -14,4 +14,5 @@ handle integration across teams.
 
 
 
-<sub>auto-generated with dox</sub>
+
+<sub><i>auto-generated with dox</i></sub>
