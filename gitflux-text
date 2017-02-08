@@ -205,9 +205,9 @@ t_init_markdown() {
 	}
 	t_definition() {
 		t_util_wrap '<dl>
-<dt>'  '</dt>
+	<dt>'  '</dt>
 ' "$1"
-		shift; t_util_wrap '<dd>' '</dd>
+		shift; t_util_wrap '	<dd>' '</dd>
 </dl>
 ' "$@"
 	}
