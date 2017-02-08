@@ -5,77 +5,23 @@ git commands for fluent, team-oriented workflow.
 
 ##### available subcommands
 
-**init**  
-  initialize the git-flux configuration survey.
+<dl><dt>init</dt>
+<dd>initialize the git-flux configuration survey.</dd></dl>
 
-**feature**  
-  handle feature level actions.
+<dl><dt>feature</dt>
+<dd>handle feature level actions.</dd></dl>
 
-**team**  
-  handle integration across team members and their features.
+<dl><dt>team</dt>
+<dd>handle integration across team members and their features.</dd></dl>
 
-**integration**  
-  handle integration across teams.
+<dl><dt>integration</dt>
+<dd>handle integration across teams.</dd></dl>
 
-**rc**  
-  handle lifecycle of release-candidates.
+<dl><dt>rc</dt>
+<dd>handle lifecycle of release-candidates.</dd></dl>
 
-**hf**  
-  handle lifecycle of hot-fixes.
+<dl><dt>hf</dt>
+<dd>handle lifecycle of hot-fixes.</dd></dl>
 
 refer to each subcommand's help menu for an in-depth description of its actions (e.g. `git flux init -h`).
  
----
-
-<dl>
-<dt>init</dt>
-<dd>initialize the git-flux configuration survey.</dd>
-
-<dt>feature</dt>
-<dd>handle feature level actions.</dd>
-
-<dt>team</dt>
-<dd>handle integration across team members and their features.</dd>
-
-<dt>integration</dt>
-<dd>handle integration across teams.</dd>
-
-<dt>rc</dt>
-<dd>handle lifecycle of release-candidates.</dd>
-
-<dt>hf</dt>
-<dd>handle lifecycle of hot-fixes.</dd>
-</dl>
- 
----
-
-<dl>
-<dt>init</dt>
-<dd>initialize the git-flux configuration survey.</dd>
-</dl>
-
-<dl>
-<dt>feature</dt>
-<dd>handle feature level actions.</dd>
-</dl>
-
-<dl>
-<dt>team</dt>
-<dd>handle integration across team members and their features.</dd>
-</dl>
-
-<dl>
-<dt>integration</dt>
-<dd>handle integration across teams.</dd>
-</dl>
-
-<dl>
-<dt>rc</dt>
-<dd>handle lifecycle of release-candidates.</dd>
-</dl>
-
-<dl>
-<dt>hf</dt>
-<dd>handle lifecycle of hot-fixes.</dd>
-</dl>
-

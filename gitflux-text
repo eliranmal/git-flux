@@ -180,13 +180,13 @@ t_init_markdown() {
 		t_util_wrap     "- $_t_bold"  "$_t_bold_off  " "$1"
 	}
 	t_list_item_body() {
-		t_description   "$@"
+		t_util_indent   '  '       "$@"
 	}
 	t_term() {
-		t_util_wrap     "$_t_bold"  "$_t_bold_off  "  "$1"
+		t_util_wrap     '<dl><dt>'  '</dt>'  "$1"
 	}
 	t_description() {
-		t_util_indent   '  '       "$@"
+		t_util_wrap     '<dd>'  '</dd></dl>'  "$@"
 	}
 
 	# colors could be possible with html, if they're not stripped down by the markdown parser. haven't tested it
