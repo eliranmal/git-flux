@@ -1,4 +1,6 @@
 
+    usage: git flux team <create|destroy|sync|join> <name> [-h]
+
 ## team
 
 handle integration across team members and their features.

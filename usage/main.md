@@ -1,7 +1,15 @@
 
+    usage: git flux <init|feature|team|integration|rc|hf> [action] [action-args...] [-h]
+
 ## git-flux
 
 git commands for fluent, team-oriented workflow.
+
+#### flags
+flags
+
+-h
+shows the f***ing manual. works everywhere, and context dependent. this means you can git flux -h, and also git flux feature -h or git flux feature start -h.
 
 #### available subcommands
 
@@ -31,4 +39,3 @@ git commands for fluent, team-oriented workflow.
 </dl>
 
 refer to each subcommand's help menu for an in-depth description of its actions (e.g. `git flux init -h`).
- 

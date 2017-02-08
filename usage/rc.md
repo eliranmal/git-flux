@@ -1,4 +1,6 @@
 
+    usage: git flux rc <start|finish> <name> [-h]
+
 ## rc
 
 handle lifecycle of release-candidates.
