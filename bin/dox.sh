@@ -28,9 +28,9 @@ main() {
 	mkdir -p ${usage_dir}
 
 	printf "%s\n" "$(env FORMAT=${output_format} git flux -h | strip_down)" >> ${usage_dir}/main.md
-	for file in ${working_dir}/../${file_prefix}*
+	for path in ${working_dir}/../${file_prefix}*
 	do
-		local cmd="${file##*/$file_prefix}"
+		local cmd="${path##*/$file_prefix}"
 		printf "%s\n" "$(env FORMAT=${output_format} git flux ${cmd} -h | strip_down)" >> ${usage_dir}/${cmd}.md
 	done
 }
