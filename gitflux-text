@@ -55,26 +55,33 @@
 t_util_wrap() {
 	local tag="$1"; shift; local tagoff="$1"; shift
 	local input=$(get_input "$@")
-	printf "${tag}%s${tagoff}" "$input"
+	printf "%s%s%s" "$tag" "$input" "$tagoff"
 }
 
 t_util_prefix() {
 	local prefix="$1"; shift
 	local input=$(get_input "$@")
-	printf "${prefix}%s" "$input"
+	printf "%s%s" "$prefix" "$input"
 }
 
 t_util_suffix() {
 	local suffix="$1"; shift
 	local input=$(get_input "$@")
-	printf "%s${suffix}" "$input"
+	printf "%s%s" "$input" "$suffix"
+}
+
+t_util_indent() {
+	local margin=$1; shift
+	local input=$(get_input "$@")
+	printf "%s" "$input" | sed -e 's,^\(.*\),'"$margin"'\1,'
 }
 
 t_util_underline() {
 	local char="$1"; shift
 	local suffix="$1"; shift
 	local input=$(get_input "$@")
-	printf "%s\n$(repeat ${char} ${#input})" "$input$suffix"
+	local underline="$(repeat ${char} ${#input})"
+	printf "%s%s\n%s" "$input" "$suffix" "$underline"
 }
 
 
@@ -133,6 +140,12 @@ t_init_terminal() {
 		t_list_item() {
 			echo "$@"
 		}
+		t_term() {
+			t_util_prefix   '   '       "$@" | t_util_wrap     "$_t_bold"  "$_t_bold_off"
+		}
+		t_description() {
+			t_util_indent   '      '    "$@"
+		}
 
 	} 2>/dev/null ||: # protect from "unknown terminfo capability" errors 
 
@@ -150,9 +163,13 @@ t_init_markdown() {
 	_t_code='`'
 	_t_code_off=$_t_code
 
-	t_heading() {       t_util_prefix   '### '      "$1"; }
-	t_subheading() {    t_util_prefix   '##### '    "$1"; }
-	t_list_item() {     t_util_prefix   ' - '       "$1" | t_util_suffix '  '; }
+	t_heading() {           t_util_prefix   '### '      "$1"; }
+	t_subheading() {        t_util_prefix   '##### '    "$1"; }
+	t_list_item() {         t_util_prefix   '- '       "$1"; }
+	t_list_item_title() {   t_util_wrap     "$_t_bold"  "$_t_bold_off" "$1" |   t_list_item; }
+	t_list_item_body() {    t_description   "$@"; }
+	t_term() {              t_util_wrap     "$_t_bold"  "$_t_bold_off"  "$1"; }
+	t_description() {       t_util_indent   '  '       "$@"; }
 
 	# colors could be possible with html, if they're not stripped down by the markdown parser. haven't tested it
 #	_t_fg_off=$'</span>'

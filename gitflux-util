@@ -23,7 +23,7 @@ strip_prefix() {
 }
 
 repeat() {
-    seq -f $1 -s '' $2; echo
+    seq -f "$1" -s '' $2; echo
 }
 
 # parses function input from stdin or passed arguments
