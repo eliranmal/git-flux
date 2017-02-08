@@ -174,19 +174,19 @@ t_init_markdown() {
 	_t_new_line="  \n"
 
 	# colors could be possible with html, if they're not stripped down by the markdown parser. haven't tested it
-#	_t_fg_off=$'</span>'
-#	_t_fg_red=$'<span style="color: #c75646">'
-#	_t_fg_green=$'<span style="color: #8eb33b">'
-#	_t_fg_yellow=$'<span style="color: #d0b03c">'
-#	_t_fg_blue=$'<span style="color: #72b3cc">'
-#	_t_fg_magenta=$'<span style="color: #c8a0d1">'
-#	_t_fg_cyan=$'<span style="color: #218693">'
-#	_t_fg_lightred=$'<span style="color: #e09690">'
-#	_t_fg_lightgreen=$'<span style="color: #cdee69">'
-#	_t_fg_lightyellow=$'<span style="color: #ffe377">'
-#	_t_fg_lightblue=$'<span style="color: #9cd9f0">'
-#	_t_fg_lightmagenta=$'<span style="color: #fbb1f9">'
-#	_t_fg_lightcyan=$'<span style="color: #77dfd8">'
+	_t_fg_off=$'</span>'
+	_t_fg_red=$'<span style="color: #c75646">'
+	_t_fg_green=$'<span style="color: #8eb33b">'
+	_t_fg_yellow=$'<span style="color: #d0b03c">'
+	_t_fg_blue=$'<span style="color: #72b3cc">'
+	_t_fg_magenta=$'<span style="color: #c8a0d1">'
+	_t_fg_cyan=$'<span style="color: #218693">'
+	_t_fg_lightred=$'<span style="color: #e09690">'
+	_t_fg_lightgreen=$'<span style="color: #cdee69">'
+	_t_fg_lightyellow=$'<span style="color: #ffe377">'
+	_t_fg_lightblue=$'<span style="color: #9cd9f0">'
+	_t_fg_lightmagenta=$'<span style="color: #fbb1f9">'
+	_t_fg_lightcyan=$'<span style="color: #77dfd8">'
 
 	t_heading() {
 		t_util_prefix   '### '      "$1"

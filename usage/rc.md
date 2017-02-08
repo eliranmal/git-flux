@@ -1,5 +1,5 @@
 
-### rc
+<span style="color: #8eb33b">### rc</span>
 
 handle lifecycle of release-candidates.
 
