@@ -19,7 +19,7 @@ cmd_usage_sync() {
 
 cmd_long_usage_default() {
 	printf "\
-$(echo "feature" | t_heading | t_fg_blue)
+$(t_heading "feature" | t_fg_blue)
 
 handle feature level actions.
 

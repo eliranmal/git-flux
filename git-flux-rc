@@ -15,7 +15,7 @@ cmd_usage_finish() {
 
 cmd_long_usage_default() {
 	printf "\
-$(echo "rc" | t_heading | t_fg_green)
+$(t_heading "rc" | t_fg_green)
 
 handle lifecycle of release-candidates.
 

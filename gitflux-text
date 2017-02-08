@@ -11,6 +11,8 @@
 # 
 # usage:
 # 
+# two possible ways:
+# 
 # - include the available _t_* tags within strings to wrap terms.
 #   tags must be closed with the appropriate _t_*_off tag.
 # 
@@ -25,9 +27,14 @@
 #   echo "color text in ${_t_fg_yellow}yellow${_t_fg_off} or ${_t_fg_blue}blue${_t_fg_off}"
 # 
 # - using functions:
-#   echo "$(t_heading "foo")"
-#   echo "$(echo "foo" | t_heading)"
-#   echo "$(echo "foo" | t_heading | t_fg_yellow)"
+# 
+#       echo "$(t_heading "foo")"
+#       echo "$(echo "foo" | t_heading)"
+#       echo "$(echo "foo" | t_heading | t_fg_yellow)"
+# 
+#   you can also skip the echo, and combine the functions in any which way:
+# 
+#       echo "$(t_heading "foo" | t_fg_yellow)"
 # 
 # 
 # caveats:
@@ -59,8 +66,9 @@ t_util_prefix() {
 
 t_util_underline() {
 	local char="$1"; shift
+	local suffix="$1"; shift
 	local input=$(get_input "$@")
-	printf "%s\n$(repeat ${char} ${#input})" "$input"
+	printf "%s\n$(repeat ${char} ${#input})" "$input$suffix"
 }
 
 
@@ -111,7 +119,7 @@ t_init_terminal() {
 		fi
 
 		t_heading() {
-			echo "$@" | t_util_underline '-' | t_util_wrap "$_t_bold" "$_t_bold_off"
+			t_util_underline '-' "$_t_fg_off" "$@" | t_util_wrap "$_t_bold" "$_t_bold_off"
 		}
 		t_subheading() {
 			t_util_wrap "$_t_under" "$_t_under_off" "$@"
