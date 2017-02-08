@@ -1,5 +1,5 @@
 
-<span style="color: #d0b03c">### team</span>
+### team
 
 handle integration across team members and their features.
 

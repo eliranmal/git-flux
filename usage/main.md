@@ -11,27 +11,27 @@ git commands for fluent, team-oriented workflow.
 </dl>
 
 <dl>
-<dt><span style="color: #72b3cc">feature</span></dt>
+<dt>feature</dt>
 <dd>handle feature level actions.</dd>
 </dl>
 
 <dl>
-<dt><span style="color: #d0b03c">team</span></dt>
+<dt>team</dt>
 <dd>handle integration across team members and their features.</dd>
 </dl>
 
 <dl>
-<dt><span style="color: #c8a0d1">integration</span></dt>
+<dt>integration</dt>
 <dd>handle integration across teams.</dd>
 </dl>
 
 <dl>
-<dt><span style="color: #8eb33b">rc</span></dt>
+<dt>rc</dt>
 <dd>handle lifecycle of release-candidates.</dd>
 </dl>
 
 <dl>
-<dt><span style="color: #c75646">hf</span></dt>
+<dt>hf</dt>
 <dd>handle lifecycle of hot-fixes.</dd>
 </dl>
 
