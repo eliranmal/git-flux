@@ -2,11 +2,11 @@
 
 
 cmd_usage_default() {
-	printf "integration <sync> [-h]"
+	printf "<sync> [-h]"
 }
 
 cmd_usage_sync() {
-	printf "integration sync [-h]"
+	printf "sync [-h]"
 }
 
 cmd_long_usage_default() {
@@ -24,7 +24,7 @@ $(cmd_long_usage_sync)
 
 cmd_long_usage_sync() {
 	printf "\
-   ${t_bold}$(cmd_usage_sync)${t_bold_off}
+   $(cmd_usage_sync | t_bold)
       pulls changes from the base branch, i.e. 'master', into the integration branch.
  "
 }

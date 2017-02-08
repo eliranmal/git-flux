@@ -2,19 +2,19 @@
 
 
 cmd_usage_default() {
-	printf "feature <start|finish|sync> <name> [base] [-h]"
+	printf "<start|finish|sync> <name> [base] [-h]"
 }
 
 cmd_usage_start() {
-	printf "feature start <name> [base] [-h]"
+	printf "start <name> [base] [-h]"
 }
 
 cmd_usage_finish() {
-	printf "feature finish <name> [-h]"
+	printf "finish <name> [-h]"
 }
 
 cmd_usage_sync() {
-	printf "feature sync <name> [-h]"
+	printf "sync <name> [-h]"
 }
 
 cmd_long_usage_default() {
@@ -34,23 +34,23 @@ $(cmd_long_usage_sync)
 
 cmd_long_usage_start() {
 	printf "\
-   ${t_bold}$(cmd_usage_start)${t_bold_off}
+   $(cmd_usage_start | t_bold)
       start a new feature; create a local branch and push it to the remote.
-      the branch name will be composed of the pre-configured feature prefix and the passed ${t_bold}name${t_bold_off}.
-      pass an optional ${t_bold}base${t_bold_off} to set a custom base for the branch (default ${t_bold}base${t_bold_off} is the current team branch).
+      the branch name will be composed of the pre-configured feature prefix and the passed $(t_code "name").
+      pass an optional $(t_code "base") to set a custom base for the branch (default $(t_code "base") is the current team branch).
  "
 }
 
 cmd_long_usage_finish() {
 	printf "\
-   ${t_bold}$(cmd_usage_finish)${t_bold_off}
+   $(cmd_usage_finish | t_bold)
       finish an existing feature; delete its local and remote branches, for good.
  "
 }
 
 cmd_long_usage_sync() {
 	printf "\
-   ${t_bold}$(cmd_usage_sync)${t_bold_off}
+   $(cmd_usage_sync | t_bold)
       sync an existing feature with its base branch, usually the current team branch, unless otherwise set when the feature was started.
  "
 }

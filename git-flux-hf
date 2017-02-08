@@ -2,15 +2,15 @@
 
 
 cmd_usage_default() {
-	printf "hf <start|finish> <name> [tag] [-h]"
+	printf "<start|finish> <name> [tag] [-h]"
 }
 
 cmd_usage_start() {
-	printf "hf start <name> <tag> [-h]"
+	printf "start <name> <tag> [-h]"
 }
 
 cmd_usage_finish() {
-	printf "hf finish <name> [-h]"
+	printf "finish <name> [-h]"
 }
 
 cmd_long_usage_default() {
@@ -29,16 +29,16 @@ $(cmd_long_usage_finish)
 
 cmd_long_usage_start() {
 	printf "\
-   ${t_bold}$(cmd_usage_start)${t_bold_off}
+   $(cmd_usage_start | t_bold)
       start a hot-fix; create a local branch and push it to the remote.
-      the branch name will be composed of the pre-configured hot-fix prefix and the passed ${t_bold}name${t_bold_off}.
-      the passed ${t_bold}tag${t_bold_off} will be used as the branch base.
+      the branch name will be composed of the pre-configured hot-fix prefix and the passed $(t_code "name").
+      the passed $(t_code "tag") will be used as the branch base.
  "
 }
 
 cmd_long_usage_finish() {
 	printf "\
-   ${t_bold}$(cmd_usage_finish)${t_bold_off}
+   $(cmd_usage_finish | t_bold)
       finish an existing hot-fix; delete its local and remote branches, for good.
  "
 }

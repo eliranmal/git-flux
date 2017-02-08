@@ -26,19 +26,19 @@ $(t_subheading "available subcommands")
    $(t_bold "init")
       initialize the git-flux configuration survey.
 
-   $(echo "feature" | t_bold | t_fg_blue)
+   $(t_bold "feature" | t_fg_blue)
       handle feature level actions.
 
-   $(echo "team" | t_bold | t_fg_yellow)
+   $(t_bold "team" | t_fg_yellow)
       handle integration across team members and their features.
 
-   $(echo "integration" | t_bold | t_fg_magenta)
+   $(t_bold "integration" | t_fg_magenta)
       handle integration across teams.
 
-   $(echo "rc" | t_bold | t_fg_green)
+   $(t_bold "rc" | t_fg_green)
       handle lifecycle of release-candidates.
 
-   $(echo "hf" | t_bold | t_fg_red)
+   $(t_bold "hf" | t_fg_red)
       handle lifecycle of hot-fixes.
 
 
@@ -75,7 +75,7 @@ main() {
 	
 	# explicitly override usage/long-usage from the loaded sub-command per action
 	if is_available "cmd_usage_$action"; then
-		USAGE="$(cmd_usage_${action})"
+		USAGE="$sub_command $(cmd_usage_${action})"
 	fi
 	if is_available "cmd_long_usage_$action"; then
 		LONG_USAGE="$(cmd_long_usage_${action})"
