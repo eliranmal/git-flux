@@ -12,24 +12,24 @@ $(t_heading "init")
 configures the git-flux environment with an interactive survey.
 
 
-here are the questions you'd have to answer:
+here are the details you need to fill in:
 
-$(t_term "$(t_fg_blue "feature") prefix?")
-$(t_description "a prefix for feature branch names, defaults to 'feature/'. 
+$(t_list_item_title "$(t_fg_blue "feature") prefix")
+$(t_list_item_body "a prefix for feature branch names, defaults to 'feature/'. 
 for example, 'foo/' will result in feature branch names like 'foo/my_awesome_feature'.")
 
-$(t_list_item_title "$(t_fg_yellow "team") prefix?")
+$(t_list_item_title "$(t_fg_yellow "team") prefix")
 $(t_list_item_body "a prefix for team branch names, defaults to 'team/'.")
 
-   $(t_list_item "$(t_fg_green "release candidate") prefix?")
-      a prefix for release candidate branch names, defaults to 'rc/'.
+$(t_list_item_title "$(t_fg_green "release candidate") prefix")
+$(t_list_item_body "a prefix for release candidate branch names, defaults to 'rc/'.")
 
-   $(t_list_item "$(t_fg_red "hot-fix") prefix?")
-   a prefix for hot-fix branch names, defaults to 'hf/'.
+$(t_list_item_title "$(t_fg_red "hot-fix") prefix")
+$(t_list_item_body "a prefix for hot-fix branch names, defaults to 'hf/'.")
 
-   $(t_bold "$(t_fg_magenta "integration") branch?")
-      the long-lived integration branch name, defaults to 'integration'. 
-      this branch serves as the base to all team branches, and will be created if it does not already exist.
+$(t_list_item_title "$(t_fg_magenta "integration") branch")
+$(t_list_item_body "the long-lived integration branch name, defaults to 'integration'. 
+this branch serves as the base to all team branches, and will be created if it does not already exist.")
  "
 }
 

@@ -87,67 +87,71 @@ t_util_underline() {
 
 t_init_terminal() {
 
-	# todo - headings, lists etc.
+	if [[ ! -t 2 ]]; then
+		return 1
+	fi
 
-	[[ -t 2 ]] && { # in a terminal session
+	_t_bold=$(       tput bold   || tput md      )
+	_t_bold_off=$(   tput sgr0                   )
+	_t_italic=$(     tput sitm   || tput ZH      )
+	_t_italic_off=$( tput ritm   || tput ZR      )
+	_t_under=$(      tput smul   || tput us      )
+	_t_under_off=$(  tput rmul   || tput ue      )
+	_t_strike=$'\033[9m'
+	_t_strike_off=$'\033[29m'
+	_t_code=$_t_bold
+	_t_code_off=$_t_bold_off
 	
-		_t_bold=$(       tput bold   || tput md      )
-		_t_bold_off=$(   tput sgr0                   )
-		_t_italic=$(     tput sitm   || tput ZH      )
-		_t_italic_off=$( tput ritm   || tput ZR      )
-		_t_under=$(      tput smul   || tput us      )
-		_t_under_off=$(  tput rmul   || tput ue      )
-		_t_strike=$'\033[9m'
-		_t_strike_off=$'\033[29m'
-		_t_code=$_t_bold
-		_t_code_off=$_t_bold_off
-		
-		_t_fg_off=$(                 tput setaf 0    || tput AF 0    )
-		if (( $(tput colors) >= 256 )); then
-			_t_fg_red=$(             tput setaf 167  || tput AF 167  )
-			_t_fg_green=$(           tput setaf 107  || tput AF 107  )
-			_t_fg_yellow=$(          tput setaf 179  || tput AF 179  )
-			_t_fg_blue=$(            tput setaf 74   || tput AF 74   )
-			_t_fg_magenta=$(         tput setaf 182  || tput AF 182  )
-			_t_fg_cyan=$(            tput setaf 30   || tput AF 30   )
-			_t_fg_lightred=$(        tput setaf 174  || tput AF 174  )
-			_t_fg_lightgreen=$(      tput setaf 191  || tput AF 191  )
-			_t_fg_lightyellow=$(     tput setaf 222  || tput AF 222  )
-			_t_fg_lightblue=$(       tput setaf 153  || tput AF 153  )
-			_t_fg_lightmagenta=$(    tput setaf 219  || tput AF 219  )
-			_t_fg_lightcyan=$(       tput setaf 116  || tput AF 116  )
-		elif (( $(tput colors) >= 8 )); then
-			_t_fg_red=$(             tput setaf 1    || tput AF 1    )
-			_t_fg_green=$(           tput setaf 2    || tput AF 2    )
-			_t_fg_yellow=$(          tput setaf 3    || tput AF 3    )
-			_t_fg_blue=$(            tput setaf 4    || tput AF 4    )
-			_t_fg_magenta=$(         tput setaf 5    || tput AF 5    )
-			_t_fg_cyan=$(            tput setaf 6    || tput AF 6    )
-			_t_fg_lightred=$_t_fg_red
-			_t_fg_lightgreen=$_t_fg_green
-			_t_fg_lightyellow=$_t_fg_yellow
-			_t_fg_lightblue=$_t_fg_blue
-			_t_fg_lightmagenta=$_t_fg_magenta
-			_t_fg_lightcyan=$_t_fg_cyan
-		fi
+	_t_fg_off=$(                 tput setaf 0    || tput AF 0    )
+	if (( $(tput colors) >= 256 )); then
+		_t_fg_red=$(             tput setaf 167  || tput AF 167  )
+		_t_fg_green=$(           tput setaf 107  || tput AF 107  )
+		_t_fg_yellow=$(          tput setaf 179  || tput AF 179  )
+		_t_fg_blue=$(            tput setaf 74   || tput AF 74   )
+		_t_fg_magenta=$(         tput setaf 182  || tput AF 182  )
+		_t_fg_cyan=$(            tput setaf 30   || tput AF 30   )
+		_t_fg_lightred=$(        tput setaf 174  || tput AF 174  )
+		_t_fg_lightgreen=$(      tput setaf 191  || tput AF 191  )
+		_t_fg_lightyellow=$(     tput setaf 222  || tput AF 222  )
+		_t_fg_lightblue=$(       tput setaf 153  || tput AF 153  )
+		_t_fg_lightmagenta=$(    tput setaf 219  || tput AF 219  )
+		_t_fg_lightcyan=$(       tput setaf 116  || tput AF 116  )
+	elif (( $(tput colors) >= 8 )); then
+		_t_fg_red=$(             tput setaf 1    || tput AF 1    )
+		_t_fg_green=$(           tput setaf 2    || tput AF 2    )
+		_t_fg_yellow=$(          tput setaf 3    || tput AF 3    )
+		_t_fg_blue=$(            tput setaf 4    || tput AF 4    )
+		_t_fg_magenta=$(         tput setaf 5    || tput AF 5    )
+		_t_fg_cyan=$(            tput setaf 6    || tput AF 6    )
+		_t_fg_lightred=$_t_fg_red
+		_t_fg_lightgreen=$_t_fg_green
+		_t_fg_lightyellow=$_t_fg_yellow
+		_t_fg_lightblue=$_t_fg_blue
+		_t_fg_lightmagenta=$_t_fg_magenta
+		_t_fg_lightcyan=$_t_fg_cyan
+	fi
 
-		t_heading() {
-			t_util_underline '-' "$_t_fg_off" "$@" | t_util_wrap "$_t_bold" "$_t_bold_off"
-		}
-		t_subheading() {
-			t_util_wrap "$_t_under" "$_t_under_off" "$@"
-		}
-		t_list_item() {
-			echo "$@"
-		}
-		t_term() {
-			t_util_prefix   '   '       "$@" | t_util_wrap     "$_t_bold"  "$_t_bold_off"
-		}
-		t_description() {
-			t_util_indent   '      '    "$@"
-		}
-
-	} 2>/dev/null ||: # protect from "unknown terminfo capability" errors 
+	t_heading() {
+		t_util_underline '-' "$_t_fg_off" "$@" | t_util_wrap "$_t_bold" "$_t_bold_off"
+	}
+	t_subheading() {
+		t_util_wrap "$_t_under" "$_t_under_off" "$@"
+	}
+	t_list_item() {
+		t_util_prefix   ' - '       "$@"
+	}
+	t_list_item_title() {
+		t_util_wrap     "$_t_bold - "  "$_t_bold_off  " "$1"
+	}
+	t_list_item_body() {
+		t_description   "$@"
+	}
+	t_term() {
+		t_util_prefix   '   '       "$@" | t_util_wrap     "$_t_bold"  "$_t_bold_off"
+	}
+	t_description() {
+		t_util_indent   '      '    "$@"
+	}
 
 }
 
@@ -163,13 +167,27 @@ t_init_markdown() {
 	_t_code='`'
 	_t_code_off=$_t_code
 
-	t_heading() {           t_util_prefix   '### '      "$1"; }
-	t_subheading() {        t_util_prefix   '##### '    "$1"; }
-	t_list_item() {         t_util_prefix   '- '       "$1"; }
-	t_list_item_title() {   t_util_wrap     "- $_t_bold"  "$_t_bold_off  " "$1"; }
-	t_list_item_body() {    t_description   "$@"; }
-	t_term() {              t_util_wrap     "$_t_bold"  "$_t_bold_off  "  "$1"; }
-	t_description() {       t_util_indent   '  '       "$@"; }
+	t_heading() {
+		t_util_prefix   '### '      "$1"
+	}
+	t_subheading() {
+		t_util_prefix   '##### '    "$1"
+	}
+	t_list_item() {
+		t_util_prefix   '- '       "$@"
+	}
+	t_list_item_title() {
+		t_util_wrap     "- $_t_bold"  "$_t_bold_off  " "$1"
+	}
+	t_list_item_body() {
+		t_description   "$@"
+	}
+	t_term() {
+		t_util_wrap     "$_t_bold"  "$_t_bold_off  "  "$1"
+	}
+	t_description() {
+		t_util_indent   '  '       "$@"
+	}
 
 	# colors could be possible with html, if they're not stripped down by the markdown parser. haven't tested it
 #	_t_fg_off=$'</span>'
@@ -187,7 +205,7 @@ t_init_markdown() {
 #	_t_fg_lightcyan=$'<span style="color: #77dfd8">'
 }
 
-t_init_api() {
+t_init_common() {
 
 	# todo - do we need these "$@"? these functions are piped, so why explicitly pass in the arguments?
 	t_bold() {              t_util_wrap     "$_t_bold"          "$_t_bold_off"      "$@"; }
@@ -226,7 +244,7 @@ t_init_main() {
 		# todo - support formats: text/ansi/markdown to differentiate simple text from ansi-styled text
 		# todo - headings can be reused to text mode
 	esac
-	t_init_api
+	t_init_common
 }
 
 
