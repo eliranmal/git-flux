@@ -1,6 +1,7 @@
 
      git flux team <create|destroy|sync|join> <name> [-h]
 
+
 ## team
 
 handle integration across team members and their features.
@@ -27,6 +28,7 @@ aliases: <code>switch</code>.<br/></dd>
 <dl>
 	<dt><code>sync &lt;name&gt; [-h]</code></dt>
 	<dd>sync an existing team with its base branch (the integration branch).<br/></dd>
+
 
 
 ---

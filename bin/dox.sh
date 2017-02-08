@@ -2,11 +2,11 @@
 
 
 format_usage_line() {
-	sed -e 'N' -e 's,usage:\(.*\)\(\n\)$,\2    \1\2,'
+	sed -e 'N' -e 's,usage:\(.*\)\(\n\)$,\2    \1\2\2,'
 }
 
-add_gen_message() {
-	printf "%s\n\n\n%s\n\n%s" "$(cat -)" "---" "<sub><i>auto-generated with <b>dox</b></i></sub>"
+attach_message() {
+	printf "%s\n\n\n\n%s\n\n%s" "$(cat -)" "---" "<sub><i>auto-generated with <b>dox</b></i></sub>"
 }
 
 squeeze_blanks() {
@@ -18,7 +18,7 @@ strip_down() {
 }
 
 dress_up() {
-    format_usage_line | add_gen_message
+    format_usage_line | attach_message
 }
 
 
@@ -35,11 +35,11 @@ main() {
 	fi
 	mkdir -p ${output_dir}
 
-	printf "%s\n" "$(env FORMAT=${output_format} git flux -h | strip_down | dress_up)" >> ${output_dir}/main.md
+	echo "$(env FORMAT=${output_format} git flux -h | strip_down | dress_up)" >> ${output_dir}/main.md
 	for path in ${working_dir}/../${file_prefix}*
 	do
 		local cmd="${path##*/$file_prefix}"
-		printf "%s\n" "$(env FORMAT=${output_format} git flux ${cmd} -h | strip_down | dress_up)" >> ${output_dir}/${cmd}.md
+		echo "$(env FORMAT=${output_format} git flux ${cmd} -h | strip_down | dress_up)" >> ${output_dir}/${cmd}.md
 	done
 }
 

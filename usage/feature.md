@@ -1,6 +1,7 @@
 
      git flux feature <start|finish|sync> <name> [base] [-h]
 
+
 ## feature
 
 handle feature level actions.
@@ -21,6 +22,7 @@ pass an optional <code>base</code> to set a custom base for the branch (default 
 	<dt><code>sync &lt;name&gt; [-h]</code></dt>
 	<dd>sync an existing feature with its base branch, usually the current team branch, unless otherwise set when the feature was started.<br/></dd>
 </dl>
+
 
 
 ---

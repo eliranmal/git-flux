@@ -1,6 +1,7 @@
 
      git flux hf <start|finish> <name> [tag] [-h]
 
+
 ## hf
 
 handle lifecycle of hot-fixes.
@@ -19,5 +20,7 @@ the passed <code>tag</code> will be used as the branch base.<br/></dd>
 </dl>
 
 
+
 ---
+
 <sub><i>auto-generated with <b>dox</b></i></sub>
