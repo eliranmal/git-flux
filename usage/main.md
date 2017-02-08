@@ -6,7 +6,7 @@ git commands for fluent, team-oriented workflow.
 ##### available subcommands
 
 <dl>
-	<dt>init</dt>
+	<dt><code>init</code></dt>
 	<dd>initialize the git-flux configuration survey.</dd>
 </dl>
 
