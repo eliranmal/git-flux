@@ -29,6 +29,6 @@ aliases: <code>switch</code>.<br/></dd>
 	<dd>sync an existing team with its base branch (the integration branch).<br/></dd>
 
 
+---
 
-
-<sub style="display: inline-block; text-align: right;"><i>auto-generated with <b>dox</b></i></sub>
+<sub><i>auto-generated with <b>dox</b></i></sub>

@@ -17,6 +17,6 @@ the branch name will be composed of the pre-configured release-candidate prefix 
 	<dd>finish an existing release-candidate; delete its local and remote branches, for good.<br/></dd>
 
 
+---
 
-
-<sub style="display: inline-block; text-align: right;"><i>auto-generated with <b>dox</b></i></sub>
+<sub><i>auto-generated with <b>dox</b></i></sub>

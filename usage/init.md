@@ -25,6 +25,6 @@ here are the details you need to fill in:
   this branch serves as the base to all team branches, and will be created if it does not already exist.
 
 
+---
 
-
-<sub style="display: inline-block; text-align: right;"><i>auto-generated with <b>dox</b></i></sub>
+<sub><i>auto-generated with <b>dox</b></i></sub>

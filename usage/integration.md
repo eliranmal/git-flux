@@ -13,6 +13,6 @@ handle integration across teams.
 </dl>
 
 
+---
 
-
-<sub style="display: inline-block; text-align: right;"><i>auto-generated with <b>dox</b></i></sub>
+<sub><i>auto-generated with <b>dox</b></i></sub>
