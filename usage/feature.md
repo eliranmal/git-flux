@@ -5,6 +5,12 @@ handle feature level actions.
 
 #### available actions
 
+<dl>
+	<dt><code>start <name> [base] [-h]</code></dt>
+	<dd>start a new feature; create a local branch and push it to the remote.
+the branch name will be composed of the pre-configured feature prefix and the passed `name`.
+pass an optional `base` to set a custom base for the branch (default `base` is the current team branch).</dd>
+</dl>
    **start <name> [base] [-h]**
       start a new feature; create a local branch and push it to the remote.
       the branch name will be composed of the pre-configured feature prefix and the passed `name`.
