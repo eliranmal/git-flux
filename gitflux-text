@@ -191,10 +191,10 @@ t_init_markdown() {
 	_t_new_line="  \n"
 
 	t_heading() {
-		t_util_prefix '### ' "$1"
+		t_util_prefix '## ' "$1"
 	}
 	t_subheading() {
-		t_util_prefix '##### ' "$1"
+		t_util_prefix '#### ' "$1"
 	}
 	t_list_item() {
 		local title="$1"
