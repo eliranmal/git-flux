@@ -99,8 +99,12 @@ t_init_terminal() {
 	_t_under_off=$(  tput rmul   || tput ue      )
 	_t_strike=$'\033[9m'
 	_t_strike_off=$'\033[29m'
+	
 	_t_code=$_t_bold
 	_t_code_off=$_t_bold_off
+	
+	_t_list_item=' * '
+	_t_new_line="\n"
 	
 	_t_fg_off=$(                 tput setaf 0    || tput AF 0    )
 	if (( $(tput colors) >= 256 )); then
@@ -138,19 +142,18 @@ t_init_terminal() {
 		t_util_wrap "$_t_under" "$_t_under_off" "$@"
 	}
 	t_list_item() {
-		t_util_prefix   ' - '       "$@"
+		local title="$1"
+		local body="$2"
+		if [[ -z $body ]]; then
+			t_util_prefix   "$_t_list_item"       "$@"
+		else
+			t_util_wrap     "$_t_bold$_t_list_item"  "$_t_bold_off$_t_new_line" "$1"
+			shift; t_util_indent   '      '    "$@"
+		fi
 	}
-	t_list_item_title() {
-		t_util_wrap     "$_t_bold - "  "$_t_bold_off  " "$1"
-	}
-	t_list_item_body() {
-		t_description   "$@"
-	}
-	t_term() {
-		t_util_prefix   '   '       "$@" | t_util_wrap     "$_t_bold"  "$_t_bold_off"
-	}
-	t_description() {
-		t_util_indent   '      '    "$@"
+	t_definition() {
+		t_util_prefix   '   '       "$1" | t_util_wrap     "$_t_bold"  "$_t_bold_off$_t_new_line"
+		shift; t_util_indent   '      '    "$@"
 	}
 
 }
@@ -166,28 +169,9 @@ t_init_markdown() {
 
 	_t_code='`'
 	_t_code_off=$_t_code
-
-	t_heading() {
-		t_util_prefix   '### '      "$1"
-	}
-	t_subheading() {
-		t_util_prefix   '##### '    "$1"
-	}
-	t_list_item() {
-		t_util_prefix   '- '       "$@"
-	}
-	t_list_item_title() {
-		t_util_wrap     "- $_t_bold"  "$_t_bold_off  " "$1"
-	}
-	t_list_item_body() {
-		t_util_indent   '  '       "$@"
-	}
-	t_term() {
-		t_util_wrap     '<dl><dt>'  '</dt>'  "$1"
-	}
-	t_description() {
-		t_util_wrap     '<dd>'  '</dd></dl>'  "$@"
-	}
+	
+	_t_list_item='- '
+	_t_new_line="  \n"
 
 	# colors could be possible with html, if they're not stripped down by the markdown parser. haven't tested it
 #	_t_fg_off=$'</span>'
@@ -203,6 +187,31 @@ t_init_markdown() {
 #	_t_fg_lightblue=$'<span style="color: #9cd9f0">'
 #	_t_fg_lightmagenta=$'<span style="color: #fbb1f9">'
 #	_t_fg_lightcyan=$'<span style="color: #77dfd8">'
+
+	t_heading() {
+		t_util_prefix   '### '      "$1"
+	}
+	t_subheading() {
+		t_util_prefix   '##### '    "$1"
+	}
+	t_list_item() {
+		local title="$1"
+		local body="$2"
+		if [[ -z $body ]]; then
+			t_util_prefix   "$_t_list_item"       "$@"
+		else
+			t_util_wrap     "$_t_list_item$_t_bold"  "$_t_bold_off$_t_new_line" "$1"
+			shift; t_util_indent   '  '       "$@"
+		fi
+	}
+	t_definition() {
+		t_util_wrap     '<dl>
+<dt>'  '</dt>
+'  "$1"
+		shift; t_util_wrap     '<dd>'  '</dd>
+</dl>
+'  "$@"
+	}
 }
 
 t_init_common() {

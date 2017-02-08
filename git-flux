@@ -23,23 +23,17 @@ git commands for fluent, team-oriented workflow.
 
 $(t_subheading "available subcommands")
 
-$(t_term "init")
-$(t_description "initialize the git-flux configuration survey.")
+$(t_definition "init"                           "initialize the git-flux configuration survey.")
 
-$(t_term "feature" | t_fg_blue)
-$(t_description "handle feature level actions.")
+$(t_definition "$(t_fg_blue "feature")"         "handle feature level actions.")
 
-$(t_term "team" | t_fg_yellow)
-$(t_description "handle integration across team members and their features.")
+$(t_definition "$(t_fg_yellow "team")"          "handle integration across team members and their features.")
 
-$(t_term "integration" | t_fg_magenta)
-$(t_description "handle integration across teams.")
+$(t_definition "$(t_fg_magenta "integration")"  "handle integration across teams.")
 
-$(t_term "rc" | t_fg_green)
-$(t_description "handle lifecycle of release-candidates.")
+$(t_definition "$(t_fg_green "rc")"             "handle lifecycle of release-candidates.")
 
-$(t_term "hf" | t_fg_red)
-$(t_description "handle lifecycle of hot-fixes.")
+$(t_definition "$(t_fg_red "hf")"               "handle lifecycle of hot-fixes.")
 
 
 refer to each subcommand's help menu for an in-depth description of its actions (e.g. $(t_code "git flux init -h")).
