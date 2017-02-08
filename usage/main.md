@@ -6,10 +6,12 @@
 git commands for fluent, team-oriented workflow.
 
 #### flags
-flags
 
--h
-shows the f***ing manual. works everywhere, and context dependent. this means you can git flux -h, and also git flux feature -h or git flux feature start -h.
+<dl>
+	<dt><code>-h</code></dt>
+	<dd>shows the f***ing manual. works everywhere, and context dependent.<br/>
+this means you can <code>git flux -h</code>, and also <code>git flux feature -h</code> or <code>git flux feature start -h</code>.<br/></dd>
+</dl>
 
 #### available subcommands
 
@@ -39,3 +41,4 @@ shows the f***ing manual. works everywhere, and context dependent. this means yo
 </dl>
 
 refer to each subcommand's help menu for an in-depth description of its actions (e.g. `git flux init -h`).
+ 

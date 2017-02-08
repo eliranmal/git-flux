@@ -21,6 +21,15 @@ $(t_heading "git-flux")
 git commands for fluent, team-oriented workflow.
 
 
+$(t_subheading "flags")
+
+$(t_code_definition \
+"-h" \
+"shows the f***ing manual. works everywhere, and context dependent.
+this means you can $(t_code "git flux -h"), and also $(t_code "git flux feature -h") \
+or $(t_code "git flux feature start -h")." \
+)
+
 $(t_subheading "available subcommands")
 
 $(t_code_definition \
