@@ -41,13 +41,13 @@ the branch name will be composed of the pre-configured feature prefix and the pa
 pass an optional $(t_code "base") to set a custom base for the branch (default $(t_code "base") is the current team branch).
 " \
 )
-"
-	printf "\
-   $(cmd_usage_start | t_bold)
-      start a new feature; create a local branch and push it to the remote.
-      the branch name will be composed of the pre-configured feature prefix and the passed $(t_code "name").
-      pass an optional $(t_code "base") to set a custom base for the branch (default $(t_code "base") is the current team branch).
  "
+#	printf "\
+#   $(cmd_usage_start | t_bold)
+#      start a new feature; create a local branch and push it to the remote.
+#      the branch name will be composed of the pre-configured feature prefix and the passed $(t_code "name").
+#      pass an optional $(t_code "base") to set a custom base for the branch (default $(t_code "base") is the current team branch).
+# "
 }
 
 cmd_long_usage_finish() {
