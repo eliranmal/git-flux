@@ -1,9 +1,9 @@
 
-### rc
+## rc
 
 handle lifecycle of release-candidates.
 
-##### available actions
+#### available actions
 
    **start <name> [-h]**
       start a release-candidate; create a local branch and push it to the remote.

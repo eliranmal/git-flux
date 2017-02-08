@@ -1,9 +1,9 @@
 
-### git-flux
+## git-flux
 
 git commands for fluent, team-oriented workflow.
 
-##### available subcommands
+#### available subcommands
 
 <dl>
 	<dt><code>init</code></dt>

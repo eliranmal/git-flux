@@ -1,9 +1,9 @@
 
-### hf
+## hf
 
 handle lifecycle of hot-fixes.
 
-##### available actions
+#### available actions
 
    **start <name> <tag> [-h]**
       start a hot-fix; create a local branch and push it to the remote.
