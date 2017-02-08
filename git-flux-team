@@ -28,7 +28,7 @@ $(t_heading "team" | t_fg_yellow)
 handle integration across team members and their features.
 
 
-${t_under}available actions${t_under_off}
+$(t_subheading "available actions")
 
 $(cmd_long_usage_create)
 $(cmd_long_usage_destroy)

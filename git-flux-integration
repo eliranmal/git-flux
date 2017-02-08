@@ -16,7 +16,7 @@ $(t_heading "integration" | t_fg_magenta)
 handle integration across teams.
 
 
-${t_under}available actions${t_under_off}
+$(t_subheading "available actions")
 
 $(cmd_long_usage_sync)
 "

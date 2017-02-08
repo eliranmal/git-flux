@@ -124,7 +124,10 @@ t_init_terminal() {
 		t_subheading() {
 			t_util_wrap "$_t_under" "$_t_under_off" "$@"
 		}
-	
+#		t_list() {
+#			t_util_wrap "$_t_list" "$_t_list_off" "$@"
+#		}
+
 	} 2>/dev/null ||: # protect from "unknown terminfo capability" errors 
 
 }

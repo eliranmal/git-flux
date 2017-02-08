@@ -20,7 +20,7 @@ $(t_heading "hf" | t_fg_red)
 handle lifecycle of hot-fixes.
 
 
-${t_under}available actions${t_under_off}
+$(t_subheading "available actions")
 
 $(cmd_long_usage_start)
 $(cmd_long_usage_finish)

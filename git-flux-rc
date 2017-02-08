@@ -20,7 +20,7 @@ $(t_heading "rc" | t_fg_green)
 handle lifecycle of release-candidates.
 
 
-${t_under}available actions${t_under_off}
+$(t_subheading "available actions")
 
 $(cmd_long_usage_start)
 $(cmd_long_usage_finish)
