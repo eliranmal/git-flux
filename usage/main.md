@@ -45,6 +45,6 @@ refer to each subcommand's help menu for an in-depth description of its actions 
 
 
 
+<br/><br/>
 ---
-
-<br/><br/><sub><i>auto-generated with <b>dox</b></i></sub>
+<sub><i>auto-generated with <b>dox</b></i></sub>
