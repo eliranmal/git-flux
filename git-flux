@@ -15,7 +15,7 @@ SUBDIRECTORY_OK="yes"
 USAGE="<init|feature|team|integration|rc|hf> [action] [action-args...] [-h]"
 
 # appended to the usage output when using the `-h` flag (can be overridden in each action)
-LONG_USAGE="
+LONG_USAGE="\
 $(t_heading "git-flux")
 
 git commands for fluent, team-oriented workflow.
@@ -23,26 +23,26 @@ git commands for fluent, team-oriented workflow.
 
 $(t_subheading "available subcommands")
 
-   $(t_bold "init")
-      initialize the git-flux configuration survey.
+$(t_term "init")
+$(t_description "initialize the git-flux configuration survey.")
 
-   $(t_bold "feature" | t_fg_blue)
-      handle feature level actions.
+$(t_term "feature" | t_fg_blue)
+$(t_description "handle feature level actions.")
 
-   $(t_bold "team" | t_fg_yellow)
-      handle integration across team members and their features.
+$(t_term "team" | t_fg_yellow)
+$(t_description "handle integration across team members and their features.")
 
-   $(t_bold "integration" | t_fg_magenta)
-      handle integration across teams.
+$(t_term "integration" | t_fg_magenta)
+$(t_description "handle integration across teams.")
 
-   $(t_bold "rc" | t_fg_green)
-      handle lifecycle of release-candidates.
+$(t_term "rc" | t_fg_green)
+$(t_description "handle lifecycle of release-candidates.")
 
-   $(t_bold "hf" | t_fg_red)
-      handle lifecycle of hot-fixes.
+$(t_term "hf" | t_fg_red)
+$(t_description "handle lifecycle of hot-fixes.")
 
 
-refer to each subcommand's help menu for an in-depth description of its actions (e.g. 'git flux init -h').
+refer to each subcommand's help menu for an in-depth description of its actions (e.g. $(t_code "git flux init -h")).
  "
 # ^ single space on the last line of long-usage is used to add a line-break
 
