@@ -39,35 +39,39 @@ $(cmd_long_usage_sync)
 
 cmd_long_usage_create() {
 	printf "\
-   $(cmd_usage_create | t_bold)
-      start a new team; create a local branch and push it to the remote.
-      the branch name will be composed of the pre-configured team prefix and the passed $(t_code "name").
-      aliases: $(t_code "assemble"), $(t_code "gather"), $(t_code "huddle").
- "
+$(t_code_definition \
+"$(cmd_usage_create)" \
+"start a new team; create a local branch and push it to the remote.
+the branch name will be composed of the pre-configured team prefix and the passed $(t_code "name").
+aliases: $(t_code "assemble"), $(t_code "gather"), $(t_code "huddle")." \
+)"
 }
 
 cmd_long_usage_destroy() {
 	printf "\
-   $(cmd_usage_destroy | t_bold)
-      destroy an existing team; delete its local and remote branches, for good.
-      aliases: $(t_code "disassemble"), $(t_code "scatter"), $(t_code "break").
- "
+$(t_code_definition \
+"$(cmd_usage_destroy)" \
+"destroy an existing team; delete its local and remote branches, for good.
+aliases: $(t_code "disassemble"), $(t_code "scatter"), $(t_code "break")." \
+)"
 }
 
 cmd_long_usage_join() {
 	printf "\
-   $(cmd_usage_join | t_bold)
-      join a team for the first time, or switch teams to another team.
-      after this, all new features will be based on the new team.
-      aliases: $(t_code "switch").
- "
+$(t_code_definition \
+"$(cmd_usage_join)" \
+"join a team for the first time, or switch teams to another team.
+after this, all new features will be based on the new team.
+aliases: $(t_code "switch")." \
+)"
 }
 
 cmd_long_usage_sync() {
 	printf "\
-   $(cmd_usage_sync | t_bold)
-      sync an existing team with its base branch (the integration branch).
- "
+$(t_code_definition \
+"$(cmd_usage_sync)" \
+"sync an existing team with its base branch (the integration branch)." \
+)"
 }
 
 
