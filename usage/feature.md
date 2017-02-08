@@ -1,5 +1,5 @@
 
-<span style="color: #72b3cc">### feature</span>
+### feature
 
 handle feature level actions.
 

@@ -1,5 +1,5 @@
 
-<span style="color: #c8a0d1">### integration</span>
+### integration
 
 handle integration across teams.
 

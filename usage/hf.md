@@ -1,5 +1,5 @@
 
-<span style="color: #c75646">### hf</span>
+### hf
 
 handle lifecycle of hot-fixes.
 
