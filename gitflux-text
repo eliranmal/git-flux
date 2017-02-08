@@ -64,6 +64,12 @@ t_util_prefix() {
 	printf "${prefix}%s" "$input"
 }
 
+t_util_suffix() {
+	local suffix="$1"; shift
+	local input=$(get_input "$@")
+	printf "%s${suffix}" "$input"
+}
+
 t_util_underline() {
 	local char="$1"; shift
 	local suffix="$1"; shift
@@ -146,7 +152,7 @@ t_init_markdown() {
 
 	t_heading() {       t_util_prefix   '### '      "$1"; }
 	t_subheading() {    t_util_prefix   '##### '    "$1"; }
-	t_list_item() {     t_util_prefix   ' - '       "$1"; }
+	t_list_item() {     t_util_prefix   ' - '       "$1" | t_util_suffix '  '; }
 
 	# colors could be possible with html, if they're not stripped down by the markdown parser. haven't tested it
 #	_t_fg_off=$'</span>'
