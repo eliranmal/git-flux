@@ -66,41 +66,60 @@
 
 
 
+# parses function input from stdin or passed arguments
+# usage:
+# local input=$(t_util_input "$@")
+t_util_input() {
+	local input
+	if [ -t 0 ]; then
+		if [ $# -gt 0 ]; then
+			input="$*"
+		fi
+	else
+		input=$(cat -)
+	fi
+	printf "%s" "$input"
+}
+
+t_util_repeat() {
+    seq -f "$1" -s '' $2
+}
+
 t_util_wrap() {
 	local tag="$1"; shift; local tagoff="$1"; shift
-	local input=$(get_input "$@")
+	local input=$(t_util_input "$@")
 	printf "%s%s%s" "$tag" "$input" "$tagoff"
 }
 
 t_util_prefix() {
 	local prefix="$1"; shift
-	local input=$(get_input "$@")
+	local input=$(t_util_input "$@")
 	printf "%s%s" "$prefix" "$input"
 }
 
 t_util_suffix() {
 	local suffix="$1"; shift
-	local input=$(get_input "$@")
+	local input=$(t_util_input "$@")
 	printf "%s%s" "$input" "$suffix"
 }
 
 t_util_prefix_multiline() {
 	local prefix=$1; shift
-	local input=$(get_input "$@")
+	local input=$(t_util_input "$@")
 	printf "%s" "$input" | sed -e 's,^\(.*\)$,'"$prefix"'\1,'
 }
 
 t_util_suffix_multiline() {
 	local suffix=$1; shift
-	local input=$(get_input "$@")
+	local input=$(t_util_input "$@")
 	printf "%s" "$input" | sed -e 's,^\(.*\)$,\1'"$suffix"','
 }
 
 t_util_underline() {
 	local char="$1"; shift
 	local suffix="$1"; shift
-	local input=$(get_input "$@")
-	local underline="$(repeat ${char} ${#input})"
+	local input=$(t_util_input "$@")
+	local underline="$(t_util_repeat ${char} ${#input})"
 	printf "%s%s\n%s" "$input" "$suffix" "$underline"
 }
 
