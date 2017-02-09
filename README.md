@@ -47,7 +47,7 @@ cd ~/tmp
 
 ## usage
 
-see the [usage][4] directory for full usage.
+see the [usage][4] directory.
 
 
 ## gotcha's
