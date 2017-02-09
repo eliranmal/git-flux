@@ -47,8 +47,126 @@ cd ~/tmp
 
 ## usage
 
-from the terminal, use the `-h` flag anywhere, or see the [usage][4] 
-directory of this repository for the markdown-formatted help.
+    git flux <sub-command> [action] [action-args...] [-h]
+
+#### flags
+
+- **`-h`**  
+shows the f***ing manual. works everywhere, and context dependent. 
+this means you can `git flux -h`, and also `git flux feature -h` or 
+`git flux feature start -h`.
+
+
+#### sub-commands
+
+
+##### `init`
+
+configures the git-flux environment with an interactive survey.
+
+here are the questions you'd have to answer:
+
+- **feature prefix?**  
+a prefix for feature branch names, defaults to 'feature/'. 
+for example, 'foo/' will result in feature branch names like 'foo/my_awesome_feature'.
+
+- **team prefix?**  
+a prefix for team branch names, defaults to 'team/'.
+
+- **release candidate prefix?**  
+a prefix for release candidate branch names, defaults to 'rc/'.
+
+- **hot-fix prefix?**  
+a prefix for hot-fix branch names, defaults to 'hf/'.
+
+- **integration branch?**  
+the long-lived integration branch name, defaults to 'integration'. 
+this branch serves as the base to all team branches, and will be created if it does not already exist.
+ 
+
+(this sub-command has no actions).
+
+
+##### `feature`
+
+handle feature level actions.
+
+###### actions
+
+- **`start <name> [base]`**  
+start a new feature; create a local branch and push it to the remote.
+the branch name will be composed of the pre-configured feature prefix and the passed **name**.
+pass an optional **base** to set a custom base for the branch (default **base** is the current team branch).
+
+- **`finish <name>`**  
+finish an existing feature; delete its local and remote branches, for good.
+
+- **`sync <name>`**  
+sync an existing feature with its base branch, usually the current team branch, unless otherwise set when the feature was started.
+
+
+##### `team`
+
+handle integration across team members and their features.
+
+###### actions
+
+- **`create <name>`**  
+start a new team; create a local branch and push it to the remote.
+the branch name will be composed of the pre-configured team prefix and the passed **`name`**.  
+aliases: **`assemble`**, **`gather`**, **`huddle`**.
+
+- **`destroy <name>`**  
+destroy an existing team; delete its local and remote branches, for good.  
+aliases: **`disassemble`**, **`scatter`**, **`break`**.
+
+- **`sync <name>`**  
+sync an existing team with its base branch (the integration branch).
+
+- **`join <name>`**  
+join a team for the first time, or switch teams to another team.
+after this, all new features will be based on the new team.  
+aliases: **`switch`**.
+
+
+##### `integration`
+
+handle integration across teams.
+
+###### actions
+
+- **`sync <name>`**  
+pulls changes from the base branch, i.e. 'master', into the integration branch.
+
+
+##### `rc`
+
+handle lifecycle of release-candidates.
+
+###### actions
+
+- **`start <name>`**  
+start a release-candidate; create a local branch and push it to the remote.
+the branch name will be composed of the pre-configured release-candidate prefix and the passed **`name`**.
+
+- **`finish <name>`**  
+finish an existing release-candidate; delete its local and remote branches, for good.
+
+
+##### `hf`
+
+handle lifecycle of hot-fixes.
+
+###### actions
+
+- **`start <name> <tag>`**  
+start a hot-fix; create a local branch and push it to the remote.
+the branch name will be composed of the pre-configured hot-fix prefix and the passed **`name`**.
+the passed **`tag`** will be used as the branch base.
+
+- **`finish <name>`**  
+finish an existing hot-fix; delete its local and remote branches, for good.
+
 
 
 ## gotcha's
@@ -66,4 +184,3 @@ teams, etc.) is saved to the git config, and not dynamically resolved via git.
 [1]: https://git-scm.com/download/win
 [2]: https://git-scm.com/book/en/v2/Git-Branching-Rebasing#_rebase_peril
 [3]: https://danlimerick.wordpress.com/2011/07/11/git-for-windows-tip-setting-home-and-the-startup-directory/
-[4]: /usage

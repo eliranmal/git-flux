@@ -2,25 +2,26 @@
 
 
 cmd_usage_default() {
-	printf "<start|finish> <name> [-h]"
+	printf "rc <start|finish> <name> [-h]"
 }
 
 cmd_usage_start() {
-	printf "start <name> [-h]"
+	printf "rc start <name> [-h]"
 }
 
 cmd_usage_finish() {
-	printf "finish <name> [-h]"
+	printf "rc finish <name> [-h]"
 }
 
 cmd_long_usage_default() {
 	printf "\
-$(t_heading "rc" | t_fg_green)
+${t_bold}${t_fg_green}rc${t_off}
+--
 
 handle lifecycle of release-candidates.
 
 
-$(t_subheading "available actions")
+${t_under}available actions${t_off}
 
 $(cmd_long_usage_start)
 $(cmd_long_usage_finish)
@@ -29,19 +30,17 @@ $(cmd_long_usage_finish)
 
 cmd_long_usage_start() {
 	printf "\
-$(t_code_definition \
-"$(cmd_usage_start)" \
-"start a release-candidate; create a local branch and push it to the remote.
-the branch name will be composed of the pre-configured release-candidate prefix and the passed $(t_code "name")." \
-)"
+   ${t_bold}$(cmd_usage_start)${t_off}
+      start a release-candidate; create a local branch and push it to the remote.
+      the branch name will be composed of the pre-configured release-candidate prefix and the passed ${t_bold}name${t_off}.
+ "
 }
 
 cmd_long_usage_finish() {
 	printf "\
-$(t_code_definition \
-"$(cmd_usage_finish)" \
-"finish an existing release-candidate; delete its local and remote branches, for good." \
-)"
+   ${t_bold}$(cmd_usage_finish)${t_off}
+      finish an existing release-candidate; delete its local and remote branches, for good.
+ "
 }
 
 cmd_start() {

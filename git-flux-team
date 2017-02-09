@@ -2,33 +2,34 @@
 
 
 cmd_usage_default() {
-	printf "<create|destroy|sync|join> <name> [-h]"
+	printf "team <create|destroy|sync|join> <name> [-h]"
 }
 
 cmd_usage_create() {
-	printf "create <name> [-h]"
+	printf "team create <name> [-h]"
 }
 
 cmd_usage_destroy() {
-	printf "destroy <name> [-h]"
+	printf "team destroy <name> [-h]"
 }
 
 cmd_usage_join() {
-	printf "join <name> [-h]"
+	printf "team join <name> [-h]"
 }
 
 cmd_usage_sync() {
-	printf "sync <name> [-h]"
+	printf "team sync <name> [-h]"
 }
 
 cmd_long_usage_default() {
 	printf "\
-$(t_heading "team" | t_fg_yellow)
+${t_bold}${t_fg_yellow}team${t_off}
+----
 
 handle integration across team members and their features.
 
 
-$(t_subheading "available actions")
+${t_under}available actions${t_off}
 
 $(cmd_long_usage_create)
 $(cmd_long_usage_destroy)
@@ -39,39 +40,35 @@ $(cmd_long_usage_sync)
 
 cmd_long_usage_create() {
 	printf "\
-$(t_code_definition \
-"$(cmd_usage_create)" \
-"start a new team; create a local branch and push it to the remote.
-the branch name will be composed of the pre-configured team prefix and the passed $(t_code "name").
-aliases: $(t_code "assemble"), $(t_code "gather"), $(t_code "huddle")." \
-)"
+   ${t_bold}$(cmd_usage_create)${t_off}
+      start a new team; create a local branch and push it to the remote.
+      the branch name will be composed of the pre-configured team prefix and the passed ${t_bold}name${t_off}.
+      aliases: ${t_bold}assemble${t_off}, ${t_bold}gather${t_off}, ${t_bold}huddle${t_off}.
+ "
 }
 
 cmd_long_usage_destroy() {
 	printf "\
-$(t_code_definition \
-"$(cmd_usage_destroy)" \
-"destroy an existing team; delete its local and remote branches, for good.
-aliases: $(t_code "disassemble"), $(t_code "scatter"), $(t_code "break")." \
-)"
+   ${t_bold}$(cmd_usage_destroy)${t_off}
+      destroy an existing team; delete its local and remote branches, for good.
+      aliases: ${t_bold}disassemble${t_off}, ${t_bold}scatter${t_off}, ${t_bold}break${t_off}.
+ "
 }
 
 cmd_long_usage_join() {
 	printf "\
-$(t_code_definition \
-"$(cmd_usage_join)" \
-"join a team for the first time, or switch teams to another team.
-after this, all new features will be based on the new team.
-aliases: $(t_code "switch")." \
-)"
+   ${t_bold}$(cmd_usage_join)${t_off}
+      join a team for the first time, or switch teams to another team.
+      after this, all new features will be based on the new team.
+      aliases: ${t_bold}switch${t_off}.
+ "
 }
 
 cmd_long_usage_sync() {
 	printf "\
-$(t_code_definition \
-"$(cmd_usage_sync)" \
-"sync an existing team with its base branch (the integration branch)." \
-)"
+   ${t_bold}$(cmd_usage_sync)${t_off}
+      sync an existing team with its base branch (the integration branch).
+ "
 }
 
 
