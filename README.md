@@ -47,7 +47,8 @@ cd ~/tmp
 
 ## usage
 
-see the [usage][4] directory.
+from the terminal, use the `-h` flag anywhere, or see the [usage][4] 
+directory of this repository for the markdown-formatted help.
 
 
 ## gotcha's
