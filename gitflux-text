@@ -279,9 +279,6 @@ t_init_main() {
 		*)
 			t_init_terminal
 			;;
-			
-		# todo - support formats: text/ansi/markdown to differentiate simple text from ansi-styled text
-		# todo - headings can be reused to text mode
 	esac
 	t_init_common
 }
