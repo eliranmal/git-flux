@@ -2,7 +2,7 @@
 
 
 # 
-# little text formatters for terminal or markdown.
+# little text formatters for terminal or markdown style output.
 # 
 # 
 # environment:
@@ -32,7 +32,7 @@
 #       echo "$(echo "foo" | t_heading)"
 #       echo "$(echo "foo" | t_heading | t_fg_yellow)"
 # 
-#   you can also skip the echo, and combine the functions in any which way:
+#   you can also skip the echo, and compose the formatter functions in any which way:
 # 
 #       echo "$(t_heading "foo" | t_fg_yellow)"
 # 
@@ -109,7 +109,7 @@ t_util_replace_tags() {
 	sed -e 's,'"$from_tag"'\([^'"$from_tag"']*\)'"$from_tag_off"','"$to_tag"'\1'"$to_tag_off"',g'
 }
 
-t_util_strip_entities() {
+t_util_replace_entities() {
 	sed -e 's,\&,\&amp;,g' | sed -e 's,\<,\&lt;,g' | sed -e 's,\>,\&gt;,g'
 }
 
@@ -233,8 +233,8 @@ t_init_markdown() {
 		fi
 	}
 	t_definition() {
-		local term="$(echo "$1" | t_util_strip_entities)"
-		local desc="$(echo "$2" | t_util_strip_entities | t_util_suffix_multiline '<br/>')"
+		local term="$(echo "$1" | t_util_replace_entities)"
+		local desc="$(echo "$2" | t_util_replace_entities | t_util_suffix_multiline '<br/>')"
 		t_util_wrap "$_t_def_term" "$_t_def_term_off" "$term" | t_util_replace_tags "$_t_code" "$_t_code_off" '<code>' '</code>'
 		t_util_wrap "$_t_def_desc" "$_t_def_desc_off" "$desc" | t_util_replace_tags "$_t_code" "$_t_code_off" '<code>' '</code>'
 	}
