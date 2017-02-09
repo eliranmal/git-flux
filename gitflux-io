@@ -8,23 +8,23 @@ io_log() {
 }
 
 io_log_ok() {
-	io_print "${t_fg_green} ✔ ${t_off}" "$@"
+	io_print "$(t_fg_green " ✔ ")" "$@"
 }
 
 io_log_info() {
-	io_print "${t_fg_blue} ℹ ${t_off}" "$@"
+	io_print "$(t_fg_blue " ℹ ")" "$@"
 }
 
 io_log_banner() {
-	io_print "${t_fg_blue} ★ ★ ★ ${t_off}" "${t_bold}$1${t_off}" 2 "${t_fg_blue} ★ ★ ★ ${t_off}"
+	io_print "$(t_fg_blue " ★ ★ ★ ")" "$(t_bold "$1")" 2 "$(t_fg_blue " ★ ★ ★ ")"
 }
 
 io_log_warn() {
-	io_print "${t_fg_yellow} ✘ ${t_off}" "$@" >&2
+	io_print "$(t_fg_yellow " ✘ ")" "$@" >&2
 }
 
 io_status_fatal() {
-	die "$(io_print "${t_fg_red} ✘ ${t_off}" "$@")
+	die "$(io_print "$(t_fg_red " ✘ ")" "$@")
 " >&2
 }
 
@@ -43,7 +43,7 @@ io_prompt() {
 	fi
 	# use -p instead of sending the question to stdout, as this function will probably be 
 	# called in a $(subshell), so printing to stdout won't work as expected
-	read -r -p "$(printf "${t_fg_yellow} ? ${t_off}%s " "$question")" answer
+	read -r -p "$(printf "$(t_fg_yellow " ? ")%s " "$question")" answer
 	echo "${answer:-$default_suggestion}"
 }
 

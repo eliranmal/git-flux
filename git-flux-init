@@ -2,36 +2,41 @@
 
 
 cmd_usage_default() {
-	printf "init [-h]"
+	printf "[-h]"
 }
 
 cmd_long_usage_default() {
 	printf "\
-${t_bold}init${t_off}
-----
+$(t_heading "init")
 
 configures the git-flux environment with an interactive survey.
 
 
-here are the questions you'd have to answer:
+here are the details you need to fill in:
 
-   ${t_bold}${t_fg_blue}feature${t_off}${t_bold} prefix?${t_off}
-      a prefix for feature branch names, defaults to 'feature/'. 
-      for example, 'foo/' will result in feature branch names like 'foo/my_awesome_feature'.
-
-   ${t_bold}${t_fg_yellow}team${t_off}${t_bold} prefix?${t_off}
-      a prefix for team branch names, defaults to 'team/'.
-
-   ${t_bold}${t_fg_green}release candidate${t_off}${t_bold} prefix?${t_off}
-      a prefix for release candidate branch names, defaults to 'rc/'.
-
-   ${t_bold}${t_fg_red}hot-fix${t_off}${t_bold} prefix?${t_off}
-      a prefix for hot-fix branch names, defaults to 'hf/'.
-
-   ${t_bold}${t_fg_magenta}integration${t_off}${t_bold} branch?${t_off}
-      the long-lived integration branch name, defaults to 'integration'. 
-      this branch serves as the base to all team branches, and will be created if it does not already exist.
- "
+$(t_list_item \
+"$(t_fg_blue "feature") prefix" \
+"a prefix for feature branch names, defaults to $(t_code "feature/").
+for example, $(t_code "foo/") will result in feature branch names like $(t_code "foo/my_awesome_feature")." \
+)
+$(t_list_item \
+"$(t_fg_yellow "team") prefix" \
+"a prefix for team branch names, defaults to $(t_code "team/")." \
+)
+$(t_list_item \
+"$(t_fg_green "release candidate") prefix" \
+"a prefix for release candidate branch names, defaults to $(t_code "rc/")." \
+)
+$(t_list_item \
+"$(t_fg_red "hot-fix") prefix" \
+"a prefix for hot-fix branch names, defaults to $(t_code "hf/")." \
+)
+$(t_list_item \
+"$(t_fg_magenta "integration") branch" \
+"the long-lived integration branch name, defaults to $(t_code "integration").
+this branch serves as the base to all team branches, and will be created if it does not already exist." \
+)
+"
 }
 
 
