@@ -21,4 +21,4 @@ the branch name will be composed of the pre-configured release-candidate prefix 
 
 <br/><br/>
 ---
-<sup><i>auto-generated with <b>dox</b></i></sup>
+<sup><i>auto-generated with <b><a href="https://github.com/eliranmal/sh-dox">sh-dox</a></b></i></sup>

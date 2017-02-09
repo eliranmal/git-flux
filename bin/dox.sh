@@ -1,12 +1,13 @@
 #!/usr/bin/env bash
 
 
+# todo - move this into the text formatter: t_code_block() { t_util_prefix_multiline '    ' }
 format_usage_line() {
 	sed -e 'N' -e 's,usage:\(.*\)\(\n\)$,\2    \1\2\2,'
 }
 
 attach_message() {
-	printf "%s\n\n\n\n%s\n%s\n%s" "$(cat -)" '<br/><br/>' '---' '<sup><i>auto-generated with <b>dox</b></i></sup>'
+	printf "%s\n\n\n\n%s\n%s\n%s" "$(cat -)" '<br/><br/>' '---' '<sup><i>auto-generated with <b><a href="https://github.com/eliranmal/sh-dox">sh-dox</a></b></i></sup>'
 }
 
 squeeze_blanks() {

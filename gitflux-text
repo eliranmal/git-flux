@@ -37,10 +37,10 @@
 #       echo "$(t_heading "foo" | t_fg_yellow)"
 # 
 # 
-# caveats:
+# gotcha's:
 # 
-# - _t_bold cannot be nested and must be the outermost tag, as _t_bold_off will 
-#   reset any other style.
+# - nesting formats may not behave as expected in the terminal mode, as some 
+# closing tags reset all formatting.
 # 
 # 
 # references:
@@ -135,55 +135,60 @@ t_util_replace_entities() {
 
 t_init_terminal() {
 
-	if [[ ! -t 2 ]]; then
-		return 1
-	fi
+	[[ -t 1 && -t 2 ]] && {
+	
+		_t_off=$(           tput sgr0                   )
 
-	_t_bold=$(       tput bold   || tput md      )
-	_t_bold_off=$(   tput sgr0                   )
-	_t_italic=$(     tput sitm   || tput ZH      )
-	_t_italic_off=$( tput ritm   || tput ZR      )
-	_t_under=$(      tput smul   || tput us      )
-	_t_under_off=$(  tput rmul   || tput ue      )
+		_t_bold=$(          tput bold   || tput md      )
+		_t_bold_off=$_t_off
+		_t_italic=$(        tput sitm   || tput ZH      )
+		_t_italic_off=$(    tput ritm   || tput ZR      )
+		_t_under=$(         tput smul   || tput us      )
+		_t_under_off=$(     tput rmul   || tput ue      )
+		
+		if [[ $(tput colors) ]]; then
+			# `tput setaf 0 || tput AF 0` cannot be used to reset the foreground, as some 
+			# terminal emulators (e.g. iterm2) will set it to explicit black. 
+			# too bad, nesting tags in terminal mode may misbehave as a consequence.
+			_t_fg_off=$_t_off
+			if (( $(tput colors) >= 256 )); then
+				_t_fg_red=$(             tput setaf 167     || tput AF 167  )
+				_t_fg_green=$(           tput setaf 107     || tput AF 107  )
+				_t_fg_yellow=$(          tput setaf 179     || tput AF 179  )
+				_t_fg_blue=$(            tput setaf 74      || tput AF 74   )
+				_t_fg_magenta=$(         tput setaf 182     || tput AF 182  )
+				_t_fg_cyan=$(            tput setaf 30      || tput AF 30   )
+				_t_fg_lightred=$(        tput setaf 174     || tput AF 174  )
+				_t_fg_lightgreen=$(      tput setaf 191     || tput AF 191  )
+				_t_fg_lightyellow=$(     tput setaf 222     || tput AF 222  )
+				_t_fg_lightblue=$(       tput setaf 153     || tput AF 153  )
+				_t_fg_lightmagenta=$(    tput setaf 219     || tput AF 219  )
+				_t_fg_lightcyan=$(       tput setaf 116     || tput AF 116  )
+			elif (( $(tput colors) >= 8 )); then
+				_t_fg_red=$(             tput setaf 1       || tput AF 1    )
+				_t_fg_green=$(           tput setaf 2       || tput AF 2    )
+				_t_fg_yellow=$(          tput setaf 3       || tput AF 3    )
+				_t_fg_blue=$(            tput setaf 4       || tput AF 4    )
+				_t_fg_magenta=$(         tput setaf 5       || tput AF 5    )
+				_t_fg_cyan=$(            tput setaf 6       || tput AF 6    )
+				_t_fg_lightred=$_t_fg_red
+				_t_fg_lightgreen=$_t_fg_green
+				_t_fg_lightyellow=$_t_fg_yellow
+				_t_fg_lightblue=$_t_fg_blue
+				_t_fg_lightmagenta=$_t_fg_magenta
+				_t_fg_lightcyan=$_t_fg_cyan
+			fi
+		fi
+
+	} 2>/dev/null ||: # protect from "unknown terminfo capability" errors
+
 	_t_strike=$'\033[9m'
 	_t_strike_off=$'\033[29m'
-	
 	_t_code=$_t_bold
 	_t_code_off=$_t_bold_off
-	
 	_t_list_item=' * '
-
 	_t_new_line="\n"
 	_t_line_break="$_t_new_line "
-	
-	_t_fg_off=$(                 tput setaf 0    || tput AF 0    )
-	if (( $(tput colors) >= 256 )); then
-		_t_fg_red=$(             tput setaf 167  || tput AF 167  )
-		_t_fg_green=$(           tput setaf 107  || tput AF 107  )
-		_t_fg_yellow=$(          tput setaf 179  || tput AF 179  )
-		_t_fg_blue=$(            tput setaf 74   || tput AF 74   )
-		_t_fg_magenta=$(         tput setaf 182  || tput AF 182  )
-		_t_fg_cyan=$(            tput setaf 30   || tput AF 30   )
-		_t_fg_lightred=$(        tput setaf 174  || tput AF 174  )
-		_t_fg_lightgreen=$(      tput setaf 191  || tput AF 191  )
-		_t_fg_lightyellow=$(     tput setaf 222  || tput AF 222  )
-		_t_fg_lightblue=$(       tput setaf 153  || tput AF 153  )
-		_t_fg_lightmagenta=$(    tput setaf 219  || tput AF 219  )
-		_t_fg_lightcyan=$(       tput setaf 116  || tput AF 116  )
-	elif (( $(tput colors) >= 8 )); then
-		_t_fg_red=$(             tput setaf 1    || tput AF 1    )
-		_t_fg_green=$(           tput setaf 2    || tput AF 2    )
-		_t_fg_yellow=$(          tput setaf 3    || tput AF 3    )
-		_t_fg_blue=$(            tput setaf 4    || tput AF 4    )
-		_t_fg_magenta=$(         tput setaf 5    || tput AF 5    )
-		_t_fg_cyan=$(            tput setaf 6    || tput AF 6    )
-		_t_fg_lightred=$_t_fg_red
-		_t_fg_lightgreen=$_t_fg_green
-		_t_fg_lightyellow=$_t_fg_yellow
-		_t_fg_lightblue=$_t_fg_blue
-		_t_fg_lightmagenta=$_t_fg_magenta
-		_t_fg_lightcyan=$_t_fg_cyan
-	fi
 
 	t_heading() {
 		t_util_underline '-' "$_t_fg_off" "$@" | t_util_wrap "$_t_bold" "$_t_bold_off"
@@ -219,10 +224,8 @@ t_init_markdown() {
 	_t_italic_off=$_t_italic
 	_t_strike='~~'
 	_t_strike_off=$_t_strike
-
 	_t_code='`'
 	_t_code_off=$_t_code
-	
 	_t_list_item='- '
 	_t_def_term='<dl>
 	<dt>'

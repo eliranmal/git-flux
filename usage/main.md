@@ -47,4 +47,4 @@ refer to each subcommand's help menu for an in-depth description of its actions 
 
 <br/><br/>
 ---
-<sup><i>auto-generated with <b>dox</b></i></sup>
+<sup><i>auto-generated with <b><a href="https://github.com/eliranmal/sh-dox">sh-dox</a></b></i></sup>
