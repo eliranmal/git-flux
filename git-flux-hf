@@ -2,25 +2,26 @@
 
 
 cmd_usage_default() {
-	printf "<start|finish> <name> [tag] [-h]"
+	printf "hf <start|finish> <name> [tag] [-h]"
 }
 
 cmd_usage_start() {
-	printf "start <name> <tag> [-h]"
+	printf "hf start <name> <tag> [-h]"
 }
 
 cmd_usage_finish() {
-	printf "finish <name> [-h]"
+	printf "hf finish <name> [-h]"
 }
 
 cmd_long_usage_default() {
 	printf "\
-$(t_heading "hf" | t_fg_red)
+${t_bold}${t_fg_red}hf${t_off}
+--
 
 handle lifecycle of hot-fixes.
 
 
-$(t_subheading "available actions")
+${t_under}available actions${t_off}
 
 $(cmd_long_usage_start)
 $(cmd_long_usage_finish)
@@ -29,20 +30,18 @@ $(cmd_long_usage_finish)
 
 cmd_long_usage_start() {
 	printf "\
-$(t_code_definition \
-"$(cmd_usage_start)" \
-"start a hot-fix; create a local branch and push it to the remote.
-the branch name will be composed of the pre-configured hot-fix prefix and the passed $(t_code "name").
-the passed $(t_code "tag") will be used as the branch base." \
-)"
+   ${t_bold}$(cmd_usage_start)${t_off}
+      start a hot-fix; create a local branch and push it to the remote.
+      the branch name will be composed of the pre-configured hot-fix prefix and the passed ${t_bold}name${t_off}.
+      the passed ${t_bold}tag${t_off} will be used as the branch base.
+ "
 }
 
 cmd_long_usage_finish() {
 	printf "\
-$(t_code_definition \
-"$(cmd_usage_finish)" \
-"finish an existing hot-fix; delete its local and remote branches, for good." \
-)"
+   ${t_bold}$(cmd_usage_finish)${t_off}
+      finish an existing hot-fix; delete its local and remote branches, for good.
+ "
 }
 
 cmd_start() {

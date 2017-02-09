@@ -2,21 +2,22 @@
 
 
 cmd_usage_default() {
-	printf "<sync> [-h]"
+	printf "integration <sync> [-h]"
 }
 
 cmd_usage_sync() {
-	printf "sync [-h]"
+	printf "integration sync [-h]"
 }
 
 cmd_long_usage_default() {
 	printf "\
-$(t_heading "integration" | t_fg_magenta)
+${t_bold}${t_fg_magenta}integration${t_off}
+-----------
 
 handle integration across teams.
 
 
-$(t_subheading "available actions")
+${t_under}available actions${t_off}
 
 $(cmd_long_usage_sync)
 "
@@ -24,10 +25,9 @@ $(cmd_long_usage_sync)
 
 cmd_long_usage_sync() {
 	printf "\
-$(t_code_definition \
-"$(cmd_usage_sync)" \
-"pulls changes from the base branch, i.e. 'master', into the integration branch." \
-)"
+   ${t_bold}$(cmd_usage_sync)${t_off}
+      pulls changes from the base branch, i.e. 'master', into the integration branch.
+ "
 }
 
 cmd_sync() {

@@ -15,49 +15,35 @@ SUBDIRECTORY_OK="yes"
 USAGE="<init|feature|team|integration|rc|hf> [action] [action-args...] [-h]"
 
 # appended to the usage output when using the `-h` flag (can be overridden in each action)
-LONG_USAGE="\
-$(t_heading "git-flux")
+LONG_USAGE="
+${t_bold}git-flux${t_off}
+--------
 
 git commands for fluent, team-oriented workflow.
 
 
-$(t_subheading "flags")
+${t_under}available subcommands${t_off}
 
-$(t_code_definition \
-"-h" \
-"shows the f***ing manual. works everywhere, and context dependent.
-this means you can $(t_code "git flux -h"), and also $(t_code "git flux feature -h") \
-or $(t_code "git flux feature start -h")." \
-)
+   ${t_bold}init${t_off}
+      initialize the git-flux configuration survey.
 
-$(t_subheading "available subcommands")
+   ${t_bold}${t_fg_blue}feature${t_off}
+      handle feature level actions.
 
-$(t_code_definition \
-"init" \
-"initialize the git-flux configuration survey." \
-)
-$(t_code_definition \
-"$(t_fg_blue "feature")" \
-"handle feature level actions." \
-)
-$(t_code_definition \
-"$(t_fg_yellow "team")" \
-"handle integration across team members and their features." \
-)
-$(t_code_definition \
-"$(t_fg_magenta "integration")" \
-"handle integration across teams." \
-)
-$(t_code_definition \
-"$(t_fg_green "rc")" \
-"handle lifecycle of release-candidates." \
-)
-$(t_code_definition \
-"$(t_fg_red "hf")" \
-"handle lifecycle of hot-fixes." \
-)
+   ${t_bold}${t_fg_yellow}team${t_off}
+      handle integration across team members and their features.
 
-refer to each subcommand's help menu for an in-depth description of its actions (e.g. $(t_code "git flux init -h")).
+   ${t_bold}${t_fg_magenta}integration${t_off}
+      handle integration across teams.
+
+   ${t_bold}${t_fg_green}rc${t_off}
+      handle lifecycle of release-candidates.
+
+   ${t_bold}${t_fg_red}hf${t_off}
+      handle lifecycle of hot-fixes.
+
+
+refer to each subcommand's help menu for an in-depth description of its actions (e.g. 'git flux init -h').
  "
 # ^ single space on the last line of long-usage is used to add a line-break
 
@@ -90,7 +76,7 @@ main() {
 	
 	# explicitly override usage/long-usage from the loaded sub-command per action
 	if is_available "cmd_usage_$action"; then
-		USAGE="$sub_command $(cmd_usage_${action})"
+		USAGE="$(cmd_usage_${action})"
 	fi
 	if is_available "cmd_long_usage_$action"; then
 		LONG_USAGE="$(cmd_long_usage_${action})"
