@@ -209,8 +209,10 @@ t_init_api_terminal() {
 		fi
 	}
 	t_definition() {
-		t_util_prefix '   ' "$1" | t_util_wrap "$_t_bold" "$_t_bold_off$_t_new_line"
-		t_util_prefix_multiline '      ' "$2$_t_line_break"
+		local term="$1"
+		local desc="$2"
+		t_util_prefix '   ' "$term" | t_util_wrap "$_t_bold" "$_t_bold_off$_t_new_line"
+		t_util_prefix_multiline '      ' "$desc$_t_blank_line"
 	}
 	t_code_definition() {
 		t_definition "$@"
