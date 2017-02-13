@@ -19,6 +19,9 @@ main() {
 		git-flux-integration
 		git-flux-rc
 		git-flux-hf
+		sh-dox/dox
+		sh-dox/lib/formatter
+		sh-dox/lib/renderer
 	"
 	ensure_install_prefix
 	ensure_repo_url
@@ -72,7 +75,11 @@ do_install() {
 		install -v -m 0755 "$setup_repo_path/$exec_file" "$INSTALL_PREFIX"
 	done
 	for script_file in $script_files; do
-		install -v -m 0644 "$setup_repo_path/$script_file" "$INSTALL_PREFIX"
+		local script_dir="$( dirname "$INSTALL_PREFIX/$script_file" )"
+		if [[ ! -d ${script_dir} ]]; then
+			mkdir -p "$script_dir"
+		fi
+		install -v -m 0644 "$setup_repo_path/$script_file" "$script_dir"
 	done
 }
 

@@ -1,0 +1,67 @@
+#!/usr/bin/env bash
+
+
+r_usage_line() {
+	# todo - this is markdown-specific: use polymorphic api (t_code_block)
+	sed -e 'N' -e 's,usage:\(.*\)\(\n\)$,\2    \1\2\2,'
+}
+
+r_gen_message() {
+	# todo - this is markdown-specific: use polymorphic api
+	printf "%s\n\n\n\n%s\n%s\n%s" "$(cat -)" '<br/><br/>' '---' \
+	'<sup><i>auto-generated with <b><a href="https://github.com/eliranmal/sh-dox">sh-dox</a></b></i></sup>'
+}
+
+r_squeeze_blanks() {
+	cat -s
+}
+
+r_strip_down() {
+	r_squeeze_blanks
+}
+
+r_dress_up() {
+    r_usage_line | r_gen_message
+}
+
+t_init_renderer() {
+
+	if [[ -z $DOX_RENDER ]]; then
+		return 0
+	else
+		echo "> rendering output to a file"
+	fi
+
+	local working_dir=$(dirname "$(echo "$0" | sed -e 's,\\,/,g')")
+
+	local default_output_dir="$working_dir/dox"
+	local output_dir="${OUTPUT_DIR:-$default_output_dir}"
+	echo "> output dir: $output_dir"
+
+	if [[ ! -d ${output_dir} ]]; then
+		mkdir -p ${output_dir}
+	fi
+
+	local cmd="$(basename $0)"
+	local output_file_name="${OUTPUT_FILE:-$cmd}"
+	echo "> output file name: '$output_file_name'"
+
+	local output_file_ext
+	case "$FORMAT" in
+		markdown)
+			output_file_ext="md"
+			;;
+		*) # terminal/raw/[none] output should be written to .txt files
+			output_file_ext="txt"
+			;;
+	esac
+	echo "> output file extension: '$output_file_ext'"
+
+	local output_path=${output_dir}/${output_file_name}.${output_file_ext}
+	echo "> output path: '$output_path'"
+
+	echo "> redirecting all output from now on to the output path"
+	# todo - find out how this works? it's a magic!
+	exec 1> ${output_path} > >( r_strip_down | r_dress_up )
+#	exec 1> ${output_path}
+}
