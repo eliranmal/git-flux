@@ -89,6 +89,9 @@ do_install() {
 		# $submodule_files may contain/full/paths, so we're being careful
 		local submodule_file_dir="$( dirname "$INSTALL_PREFIX/$submodule_path/$submodule_file" )"
 		install -v -d -m 0644 "$submodule_file_dir"
+		echo " - install - "
+		echo "source: $setup_repo_path/$submodule_path/$submodule_file"
+		echo "target: $submodule_file_dir"
 		install -v -m 0644 "$setup_repo_path/$submodule_path/$submodule_file" "$submodule_file_dir"
 	done
 }
