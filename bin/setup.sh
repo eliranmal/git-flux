@@ -19,9 +19,11 @@ main() {
 		git-flux-integration
 		git-flux-rc
 		git-flux-hf
-		sh-dox/dox
-		sh-dox/lib/formatter
-		sh-dox/lib/renderer
+	"
+	local submodule_files="
+		sh-dox/sh-dox
+		sh-dox/sh-dox-format
+		sh-dox/sh-dox-render
 	"
 	ensure_install_prefix
 	ensure_repo_url
@@ -56,6 +58,7 @@ environment:
 
 do_install() {
 	validate_install_prefix
+	
 	local setup_repo_path
 	if is_git_repo "$REPO_PATH"; then # user passed a local repo path, and it's a valid git repo
 		log "using repo from environment variable in '$REPO_PATH'"
@@ -71,17 +74,19 @@ do_install() {
 		fi
 		setup_repo_path="$clone_dir"
 	fi
+	
 	log "installing git-flux to '$INSTALL_PREFIX'"
 	install -v -d -m 0755 "$INSTALL_PREFIX"
 	for exec_file in $exec_files; do
 		install -v -m 0755 "$setup_repo_path/$exec_file" "$INSTALL_PREFIX"
 	done
 	for script_file in $script_files; do
-		local script_dir="$( dirname "$INSTALL_PREFIX/$script_file" )"
-		if [[ ! -d ${script_dir} ]]; then
-			mkdir -p "$script_dir"
-		fi
-		install -v -m 0644 "$setup_repo_path/$script_file" "$script_dir"
+		install -v -m 0644 "$setup_repo_path/$script_file" "$INSTALL_PREFIX"
+	done
+	for submodule_file in $submodule_files; do
+		local submodule_dir="$( dirname "$INSTALL_PREFIX/$submodule_file" )"
+		ensure_dir "$submodule_dir"
+		install -v -m 0644 "$setup_repo_path/$submodule_file" "$submodule_dir"
 	done
 }
 
@@ -100,6 +105,12 @@ do_update() {
 		rm -rf "$clone_dir"
 	fi
 	do_install
+}
+
+ensure_dir() {
+	if [[ ! -d $1 ]]; then
+		mkdir -p "$1"
+	fi
 }
 
 ensure_repo_url() {
