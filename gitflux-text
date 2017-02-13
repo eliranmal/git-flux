@@ -1,7 +1,0 @@
-#!/usr/bin/env bash
-
-
-source_dir=$( cd "$(dirname "${BASH_SOURCE}")" ; pwd -P )
-
-# include the lib
-source ${source_dir}/sh-dox/dox
