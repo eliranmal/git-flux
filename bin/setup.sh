@@ -65,7 +65,7 @@ do_install() {
 			log "using existing repo in '$clone_dir'"
 		else # first-time installation, go fish
 			log "cloning repo from github into '$clone_dir'"
-			git clone "$REPO_URL" "$clone_dir"
+			git clone --recursive "$REPO_URL" "$clone_dir"
 		fi
 		setup_repo_path="$clone_dir"
 	fi
