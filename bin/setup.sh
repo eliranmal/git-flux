@@ -19,10 +19,11 @@ main() {
 		git-flux-rc
 		git-flux-hf
 	"
+	local submodule_path="sh-dox"
 	local submodule_files="
-		sh-dox/sh-dox
-		sh-dox/sh-dox-format
-		sh-dox/sh-dox-render
+		sh-dox
+		sh-dox-format
+		sh-dox-render
 	"
 	ensure_install_prefix
 	ensure_repo_url
@@ -82,10 +83,13 @@ do_install() {
 	for script_file in $script_files; do
 		install -v -m 0644 "$setup_repo_path/$script_file" "$INSTALL_PREFIX"
 	done
+	
+	install -v -d -m 0644 "$INSTALL_PREFIX/$submodule_path"
 	for submodule_file in $submodule_files; do
-		local submodule_dir="$( dirname "$INSTALL_PREFIX/$submodule_file" )"
-		ensure_dir "$submodule_dir"
-		install -v -m 0644 "$setup_repo_path/$submodule_file" "$submodule_dir"
+		# $submodule_files may contain/full/paths, so we're being careful
+		local submodule_file_dir="$( dirname "$INSTALL_PREFIX/$submodule_path/$submodule_file" )"
+		install -v -d -m 0644 "$submodule_file_dir"
+		install -v -m 0644 "$setup_repo_path/$submodule_path/$submodule_file" "$submodule_file_dir"
 	done
 }
 
@@ -95,6 +99,7 @@ do_uninstall() {
 	for script_file in $script_files $exec_files; do
 		rm -vf "$INSTALL_PREFIX/$script_file"
 	done
+	rm -vfr "$INSTALL_PREFIX/$submodule_path"
 }
 
 do_update() {
@@ -104,12 +109,6 @@ do_update() {
 		rm -rf "$clone_dir"
 	fi
 	do_install
-}
-
-ensure_dir() {
-	if [[ ! -d $1 ]]; then
-		mkdir -p "$1"
-	fi
 }
 
 ensure_repo_url() {
