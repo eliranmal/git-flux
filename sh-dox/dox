@@ -4,21 +4,22 @@
 # todo - eat our own dog food, output all usage of this repo to our own './usage' dir, and use it as a showcase :)
 
 
-source_dir=$( cd "$(dirname "${BASH_SOURCE}")" ; pwd -P )
-
-# include the libs
-source ${source_dir}/lib/formatter
-source ${source_dir}/lib/renderer
-
-# todo - if $BASH_SOURCE == $0 we're executing dox, not including it: parse "-h" and show usage than
-
-#echo "> > > source_dir: $source_dir"	
-#echo "> > > BASH_SOURCE: $BASH_SOURCE"	
-#echo "> > > arg 0: $0"	
-#echo "> > > arg 1: $1"	
-#echo "> > > args: $@"	
-
 t_main() {
+
+	local source_dir=$( cd "$(dirname "${BASH_SOURCE}")" ; pwd -P )
+	
+	# include the libs
+	source ${source_dir}/lib/formatter
+	source ${source_dir}/lib/renderer
+
+	# todo - if $BASH_SOURCE == $0 we're executing dox, not including it: parse "-h" and show usage than
+
+	#echo "> > > source_dir: $source_dir"	
+	#echo "> > > BASH_SOURCE: $BASH_SOURCE"	
+	#echo "> > > arg 0: $0"	
+	#echo "> > > arg 1: $1"	
+	#echo "> > > args: $@"	
+
 	if type "t_init_formatter" >/dev/null 2>&1; then
 		t_init_formatter
 	fi

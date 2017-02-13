@@ -12,6 +12,10 @@ r_gen_message() {
 	'<sup><i>auto-generated with <b><a href="https://github.com/eliranmal/sh-dox">sh-dox</a></b></i></sup>'
 }
 
+r_eof() {
+	echo "$(cat -)"
+}
+
 r_squeeze_blanks() {
 	cat -s
 }
@@ -21,16 +25,16 @@ r_strip_down() {
 }
 
 r_dress_up() {
-    r_usage_line | r_gen_message
+    r_usage_line | r_gen_message | r_eof
 }
 
 t_init_renderer() {
 
 	if [[ -z $DOX_RENDER ]]; then
 		return 0
-	else
-		echo "> rendering output to a file"
 	fi
+	
+	echo "> rendering output to a file"
 
 	local working_dir=$(dirname "$(echo "$0" | sed -e 's,\\,/,g')")
 
@@ -63,5 +67,4 @@ t_init_renderer() {
 	echo "> redirecting all output from now on to the output path"
 	# todo - find out how this works? it's a magic!
 	exec 1> ${output_path} > >( r_strip_down | r_dress_up )
-#	exec 1> ${output_path}
 }

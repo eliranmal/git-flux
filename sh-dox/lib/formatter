@@ -189,7 +189,8 @@ t_init_api_terminal() {
 	_t_list_item=' * '
 	_t_new_line='
 '
-	_t_line_break="$_t_new_line "
+	_t_line_break=$_t_new_line
+	_t_blank_line="$_t_new_line "
 
 	t_heading() {
 		t_util_underline '-' "$_t_fg_off" "$@" | t_util_wrap "$_t_bold" "$_t_bold_off"
@@ -201,10 +202,10 @@ t_init_api_terminal() {
 		local title="$1"
 		local body="$2"
 		if [[ -z $body ]]; then
-			t_util_prefix "$_t_list_item" "$title$_t_line_break"
+			t_util_prefix "$_t_list_item" "$title$_t_new_line"
 		else
-			t_util_wrap "$_t_bold$_t_list_item" "$_t_bold_off$_t_new_line" "$title"
-			t_util_prefix_multiline '      ' "$body$_t_line_break"
+			t_util_wrap "$_t_bold$_t_list_item" "$_t_bold_off$_t_line_break" "$title"
+			t_util_prefix_multiline '      ' "$body$_t_blank_line"
 		fi
 	}
 	t_definition() {
@@ -242,6 +243,7 @@ t_init_api_markdown() {
 	_t_new_line='
 '
 	_t_line_break="  $_t_new_line"
+	_t_blank_line="\n"
 
 	t_heading() {
 		t_util_prefix '## ' "$1"
@@ -256,7 +258,7 @@ t_init_api_markdown() {
 			t_util_prefix "$_t_list_item" "$title$_t_new_line"
 		else
 			t_util_wrap "$_t_list_item$_t_bold" "$_t_bold_off$_t_line_break" "$title"
-			t_util_prefix_multiline '  ' "$body$_t_new_line"
+			t_util_prefix_multiline '  ' "$body$_t_blank_line"
 		fi
 	}
 	t_definition() {
