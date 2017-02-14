@@ -29,6 +29,10 @@ git_current_branch() {
 	git branch --no-color | grep '^\* ' | grep -v 'no branch' | sed 's/^* //g'
 }
 
+git_search() {
+	git log --pretty=raw --no-color -S $1
+}
+
 git_is_clean_working_tree() {
 	if ! git diff --no-ext-diff --ignore-submodules --quiet --exit-code; then
 		return 1

@@ -79,14 +79,15 @@ main() {
 		source "$working_dir/git-flux-$sub_command"
 	fi
 
-	local action="$1";
+
+	local action;
 
 	# lose the action arg only if it's not an `-h` flag, to not break long-usage
-	[[ -n $1 && $1 != "-h" ]] && shift
-
-	if [[ -z $action || $action = "-h" ]]; then
+	if [[ -n $1 && $1 != "-h" ]] && is_available "cmd_$1"; then
+		action="$1"; shift
+	else
 		action="default"
-	fi	
+	fi
 	
 	# explicitly override usage/long-usage from the loaded sub-command per action
 	if is_available "cmd_usage_$action"; then

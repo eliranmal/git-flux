@@ -18,6 +18,7 @@ main() {
 		git-flux-integration
 		git-flux-rc
 		git-flux-hf
+		git-flux-search
 	"
 	local submodule_path='styli.sh'
 	local submodule_files="
