@@ -27,6 +27,10 @@ clean_dir() {
 	mkdir -p $1
 }
 
+build_path() {
+	printf "%s/%s.%s" "$1" "$2" "$3"
+}
+
 generate_dox() {
 	local output_dir="$1"
 	local output_format="markdown"
@@ -35,7 +39,7 @@ generate_dox() {
 	# generate the main file dox (git-flux)
 	env RENDER=true \
 		FORMAT="$output_format" \
-		OUTPUT_PATH="$output_dir"'/main.md' \
+		OUTPUT_PATH="$(build_path "$output_dir" "main" "md")" \
 		git flux -h
 
 	# generate all other files dox (git-flux-*)
@@ -44,7 +48,7 @@ generate_dox() {
 		local cmd="${path##*/$file_prefix}"
 		env RENDER=true \
 			FORMAT="$output_format" \
-			OUTPUT_PATH="$output_dir"'/'"$cmd"'.md' \
+			OUTPUT_PATH="$(build_path "$output_dir" "$cmd" "md")" \
 			git flux "$cmd" -h
 	done
 }
