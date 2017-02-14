@@ -2,7 +2,7 @@
 
 
 cmd_usage_default() {
-	printf "<start|finish> <name> [-h]"
+	printf "start|finish <name> [-h]"
 }
 
 cmd_usage_start() {

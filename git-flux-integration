@@ -2,7 +2,7 @@
 
 
 cmd_usage_default() {
-	printf "<sync> [-h]"
+	printf "sync [-h]"
 }
 
 cmd_usage_sync() {

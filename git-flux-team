@@ -2,7 +2,7 @@
 
 
 cmd_usage_default() {
-	printf "<create|destroy|sync|join> <name> [-h]"
+	printf "create|destroy|sync|join <name> [-h]"
 }
 
 cmd_usage_create() {

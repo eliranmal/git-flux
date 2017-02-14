@@ -32,7 +32,7 @@ main() {
 
 call_command() {	
 	case "$1" in
-		help)
+		help|-h)
 			usage
 			;;
 		update)
@@ -48,12 +48,13 @@ call_command() {
 }
 
 usage() {
-	echo "\
+	echo "
 usage: [environment] setup.sh [install|uninstall|update]
 environment:
    REPO_URL=$REPO_URL
    REPO_PATH=$REPO_PATH
-   INSTALL_PREFIX=$INSTALL_PREFIX"
+   INSTALL_PREFIX=$INSTALL_PREFIX
+"
 }
 
 do_install() {
