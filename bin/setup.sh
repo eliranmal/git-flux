@@ -61,7 +61,7 @@ do_install() {
 	
 	local setup_repo_path
 	if is_git_repo "$REPO_PATH"; then # user passed a local repo path, and it's a valid git repo
-		log "using repo from environment variable in '$REPO_PATH'"
+		log "using repo in '$REPO_PATH'"
 		setup_repo_path="$REPO_PATH"
 	else # installer is in charge of figuring out the repo path
 		if is_git_repo "$clone_dir"; then # we already have a cloned repo from a previous installation
