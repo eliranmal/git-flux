@@ -19,7 +19,7 @@ main() {
 		git-flux-rc
 		git-flux-hf
 	"
-	local submodule_path="styli.sh"
+	local submodule_path='styli.sh'
 	local submodule_files="
 		main
 		formatter

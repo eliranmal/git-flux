@@ -16,7 +16,7 @@ they all can be found under the '$output_dir' directory."
 }
 
 source_dir() {
-	local relative_path="${1:-'.'}"
+	local relative_path="${1:-"."}"
 	printf "%s" "$( cd "$(dirname "${BASH_SOURCE}")" ; cd "$relative_path" ; pwd -P )"
 }
 
@@ -31,21 +31,20 @@ generate_dox() {
 	local output_dir="$1"
 	local output_format="markdown"
 	local file_prefix="git-flux-"
+
 	# generate the main file dox (git-flux)
-	env DOX_RENDER=true \
+	env RENDER=true \
 		FORMAT="$output_format" \
-		OUTPUT_DIR="$output_dir" \
-		OUTPUT_FILE=main \
+		OUTPUT_PATH="$output_dir"'/main.md' \
 		git flux -h
 
 	# generate all other files dox (git-flux-*)
 	for path in $( source_dir )/../${file_prefix}*
 	do
 		local cmd="${path##*/$file_prefix}"
-		env DOX_RENDER=true \
+		env RENDER=true \
 			FORMAT="$output_format" \
-			OUTPUT_DIR="$output_dir" \
-			OUTPUT_FILE="$cmd" \
+			OUTPUT_PATH="$output_dir"'/'"$cmd"'.md' \
 			git flux "$cmd" -h
 	done
 }

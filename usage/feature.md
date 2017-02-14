@@ -27,4 +27,4 @@ pass an optional <code>base</code> to set a custom base for the branch (default 
 
 <br/><br/>
 ---
-<sup><i>auto-generated with <b><a href="https://github.com/eliranmal/styli.sh">styli.sh</a></b></i></sup>
+<sup><i>formatted with <b><a href="https://github.com/eliranmal/styli.sh">styli.sh</a></b></i></sup>

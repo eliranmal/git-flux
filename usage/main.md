@@ -47,4 +47,4 @@ refer to each subcommand's help menu for an in-depth description of its actions 
 
 <br/><br/>
 ---
-<sup><i>auto-generated with <b><a href="https://github.com/eliranmal/styli.sh">styli.sh</a></b></i></sup>
+<sup><i>formatted with <b><a href="https://github.com/eliranmal/styli.sh">styli.sh</a></b></i></sup>
