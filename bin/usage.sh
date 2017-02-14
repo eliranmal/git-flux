@@ -2,14 +2,22 @@
 
 
 main() {
-	local output_dir="$( source_dir )/../usage"
-
+	local output_dir="$( source_dir ../usage )"
+	[[ $1 = "-h" ]] && show_help "$output_dir"
 	clean_dir "$output_dir"
 	generate_dox "$output_dir"
 }
 
+show_help() {
+	local output_dir="$1"
+	printf "\n%s\n\n" "this script auto-generates the git-flux usage documentation markdown files.
+they all can be found under the '$output_dir' directory."
+	exit 0
+}
+
 source_dir() {
-	printf "%s" "$( cd "$(dirname "${BASH_SOURCE}")" ; pwd -P )"
+	local relative_path="${1:-'.'}"
+	printf "%s" "$( cd "$(dirname "${BASH_SOURCE}")" ; cd "$relative_path" ; pwd -P )"
 }
 
 clean_dir() {
@@ -43,4 +51,4 @@ generate_dox() {
 }
 
 
-main
+main "$@"
