@@ -68,9 +68,8 @@ do_install() {
 			log "using existing repo in '$clone_dir'"
 		else # first-time installation, go fish
 			log "cloning repo from github into '$clone_dir'"
-			# todo - bring this line back - don't mention the branch
-#			git clone --recursive "$REPO_URL" "$clone_dir"
-			git clone --recursive --branch integrate_sh_dox "$REPO_URL" "$clone_dir"
+			# using --recursive to auto-init the submodule
+			git clone --recursive "$REPO_URL" "$clone_dir"
 		fi
 		setup_repo_path="$clone_dir"
 	fi
