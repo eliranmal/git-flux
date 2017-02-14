@@ -19,11 +19,11 @@ main() {
 		git-flux-rc
 		git-flux-hf
 	"
-	local submodule_path="sh-dox"
+	local submodule_path="styli.sh"
 	local submodule_files="
-		sh-dox
-		sh-dox-format
-		sh-dox-render
+		main
+		formatter
+		renderer
 	"
 	ensure_install_prefix
 	ensure_repo_url
