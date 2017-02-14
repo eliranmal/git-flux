@@ -17,4 +17,4 @@ handle integration across teams.
 
 <br/><br/>
 ---
-<sup><i>auto-generated with <b><a href="https://github.com/eliranmal/sh-dox">sh-dox</a></b></i></sup>
+<sup><i>created with <b><a href="https://github.com/eliranmal/styli.sh">styli.sh</a></b></i></sup>
