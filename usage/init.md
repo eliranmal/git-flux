@@ -29,4 +29,4 @@ here are the details you need to fill in:
 
 <br/><br/>
 ---
-<sup><i>formatted with <b><a href="https://github.com/eliranmal/styli.sh">styli.sh</a></b></i></sup>
+<sup><i>created with <b><a href="https://github.com/eliranmal/styli.sh">styli.sh</a></b></i></sup>
