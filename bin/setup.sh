@@ -70,7 +70,7 @@ do_install() {
 		else # first-time installation, go fish
 			log "cloning repo from github into '$clone_dir'"
 			# using --recursive to auto-init the submodule
-			git clone --recursive "$REPO_URL" "$clone_dir" # todo - exit on error
+			git clone --recursive "$REPO_URL" "$clone_dir" || exit 1
 		fi
 		setup_repo_path="$clone_dir"
 	fi
@@ -113,7 +113,7 @@ do_update() {
 
 ensure_repo_url() {
 	if [[ -z $REPO_URL ]]; then
-		REPO_URL="http://github.com/eliranmal/git-flux.git"
+		REPO_URL="http://github.com/eliranmal/git-fluxxx.git"
 	fi
 }
 
