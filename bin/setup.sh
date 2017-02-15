@@ -60,10 +60,10 @@ environment:
 do_install() {
 	validate_install_prefix
 	
-	local setup_repo_path
+	local source_repo_path
 	if is_git_repo "$REPO_PATH"; then # user passed a local repo path, and it's a valid git repo
 		log "using repo in '$REPO_PATH'"
-		setup_repo_path="$REPO_PATH"
+		source_repo_path="$REPO_PATH"
 	else # installer is in charge of figuring out the repo path
 		if is_git_repo "$clone_dir"; then # we already have a cloned repo from a previous installation
 			log "using existing repo in '$clone_dir'"
@@ -72,16 +72,16 @@ do_install() {
 			# using --recursive to auto-init the submodule
 			git clone --recursive "$REPO_URL" "$clone_dir" || exit 1
 		fi
-		setup_repo_path="$clone_dir"
+		source_repo_path="$clone_dir"
 	fi
 	
 	log "installing git-flux to '$INSTALL_PREFIX'"
 	install -v -d -m 0755 "$INSTALL_PREFIX"
 	for exec_file in $exec_files; do
-		install -v -m 0755 "$setup_repo_path/$exec_file" "$INSTALL_PREFIX"
+		install -v -m 0755 "$source_repo_path/$exec_file" "$INSTALL_PREFIX"
 	done
 	for script_file in $script_files; do
-		install -v -m 0644 "$setup_repo_path/$script_file" "$INSTALL_PREFIX"
+		install -v -m 0644 "$source_repo_path/$script_file" "$INSTALL_PREFIX"
 	done
 	
 	install -v -d -m 0755 "$INSTALL_PREFIX/$submodule_path"
@@ -89,7 +89,7 @@ do_install() {
 		# $submodule_files may contain/full/paths, so we're being careful
 		local submodule_file_dir="$( dirname "$INSTALL_PREFIX/$submodule_path/$submodule_file" )"
 		install -v -d -m 0755 "$submodule_file_dir"
-		install -v -m 0644 "$setup_repo_path/$submodule_path/$submodule_file" "$submodule_file_dir"
+		install -v -m 0644 "$source_repo_path/$submodule_path/$submodule_file" "$submodule_file_dir"
 	done
 }
 
