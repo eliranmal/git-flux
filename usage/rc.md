@@ -1,5 +1,5 @@
 
-     git flux rc start|finish <name> [-h]
+    git flux rc start|finish <name> [-h]
 
 
 ## rc

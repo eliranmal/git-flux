@@ -1,5 +1,5 @@
 
-     git flux hf start|finish <name> [<tag>] [-h]
+    git flux hf start|finish <name> [<tag>] [-h]
 
 
 ## hf
