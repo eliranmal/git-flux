@@ -113,7 +113,7 @@ do_update() {
 
 ensure_repo_url() {
 	if [[ -z $REPO_URL ]]; then
-		REPO_URL="http://github.com/eliranmal/git-fluxxx.git"
+		REPO_URL="http://github.com/eliranmal/git-flux.git"
 	fi
 }
 
