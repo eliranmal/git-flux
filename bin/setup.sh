@@ -2,8 +2,8 @@
 
 
 main() {
-	local cmd_name="$1"
-	local clone_dir="./git-flux"
+	local source_dir="$( cd "$(dirname "${BASH_SOURCE}")" ; pwd -P )"
+	local clone_dir="$source_dir"'/git-flux'
 	local exec_files="git-flux"
 	local script_files="
 		gitflux-util
@@ -27,7 +27,7 @@ main() {
 	"
 	ensure_install_prefix
 	ensure_repo_url
-	call_command "$cmd_name"
+	call_command "$1"
 }
 
 call_command() {	
@@ -70,7 +70,7 @@ do_install() {
 		else # first-time installation, go fish
 			log "cloning repo from github into '$clone_dir'"
 			# using --recursive to auto-init the submodule
-			git clone --recursive "$REPO_URL" "$clone_dir"
+			git clone --recursive "$REPO_URL" "$clone_dir" # todo - exit on error
 		fi
 		setup_repo_path="$clone_dir"
 	fi
