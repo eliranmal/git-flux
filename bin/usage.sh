@@ -10,8 +10,10 @@ main() {
 
 show_help() {
 	local output_dir="$1"
-	printf "\n%s\n\n" "this script auto-generates the git-flux usage documentation markdown files.
-they all can be found under the '$output_dir' directory."
+	echo "
+this script auto-generates the git-flux usage documentation markdown files.
+they all can be found under the '$output_dir' directory.
+"
 	exit 0
 }
 
