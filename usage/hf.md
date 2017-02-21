@@ -1,12 +1,10 @@
-
-    git flux hf start|finish <name> [<tag>] [-h]
-
+usage: git flux hf start|finish <name> [<tag>] [-h]
 
 ## hf
 
 handle lifecycle of hot-fixes.
 
-#### available actions
+### available actions
 
 <dl>
 	<dt><code>start &lt;name&gt; &lt;tag&gt; [-h]</code></dt>
@@ -14,10 +12,12 @@ handle lifecycle of hot-fixes.
 the branch name will be composed of the pre-configured hot-fix prefix and the passed <code>name</code>.<br/>
 the passed <code>tag</code> will be used as the branch base.<br/></dd>
 </dl>
+ 
 <dl>
 	<dt><code>finish &lt;name&gt; [-h]</code></dt>
 	<dd>finish an existing hot-fix; delete its local and remote branches, for good.<br/></dd>
 </dl>
+ 
 
 
 

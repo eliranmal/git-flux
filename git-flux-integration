@@ -26,8 +26,8 @@ cmd_long_usage_sync() {
 	printf "\
 $(t_code_definition \
 "$(cmd_usage_sync)" \
-"pulls changes from the base branch, i.e. 'master', into the integration branch." \
-)"
+"pulls changes from the base branch, i.e. 'master', into the integration branch.")
+ "
 }
 
 cmd_sync() {
