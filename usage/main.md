@@ -1,4 +1,5 @@
-usage: git flux init|feature|team|integration|rc|hf [<action>] [<action-args>...] [-h]
+
+    git flux init|feature|team|integration|rc|hf [<action>] [<action-args>...] [-h]
 
 ## git-flux
 
@@ -45,7 +46,6 @@ this means you can <code>git flux -h</code>, and also <code>git flux feature -h<
 </dl>
 
 refer to each subcommand's help menu for an in-depth description of its actions (e.g. `git flux init -h`).
- 
 
 
 
