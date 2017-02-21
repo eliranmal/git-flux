@@ -1,7 +1,6 @@
 
     git flux init [-h]
 
-
 ## init
 
 configures the git-flux environment with an interactive survey.

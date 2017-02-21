@@ -21,9 +21,7 @@ main() {
 	"
 	local submodule_path='styli.sh'
 	local submodule_files="
-		main
 		formatter
-		renderer
 	"
 	ensure_install_prefix
 	ensure_repo_url

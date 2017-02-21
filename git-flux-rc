@@ -32,16 +32,16 @@ cmd_long_usage_start() {
 $(t_code_definition \
 "$(cmd_usage_start)" \
 "start a release-candidate; create a local branch and push it to the remote.
-the branch name will be composed of the pre-configured release-candidate prefix and the passed $(t_code "name")." \
-)"
+the branch name will be composed of the pre-configured release-candidate prefix and the passed $(t_code "name").")
+ "
 }
 
 cmd_long_usage_finish() {
 	printf "\
 $(t_code_definition \
 "$(cmd_usage_finish)" \
-"finish an existing release-candidate; delete its local and remote branches, for good." \
-)"
+"finish an existing release-candidate; delete its local and remote branches, for good.")
+ "
 }
 
 cmd_start() {
