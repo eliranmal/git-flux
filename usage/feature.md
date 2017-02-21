@@ -1,4 +1,5 @@
-usage: git flux feature start|finish|sync <name> [<base>] [-h]
+
+    git flux feature start|finish|sync <name> [<base>] [-h]
 
 ## feature
 

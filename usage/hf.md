@@ -1,4 +1,5 @@
-usage: git flux hf start|finish <name> [<tag>] [-h]
+
+    git flux hf start|finish <name> [<tag>] [-h]
 
 ## hf
 
@@ -17,7 +18,6 @@ the passed <code>tag</code> will be used as the branch base.<br/></dd>
 	<dt><code>finish &lt;name&gt; [-h]</code></dt>
 	<dd>finish an existing hot-fix; delete its local and remote branches, for good.<br/></dd>
 </dl>
- 
 
 
 

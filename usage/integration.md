@@ -1,4 +1,5 @@
-usage: git flux integration sync [-h]
+
+    git flux integration sync [-h]
 
 ## integration
 

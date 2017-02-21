@@ -4,6 +4,10 @@
 # this script auto-generates the git-flux usage documentation markdown files.
 # they all can be found under the '$output_dir' directory.
 
+format_usage_line() {
+	sed -e 'N' -e 's,usage: \(.*\)\(\n\)$,\2    \1\2\2,'
+}
+
 main() {
 	local source_dir="$( cd "$(dirname "${BASH_SOURCE}")" ; pwd -P )"
 	local root_dir="$source_dir"'/..'
@@ -22,7 +26,7 @@ main() {
 		local cmd="${path##*/$file_prefix}"
 		(
 			export FORMAT="$output_format" OUTPUT_PATH="$output_dir"'/'"$cmd"'.md'
-			git flux "$cmd" -h | ${root_dir}/styli.sh/renderer
+			git flux "$cmd" -h | format_usage_line | ${root_dir}/styli.sh/renderer
 		)
 	done
 }
