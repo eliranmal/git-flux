@@ -15,12 +15,12 @@ cmd_usage_finish() {
 
 cmd_long_usage_default() {
 	printf "\
-$(t_heading "rc" | t_fg_green)
+$(f_heading "rc" | f_fg_green)
 
 handle lifecycle of release-candidates.
 
 
-$(t_subheading "available actions")
+$(f_subheading "available actions")
 
 $(cmd_long_usage_start)
 $(cmd_long_usage_finish)
@@ -29,16 +29,16 @@ $(cmd_long_usage_finish)
 
 cmd_long_usage_start() {
 	printf "\
-$(t_code_definition \
+$(f_code_definition \
 "$(cmd_usage_start)" \
 "start a release-candidate; create a local branch and push it to the remote.
-the branch name will be composed of the pre-configured release-candidate prefix and the passed $(t_code "name").")
+the branch name will be composed of the pre-configured release-candidate prefix and the passed $(f_code "name").")
  "
 }
 
 cmd_long_usage_finish() {
 	printf "\
-$(t_code_definition \
+$(f_code_definition \
 "$(cmd_usage_finish)" \
 "finish an existing release-candidate; delete its local and remote branches, for good.")
  "

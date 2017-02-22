@@ -11,12 +11,12 @@ cmd_usage_sync() {
 
 cmd_long_usage_default() {
 	printf "\
-$(t_heading "integration" | t_fg_magenta)
+$(f_heading "integration" | f_fg_magenta)
 
 handle integration across teams.
 
 
-$(t_subheading "available actions")
+$(f_subheading "available actions")
 
 $(cmd_long_usage_sync)
 "
@@ -24,7 +24,7 @@ $(cmd_long_usage_sync)
 
 cmd_long_usage_sync() {
 	printf "\
-$(t_code_definition \
+$(f_code_definition \
 "$(cmd_usage_sync)" \
 "pulls changes from the base branch, i.e. 'master', into the integration branch.")
  "
