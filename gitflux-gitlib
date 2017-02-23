@@ -43,6 +43,10 @@ git_repo_is_headless() {
 	! git rev-parse --quiet --verify HEAD >/dev/null 2>&1
 }
 
+git_repo_is_empty() {
+	[[ -z $(git_local_branches) && -z $(git_remote_branches) ]]
+}
+
 git_can_prune() {
 	( git remote prune origin --dry-run)
 }
@@ -76,6 +80,10 @@ git_is_different() {
 
 git_is_merged() {
 	has $1 $(git_merged_branches)
+}
+
+git_pull_origin() {
+	git pull origin "$1" >/dev/null 2>&1
 }
 
 
@@ -121,14 +129,14 @@ git_create_branch() {
 	local branch="$1"
 	local remote="${2:+origin/$2}" # remote name is optional
 	io_log "creating the '$branch' local branch..."
-	git checkout -b "$branch" ${remote} >/dev/null 2>&1
+	git checkout -b "$branch" ${remote}
 	io_status_logger $? "created and checked out" "create failed"
 }
 
 git_push_set_upstream() {
 	local branch="$1"
 	io_log "pushing '$branch' to the remote and setting upstream..."
-	git push --set-upstream origin "$branch" >/dev/null 2>&1
+	git push --set-upstream origin "$branch"
 	io_status_logger $? "pushed ok, upstream set" "push upstream failed"
 }
 
