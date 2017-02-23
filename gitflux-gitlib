@@ -129,14 +129,14 @@ git_create_branch() {
 	local branch="$1"
 	local remote="${2:+origin/$2}" # remote name is optional
 	io_log "creating the '$branch' local branch..."
-	git checkout -b "$branch" ${remote}
+	git checkout -b "$branch" ${remote} >/dev/null 2>&1
 	io_status_logger $? "created and checked out" "create failed"
 }
 
 git_push_set_upstream() {
 	local branch="$1"
 	io_log "pushing '$branch' to the remote and setting upstream..."
-	git push --set-upstream origin "$branch"
+	git push --set-upstream origin "$branch" >/dev/null 2>&1
 	io_status_logger $? "pushed ok, upstream set" "push upstream failed"
 }
 
