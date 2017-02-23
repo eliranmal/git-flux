@@ -1,5 +1,5 @@
 
-    git flux team create|destroy|sync|join <name> [-h]
+    git flux team create|destroy|switch|sync <name> [-h]
 
 ## team
 
@@ -21,8 +21,8 @@ aliases: <code>disassemble</code>, <code>scatter</code>, <code>break</code>.<br/
 </dl>
  
 <dl>
-	<dt><code>join &lt;name&gt; [-h]</code></dt>
-	<dd>join a team for the first time, or switch teams to another team.<br/>
+	<dt><code>switch &lt;name&gt; [-h]</code></dt>
+	<dd>switch teams to another team, or join a team for the first time.<br/>
 after this, all new features will be based on the new team.<br/>
 aliases: <code>switch</code>.<br/></dd>
 </dl>

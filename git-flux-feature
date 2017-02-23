@@ -64,7 +64,7 @@ cmd_start() {
 	local team_branch="$(git_config_get "branch.team")"
 	if [[ -z $team_branch && -z $2 ]]; then
 		io_log; io_status_fatal "no base found!
-      set up a team first with 'git flux team create' or 'git flux team join', or pass the base to this command."
+      set up a team first with 'git flux team create', or pass the desired base to this command."
 	fi
 	io_log; create_branch_from_base "$(git_config_get "prefix.feature")$1" "$team_branch" "$2"
 	io_log; io_log_ok "feature '$1' is started. happy coding!"; io_log

@@ -2,7 +2,7 @@
 
 
 cmd_usage_default() {
-	printf "create|destroy|sync|join <name> [-h]"
+	printf "create|destroy|switch|sync <name> [-h]"
 }
 
 cmd_usage_create() {
@@ -13,8 +13,8 @@ cmd_usage_destroy() {
 	printf "destroy <name> [-h]"
 }
 
-cmd_usage_join() {
-	printf "join <name> [-h]"
+cmd_usage_switch() {
+	printf "switch <name> [-h]"
 }
 
 cmd_usage_sync() {
@@ -32,7 +32,7 @@ $(f_subheading "available actions")
 
 $(cmd_long_usage_create)
 $(cmd_long_usage_destroy)
-$(cmd_long_usage_join)
+$(cmd_long_usage_switch)
 $(cmd_long_usage_sync)
 "
 }
@@ -56,11 +56,11 @@ aliases: $(f_code "disassemble"), $(f_code "scatter"), $(f_code "break").")
  "
 }
 
-cmd_long_usage_join() {
+cmd_long_usage_switch() {
 	printf "\
 $(f_code_definition \
-"$(cmd_usage_join)" \
-"join a team for the first time, or switch teams to another team.
+"$(cmd_usage_switch)" \
+"switch teams to another team, or join a team for the first time.
 after this, all new features will be based on the new team.
 aliases: $(f_code "switch").")
  "
@@ -83,7 +83,7 @@ cmd_huddle() { cmd_create "$@"; }
 cmd_disassemble() { cmd_destroy "$@"; }
 cmd_scatter() { cmd_destroy "$@"; }
 cmd_break() { cmd_destroy "$@"; }
-cmd_switch() { cmd_join "$@"; }
+cmd_join() { cmd_switch "$@"; }
 
 
 cmd_create() {
@@ -107,7 +107,7 @@ cmd_sync() {
 	io_log; io_log_ok "team '$1' is in sync with the base."; io_log
 }
 
-cmd_join() {
+cmd_switch() {
 	require_args "$1"
 
 	local prefix="$(git_config_get "prefix.team")"
