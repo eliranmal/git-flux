@@ -15,6 +15,14 @@ require_gitflux_initialized() {
 	fi
 }
 
+require_non_empty_repository() {
+	if git_repo_is_empty; then
+		if ! git_pull_origin "master" && git_repo_is_empty; then
+			io_log; io_status_fatal "repository is empty, add some changes to fix this."
+		fi
+	fi
+}
+
 validate_git_clean_working_tree() {
 	if ! git_is_clean_working_tree; then
 		io_status_fatal "working tree is not clean. make sure all changes are commited, or stash them." 

@@ -108,7 +108,9 @@ main() {
 	fi
 
 	# validate action prerequisites
-	if [[ $sub_command != "init" ]]; then
+	if [[ $sub_command == "init" ]]; then
+		require_non_empty_repository
+	else
 		require_gitflux_initialized
 	fi
 

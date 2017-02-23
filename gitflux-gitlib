@@ -43,6 +43,10 @@ git_repo_is_headless() {
 	! git rev-parse --quiet --verify HEAD >/dev/null 2>&1
 }
 
+git_repo_is_empty() {
+	[[ -z $(git_local_branches) && -z $(git_remote_branches) ]]
+}
+
 git_can_prune() {
 	( git remote prune origin --dry-run)
 }
@@ -76,6 +80,10 @@ git_is_different() {
 
 git_is_merged() {
 	has $1 $(git_merged_branches)
+}
+
+git_pull_origin() {
+	git pull origin "$1" >/dev/null 2>&1
 }
 
 
