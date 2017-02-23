@@ -53,7 +53,7 @@ cmd_default() {
 	local hot_fix_prefix=$(io_prompt "hot-fix prefix" "hf$prefix_delimiter")
 	local integration_branch=$(io_prompt "integration branch" "integration")
 
-	io_log; git_ensure_branch "$integration_branch"
+	io_log; git_v_ensure_branch "$integration_branch"
 
 	git_config_set "prefix.feature" "$feature_prefix"
 	git_config_set "prefix.team" "$team_prefix"

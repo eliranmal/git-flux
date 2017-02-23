@@ -137,7 +137,7 @@ cmd_switch() {
 	fi
 
 	io_log
-	git_checkout "$new_team_branch"
+	git_v_checkout "$new_team_branch"
 	git_config_set "branch.team" "$new_team_branch"
 
 	io_log; io_log_ok "team switched. welcome aboard!"; io_log
