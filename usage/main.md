@@ -1,11 +1,11 @@
 
     git flux init|feature|team|integration|rc|hf [<action>] [<action-args>...] [-h]
 
-## git-flux
+# git-flux
 
 git commands for fluent, team-oriented workflow.
 
-### flags
+## flags
 
 <dl>
 	<dt><code>-h</code></dt>
@@ -13,7 +13,7 @@ git commands for fluent, team-oriented workflow.
 this means you can <code>git flux -h</code>, and also <code>git flux feature -h</code> or <code>git flux feature start -h</code>.<br/></dd>
 </dl>
 
-### available subcommands
+## available subcommands
 
 <dl>
 	<dt><code>init</code></dt>

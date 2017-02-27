@@ -1,11 +1,11 @@
 
     git flux integration sync [-h]
 
-## integration
+# integration
 
 handle integration across teams.
 
-### available actions
+## available actions
 
 <dl>
 	<dt><code>sync [-h]</code></dt>

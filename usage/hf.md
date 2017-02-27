@@ -1,11 +1,11 @@
 
     git flux hf start|finish <name> [<tag>] [-h]
 
-## hf
+# hf
 
 handle lifecycle of hot-fixes.
 
-### available actions
+## available actions
 
 <dl>
 	<dt><code>start &lt;name&gt; &lt;tag&gt; [-h]</code></dt>

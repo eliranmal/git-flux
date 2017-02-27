@@ -1,11 +1,11 @@
 
     git flux feature start|finish|sync <name> [<base>] [-h]
 
-## feature
+# feature
 
 handle feature level actions.
 
-### available actions
+## available actions
 
 <dl>
 	<dt><code>start &lt;name&gt; [&lt;base&gt;] [-h]</code></dt>

@@ -1,11 +1,11 @@
 
     git flux team create|destroy|switch|sync <name> [-h]
 
-## team
+# team
 
 handle integration across team members and their features.
 
-### available actions
+## available actions
 
 <dl>
 	<dt><code>create &lt;name&gt; [-h]</code></dt>

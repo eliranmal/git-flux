@@ -1,11 +1,11 @@
 
     git flux rc start|finish <name> [-h]
 
-## rc
+# rc
 
 handle lifecycle of release-candidates.
 
-### available actions
+## available actions
 
 <dl>
 	<dt><code>start &lt;name&gt; [-h]</code></dt>
