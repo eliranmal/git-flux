@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 
 create_branch_from_base() {
@@ -8,9 +8,9 @@ create_branch_from_base() {
 	validate_git_clean_working_tree
 	validate_git_local_and_remote_branches_exist "$base_branch"
 
-	git_checkout "$base_branch"
-	git_pull
-	git_ensure_branch "$branch"
+	git_v_checkout "$base_branch"
+	git_v_pull
+	git_v_ensure_branch "$branch"
 
 	# save the base to config for the 'finish' command
 	git_config_set "$(git_config_escape_subsection "branch:$branch").base" "$base_branch"
@@ -22,13 +22,13 @@ create_branch_from_tag() {
 	validate_git_clean_working_tree
 
 	# fetch remote tag refs
-	git_checkout "master"
-	git_pull
+	git_v_checkout "master"
+	git_v_pull
 
 	validate_git_tag_exists "$tag"
 
-	git_checkout "$tag"
-	git_ensure_branch "$branch"
+	git_v_checkout "$tag"
+	git_v_ensure_branch "$branch"
 
 	# save the base to config for the 'finish' command
 	git_config_set "$(git_config_escape_subsection "branch:$branch").base" "$tag"
@@ -44,8 +44,8 @@ destroy_branch_from_base() {
 	validate_git_clean_working_tree
 	validate_git_local_branch_exists "$base_branch"
 
-	git_checkout "$base_branch"
-	git_ensure_no_branch "$branch"
+	git_v_checkout "$base_branch"
+	git_v_ensure_no_branch "$branch"
 
 	# delete the base from config, we're not gonna need it anymore
 	git_config_remove_section "$(git_config_escape_subsection "branch:$branch")"
@@ -61,8 +61,8 @@ destroy_branch_from_tag() {
 	validate_git_clean_working_tree
 	validate_git_tag_exists "$tag"
 
-	git_checkout "$tag"
-	git_ensure_no_branch "$branch"
+	git_v_checkout "$tag"
+	git_v_ensure_no_branch "$branch"
 
 	# delete the base from config, we're not gonna need it anymore
 	git_config_remove_section "$(git_config_escape_subsection "branch:$branch")"
@@ -78,5 +78,5 @@ sync_branch_with_base() {
 	validate_git_local_and_remote_branches_exist "$branch"	
 	validate_git_local_and_remote_branches_exist "$base_branch"
 
-	git_ensure_merged "$branch" "$base_branch"
+	git_v_ensure_merged "$branch" "$base_branch"
 }

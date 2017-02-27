@@ -1,11 +1,12 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 working_dir=$(dirname "$(echo "$0" | sed -e 's,\\,/,g')")
 
-source "$working_dir/gitflux-text"
-source "$working_dir/gitflux-util"
-source "$working_dir/gitflux-io"
-source "$working_dir/gitflux-validation"
-source "$working_dir/gitflux-gitlib"
-source "$working_dir/gitflux-action"
+source "$working_dir"'/styli.sh/formatter'
+
+source "$working_dir"'/gitflux-util'
+source "$working_dir"'/gitflux-io'
+source "$working_dir"'/gitflux-validation'
+source "$working_dir"'/gitflux-gitlib'
+source "$working_dir"'/gitflux-action'
 

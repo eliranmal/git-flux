@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 
 require_args() {
@@ -12,6 +12,14 @@ require_args() {
 require_gitflux_initialized() {
 	if [[ $(git_config_get "initialized") != true ]]; then
 		io_log; io_status_fatal "git-flux is not initialized. run 'git flux init' to fix this."
+	fi
+}
+
+require_non_empty_repository() {
+	if git_repo_is_empty; then
+		if ! git_pull_origin "master" && git_repo_is_empty; then
+			io_log; io_status_fatal "repository is empty, add some changes to fix this."
+		fi
 	fi
 }
 

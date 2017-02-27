@@ -1,0 +1,3 @@
+[submodule "styli.sh"]
+	path = styli.sh
+	url = https://github.com/eliranmal/styli.sh

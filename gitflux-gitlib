@@ -1,5 +1,7 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
+
+# - - - - -  actions - - - - - #
 
 git_local_branches() {
 	git branch --no-color | sed 's/^[* ] //'
@@ -29,6 +31,54 @@ git_current_branch() {
 	git branch --no-color | grep '^\* ' | grep -v 'no branch' | sed 's/^* //g'
 }
 
+git_prune() {
+	git remote prune origin >/dev/null 2>&1
+}
+
+git_pull_origin() {
+	git pull origin "$1" >/dev/null 2>&1
+}
+
+git_checkout() {
+	git checkout "$1" >/dev/null 2>&1
+}
+
+git_delete_local_branch() {
+	git branch -D "$1" >/dev/null 2>&1
+}
+
+git_delete_remote_branch() {
+	git push origin :"$1" >/dev/null 2>&1
+}
+
+git_pull() {
+	git pull >/dev/null 2>&1
+}
+
+git_push() {
+	git push origin "$1" >/dev/null 2>&1
+}
+
+git_create_branch() {
+	local remote="${2:+origin/$2}" # remote is optional
+	git checkout -b "$1" ${remote} >/dev/null 2>&1
+}
+
+git_push_set_upstream() {
+	git push --set-upstream origin "$1" >/dev/null 2>&1
+}
+
+git_merge() {
+	git merge --no-edit "$1" >/dev/null 2>&1
+}
+
+git_create_tag() {
+	git tag -a "$1" -m "$2" >/dev/null 2>&1
+}
+
+
+# - - - - -  predicates - - - - - #
+
 git_is_clean_working_tree() {
 	if ! git diff --no-ext-diff --ignore-submodules --quiet --exit-code; then
 		return 1
@@ -43,12 +93,12 @@ git_repo_is_headless() {
 	! git rev-parse --quiet --verify HEAD >/dev/null 2>&1
 }
 
-git_can_prune() {
-	( git remote prune origin --dry-run)
+git_repo_is_empty() {
+	[[ -z $(git_local_branches) && -z $(git_remote_branches) ]]
 }
 
-git_prune() {
-	git remote prune origin >/dev/null 2>&1
+git_can_prune() {
+	( git remote prune origin --dry-run)
 }
 
 git_local_branch_exists() {
@@ -79,119 +129,111 @@ git_is_merged() {
 }
 
 
+# - - - - -  verbose actions - - - - - #
 
-# - - - - -  actions (verbose) - - - - - #
-
-
-git_checkout() {
+git_v_checkout() {
 	local branch="$1"
 	io_log "checking out '$branch'..."
-	# todo - continue this (issue #2)
-#	git checkout "$branch" 2>>${err_log} 1>/dev/null
-	git checkout "$branch" >/dev/null 2>&1
+	git_checkout "$branch"
 	io_status_logger $? "checked out" "checkout failed"
 }
 
-git_delete_local_branch() {
+git_v_delete_local_branch() {
 	local branch="$1"
 	io_log "deleting the '$branch' local branch..."
-	git branch -D "$branch" >/dev/null 2>&1
+	git_delete_local_branch "$branch"
 	io_status_logger $? "deleted ok" "delete failed"
 }
 
-git_delete_remote_branch() {
+git_v_delete_remote_branch() {
 	local branch="$1"
 	io_log "deleting the '$branch' remote branch..."
-	git push origin :"$branch" >/dev/null 2>&1
+	git_delete_remote_branch "$branch"
 	io_status_logger $? "deleted ok" "delete failed"
 }
 
-git_pull() {
+git_v_pull() {
 	io_log "pulling from the remote..."
-	git pull >/dev/null 2>&1
+	git_pull
 	io_status_logger $? "pulled ok" "pull failed"
 }
 
-git_push() {
+git_v_push() {
 	local ref="$1" # ref can be 'branch' or 'tag'
 	io_log "pushing '$ref' to the remote..."
-	git push origin "$ref" >/dev/null 2>&1
+	git_push "$ref"
 	io_status_logger $? "pushed ok" "push failed"
 }
 
-git_create_branch() {
-	local branch="$1"
-	local remote="${2:+origin/$2}" # remote name is optional
+git_v_create_branch() {
+	local branch="$1"; local remote="$2"
 	io_log "creating the '$branch' local branch..."
-	git checkout -b "$branch" ${remote} >/dev/null 2>&1
+	git_create_branch "$branch" "$remote"
 	io_status_logger $? "created and checked out" "create failed"
 }
 
-git_push_set_upstream() {
+git_v_push_set_upstream() {
 	local branch="$1"
 	io_log "pushing '$branch' to the remote and setting upstream..."
-	git push --set-upstream origin "$branch" >/dev/null 2>&1
+	git_push_set_upstream "$branch"
 	io_status_logger $? "pushed ok, upstream set" "push upstream failed"
 }
 
-git_ensure_branch() {
+git_v_ensure_branch() {
 	local branch="$1"
 	if git_local_branch_exists "$branch" && git_remote_branch_exists "$branch"; then
 		return 0
 	fi
 	if git_remote_branch_exists "$branch"; then
-		git_create_branch "$branch" "$branch"
+		git_v_create_branch "$branch" "$branch"
 	else
 		if ! git_local_branch_exists "$branch"; then
-			git_create_branch "$branch"
+			git_v_create_branch "$branch"
 		fi
-		git_push_set_upstream "$branch"
+		git_v_push_set_upstream "$branch"
 	fi
 }
 
-git_ensure_no_branch() {
+git_v_ensure_no_branch() {
 	local branch="$1"
 	if ! git_local_branch_exists "$branch" && ! git_remote_branch_exists "$branch"; then
 		return 0
 	fi
 	if git_local_branch_exists "$branch"; then
-		git_delete_local_branch "$branch"
+		git_v_delete_local_branch "$branch"
 	fi
 	if git_remote_branch_exists "$branch"; then
-		git_delete_remote_branch "$branch"
+		git_v_delete_remote_branch "$branch"
 	fi
 }
 
-git_ensure_merged() {
+git_v_ensure_merged() {
 	local branch="$1"; local base_branch="$2"
-	git_checkout "$base_branch"
-	git_pull
-	git_checkout "$branch"
-	git_pull
+	git_v_checkout "$base_branch"
+	git_v_pull
+	git_v_checkout "$branch"
+	git_v_pull
 	if git_is_different "$branch" "$base_branch" && ! git_is_merged "$base_branch"; then
-		git_merge "$base_branch"
+		git_v_merge "$base_branch"
 	fi
 }
 
-git_merge() {
+git_v_merge() {
 	local branch="$1"
 	io_log "merging changes from '$branch'..."
-	git merge --no-edit "$branch" >/dev/null 2>&1
+	git_merge "$branch"
 	io_status_logger $? "merged ok" "conflicts were found during the merge, resolve them in your favorite merge tool"
 }
 
-git_create_tag() {
+git_v_create_tag() {
 	local tag="$1"; local message="$2"
 	io_log "creating tag '$tag'..."
-	git tag -a "$tag" -m "$message" >/dev/null 2>&1
+	git_create_tag "$tag" "$message"
 	io_status_logger $? "created ok" "create failed"
 }
 
 
-
-
-# - - - - -  git config - - - - - #
-
+# - - - - - config - - - - - #
 
 git_config_section="gitflux"
 

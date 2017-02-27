@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 
 working_dir=$(dirname "$(echo "$0" | sed -e 's,\\,/,g')")
@@ -12,38 +12,52 @@ source "$working_dir/gitflux-common"
 SUBDIRECTORY_OK="yes"
 
 # output for stdout when calling the usage() function (can be overridden in each action)
-USAGE="<init|feature|team|integration|rc|hf> [action] [action-args...] [-h]"
+USAGE="init|feature|team|integration|rc|hf [<action>] [<action-args>...] [-h]"
 
 # appended to the usage output when using the `-h` flag (can be overridden in each action)
-LONG_USAGE="
-${t_bold}git-flux${t_off}
---------
+LONG_USAGE="\
+$(f_heading "git-flux")
 
 git commands for fluent, team-oriented workflow.
 
 
-${t_under}available subcommands${t_off}
+$(f_subheading "flags")
 
-   ${t_bold}init${t_off}
-      initialize the git-flux configuration survey.
-
-   ${t_bold}${t_fg_blue}feature${t_off}
-      handle feature level actions.
-
-   ${t_bold}${t_fg_yellow}team${t_off}
-      handle integration across team members and their features.
-
-   ${t_bold}${t_fg_magenta}integration${t_off}
-      handle integration across teams.
-
-   ${t_bold}${t_fg_green}rc${t_off}
-      handle lifecycle of release-candidates.
-
-   ${t_bold}${t_fg_red}hf${t_off}
-      handle lifecycle of hot-fixes.
+$(f_code_definition \
+"-h" \
+"shows the f***ing manual. works everywhere, and context dependent.
+this means you can $(f_code "git flux -h"), and also $(f_code "git flux feature -h") \
+or $(f_code "git flux feature start -h").")
 
 
-refer to each subcommand's help menu for an in-depth description of its actions (e.g. 'git flux init -h').
+$(f_subheading "available subcommands")
+
+$(f_code_definition \
+"init" \
+"initialize the git-flux configuration survey.")
+
+$(f_code_definition \
+"$(f_fg_blue "feature")" \
+"handle feature level actions.")
+
+$(f_code_definition \
+"$(f_fg_yellow "team")" \
+"handle integration across team members and their features.")
+
+$(f_code_definition \
+"$(f_fg_magenta "integration")" \
+"handle integration across teams.")
+
+$(f_code_definition \
+"$(f_fg_green "rc")" \
+"handle lifecycle of release-candidates.")
+
+$(f_code_definition \
+"$(f_fg_red "hf")" \
+"handle lifecycle of hot-fixes.")
+
+
+refer to each subcommand's help menu for an in-depth description of its actions (e.g. $(f_code "git flux init -h")).
  "
 # ^ single space on the last line of long-usage is used to add a line-break
 
@@ -57,7 +71,7 @@ main() {
 
 	local sub_command="$1";
 
-	# lose the sub-command arg only if it's not an `-h` flag, to not break long-usage
+	# lose the sub-command arg only if it's not a `-h` flag, to not break long-usage
 	[[ -n $1 && $1 != "-h" ]] && shift
 
 	# verify the sub-command script exists, and include it
@@ -65,18 +79,18 @@ main() {
 		source "$working_dir/git-flux-$sub_command"
 	fi
 
-	local action="$1";
+	local action;
 
-	# lose the action arg only if it's not an `-h` flag, to not break long-usage
-	[[ -n $1 && $1 != "-h" ]] && shift
-
-	if [[ -z $action || $action = "-h" ]]; then
+	# lose the action arg only if it's not a `-h` flag, to not break long-usage
+	if [[ -n $1 && $1 != "-h" ]]; then
+		action="$1"; shift
+	else
 		action="default"
-	fi	
+	fi
 	
 	# explicitly override usage/long-usage from the loaded sub-command per action
 	if is_available "cmd_usage_$action"; then
-		USAGE="$(cmd_usage_${action})"
+		USAGE="$sub_command $(cmd_usage_${action})"
 	fi
 	if is_available "cmd_long_usage_$action"; then
 		LONG_USAGE="$(cmd_long_usage_${action})"
@@ -94,7 +108,9 @@ main() {
 	fi
 
 	# validate action prerequisites
-	if [[ $sub_command != "init" ]]; then
+	if [[ $sub_command == "init" ]]; then
+		require_non_empty_repository
+	else
 		require_gitflux_initialized
 	fi
 

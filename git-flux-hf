@@ -1,27 +1,26 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 
 cmd_usage_default() {
-	printf "hf <start|finish> <name> [tag] [-h]"
+	printf "start|finish <name> [<tag>] [-h]"
 }
 
 cmd_usage_start() {
-	printf "hf start <name> <tag> [-h]"
+	printf "start <name> <tag> [-h]"
 }
 
 cmd_usage_finish() {
-	printf "hf finish <name> [-h]"
+	printf "finish <name> [-h]"
 }
 
 cmd_long_usage_default() {
 	printf "\
-${t_bold}${t_fg_red}hf${t_off}
---
+$(f_heading "hf" | f_fg_red)
 
 handle lifecycle of hot-fixes.
 
 
-${t_under}available actions${t_off}
+$(f_subheading "available actions")
 
 $(cmd_long_usage_start)
 $(cmd_long_usage_finish)
@@ -30,17 +29,19 @@ $(cmd_long_usage_finish)
 
 cmd_long_usage_start() {
 	printf "\
-   ${t_bold}$(cmd_usage_start)${t_off}
-      start a hot-fix; create a local branch and push it to the remote.
-      the branch name will be composed of the pre-configured hot-fix prefix and the passed ${t_bold}name${t_off}.
-      the passed ${t_bold}tag${t_off} will be used as the branch base.
+$(f_code_definition \
+"$(cmd_usage_start)" \
+"start a hot-fix; create a local branch and push it to the remote.
+the branch name will be composed of the pre-configured hot-fix prefix and the passed $(f_code "name").
+the passed $(f_code "tag") will be used as the branch base.")
  "
 }
 
 cmd_long_usage_finish() {
 	printf "\
-   ${t_bold}$(cmd_usage_finish)${t_off}
-      finish an existing hot-fix; delete its local and remote branches, for good.
+$(f_code_definition \
+"$(cmd_usage_finish)" \
+"finish an existing hot-fix; delete its local and remote branches, for good.")
  "
 }
 
