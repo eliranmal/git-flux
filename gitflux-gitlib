@@ -40,6 +40,8 @@ git_pull_origin() {
 }
 
 git_checkout() {
+	# todo - continue this (issue #2)
+#	git checkout "$branch" 2>>${err_log} 1>/dev/null
 	git checkout "$1" >/dev/null 2>&1
 }
 
