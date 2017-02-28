@@ -81,3 +81,9 @@ cmd_sync() {
 	io_log; sync_branch_with_base "$(git_config_get "prefix.feature")$1"
 	io_log; io_log_ok "feature '$1' is in sync with the base."; io_log
 }
+
+cmd_review() {
+	require_args "$1"
+	io_log; review_branch_from_base "$(git_config_get "prefix.feature")$1"
+	io_log; io_log_ok "feature '$1' is ready for review. go to github to see it."; io_log
+}

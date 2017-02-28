@@ -282,3 +282,53 @@ git_config_get_subsections_by_value() {
 git_config_escape_subsection() {
 	printf "%s" "$1" | sed 's,\([\\\"]\),\\\1,g' # '\' and '"' must be escaped in git config subsection names
 }
+
+
+# - - - - - hub - - - - - #
+
+hub_post() {
+	local location="$1"; local data="$2"
+	local accept_header='Accept: application/vnd.github.v3+json'
+	
+	local domain='lpgithub.dev.lprnd.net'
+	if [[ ! -e ~/.netrc || -z $(cat ~/.netrc | grep "$domain") ]]; then
+		local origin="$(git config --get remote.origin.url)"
+		local user="$(echo "$origin" | sed -e 's/.*[\/:]\([^/]*\)\/[^/]*$/\1/')"
+		
+		# we could generate the token on the fly, but this requires us to parse the json response - fuck that shit
+#		curl -u "$user" -d '{"scopes":["public_repo"],"note":"Git Flux - Pull Requests"}' https://lpgithub.dev.lprnd.net/api/v3/authorizations
+
+		read -r -s -p "create a dedicated github access token and put it here (you'll only have to do this once):" token; echo
+		
+		printf "\nmachine %s\nlogin %s\npassword %s\n" "$domain" "$user" "$token" >> ~/.netrc
+	fi
+	
+	
+	curl -snif -H "$accept_header" -d "$data" -L "$location" >/dev/null
+}
+
+hub_pull_request() {
+
+	local to_branch="${1:-"master"}"
+	local from_branch="$(git rev-parse --abbrev-ref HEAD)"
+	local data='{
+					"title": "Amazing new feature",
+					"body": "Please pull this in!",
+					"head": "'"$from_branch"'",
+					"base": "'"$to_branch"'"
+				}'
+
+	local origin="$(git config --get remote.origin.url)"
+	local user="$(echo "$origin" | sed -e 's/.*[\/:]\([^/]*\)\/[^/]*$/\1/')"
+	local repo="$(basename `git rev-parse --show-toplevel`)"
+	local resource="repos/$user/$repo/pulls"
+
+	local root_endpoint="lpgithub.dev.lprnd.net/api/v3"
+	local location="https://$root_endpoint/$resource"
+	
+	io_log "creating pull-request from '$from_branch' to '$to_branch'..."
+
+	hub_post "$location" "$data"
+
+	io_status_logger $? "created ok" "create failed"
+}
