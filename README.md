@@ -28,7 +28,7 @@ chmod +x setup.sh
 ./setup.sh
 ```
 
-(windows users may skip the `chmod` bit).
+(windows users can skip the `chmod` bit).
 
 #### uninstall
 
@@ -58,6 +58,21 @@ happen. why? because the branch base (for `start`ed features, `create`ed
 teams, etc.) is saved to the git config, and not dynamically resolved via git.
 
 
+## troubleshooting
+
+- **\[git-bash\] pull/push fails ([#37][6])**
+  
+  if your git-bash prompts you for credentials on each git command, 
+  git-flux commands may fail for no apparent reason.  
+  this happens due a [bug in git-for-windows][5], and can be worked-around
+  if you disable the tedious credentials prompt and tell git to just 
+  store them for you:
+  
+  ```sh
+  git config --global credential.helper wincred
+  ```
+
+
 
 
 
@@ -67,3 +82,5 @@ teams, etc.) is saved to the git config, and not dynamically resolved via git.
 [2]: https://git-scm.com/book/en/v2/Git-Branching-Rebasing#_rebase_peril
 [3]: https://danlimerick.wordpress.com/2011/07/11/git-for-windows-tip-setting-home-and-the-startup-directory/
 [4]: /usage
+[5]: https://github.com/git-for-windows/git/issues/327
+[6]: https://github.com/eliranmal/git-flux/issues/37
