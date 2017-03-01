@@ -52,7 +52,7 @@ git_delete_remote_branch() {
 }
 
 git_pull() {
-	git pull
+	git pull >/dev/null 2>&1
 }
 
 git_push() {
