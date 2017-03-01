@@ -60,7 +60,7 @@ teams, etc.) is saved to the git config, and not dynamically resolved via git.
 
 ## troubleshooting
 
-- **pull/push fails on git-bash for no apparent reason**
+- **pull/push fails on git-bash for no apparent reason ([#37][6])**
   
   if your git-bash prompts you for credentials on each git command, 
   git-flux commands may fail for no apparent reason.  
@@ -83,3 +83,4 @@ teams, etc.) is saved to the git config, and not dynamically resolved via git.
 [3]: https://danlimerick.wordpress.com/2011/07/11/git-for-windows-tip-setting-home-and-the-startup-directory/
 [4]: /usage
 [5]: https://github.com/git-for-windows/git/issues/327
+[6]: https://github.com/eliranmal/git-flux/issues/37
