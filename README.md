@@ -60,7 +60,7 @@ teams, etc.) is saved to the git config, and not dynamically resolved via git.
 
 ## troubleshooting
 
-- **pull/push fails on git-bash for no apparent reason ([#37][6])**
+- **\[git-bash\] pull/push fails ([#37][6])**
   
   if your git-bash prompts you for credentials on each git command, 
   git-flux commands may fail for no apparent reason.  
