@@ -393,7 +393,7 @@ hub_create_pull_request() {
 	local split_index=40
 	local pr_title; local pr_body;
 	if (( ${#pr_message} <= $split_index )); then
-		pr_title="${pr_message:0:$split_index}"
+		pr_title="$pr_message"
 	else
 		pr_title="${pr_message:0:$split_index}..."
 		pr_body="...${pr_message:$split_index}"
