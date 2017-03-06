@@ -21,3 +21,38 @@ is_available() {
 strip_prefix() {
 	echo "$1" | sed -e 's,^'"$2"',,'
 }
+
+os_value() {
+	local val
+	if [[ $OSTYPE = "linux-gnu" || $OSTYPE = "darwin"* ]]; then # linux / mac osx
+		val=$1
+	elif [[ $OSTYPE = "msys" ]]; then # mingw
+		val=$2
+	fi
+	printf "%s" "$val"
+}
+
+url_last_path_seg() {
+	sed -e 's,.*[/:]\([^/]*\)/[^/]*$,\1,'
+}
+
+url_domain() {
+	sed -e 's,[^:/]*://\([^/]*\)/.*$,\1,'
+}
+
+json_get() {
+	json_select '["'"$1"'"]'
+}
+
+json_select() {
+	local selector="$1"	
+	# check node is available
+	if hash node 2>/dev/null; then
+		local src='
+			var data=JSON.parse(process.argv[1] || "{}");
+			var val=data'"$selector"';
+			console.log(typeof val === "undefined" ? "" : typeof val === "string" ? val : JSON.stringify(val));
+		'
+		node -e "$src" "$(cat -)" 2>/dev/null
+	fi
+}

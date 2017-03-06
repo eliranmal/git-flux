@@ -2,7 +2,7 @@
 
 
 cmd_usage_default() {
-	printf "start|finish|sync <name> [<base>] [-h]"
+	printf "start|finish|sync|review <name> [<base>] [-h]"
 }
 
 cmd_usage_start() {
@@ -17,6 +17,10 @@ cmd_usage_sync() {
 	printf "sync <name> [-h]"
 }
 
+cmd_usage_review() {
+	printf "review <name> [-h]"
+}
+
 cmd_long_usage_default() {
 	printf "\
 $(f_heading "feature" | f_fg_blue)
@@ -29,6 +33,7 @@ $(f_subheading "available actions")
 $(cmd_long_usage_start)
 $(cmd_long_usage_finish)
 $(cmd_long_usage_sync)
+$(cmd_long_usage_review)
 "
 }
 
@@ -55,6 +60,14 @@ cmd_long_usage_sync() {
 $(f_code_definition \
 "$(cmd_usage_sync)" \
 "sync an existing feature with its base branch, usually the current team branch, unless otherwise set when the feature was started.")
+ "
+}
+
+cmd_long_usage_review() {
+	printf "\
+$(f_code_definition \
+"$(cmd_usage_review)" \
+"opens a pull request from the feature branch to its base branch, for review in github.")
  "
 }
 
@@ -85,5 +98,5 @@ cmd_sync() {
 cmd_review() {
 	require_args "$1"
 	io_log; review_branch_from_base "$(git_config_get "prefix.feature")$1"
-	io_log; io_log_ok "feature '$1' is ready for review. go to github to see it."; io_log
+	io_log; io_log_ok "feature '$1' is ready for review."; io_log
 }
