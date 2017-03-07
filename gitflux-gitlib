@@ -369,9 +369,10 @@ hub_ensure_authenticated() {
 	if [[ ! -e ~/$netrc || -z $(cat ~/${netrc} | grep "$domain") ]]; then
 		local pass="$(io_prompt_pass "type in your github password (you'll only have to do this once)")"; io_log
 		local user="$(git_repo_user)"
+		# currently only 'public_repo' is needed (for pull-requests)
 		local data='{
 						"scopes": ["public_repo"],
-						"note": "Git Flux - Pull Requests"
+						"note": "Git Flux"
 					}'
 
 		io_log; io_log "creating an access token on '$domain'..."
@@ -385,26 +386,64 @@ hub_ensure_authenticated() {
 	fi
 }
 
+# 
+# treats the title/body in the following manner:
+#
+# - let 'message' be the last commit message
+# - let 'joint' be a horizontal ellipsis ('...')
+# - let 'title-max-length' be an arbitrary number to try and fit in the PR title field on github as one line
+# - if 'message' has line breaks:
+#   let 'title' be everything before the first line break
+#   let 'body' be the rest of message
+#   escape new-lines in the body
+#    - if 'title' is longer than 'title-max-length':
+#      trim 'title' and prepend the trimmed text to 'body'
+#      pad the split joints with 'joint'
+# - otherwise (no line breaks were found in 'message'):
+#    - if 'message' is longer than 'title-max-length':
+#      let 'title' be everything before the index indicated by 'title-max-length'
+#      let 'body' be the rest of 'message'
+#      pad the split joints with 'joint'
+#    - otherwise ('message' is not longer than 'title-max-length'):
+#      let 'title' be 'message'
+hub_build_pull_request_data() {
+	local from_branch="$1"; local to_branch="$2"
+	local title; local body
+
+	local message="$(git_last_commit_message "$from_branch")"
+	local joint='...'
+	local title_max_length=40
+	if [[ $message = *$'\n'* ]]; then # check for line breaks
+		# split message at the first line break
+		title="$(head -n 1 <<< "$message")"
+		body="$(tail -n +2 <<< "$message")"
+		body="${body/$'\n'/\n}" # escape new lines (it's going into a json object!)
+		if (( ${#title} > $title_max_length )); then
+			body="$joint${title:$title_max_length}"'\n'"$body" # re-add the lost line break before the original body
+			title="${title:0:$title_max_length}$joint"
+	    fi
+	else # no line breaks
+		if (( ${#message} > $title_max_length )); then
+			title="${message:0:$title_max_length}$joint"
+			body="$joint${message:$title_max_length}"
+		else
+			title="$message"
+		fi
+	fi
+
+	printf "%s" '{
+					"title": "'"$title"'",
+					"body": "'"$body"'",
+					"head": "'"$from_branch"'",
+					"base": "'"$to_branch"'"
+				}'
+}
+
 hub_create_pull_request() {
 	local from_branch="$1"
 	local to_branch="${2:-master}"
 
-	local pr_message="$(git_last_commit_message "$from_branch")"
-	local split_index=40
-	local pr_title; local pr_body;
-	if (( ${#pr_message} <= $split_index )); then
-		pr_title="$pr_message"
-	else
-		pr_title="${pr_message:0:$split_index}..."
-		pr_body="...${pr_message:$split_index}"
-	fi
-
-	local data='{
-					"title": "'"$pr_title"'",
-					"body": "'"$pr_body"'",
-					"head": "'"$from_branch"'",
-					"base": "'"$to_branch"'"
-				}'
+	local data="$(hub_build_pull_request_data "$from_branch" "$to_branch")"
 
 	io_log "creating pull-request from '$from_branch' to '$to_branch'..."
 	local response="$(hub_post "/repos/$(git_repo_user)/$(git_repo_name)/pulls" "$data")"
