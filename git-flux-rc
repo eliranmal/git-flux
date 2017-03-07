@@ -2,7 +2,7 @@
 
 
 cmd_usage_default() {
-	printf "start|finish <name> [-h]"
+	printf "start|finish|review <name> [-h]"
 }
 
 cmd_usage_start() {
@@ -11,6 +11,10 @@ cmd_usage_start() {
 
 cmd_usage_finish() {
 	printf "finish <name> [-h]"
+}
+
+cmd_usage_review() {
+	printf "review <name> [-h]"
 }
 
 cmd_long_usage_default() {
@@ -24,6 +28,7 @@ $(f_subheading "available actions")
 
 $(cmd_long_usage_start)
 $(cmd_long_usage_finish)
+$(cmd_long_usage_review)
 "
 }
 
@@ -32,7 +37,8 @@ cmd_long_usage_start() {
 $(f_code_definition \
 "$(cmd_usage_start)" \
 "start a release-candidate; create a local branch and push it to the remote.
-the branch name will be composed of the pre-configured release-candidate prefix and the passed $(f_code "name").")
+the branch name will be composed of the pre-configured release-candidate prefix and the passed $(f_code "name").
+it is advised that $(f_code "name") will be the next version, e.g. '1.1.0'.")
  "
 }
 
@@ -41,6 +47,14 @@ cmd_long_usage_finish() {
 $(f_code_definition \
 "$(cmd_usage_finish)" \
 "finish an existing release-candidate; delete its local and remote branches, for good.")
+ "
+}
+
+cmd_long_usage_review() {
+	printf "\
+$(f_code_definition \
+"$(cmd_usage_review)" \
+"opens a pull request from the release-candidate branch to its base branch, i.e. the integration branch, for review in github.")
  "
 }
 
@@ -54,4 +68,10 @@ cmd_finish() {
 	require_args "$1"
 	io_log; destroy_branch_from_base "$(git_config_get "prefix.rc")$1"
 	io_log; io_log_ok "release candidate '$1' is finished. goodbye!"; io_log
+}
+
+cmd_review() {
+	require_args "$1"
+	io_log; review_branch_from_base "$(git_config_get "prefix.rc")$1"
+	io_log; io_log_ok "release candidate '$1' is ready for review."; io_log
 }

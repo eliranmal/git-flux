@@ -65,7 +65,7 @@ cmd_long_usage_sync() {
 	printf "\
 $(f_code_definition \
 "$(cmd_usage_sync)" \
-"sync an existing team with its base branch (the integration branch).")
+"sync an existing team with its base branch, i.e. the integration branch.")
  "
 }
 
@@ -73,7 +73,7 @@ cmd_long_usage_review() {
 	printf "\
 $(f_code_definition \
 "$(cmd_usage_review)" \
-"opens a pull request from the team branch to its base branch (the integration branch), for review in github.")
+"opens a pull request from the team branch to its base branch, i.e. the integration branch, for review in github.")
  "
 }
 

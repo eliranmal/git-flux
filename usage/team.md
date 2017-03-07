@@ -22,12 +22,12 @@ aliases: <code>disassemble</code>, <code>scatter</code>, <code>break</code>.<br/
  
 <dl>
 	<dt><code>sync &lt;name&gt; [-h]</code></dt>
-	<dd>sync an existing team with its base branch (the integration branch).<br/></dd>
+	<dd>sync an existing team with its base branch, i.e. the integration branch.<br/></dd>
 </dl>
  
 <dl>
 	<dt><code>review &lt;name&gt; [-h]</code></dt>
-	<dd>opens a pull request from the team branch to its base branch (the integration branch), for review in github.<br/></dd>
+	<dd>opens a pull request from the team branch to its base branch, i.e. the integration branch, for review in github.<br/></dd>
 </dl>
  
 <dl>
