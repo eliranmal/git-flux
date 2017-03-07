@@ -355,8 +355,8 @@ hub_response_status() {
 	else
 		error_message="$(echo "$response" | json_get "message")"
 	fi
-    
-    if [[ $error_message ]]; then
+
+	if [[ $error_message ]]; then
 		io_status_fatal "$3: '$error_message'" 1
 	else
 		io_log_ok "$2" 1
@@ -421,7 +421,7 @@ hub_build_pull_request_data() {
 		if (( ${#title} > $title_max_length )); then
 			body="$joint${title:$title_max_length}"'\n'"$body" # re-add the lost line break before the original body
 			title="${title:0:$title_max_length}$joint"
-	    fi
+		fi
 	else # no line breaks
 		if (( ${#message} > $title_max_length )); then
 			title="${message:0:$title_max_length}$joint"
