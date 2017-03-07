@@ -335,7 +335,7 @@ hub_post() {
 	local location='https://'"$(hub_root_endpoint)$resource"
 	
     curl --silent \
-        ${netrc} \
+		${netrc} \
 		${credentials} \
 		--header "$accept_header" \
 		--data "$data" \
