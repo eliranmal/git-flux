@@ -333,7 +333,7 @@ hub_post() {
 	local credentials="${3:+--user $3}"; local netrc="${3:---netrc}"
 	local accept_header='Accept: application/vnd.github.v3+json'
 	local location='https://'"$(hub_root_endpoint)$resource"
-	
+
 	curl --silent \
 		${netrc} \
 		${credentials} \
