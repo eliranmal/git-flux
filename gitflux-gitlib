@@ -334,7 +334,7 @@ hub_post() {
 	local accept_header='Accept: application/vnd.github.v3+json'
 	local location='https://'"$(hub_root_endpoint)$resource"
 	
-    curl --silent \
+	curl --silent \
 		${netrc} \
 		${credentials} \
 		--header "$accept_header" \
