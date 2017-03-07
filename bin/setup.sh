@@ -68,9 +68,7 @@ do_install() {
 		else # first-time installation, go fish
 			log "cloning repo from github into '$clone_dir'"
 			# using --recursive to auto-init the submodule
-			# to clone another branch, use --branch
-#			git clone --recursive "$REPO_URL" "$clone_dir" || exit 1
-			git clone --recursive --branch "support_pr" "$REPO_URL" "$clone_dir" || exit 1
+			git clone --recursive "$REPO_URL" "$clone_dir" || exit 1
 		fi
 		source_repo_path="$clone_dir"
 	fi
