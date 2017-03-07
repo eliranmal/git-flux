@@ -29,14 +29,12 @@ git_diff() {
 
 git_current_branch() {
 	git branch --no-color | grep '^\* ' | grep -v 'no branch' | sed 's/^* //g'
+	# todo - consider this implementation instead:
+#	git rev-parse --abbrev-ref HEAD
 }
 
 git_prune() {
 	git remote prune origin >/dev/null 2>&1
-}
-
-git_pull_origin() {
-	git pull origin "$1" >/dev/null 2>&1
 }
 
 git_checkout() {
@@ -53,6 +51,10 @@ git_delete_remote_branch() {
 
 git_pull() {
 	git pull >/dev/null 2>&1
+}
+
+git_pull_origin() {
+	git pull origin "$1" >/dev/null 2>&1
 }
 
 git_push() {
@@ -74,6 +76,26 @@ git_merge() {
 
 git_create_tag() {
 	git tag -a "$1" -m "$2" >/dev/null 2>&1
+}
+
+git_last_commit_message() {
+	git log ${1} --no-merges --format=%s -1
+}
+
+git_repo_origin() {
+	git config --get remote.origin.url
+}
+
+git_repo_user() {
+	git_repo_origin | url_last_path_seg
+}
+
+git_repo_domain() {
+	git_repo_origin | url_domain
+}
+
+git_repo_name() {
+	basename "$(git rev-parse --show-toplevel)"
 }
 
 
@@ -281,4 +303,150 @@ git_config_get_subsections_by_value() {
 
 git_config_escape_subsection() {
 	printf "%s" "$1" | sed 's,\([\\\"]\),\\\1,g' # '\' and '"' must be escaped in git config subsection names
+}
+
+
+# - - - - - hub - - - - - #
+
+hub_domain() {
+	local domain="$(git_repo_domain)"
+	if [[ $domain = github.com ]]; then
+		domain='api.'"$domain"
+	fi
+	printf "%s" "$domain"
+}
+
+hub_root_endpoint() {
+	local root_endpoint
+	local domain="$(git_repo_domain)"
+	if [[ $domain = github.com ]]; then
+		root_endpoint='api.'"$domain"
+	else # github enterprise
+		root_endpoint="$domain"'/api/v3'
+	fi
+	printf "%s" "$root_endpoint"
+}
+
+hub_post() {
+	local resource="$1"; local data="$2"
+	# optionally pass credentials in the form "user:pass". if not passed, fallback to use the netrc file
+	local credentials="${3:+--user $3}"; local netrc="${3:---netrc}"
+	local accept_header='Accept: application/vnd.github.v3+json'
+	local location='https://'"$(hub_root_endpoint)$resource"
+
+	curl --silent \
+		${netrc} \
+		${credentials} \
+		--header "$accept_header" \
+		--data "$data" \
+		--location "$location"
+}
+
+hub_response_status() {
+	local response="$1"; local error_message
+	local first_error="$(echo "$response" | json_select '.errors[0]')"
+	if [[ $first_error ]]; then
+		code="$(echo "$first_error" | json_get "code")"
+		if [[ $code = custom ]]; then
+			error_message="$(echo "$first_error" | json_get "message")"
+		else
+			error_message="$code"
+		fi
+	else
+		error_message="$(echo "$response" | json_get "message")"
+	fi
+
+	if [[ $error_message ]]; then
+		io_status_fatal "$3: '$error_message'" 1
+	else
+		io_log_ok "$2" 1
+	fi
+}
+
+hub_ensure_authenticated() {
+	local domain="$(hub_domain)"
+	local netrc="$(os_value '.netrc' '_netrc')"
+	if [[ ! -e ~/$netrc || -z $(cat ~/${netrc} | grep "$domain") ]]; then
+		local pass="$(io_prompt_pass "type in your github password (you'll only have to do this once)")"; io_log
+		local user="$(git_repo_user)"
+		# currently only 'public_repo' is needed (for pull-requests)
+		local data='{
+						"scopes": ["public_repo"],
+						"note": "Git Flux"
+					}'
+
+		io_log; io_log "creating an access token on '$domain'..."
+		local response="$(hub_post "/authorizations" "$data" "$user:$pass")"
+		hub_response_status "$response" "created ok" "create failed"
+
+		local token="$(echo "$response" | json_get "token")"
+		if [[ $token ]]; then
+			printf "\nmachine %s\nlogin %s\npassword %s\n" "$domain" "$user" "$token" >> ~/${netrc}
+		fi
+	fi
+}
+
+# 
+# treats the title/body in the following manner:
+#
+# - let 'message' be the last commit message
+# - let 'joint' be a horizontal ellipsis ('...')
+# - let 'title-max-length' be an arbitrary number to try and fit in the PR title field on github as one line
+# - if 'message' has line breaks:
+#   let 'title' be everything before the first line break
+#   let 'body' be the rest of message
+#   escape new-lines in the body
+#    - if 'title' is longer than 'title-max-length':
+#      trim 'title' and prepend the trimmed text to 'body'
+#      pad the split joints with 'joint'
+# - otherwise (no line breaks were found in 'message'):
+#    - if 'message' is longer than 'title-max-length':
+#      let 'title' be everything before the index indicated by 'title-max-length'
+#      let 'body' be the rest of 'message'
+#      pad the split joints with 'joint'
+#    - otherwise ('message' is not longer than 'title-max-length'):
+#      let 'title' be 'message'
+hub_build_pull_request_data() {
+	local from_branch="$1"; local to_branch="$2"
+	local title; local body
+
+	local message="$(git_last_commit_message "$from_branch")"
+	local joint='...'
+	local title_max_length=40
+	if [[ $message = *$'\n'* ]]; then # check for line breaks
+		# split message at the first line break
+		title="$(head -n 1 <<< "$message")"
+		body="$(tail -n +2 <<< "$message")"
+		body="${body/$'\n'/\n}" # escape new lines (it's going into a json object!)
+		if (( ${#title} > $title_max_length )); then
+			body="$joint${title:$title_max_length}"'\n'"$body" # re-add the lost line break before the original body
+			title="${title:0:$title_max_length}$joint"
+		fi
+	else # no line breaks
+		if (( ${#message} > $title_max_length )); then
+			title="${message:0:$title_max_length}$joint"
+			body="$joint${message:$title_max_length}"
+		else
+			title="$message"
+		fi
+	fi
+
+	printf "%s" '{
+					"title": "'"$title"'",
+					"body": "'"$body"'",
+					"head": "'"$from_branch"'",
+					"base": "'"$to_branch"'"
+				}'
+}
+
+hub_create_pull_request() {
+	local from_branch="$1"
+	local to_branch="${2:-master}"
+
+	local data="$(hub_build_pull_request_data "$from_branch" "$to_branch")"
+
+	io_log "creating pull-request from '$from_branch' to '$to_branch'..."
+	local response="$(hub_post "/repos/$(git_repo_user)/$(git_repo_name)/pulls" "$data")"
+	local pr_url="$(echo "$response" | json_get "html_url")"
+	hub_response_status "$response" "created ok, here's the url: $pr_url" "create failed"
 }

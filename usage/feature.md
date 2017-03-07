@@ -1,5 +1,5 @@
 
-    git flux feature start|finish|sync <name> [<base>] [-h]
+    git flux feature start|finish|sync|review <name> [<base>] [-h]
 
 # feature
 
@@ -24,6 +24,10 @@ pass an optional <code>base</code> to set a custom base for the branch (default 
 	<dd>sync an existing feature with its base branch, usually the current team branch, unless otherwise set when the feature was started.<br/></dd>
 </dl>
  
+<dl>
+	<dt><code>review &lt;name&gt; [-h]</code></dt>
+	<dd>opens a pull request from the feature branch to its base branch, for review in github.<br/></dd>
+</dl>
 
 
 

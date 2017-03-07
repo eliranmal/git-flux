@@ -51,6 +51,17 @@ destroy_branch_from_base() {
 	git_config_remove_section "$(git_config_escape_subsection "branch:$branch")"
 }
 
+review_branch_from_base() {
+	local branch="$1"; local base_override="$2"
+	local base_default="$(git_config_get "$(git_config_escape_subsection "branch:$branch").base")"
+	local base_branch=${base_override:-$base_default}
+
+	validate_git_clean_working_tree
+
+	hub_ensure_authenticated
+	hub_create_pull_request "$branch" "$base_branch"
+}
+
 destroy_branch_from_tag() {
 	io_confirm "local and remote branches will be deleted, forever! continue?" "i knew you'd chicken out."
 	io_log 
