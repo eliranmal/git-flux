@@ -371,9 +371,9 @@ hub_ensure_authenticated() {
 		local user="$(git_repo_user)"
 		# currently only 'public_repo' is needed (for pull-requests)
 		local data='{
-						"scopes": ["public_repo"],
-						"note": "Git Flux"
-					}'
+		                "scopes": ["public_repo"],
+		                "note": "Git Flux"
+		            }'
 
 		io_log; io_log "creating an access token on '$domain'..."
 		local response="$(hub_post "/authorizations" "$data" "$user:$pass")"
@@ -432,20 +432,19 @@ hub_build_pull_request_data() {
 	fi
 
 	printf "%s" '{
-					"title": "'"$title"'",
-					"body": "'"$body"'",
-					"head": "'"$from_branch"'",
-					"base": "'"$to_branch"'"
-				}'
+	                 "title": "'"$title"'",
+	                 "body": "'"$body"'",
+	                 "head": "'"$from_branch"'",
+	                 "base": "'"$to_branch"'"
+	             }'
 }
 
 hub_create_pull_request() {
 	local from_branch="$1"
 	local to_branch="${2:-master}"
 
-	local data="$(hub_build_pull_request_data "$from_branch" "$to_branch")"
-
 	io_log "creating pull-request from '$from_branch' to '$to_branch'..."
+	local data="$(hub_build_pull_request_data "$from_branch" "$to_branch")"
 	local response="$(hub_post "/repos/$(git_repo_user)/$(git_repo_name)/pulls" "$data")"
 	local pr_url="$(echo "$response" | json_get "html_url")"
 	hub_response_status "$response" "created ok, here's the url: $pr_url" "create failed"
