@@ -57,6 +57,8 @@ review_branch_from_base() {
 	local base_branch=${base_override:-$base_default}
 
 	validate_git_clean_working_tree
+	validate_git_local_and_remote_branches_exist "$branch"	
+	validate_git_local_and_remote_branches_exist "$base_branch"
 
 	hub_ensure_authenticated
 	hub_create_pull_request "$branch" "$base_branch"
@@ -85,7 +87,6 @@ sync_branch_with_base() {
 	local base_branch=${base_override:-$base_default}
 
 	validate_git_clean_working_tree
-
 	validate_git_local_and_remote_branches_exist "$branch"	
 	validate_git_local_and_remote_branches_exist "$base_branch"
 
