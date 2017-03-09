@@ -395,7 +395,6 @@ hub_ensure_authenticated() {
 # - if 'message' has line breaks:
 #   let 'title' be everything before the first line break
 #   let 'body' be the rest of message
-#   escape new-lines in the body
 #    - if 'title' is longer than 'title-max-length':
 #      trim 'title' and prepend the trimmed text to 'body'
 #      pad the split joints with 'joint'
@@ -406,6 +405,7 @@ hub_ensure_authenticated() {
 #      pad the split joints with 'joint'
 #    - otherwise ('message' is not longer than 'title-max-length'):
 #      let 'title' be 'message'
+#
 hub_build_pull_request_data() {
 	local from_branch="$1"; local to_branch="$2"
 	local title; local body
@@ -417,7 +417,6 @@ hub_build_pull_request_data() {
 		# split message at the first line break
 		title="$(head -n 1 <<< "$message")"
 		body="$(tail -n +2 <<< "$message")"
-		body="${body/$'\n'/\n}" # escape new lines (it's going into a json object!)
 		if (( ${#title} > $title_max_length )); then
 			body="$joint${title:$title_max_length}"'\n'"$body" # re-add the lost line break before the original body
 			title="${title:0:$title_max_length}$joint"
@@ -431,6 +430,9 @@ hub_build_pull_request_data() {
 		fi
 	fi
 
+	title="$(json_escape_string "$title")"
+	body="$(json_escape_string "$body")"
+
 	printf "%s" '{
 	                 "title": "'"$title"'",
 	                 "body": "'"$body"'",
@@ -440,8 +442,7 @@ hub_build_pull_request_data() {
 }
 
 hub_create_pull_request() {
-	local from_branch="$1"
-	local to_branch="${2:-master}"
+	local from_branch="$1"; local to_branch="$2"
 
 	io_log "creating pull-request from '$from_branch' to '$to_branch'..."
 	local data="$(hub_build_pull_request_data "$from_branch" "$to_branch")"
