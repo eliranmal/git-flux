@@ -56,3 +56,10 @@ json_select() {
 		node -e "$src" "$(cat -)" 2>/dev/null
 	fi
 }
+
+# simple implementation: only escapes '\', '"' and new-lines
+json_escape_string() {
+	local str="$1"
+	str="$(echo "$str" | sed -e '0N' -e 's,\(["\]\),\\\1,g')"
+	printf "%s" "${str//$'\n'/\n}"
+}
