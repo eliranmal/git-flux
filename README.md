@@ -1,7 +1,7 @@
 
 # git-flux
 
-> git commands for fluent, team-oriented workflow
+> git commands for fluent, collaborative workflow
 
 
 ## prerequisites
