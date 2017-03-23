@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+
+cmd_usage_default() {
+	# todo - pass version
+#	printf "[<version>] [-h]"
+	printf "[-h]"
+}
+
+cmd_long_usage_default() {
+	printf "\
+$(f_heading "update")
+
+$(f_fg_rainbow "auto-magically") updates git-flux.
+ "
+}
+
+
+cmd_default() {
+#	io_log; create_branch_from_tag "$(git_config_get "prefix.hf")$1" "$2"
+	io_log; io_log_ok "git-flux is updated. $(f_fg_rainbow "it's magic!")"; io_log
+}

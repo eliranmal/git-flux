@@ -6,18 +6,8 @@ main() {
 	local clone_dir="$source_dir"'/git-flux'
 	local exec_files="git-flux"
 	local script_files="
-		gitflux-util
-		gitflux-io
-		gitflux-gitlib
-		gitflux-validation
-		gitflux-action
-		gitflux-common
-		git-flux-init
-		git-flux-feature
-		git-flux-team
-		git-flux-integration
-		git-flux-rc
-		git-flux-hf
+		gitflux-*
+		git-flux-*
 	"
 	local submodule_path='styli.sh'
 	local submodule_files="

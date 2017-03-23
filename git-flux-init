@@ -35,7 +35,6 @@ $(f_list_item \
 "$(f_fg_magenta "integration branch")" \
 "the long-lived integration branch name, defaults to $(f_code "integration").
 this branch serves as the base to all team branches, and will be created if it does not already exist.")
-
  "
 }
 
