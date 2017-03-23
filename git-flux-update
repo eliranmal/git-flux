@@ -17,6 +17,23 @@ $(f_fg_rainbow "auto-magically") updates git-flux.
 
 
 cmd_default() {
-#	io_log; create_branch_from_tag "$(git_config_get "prefix.hf")$1" "$2"
+
+	local temp_dir="$(create_temp_dir 'git-flux')"
+	echo "> > > created temp dir at [$temp_dir]"
+
+	trap 'rm -rf '"$temp_dir" EXIT
+
+	echo "> > > changing to temp directory"
+	pushd $temp_dir # we're running in a subshell, no need to clear the directory stack afterwards
+	
+	echo "> > > fetching a fresh setup script from github"
+#	curl -O https://raw.githubusercontent.com/eliranmal/git-flux/master/bin/setup.sh
+	curl -O https://raw.githubusercontent.com/eliranmal/git-flux/self-update/bin/setup.sh
+	echo "> > > setting executable permissions on the setup script"
+	chmod +x setup.sh
+	echo "> > > running setup with the 'update' command. its globbing pattern on runtime files will take care to remove everything old."
+	./setup.sh update
+
+#	io_log; # ...
 	io_log; io_log_ok "git-flux is updated. $(f_fg_rainbow "it's magic!")"; io_log
 }
