@@ -107,8 +107,7 @@ do_update() {
 # so they have to be declared only after ensuring their full path exists.
 # this is why we don't declare them statically at the top, and using this function instead.
 script_file_patterns() {
-	echo "gitflux-*"
-	echo "git-flux-*"
+	echo "gitflux-* git-flux-*"
 }
 
 public_script_file_patterns() {
