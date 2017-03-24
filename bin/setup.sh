@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 
+set +o noglob
 shopt -s extglob
 
 main() {
