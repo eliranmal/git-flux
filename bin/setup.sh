@@ -3,6 +3,7 @@
 
 set +o noglob
 shopt -s extglob
+shopt -s nullglob
 
 main() {
 	local source_dir="$( cd "$(dirname "${BASH_SOURCE}")" ; pwd -P )"
