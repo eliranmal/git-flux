@@ -2,8 +2,8 @@
 
 
 #shopt -s extglob
-#shopt -s nullglob
-shopt -s failglob
+shopt -s nullglob
+#shopt -s failglob
 
 main() {
 	local source_dir="$( cd "$(dirname "${BASH_SOURCE}")" ; pwd -P )"
