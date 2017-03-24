@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
 
+shopt -s extglob
+
 main() {
 	local source_dir="$( cd "$(dirname "${BASH_SOURCE}")" ; pwd -P )"
 	local clone_dir="$source_dir"'/git-flux'
