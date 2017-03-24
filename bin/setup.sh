@@ -68,7 +68,9 @@ do_install() {
 	for exec_file in $exec_files; do
 		install -v -m 0755 "$source_repo_path/$exec_file" "$INSTALL_PREFIX"
 	done
-	for script_file in $(script_file_patterns); do
+
+	local patterns=$(script_file_patterns)
+	for script_file in ${patterns}; do
 		install -v -m 0644 "$source_repo_path/$script_file" "$INSTALL_PREFIX"
 	done
 	
@@ -84,7 +86,9 @@ do_install() {
 do_uninstall() {
 	validate_install_prefix
 	log "uninstalling git-flux from '$INSTALL_PREFIX'"
-	for script_file in $(script_file_patterns) $exec_files; do
+
+	local patterns=$(script_file_patterns)
+	for script_file in ${patterns} $exec_files; do
 		rm -vf "$INSTALL_PREFIX/$script_file"
 	done
 	rm -vfr "$INSTALL_PREFIX/$submodule_path"
