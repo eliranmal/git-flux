@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
 
-#set +o noglob
 #shopt -s extglob
 #shopt -s nullglob
+shopt -s failglob
 
 main() {
 	local source_dir="$( cd "$(dirname "${BASH_SOURCE}")" ; pwd -P )"
@@ -68,7 +68,7 @@ do_install() {
 	for exec_file in $exec_files; do
 		install -v -m 0755 "$source_repo_path/$exec_file" "$INSTALL_PREFIX"
 	done
-	for script_file in "$(script_file_patterns)"; do
+	for script_file in $(script_file_patterns); do
 		install -v -m 0644 "$source_repo_path/$script_file" "$INSTALL_PREFIX"
 	done
 	
@@ -84,7 +84,7 @@ do_install() {
 do_uninstall() {
 	validate_install_prefix
 	log "uninstalling git-flux from '$INSTALL_PREFIX'"
-	for script_file in "$(script_file_patterns)" $exec_files; do
+	for script_file in $(script_file_patterns) $exec_files; do
 		rm -vf "$INSTALL_PREFIX/$script_file"
 	done
 	rm -vfr "$INSTALL_PREFIX/$submodule_path"
@@ -103,10 +103,12 @@ do_update() {
 # so they have to be declared only after ensuring their full path exists.
 # this is why we don't declare them statically at the top, and using this function instead.
 script_file_patterns() {
-	echo "
-		gitflux-*
-		git-flux-*
-	"
+	echo "gitflux-*"
+	echo "git-flux-*"
+}
+
+public_script_file_patterns() {
+	echo "git-flux-*"
 }
 
 ensure_repo_url() {
