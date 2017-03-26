@@ -15,6 +15,12 @@ main() {
 	local output_format="markdown"
 	local file_prefix="git-flux-"
 
+    # redirect stdin to avoid piping stuff into this script - any input will be 
+	# transferred to the renderer along with the git-flux output, so we want to avoid that
+	exec < /dev/tty
+	# responsibly close the stdin
+	trap 'exec <&-' EXIT
+
 	# generate the main file usage (git-flux)
 	(
 		export FORMAT="$output_format" OUTPUT_PATH="$output_dir"'/main.md'
