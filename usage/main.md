@@ -1,7 +1,7 @@
 
     git flux init|feature|team|integration|rc|hf [<action>] [<action-args>...] [-h]
 
-# 
+# refs/heads/usage-git-hook 7bdec6781e5b848042d8513a9bbb1c42034af738 refs/heads/usage-git-hook 4418b9e41877cd86b58b392f5a441dfbee130f7a
 
 git commands for fluent, collaborative workflow.
 
