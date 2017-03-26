@@ -87,20 +87,6 @@ repository path:
 1. open a [pull-request][9]. i'll check it out, i promise.
 
 
-## troubleshooting
-
-- **\[git-bash\] pull/push fails ([#37][6])**
-  
-  if your git-bash prompts you for credentials on each git command, 
-  git-flux commands may fail for no apparent reason.  
-  this happens due a [bug in git-for-windows][5], and can be worked-around
-  if you disable the tedious credentials prompt and tell git to just 
-  store them for you:
-  
-  ```sh
-  git config --global credential.helper wincred
-  ```
-
 
 
 
