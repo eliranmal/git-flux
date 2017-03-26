@@ -2,6 +2,7 @@
 
 
 main() {
+	echo "--------- pre-commit runs! ---------"
 	render_usage_docs
 }
 
