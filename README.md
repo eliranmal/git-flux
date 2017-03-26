@@ -58,6 +58,35 @@ happen. why? because the branch base (for `start`ed features, `create`ed
 teams, etc.) is saved to the git config, and not dynamically resolved via git.
 
 
+## contributing
+
+in lieu of a formal styleguide, take care to maintain the existing coding style.
+
+### development environment setup
+
+1. clone the repository locally (preferably with the default name; *git-flux*). 
+you can fork it beforehand, or clone directly from the original repository.
+
+1. run the [dev.sh][7] script. its job is to set-up git hooks, and it 
+only needs to run once.
+
+1. create a brand new repository on github and clone it locally, for 
+the sole purpose of playing around with git-flux commands and test your 
+new awesome code.  
+let's call this repository *git-flux-playground*, for future reference.
+
+1. install git-flux from source; you can use the same [setup.sh][8] 
+script that's used for regular installations, by passing it the local 
+repository path:
+   
+   ```sh
+   cd /home/me/dev
+   env REPO_PATH=./git-flux ./git-flux/bin/setup.sh update
+   ```
+
+1. open a [pull-request][9]. i'll check it out, i promise.
+
+
 ## troubleshooting
 
 - **\[git-bash\] pull/push fails ([#37][6])**
@@ -84,3 +113,6 @@ teams, etc.) is saved to the git config, and not dynamically resolved via git.
 [4]: /usage
 [5]: https://github.com/git-for-windows/git/issues/327
 [6]: https://github.com/eliranmal/git-flux/issues/37
+[7]: /bin/dev.sh
+[8]: /bin/setup.sh
+[9]: https://github.com/eliranmal/git-flux/compare
