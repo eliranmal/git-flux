@@ -81,8 +81,9 @@ main() {
 
 	local action;
 
-	# lose the action arg only if it's not a `-h` flag, to not break long-usage
-	if [[ -n $1 && $1 != "-h" ]]; then
+	# lose the action arg only if it's not a `-h` flag, to not break long-usage, 
+	# also check for the action function availability, to allow parameters on 'default' actions
+	if [[ -n $1 && $1 != "-h" ]] && is_available "cmd_$1"; then
 		action="$1"; shift
 	else
 		action="default"
