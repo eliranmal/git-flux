@@ -2,7 +2,23 @@
 
 exec 1>&2
 
-echo "pre-push hook called with args:"
-echo "$@"
+main() {
+	log "pre-push hook called with args: [$@]"
+	render_usage_docs
+}
+
+render_usage_docs() {
+	# install git-flux from source - required for the usage.sh script
+	local git_root="$(git rev-parse --show-toplevel)"
+	env REPO_PATH=${git_root} ${git_root}/bin/setup.sh update
+	# render usage docs with the script
+	${git_root}/usage.sh
+}
+
+log() {
+	echo " > $1"
+}
+
+main "$@"
 
 exit 0
