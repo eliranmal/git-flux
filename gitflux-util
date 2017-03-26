@@ -33,7 +33,7 @@ os_value() {
 }
 
 create_temp_dir() {
-	mktemp -d 2>/dev/null || mktemp -d -t "$1"
+	mktemp -d 2>/dev/null || mktemp -d -t 'git-flux'
 }
 
 url_last_path_seg() {

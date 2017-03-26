@@ -18,7 +18,7 @@ $(f_fg_rainbow "auto-magically") updates git-flux.
 cmd_default() {
 
 	# creating temp dir to sandbox the setup process
-	local temp_dir="$(create_temp_dir 'git-flux')"
+	local temp_dir="$(create_temp_dir)"
 	# responsibly handle cleanup of the temp dir
 	trap 'cleanup '"$temp_dir" EXIT
 
