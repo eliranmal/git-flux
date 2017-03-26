@@ -70,19 +70,22 @@ you can fork it beforehand, or clone directly from the original repository.
 1. run the [dev.sh][7] script. its job is to set-up git hooks, and it 
 only needs to run once.
 
-1. create a brand new repository on github and clone it locally, for 
-the sole purpose of playing around with git-flux commands and test your 
-new awesome code.  
-let's call this repository *git-flux-playground*, for future reference.
+1. create a brand new repository on github and clone it locally (you can 
+call it *git-flux-playground*).  
+its sole purpose will be playing around with git-flux commands and test 
+your new awesome code.
 
 1. install git-flux from source; you can use the same [setup.sh][8] 
-script that's used for regular installations, by passing it the local 
+script that's used for regular installations, and pass it the local 
 repository path:
    
    ```sh
    cd /home/me/dev
    env REPO_PATH=./git-flux ./git-flux/bin/setup.sh update
    ```
+   
+   repeat this command whenever you make changes to your code and want to 
+test them in your playground repository.
 
 1. open a [pull-request][9]. i'll check it out, i promise.
 
