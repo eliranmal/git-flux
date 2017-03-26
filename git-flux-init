@@ -17,7 +17,8 @@ here are the details you need to fill in:
 $(f_list_item \
 "$(f_fg_blue "feature prefix")" \
 "a prefix for feature branch names, defaults to $(f_code "feature/").
-for example, $(f_code "foo/") will result in feature branch names like $(f_code "foo/my_awesome_feature").")
+for example, $(f_code "foo/") will result in feature branch names like $(f_code "foo/my_awesome_feature"), \
+and $(f_code "feature/foo/") will generate names like $(f_code "feature/foo/my_awesome_feature").")
 
 $(f_list_item \
 "$(f_fg_yellow "team prefix")" \
@@ -34,7 +35,7 @@ $(f_list_item \
 $(f_list_item \
 "$(f_fg_magenta "integration branch")" \
 "the long-lived integration branch name, defaults to $(f_code "integration").
-this branch serves as the base to all team branches, and will be created if it does not already exist.")
+this branch serves as the base to all team branches, and will be created if not already exists.")
  "
 }
 
