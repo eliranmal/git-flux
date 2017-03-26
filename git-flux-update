@@ -15,25 +15,30 @@ $(f_fg_rainbow "auto-magically") updates git-flux.
  "
 }
 
-
 cmd_default() {
 
+	# creating temp dir to sandbox the setup process
 	local temp_dir="$(create_temp_dir 'git-flux')"
-	echo "> > > created temp dir at [$temp_dir]"
+	# responsibly handle cleanup of the temp dir
+	trap 'cleanup '"$temp_dir" EXIT
 
-	trap 'rm -rf '"$temp_dir" EXIT
+	io_log
+	io_log "fetching a fresh setup script from github..."
+	curl --silent \
+		--output "$temp_dir"'/setup.sh' \
+		https://raw.githubusercontent.com/eliranmal/git-flux/master/bin/setup.sh
+	io_status_logger $? "fetched ok" "fetch failed"
 
-	echo "> > > changing to temp directory"
-	pushd $temp_dir # we're running in a subshell, no need to clear the directory stack afterwards
+	# setting executable permissions on the setup script
+	chmod +x "$temp_dir/setup.sh"
 	
-	echo "> > > fetching a fresh setup script from github"
-#	curl -O https://raw.githubusercontent.com/eliranmal/git-flux/master/bin/setup.sh
-	curl -O https://raw.githubusercontent.com/eliranmal/git-flux/self-update/bin/setup.sh
-	echo "> > > setting executable permissions on the setup script"
-	chmod +x setup.sh
-	echo "> > > running setup with the 'update' command. its globbing pattern on runtime files will take care to remove everything old."
-	./setup.sh update
+	io_log "running the setup script with the 'update' command..."
+	${temp_dir}/setup.sh update >/dev/null 2>&1 # todo - redirect to log file
+	io_status_logger $? "updated ok" "update failed"
 
-#	io_log; # ...
 	io_log; io_log_ok "git-flux is updated. $(f_fg_rainbow "it's magic!")"; io_log
+}
+
+cleanup() {
+	rm -rf "$1"
 }
