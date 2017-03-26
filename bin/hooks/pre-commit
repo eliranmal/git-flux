@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+exec 1<&2
+
 echo "pre-commit hook called with args:"
 echo "$@"
 
