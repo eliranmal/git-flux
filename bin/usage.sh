@@ -17,9 +17,9 @@ main() {
 
     # redirect stdin to avoid piping stuff into this script - any input will be 
 	# transferred to the renderer along with the git-flux output, so we want to avoid that
-	exec < /dev/stty
+#	exec < /dev/tty
 	# responsibly close the stdin
-	trap 'exec <&-' EXIT
+#	trap 'exec <&-' EXIT
 
 	# generate the main file usage (git-flux)
 	(
