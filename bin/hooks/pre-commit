@@ -16,6 +16,7 @@ render_usage_docs() {
 }
 
 
+
 exec 1>&2
 
 echo "-------------------pre-commit--------------------------"
