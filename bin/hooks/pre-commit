@@ -1,3 +1,6 @@
 #!/usr/bin/env bash
 
-echo "wat"
+echo "pre-commit hook called with args:"
+echo "$@"
+
+exit 0
