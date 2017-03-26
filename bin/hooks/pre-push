@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+exec 1>&2
+
+echo "pre-push hook called with args:"
+echo "$@"
+
+exit 0
