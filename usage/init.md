@@ -9,7 +9,7 @@ here are the details you need to fill in:
 
 - **feature prefix**  
   a prefix for feature branch names, defaults to `feature/`.
-  for example, `foo/` will result in feature branch names like `foo/my_awesome_feature`.
+  for example, `foo/` will result in feature branch names like `foo/my_awesome_feature`, and `feature/foo/` will generate names like `feature/foo/my_awesome_feature`.
 
 - **team prefix**  
   a prefix for team branch names, defaults to `team/`.
@@ -22,7 +22,7 @@ here are the details you need to fill in:
 
 - **integration branch**  
   the long-lived integration branch name, defaults to `integration`.
-  this branch serves as the base to all team branches, and will be created if it does not already exist.
+  this branch serves as the base to all team branches, and will be created if not already exists.
  
 
 
