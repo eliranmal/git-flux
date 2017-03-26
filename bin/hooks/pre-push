@@ -2,25 +2,21 @@
 
 
 main() {
-	log "pre-push hook called with args: $@"
+	log "pre-push hook called with args: [$*]"
 	render_usage_docs
 }
 
 render_usage_docs() {
 	local git_root="$(git rev-parse --show-toplevel)"
-	debug "install git-flux from source - required for the usage.sh script"
+	log "install git-flux from source - required for the usage.sh script"
 	env REPO_PATH=${git_root} ${git_root}/bin/setup.sh update || { exit 1; }
-	debug "render usage docs with the usage.sh script"
+	log "render usage docs with the usage.sh script"
 #	${git_root}/bin/usage.sh || { exit 2; }
 	${git_root}/usage.sh || { exit 2; }
 }
 
 log() {
 	echo " > $1"
-}
-
-debug() {
-	log "$1" 1>&2
 }
 
 
