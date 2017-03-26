@@ -2,7 +2,7 @@
 
 
 main() {
-	echo "--------- pre-commit runs! ---------"
+	echo "-------------------pre-commit--------------------------"
 	render_usage_docs
 }
 
@@ -16,8 +16,6 @@ render_usage_docs() {
 }
 
 
-echo "-------------------pre-commit--------------------------"
-
-#main
+main
 
 exit 0
