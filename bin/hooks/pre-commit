@@ -2,7 +2,7 @@
 
 
 main() {
-	echo "--------- pre-commit runs! ---------"
+	echo "--------- pre-commit runs! ---------" 1<&2
 	render_usage_docs
 }
 
