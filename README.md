@@ -68,15 +68,19 @@ in lieu of a formal styleguide, take care to maintain the existing coding style.
 you can fork it beforehand, or clone directly from the original repository.
 
 1. run the [dev.sh][7] script. its job is to set-up git hooks, and it 
-only needs to run once.
+only needs to run once.  
+the pre-push hook will take care of updating the auto-generated documentation 
+when you make changes to the help text (the output of `-h`).
 
 1. create a brand new repository on github and clone it locally (you can 
 call it *git-flux-playground*).  
 its sole purpose will be playing around with git-flux commands and test 
 your new awesome code.
 
-1. install git-flux from source; you can use the same [setup.sh][8] 
-script that's used for regular installations, and pass it the local 
+1. make some changes to the source code (a.k.a. *"your new awesome code"*).
+
+1. install git-flux from the source code; you can use the same [setup.sh][8] 
+script that's used for regular installations, and pass it your local 
 repository path:
    
    ```sh
