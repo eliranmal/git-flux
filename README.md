@@ -67,7 +67,7 @@ in lieu of a formal styleguide, take care to maintain the existing coding style.
 1. clone the repository locally (preferably with the default name; *git-flux*). 
 you can fork it beforehand, or clone directly from the original repository.
 
-1. run the [dev.sh][7] script. its job is to set-up git hooks, and it 
+1. run the [dev.sh][5] script. its job is to set-up git hooks, and it 
 only needs to run once.  
 the pre-push hook will take care of updating the auto-generated documentation 
 when you make changes to the help text (the output of `-h`).
@@ -79,7 +79,7 @@ your new awesome code.
 
 1. make some changes to the source code (a.k.a. *"your new awesome code"*).
 
-1. install git-flux from the source code; you can use the same [setup.sh][8] 
+1. install git-flux from the source code; you can use the same [setup.sh][6] 
 script that's used for regular installations, and pass it your local 
 repository path:
    
@@ -91,7 +91,7 @@ repository path:
    repeat this command whenever you make changes to your code and want to 
 test them in your playground repository.
 
-1. open a [pull-request][9]. i'll check it out, i promise.
+1. open a [pull-request][7]. i'll check it out, i promise.
 
 
 
@@ -104,8 +104,6 @@ test them in your playground repository.
 [2]: https://git-scm.com/book/en/v2/Git-Branching-Rebasing#_rebase_peril
 [3]: https://danlimerick.wordpress.com/2011/07/11/git-for-windows-tip-setting-home-and-the-startup-directory/
 [4]: /usage
-[5]: https://github.com/git-for-windows/git/issues/327
-[6]: https://github.com/eliranmal/git-flux/issues/37
-[7]: /bin/dev.sh
-[8]: /bin/setup.sh
-[9]: https://github.com/eliranmal/git-flux/compare
+[5]: /bin/dev.sh
+[6]: /bin/setup.sh
+[7]: https://github.com/eliranmal/git-flux/compare
