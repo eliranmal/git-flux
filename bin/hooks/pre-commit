@@ -2,7 +2,7 @@
 
 
 main() {
-	echo "--------- pre-commit runs! ---------" 1<&2
+	echo "--------- pre-commit runs! ---------"
 	render_usage_docs
 }
 
@@ -15,8 +15,11 @@ render_usage_docs() {
 	${git_root}/bin/usage.sh || { exit 2; }
 }
 
+
+exec 1>&2
+
 echo "-------------------pre-commit--------------------------"
 
-main
+#main
 
 exit 0
