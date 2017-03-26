@@ -2,7 +2,7 @@
 
 
 main() {
-	log 'pre-push hook called with args: ['"${@}"']'
+	log "pre-push hook called with args: [$@]"
 	render_usage_docs
 }
 
