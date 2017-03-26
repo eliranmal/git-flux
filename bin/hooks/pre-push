@@ -8,11 +8,12 @@ main() {
 }
 
 render_usage_docs() {
-	# install git-flux from source - required for the usage.sh script
 	local git_root="$(git rev-parse --show-toplevel)"
-	env REPO_PATH=${git_root} ${git_root}/bin/setup.sh update
+	# install git-flux from source - required for the usage.sh script
+	env REPO_PATH=${git_root} ${git_root}/bin/setup.sh update || { exit 1; }
 	# render usage docs with the script
-	${git_root}/usage.sh
+#	${git_root}/bin/usage.sh || { exit 2; }
+	${git_root}/usage.sh || { exit 2; }
 }
 
 log() {
