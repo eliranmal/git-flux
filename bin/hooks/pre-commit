@@ -6,7 +6,6 @@ main() {
 }
 
 render_usage_docs() {
-
 #	local git_root="$(git rev-parse --show-toplevel)"
 
     local source_dir="$( cd "$(dirname "${BASH_SOURCE}")" ; pwd -P )"
