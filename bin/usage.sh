@@ -31,4 +31,8 @@ main() {
 	done
 }
 
+
+echo "- input -"
+echo "$(cat -)"
+
 main
