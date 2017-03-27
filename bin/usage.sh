@@ -32,7 +32,18 @@ main() {
 }
 
 
-echo "- input -"
-echo "$(cat -)"
+#echo "- interactive (\$PS1) -"
+#echo "$PS1"
+#
+#echo "- interactive (\$-) -"
+#echo "$-"
+#
+#case "$-" in
+#	*i*)	echo This shell is interactive ;;
+#	*)	echo This shell is not interactive ;;
+#esac
+#
+#exit 0
+
 
 main
