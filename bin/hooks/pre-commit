@@ -2,7 +2,6 @@
 
 
 main() {
-#	echo "------------------- pre-commit --------------------------"
 	render_usage_docs
 }
 
