@@ -22,28 +22,14 @@ main() {
 	)
 
 	# generate all other files usage (git-flux-*)
-	for path in ${root_dir}/${file_prefix}*; do
-		local cmd="${path##*/$file_prefix}"
-		(
-			export FORMAT="$output_format" OUTPUT_PATH="$output_dir"'/'"$cmd"'.md'
-			git flux "$cmd" -h | format_usage_line | ${root_dir}/styli.sh/renderer
-		)
-	done
+#	for path in ${root_dir}/${file_prefix}*; do
+#		local cmd="${path##*/$file_prefix}"
+#		(
+#			export FORMAT="$output_format" OUTPUT_PATH="$output_dir"'/'"$cmd"'.md'
+#			git flux "$cmd" -h | format_usage_line | ${root_dir}/styli.sh/renderer
+#		)
+#	done
 }
-
-
-#echo "- interactive (\$PS1) -"
-#echo "$PS1"
-#
-#echo "- interactive (\$-) -"
-#echo "$-"
-#
-#case "$-" in
-#	*i*)	echo This shell is interactive ;;
-#	*)	echo This shell is not interactive ;;
-#esac
-#
-#exit 0
 
 
 main
