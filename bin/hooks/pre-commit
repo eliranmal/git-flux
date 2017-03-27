@@ -9,7 +9,7 @@ render_usage_docs() {
 #	local git_root="$(git rev-parse --show-toplevel)"
 
     local source_dir="$( cd "$(dirname "${BASH_SOURCE}")" ; pwd -P )"
-	local git_root="$source_dir/../../"
+	local git_root="$source_dir/../.."
 
 	# install git-flux from source - required for the usage.sh script
 #	env REPO_PATH=${git_root} ${git_root}/bin/setup.sh update || { exit 1; } # todo - encapsulate this into 'dev-setup.sh', update README (git_root can than be resolved via source_path)
