@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 
+
 # symlinks everything in the /bin/hooks directory to /.git/hooks
 
 main() {
