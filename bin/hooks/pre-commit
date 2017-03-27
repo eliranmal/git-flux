@@ -119,6 +119,9 @@ old_stash=$(git rev-parse -q --verify refs/stash)
 git stash save -q --keep-index
 new_stash=$(git rev-parse -q --verify refs/stash)
 
+echo "old_stash: $old_stash, new_stash: $new_stash"
+
+
 # If there were no changes (e.g., `--amend` or `--allow-empty`)
 # then nothing was stashed, and we should skip everything,
 # including the tests themselves.  (Presumably the tests passed
@@ -129,8 +132,9 @@ if [ "$old_stash" = "$new_stash" ]; then
     exit 0
 fi
 
+
 # Run tests
-#status=...
+status=0
 
 # Restore changes
 git reset --hard -q && git stash apply --index -q && git stash drop -q
