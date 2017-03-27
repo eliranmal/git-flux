@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env bash -x
 
 
 # this script auto-generates the git-flux usage documentation markdown files.
