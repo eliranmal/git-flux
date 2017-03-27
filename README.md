@@ -67,9 +67,9 @@ in lieu of a formal styleguide, take care to maintain the existing coding style.
 1. clone the repository locally (preferably with the default name; *git-flux*). 
 you can fork it beforehand, or clone directly from the original repository.
 
-1. run the [dev.sh][5] script. its job is to set-up git hooks, and it 
+1. run the [hookup.sh][5] script. its job is to set-up git hooks, and it 
 only needs to run once.  
-the pre-push hook will take care of updating the auto-generated documentation 
+the pre-commit hook will take care of updating the auto-generated documentation 
 when you make changes to the help text (the output of `-h`).
 
 1. create a brand new repository on github and clone it locally (you can 
@@ -79,13 +79,11 @@ your new awesome code.
 
 1. make some changes to the source code (a.k.a. *"your new awesome code"*).
 
-1. install git-flux from the source code; you can use the same [setup.sh][6] 
-script that's used for regular installations, and pass it your local 
-repository path:
+1. install git-flux from the source code; use the [dev-setup.sh][6] 
+script for that:
    
    ```sh
-   cd /home/me/dev
-   env REPO_PATH=./git-flux ./git-flux/bin/setup.sh update
+   ./bin/dev-setup.sh update
    ```
    
    repeat this command whenever you make changes to your code and want to 
@@ -104,6 +102,6 @@ test them in your playground repository.
 [2]: https://git-scm.com/book/en/v2/Git-Branching-Rebasing#_rebase_peril
 [3]: https://danlimerick.wordpress.com/2011/07/11/git-for-windows-tip-setting-home-and-the-startup-directory/
 [4]: /usage
-[5]: /bin/dev.sh
-[6]: /bin/setup.sh
+[5]: /bin/hookup.sh
+[6]: /bin/dev-setup.sh
 [7]: https://github.com/eliranmal/git-flux/compare
