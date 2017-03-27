@@ -1,21 +1,95 @@
 #!/usr/bin/env bash
 
 
-main() {
-	render_usage_docs
+#main() {
+#	render_usage_docs
+#}
+#
+#render_usage_docs() {
+#	local git_root="$(git rev-parse --show-toplevel)"
+#	
+#	# todo - stash ?
+#	
+#	# todo - get candidate changes
+#
+#	# install git-flux from source to get the local changes
+#	${git_root}/bin/setup-dev.sh update || { exit 1; }
+#
+#	# render usage docs
+#	${git_root}/bin/usage.sh || { exit 2; }
+#
+#	# todo - unstash ?
+#
+#	exit 0
+#}
+#
+#
+#main
+#
+
+
+
+
+
+if git rev-parse --verify HEAD >/dev/null 2>&1
+then
+    against=HEAD
+else
+    # initial commit: diff against an empty tree object
+    against=$(git hash-object -t tree /dev/null)
+fi
+
+create_temp_dir() {
+	mktemp 2>/dev/null || mktemp -t 'pre-commit-hook-changes'
 }
 
-render_usage_docs() {
-	local git_root="$(git rev-parse --show-toplevel)"
+cleanup() {
+	rm -f "$1"
+}
 
-	# install git-flux from source - required for the usage.sh script
-	${git_root}/bin/dev-setup.sh update || { exit 1; }
+create_patch() {
+	git diff --exit-code --binary --ignore-submodules --no-color > "$1"
+}
 
-	# render usage docs
-	${git_root}/bin/usage.sh || { exit 2; }
+patch_filename=$(create_temp_dir)
 
-	exit 0
+trap 'cleanup '"$patch_filename" EXIT
+
+create_patch "$patch_filename"
+has_unstaged_changes=$?
+
+if [ $has_unstaged_changes -ne 0 ]; then
+    echo "Stashing unstaged changes in $patch_filename."
+    git checkout -- .
+fi
+
+quit() {
+    if [ $has_unstaged_changes -ne 0 ]; then
+        git apply $patch_filename
+        if [ $? -ne 0 ]; then
+            git checkout -- .
+            git apply $patch_filename
+        fi
+    fi
+
+    exit $1
 }
 
 
-main
+# Redirect output to stderr.
+exec 1>&2
+
+#files_with_nocommit=$(git diff --cached --name-only --diff-filter=ACM ${against} | xargs grep -i "nocommit" -l | tr '\n' ' ')
+
+files_diff=$(git diff --cached --name-only --diff-filter=ACM ${against})
+echo "files diff: $files_diff"
+
+#if [ "x${files_with_nocommit}x" != "xx" ]; then
+#    tput setaf 1
+#    echo "File being committed with 'nocommit' in it:"
+#    echo $files_with_nocommit | tr ' ' '\n'
+#    tput sgr0
+#    quit 1
+#fi
+
+quit 0
