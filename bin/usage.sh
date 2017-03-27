@@ -18,7 +18,8 @@ main() {
 	# generate the main file usage (git-flux)
 	(
 		export FORMAT="$output_format" OUTPUT_PATH="$output_dir"'/main.md'
-		git flux -h | format_usage_line | ${root_dir}/styli.sh/renderer
+#		git flux -h | format_usage_line | ${root_dir}/styli.sh/renderer
+		git flux -h
 	)
 
 	# generate all other files usage (git-flux-*)
