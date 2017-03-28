@@ -79,11 +79,11 @@ your new awesome code.
 
 1. make some changes to the source code (a.k.a. *"your new awesome code"*).
 
-1. install git-flux from the source code; use the [dev-setup.sh][6] 
+1. install git-flux from the source code; use the [setup-dev.sh][6] 
 script for that:
    
    ```sh
-   ./bin/dev-setup.sh update
+   ./bin/setup-dev.sh update
    ```
    
    repeat this command whenever you make changes to your code and want to 
@@ -103,5 +103,5 @@ test them in your playground repository.
 [3]: https://danlimerick.wordpress.com/2011/07/11/git-for-windows-tip-setting-home-and-the-startup-directory/
 [4]: /usage
 [5]: /bin/hookup.sh
-[6]: /bin/dev-setup.sh
+[6]: /bin/setup-dev.sh
 [7]: https://github.com/eliranmal/git-flux/compare

@@ -12,12 +12,10 @@ render_usage_docs() {
 #	todo - get candidate changes
 
 	# install git-flux from source to get the local changes in the help output
-	${git_root}/bin/setup-dev.sh update || { exit 1; }
+	${git_root}/bin/setup-dev.sh update || { return 1; }
 
 	# render usage docs
-	${git_root}/bin/usage.sh || { exit 2; }
-
-	exit 0
+	${git_root}/bin/usage.sh || { return 2; }
 }
 
 
@@ -50,20 +48,21 @@ main() {
 
 
 	# do stuff
-
-	local status=0
+	local status
 
 	local changed_files=$(git diff --cached --name-only --diff-filter=ACDM "$(against_revision)")
 	echo "changed_files: $changed_files"
 
-#	 todo - the rest
+	# todo - only if changed files match 'git-flux-*', call render_usage_docs
+
+	render_usage_docs
+	status=$?
 
 	# restore changes
 	git reset --hard -q && git stash apply --index -q && git stash drop -q
 
 	# exit with status from the stuff we did: nonzero prevents commit
 	exit $status
-
 }
 
 
