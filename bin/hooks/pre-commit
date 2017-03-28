@@ -52,7 +52,6 @@ main() {
 	echo "changed_files: $changed_files"
 
 	# todo - only if changed files match 'git-flux-*', call render_usage_docs
-
 	render_usage_docs
 	status=$?
 
