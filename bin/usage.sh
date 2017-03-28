@@ -18,18 +18,17 @@ main() {
 	# generate the main file usage (git-flux)
 	(
 		export FORMAT="$output_format" OUTPUT_PATH="$output_dir"'/main.md'
-#		git flux -h | format_usage_line | ${root_dir}/styli.sh/renderer
-		git flux -h
+		git flux -h | format_usage_line | ${root_dir}/styli.sh/renderer
 	)
 
 	# generate all other files usage (git-flux-*)
-#	for path in ${root_dir}/${file_prefix}*; do
-#		local cmd="${path##*/$file_prefix}"
-#		(
-#			export FORMAT="$output_format" OUTPUT_PATH="$output_dir"'/'"$cmd"'.md'
-#			git flux "$cmd" -h | format_usage_line | ${root_dir}/styli.sh/renderer
-#		)
-#	done
+	for path in ${root_dir}/${file_prefix}*; do
+		local cmd="${path##*/$file_prefix}"
+		(
+			export FORMAT="$output_format" OUTPUT_PATH="$output_dir"'/'"$cmd"'.md'
+			git flux "$cmd" -h | format_usage_line | ${root_dir}/styli.sh/renderer
+		)
+	done
 }
 
 
