@@ -70,7 +70,9 @@ you can fork it beforehand, or clone directly from the original repository.
 1. run the [hookup.sh][5] script. its job is to set-up git hooks, and it 
 only needs to run once.  
 the pre-commit hook will take care of updating the auto-generated documentation 
-when you make changes to the help text (the output of `-h`).
+when you make changes to the help text (the output of `-h`), and will run 
+before each commit to any `git-flux*` files.  
+if you don't want this behavior - just skip this step.
 
 1. create a brand new repository on github and clone it locally (you can 
 call it *git-flux-playground*).  
