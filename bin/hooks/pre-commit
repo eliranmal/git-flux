@@ -9,8 +9,6 @@
 render_usage_docs() {
 	local git_root="$(git rev-parse --show-toplevel)"
 
-#	todo - get candidate changes
-
 	# install git-flux from source to get the local changes in the help output
 	${git_root}/bin/setup-dev.sh update || { return 1; }
 
