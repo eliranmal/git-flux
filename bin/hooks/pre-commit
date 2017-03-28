@@ -1,22 +1,14 @@
 #!/usr/bin/env bash
 
 
-#cleanup() {
-#	echo "deleting [$1]"
-#	rm -f "$1"
-#}
-
 render_usage_docs() {
 	local git_root="$(git rev-parse --show-toplevel)"
-
 	# install git-flux from source to get the local changes in the help output
 	${git_root}/bin/setup-dev.sh update || { return 1; }
-
 	# render usage docs
 	${git_root}/bin/usage.sh || { return 2; }
+	return 0
 }
-
-
 
 against_revision() {
 	local against
