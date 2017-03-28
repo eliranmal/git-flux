@@ -17,7 +17,7 @@ in lieu of a formal styleguide, take care to maintain the existing coding style.
    
    you can fork it beforehand, or clone directly from the original repository.
 
-1. run the [hookup.sh][5] script. it only needs to run once, and its job 
+1. run the [dev-env.sh][5] script. it only needs to run once, and its job 
 is to:
    
    - **initialize git-hooks**  
@@ -57,6 +57,6 @@ test them in your playground repository.
 
 
 [4]: /bin/hooks/pre-commit
-[5]: /bin/hookup.sh
+[5]: /bin/dev-env.sh
 [6]: /bin/setup-dev.sh
 [7]: https://github.com/eliranmal/git-flux/compare
