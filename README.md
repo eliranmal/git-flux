@@ -64,8 +64,13 @@ in lieu of a formal styleguide, take care to maintain the existing coding style.
 
 ### development environment setup
 
-1. clone the repository locally (preferably with the default name; *git-flux*). 
-you can fork it beforehand, or clone directly from the original repository.
+1. clone the repository, including submodules:
+   
+   ```sh
+   git clone --recursive 
+   ```
+   
+   you can fork it beforehand, or clone directly from the original repository.
 
 1. run the [hookup.sh][5] script. its job is to set-up git hooks, and it 
 only needs to run once.  
