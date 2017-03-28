@@ -6,7 +6,7 @@ main() {
 	# first, stash index and work dir, keeping only the
 	# to-be-committed changes in the working directory.
 	local old_stash=$(git rev-parse -q --verify refs/stash)
-	git stash save -q --keep-index
+	save_stash
 	local new_stash=$(git rev-parse -q --verify refs/stash)
 
 	# if there were no changes (e.g., `--amend` or `--allow-empty`)
@@ -18,23 +18,32 @@ main() {
 	# get real changes
 	local changed_files=$(git diff --cached --name-only --diff-filter=ACDM "$(against_revision)")
 
-	git config core.whitespace -trailing-space
-	# restore changes
-	git reset --hard -q && git stash apply --index -q && git stash drop -q
-	git config --unset core.whitespace -trailing-space
+	# we want to add some changes to the staged area, unstash beforehand
+	restore_stash
 
 	# set default status as success
 	local status=0
 	
 	# do the main goal of this hook
 	render_usage_docs "$changed_files"
-	
 	status=$?
 
 	# exit with status from the stuff we did: nonzero prevents commit
 	exit $status
 }
 
+save_stash() {
+	git stash save -q --keep-index
+}
+
+restore_stash() {
+	# don't let internal git-stash implementation stand in our way
+	git config core.whitespace -trailing-space
+	# restore changes from stash
+	git reset --hard -q && git stash apply --index -q && git stash drop -q
+	# restore previous config
+	git config --unset core.whitespace -trailing-space
+}
 
 render_usage_docs() {
 	local changed_files="$1"
@@ -45,23 +54,10 @@ render_usage_docs() {
 		${git_root}/bin/setup-dev.sh update || { return 1; }
 		# render usage docs
 		${git_root}/bin/usage.sh || { return 2; }
-
-		# add to index and commit the change (and make sure this hook is not activated as a result)
-#		git commit --no-verify --amend --message='auto-generate usage docs (pre-commit hook)' ${git_root}/usage || { return 3; }
+		# add change to index (stage area)
 		git add ${git_root}/usage || { return 3; }
-
-		# rebuild worktree # todo - test it
-#		rebuild_worktree || { return 4; }
-
 	fi
 	return 0
-}
-
-rebuild_worktree() {
-	git ls-files -z | xargs -0 rm -rf
-	git checkout .
-	git submodule init
-	git submodule update
 }
 
 against_revision() {
