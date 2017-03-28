@@ -47,7 +47,7 @@ this means you can <code>git flux -h</code>, and also <code>git flux feature -h<
 
 <dl>
 	<dt><code>update</code></dt>
-	<dd>auto-magically updates git-flux. <br/></dd>
+	<dd>auto-magically updates git-flux.<br/></dd>
 </dl>
 
 refer to each subcommand's help menu for an in-depth description of its actions (e.g. `git flux init -h`).
