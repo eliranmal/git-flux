@@ -58,7 +58,7 @@ $(f_code_definition \
 
 $(f_code_definition \
 "update" \
-"$(f_fg_rainbow "auto-magically") updates git-flux. ")
+"$(f_fg_rainbow "auto-magically") updates git-flux.")
 
 
 refer to each subcommand's help menu for an in-depth description of its actions (e.g. $(f_code "git flux init -h")).
