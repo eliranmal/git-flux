@@ -21,10 +21,11 @@ in lieu of a formal styleguide, take care to maintain the existing coding style.
 is to:
    
    - **initialize git-hooks**  
-     the [pre-commit][4] hook will take care of updating the auto-generated documentation 
-     when you make changes to the help text (the output of `-h`), and will run 
-     before commits with changes in `git-flux*` files.  
-     if you don't want this behavior - just skip this step.
+     this is optional - if you just hate git-hooks, you can pass `nohooks` 
+     as the first argument.
+     the [pre-commit][4] hook will take care of updating the auto-generated 
+     documentation when you make changes to the help text (the output of 
+     `-h`), and will run before commits with changes in `git-flux*` files.  
    
    - **ensure submodules are in place**  
      in case you forgot to clone it with `--recursive`, or whatever.
