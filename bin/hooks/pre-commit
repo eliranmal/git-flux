@@ -1,0 +1,57 @@
+#!/usr/bin/env bash
+
+
+render_usage_docs() {
+	local git_root="$(git rev-parse --show-toplevel)"
+	# install git-flux from source to get the local changes in the help output
+	${git_root}/bin/setup-dev.sh update || { return 1; }
+	# render usage docs
+	${git_root}/bin/usage.sh || { return 2; }
+	return 0
+}
+
+against_revision() {
+	local against
+	if git rev-parse --verify HEAD >/dev/null 2>&1; then
+	    against=HEAD
+	else
+	    # Initial commit: diff against an empty tree object
+	    against=$(git hash-object -t tree /dev/null)
+	fi
+	printf "%s" "$against"
+}
+
+
+main() {
+
+	# first, stash index and work dir, keeping only the
+	# to-be-committed changes in the working directory.
+	local old_stash=$(git rev-parse -q --verify refs/stash)
+	git stash save -q --keep-index
+	local new_stash=$(git rev-parse -q --verify refs/stash)
+
+	# if there were no changes (e.g., `--amend` or `--allow-empty`)
+	# then nothing was stashed, and we should skip everything.
+	if [ "$old_stash" = "$new_stash" ]; then
+	    exit 0
+	fi
+
+
+	# do stuff
+	local status=0
+
+	local changed_files=$(git diff --cached --name-only --diff-filter=ACDM "$(against_revision)")
+	if [[ $changed_files =~ git-flux* ]]; then
+		render_usage_docs
+		status=$?
+	fi
+
+	# restore changes
+	git reset --hard -q && git stash apply --index -q && git stash drop -q
+
+	# exit with status from the stuff we did: nonzero prevents commit
+	exit $status
+}
+
+
+main
