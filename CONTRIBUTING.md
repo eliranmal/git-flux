@@ -26,7 +26,7 @@ is to:
      before commits with changes in `git-flux*` files.  
      if you don't want this behavior - just skip this step.
    
-   - **ensure submodules are in place**
+   - **ensure submodules are in place**  
      in case you forgot to clone it with `--recursive`, or whatever.
 
 1. create a brand new repository on github and clone it locally (you can 
