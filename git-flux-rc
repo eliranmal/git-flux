@@ -70,6 +70,7 @@ cmd_finish() {
 	io_log; io_log_ok "release candidate '$1' is finished. goodbye!"; io_log
 }
 
+
 cmd_review() {
 	require_args "$1"
 	io_log; review_branch_from_base "$(git_config_get "prefix.rc")$1"
