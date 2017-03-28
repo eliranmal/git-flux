@@ -68,7 +68,6 @@ io_confirm() {
 	fi
 }
 
-
 io_print() {
 	local margin="$1"; local body="$2"; local indent_level=$3; local end_margin="$4"
 	local indent=""
