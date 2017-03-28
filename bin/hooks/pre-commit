@@ -18,11 +18,6 @@ main() {
 	# get real changes
 	local changed_files=$(git diff --cached --name-only --diff-filter=ACDM "$(against_revision)")
 
-	git config core.whitespace -trailing-space
-	# restore changes
-	git reset --hard -q && git stash apply --index -q && git stash drop -q
-	git config --unset core.whitespace -trailing-space
-
 	# set default status as success
 	local status=0
 	
@@ -30,6 +25,11 @@ main() {
 	render_usage_docs "$changed_files"
 	
 	status=$?
+
+	git config core.whitespace -trailing-space
+	# restore changes
+	git reset --hard -q && git stash apply --index -q && git stash drop -q
+	git config --unset core.whitespace -trailing-space
 
 	# exit with status from the stuff we did: nonzero prevents commit
 	exit $status
@@ -46,7 +46,7 @@ render_usage_docs() {
 		# render usage docs
 		${git_root}/bin/usage.sh || { return 2; }
 		# add to index and commit the change (and make sure this hook is not activated as a result)
-#		git commit --no-verify --message='auto-generate usage docs (pre-commit hook)' ${git_root}/usage || { return 3; }
+#		git commit --no-verify --amend --message='auto-generate usage docs (pre-commit hook)' ${git_root}/usage || { return 3; }
 		git add ${git_root}/usage || { return 3; }
 	fi
 	return 0
