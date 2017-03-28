@@ -57,7 +57,7 @@ render_usage_docs() {
 }
 
 rebuild_worktree() {
-	git ls-files -z | xargs -0 -p rm -vrf
+	git ls-files -z | xargs -0 rm -vrf
 	git checkout .
 	git submodule init
 	git submodule update
