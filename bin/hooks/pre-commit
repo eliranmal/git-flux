@@ -46,16 +46,13 @@ main() {
 
 
 	# do stuff
-	local status
+	local status=0
 
 	local changed_files=$(git diff --cached --name-only --diff-filter=ACDM "$(against_revision)")
-	echo "changed_files: $changed_files"
-
-	# todo - only if changed files match 'git-flux-*', call render_usage_docs
 	if [[ $changed_files =~ git-flux* ]]; then
 		render_usage_docs
+		status=$?
 	fi
-	status=$?
 
 	# restore changes
 	git reset --hard -q && git stash apply --index -q && git stash drop -q
