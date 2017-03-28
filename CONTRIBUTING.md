@@ -35,19 +35,18 @@ call it *git-flux-playground*).
 its sole purpose will be playing around with git-flux commands and test 
 your new awesome code.
 
-1. make some changes to the source code (a.k.a. *"your new awesome code"*).
+1. make some changes to the source (a.k.a. *"your new awesome code"*).
 
-1. install git-flux from the source code; use the [setup-dev.sh][6] 
+1. install git-flux from the source; use the [setup-dev.sh][6] 
 script for that:
    
    ```sh
    ./bin/setup-dev.sh update
    ```
    
-   repeat this command whenever you make changes to your code and want to 
-test them in your playground repository.
+1. test your changes in the playground repository.
 
-1. iterate the last two steps until you've made peace with your code.
+1. iterate the last three steps until you've made peace with your code.
 
 
 
