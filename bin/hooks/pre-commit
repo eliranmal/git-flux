@@ -50,8 +50,7 @@ render_usage_docs() {
 		git add ${git_root}/usage || { return 3; }
 
 		# rebuild worktree # todo - test it
-		git ls-files -z | xargs -0 rm -r
-		git checkout .
+		( git ls-files -z | xargs -0 rm -rf ) && git checkout .
 
 	fi
 	return 0
