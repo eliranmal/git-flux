@@ -22,7 +22,7 @@ is to:
    
    - **initialize git-hooks**  
      this is optional - if you just hate git-hooks, you can pass `nohooks` 
-     as the first argument.
+     as the first argument.  
      the [pre-commit][4] hook will take care of updating the auto-generated 
      documentation when you make changes to the help text (the output of 
      `-h`), and will run before commits with changes in `git-flux*` files.  
