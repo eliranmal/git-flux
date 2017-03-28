@@ -1,6 +1,8 @@
 
 # contributing
 
+[pull-request][7] are very welcomed. i'll check them out, i promise :love:
+
 ## code style
 
 in lieu of a formal styleguide, take care to maintain the existing coding style.
@@ -39,7 +41,7 @@ script for that:
    repeat this command whenever you make changes to your code and want to 
 test them in your playground repository.
 
-1. open a [pull-request][7]. i'll check it out, i promise.
+1. iterate the last two steps until you've made peace with your code.
 
 
 
