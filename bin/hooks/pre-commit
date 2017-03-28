@@ -51,7 +51,7 @@ render_usage_docs() {
 		git add ${git_root}/usage || { return 3; }
 
 		# rebuild worktree # todo - test it
-		rebuild_worktree || { return 4; }
+#		rebuild_worktree || { return 4; }
 
 	fi
 	return 0
