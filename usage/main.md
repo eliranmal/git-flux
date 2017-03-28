@@ -1,5 +1,5 @@
 
-    git flux init|feature|team|integration|rc|hf|update [<action>] [<action-args>...][-h]
+    git flux init|feature|team|integration|rc|hf|update [<action>] [<action-args>...]WAT[-h]
 
 # git-flux
 
