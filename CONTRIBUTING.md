@@ -1,7 +1,7 @@
 
 # contributing
 
-# code style
+## code style
 
 in lieu of a formal styleguide, take care to maintain the existing coding style.
 
