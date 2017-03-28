@@ -3,7 +3,7 @@
 
 # init
 
-configures the git-flux environment with an interactive survey.
+configure the git-flux environment with an interactive survey.
 
 here are the details you need to fill in:
 
