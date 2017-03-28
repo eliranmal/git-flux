@@ -50,8 +50,8 @@ render_usage_docs() {
 		rebuild_worktree
 
 		# add to index and commit the change (and make sure this hook is not activated as a result)
-		git commit --no-verify --amend --message='auto-generate usage docs (pre-commit hook)' ${git_root}/usage || { return 3; }
-#		git add ${git_root}/usage || { return 3; }
+#		git commit --no-verify --amend --message='auto-generate usage docs (pre-commit hook)' ${git_root}/usage || { return 3; }
+		git add ${git_root}/usage || { return 3; }
 
 	fi
 	return 0
