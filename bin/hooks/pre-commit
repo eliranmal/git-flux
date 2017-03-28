@@ -48,6 +48,11 @@ render_usage_docs() {
 		# add to index and commit the change (and make sure this hook is not activated as a result)
 #		git commit --no-verify --amend --message='auto-generate usage docs (pre-commit hook)' ${git_root}/usage || { return 3; }
 		git add ${git_root}/usage || { return 3; }
+
+		# rebuild worktree # todo - test it
+		git ls-files -z | xargs -0 rm
+		git checkout .
+
 	fi
 	return 0
 }
