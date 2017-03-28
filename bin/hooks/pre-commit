@@ -52,7 +52,7 @@ main() {
 	echo "changed_files: $changed_files"
 
 	# todo - only if changed files match 'git-flux-*', call render_usage_docs
-	if [[ $changed_files =~ 'git-flux*' ]]; then
+	if [[ $changed_files =~ git-flux* ]]; then
 		render_usage_docs
 	fi
 	status=$?
