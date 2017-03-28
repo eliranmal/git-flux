@@ -27,4 +27,4 @@ ensure_submodules() {
 }
 
 
-main
+main "$@"
