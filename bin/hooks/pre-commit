@@ -1,30 +1,6 @@
 #!/usr/bin/env bash
 
 
-render_usage_docs() {
-	local git_root="$(git rev-parse --show-toplevel)"
-	# install git-flux from source to get the local changes in the help output
-	${git_root}/bin/setup-dev.sh update || { return 1; }
-	# render usage docs
-	${git_root}/bin/usage.sh || { return 2; }
-	# add to index
-	# todo - does it work?
-#	git add ${git_root}/usage || { return 3; }
-	return 0
-}
-
-against_revision() {
-	local against
-	if git rev-parse --verify HEAD >/dev/null 2>&1; then
-	    against=HEAD
-	else
-	    # Initial commit: diff against an empty tree object
-	    against=$(git hash-object -t tree /dev/null)
-	fi
-	printf "%s" "$against"
-}
-
-
 main() {
 
 	# first, stash index and work dir, keeping only the
@@ -38,23 +14,53 @@ main() {
 	if [ "$old_stash" = "$new_stash" ]; then
 	    exit 0
 	fi
-
-
-	# do stuff
-	local status=0
-
+	
+	# get real changes
 	local changed_files=$(git diff --cached --name-only --diff-filter=ACDM "$(against_revision)")
-	if [[ $changed_files =~ git-flux* ]]; then
-		render_usage_docs
-		status=$?
-	fi
 
+	# set default status as success
+	local status=0
+	
+	# do the main goal of this hook
+	render_usage_docs "$changed_files"
+	
+	status=$?
+
+	git config core.whitespace -trailing-space
 	# restore changes
 	git reset --hard -q && git stash apply --index -q && git stash drop -q
+	git config --unset core.whitespace -trailing-space
 
 	# exit with status from the stuff we did: nonzero prevents commit
 	exit $status
-#	exit 1 # todo - remove this
+}
+
+
+render_usage_docs() {
+	local changed_files="$1"
+	# look for changes in files that are known to affect the help output
+	if [[ $changed_files =~ git-flux* ]]; then
+		local git_root="$(git rev-parse --show-toplevel)"
+		# install git-flux from source to get the local changes in the help output
+		${git_root}/bin/setup-dev.sh update || { return 1; }
+		# render usage docs
+		${git_root}/bin/usage.sh || { return 2; }
+		# add to index and commit the change (and make sure this hook is not activated as a result)
+		git commit --no-verify --message='auto-generate usage docs (pre-commit hook)' ${git_root}/usage || { return 3; }
+#		git add ${git_root}/usage || { return 3; }
+	fi
+	return 0
+}
+
+against_revision() {
+	local against
+	if git rev-parse --verify HEAD >/dev/null 2>&1; then
+		against=HEAD
+	else
+		# initial commit: diff against an empty tree object
+		against=$(git hash-object -t tree /dev/null)
+	fi
+	printf "%s" "$against"
 }
 
 
