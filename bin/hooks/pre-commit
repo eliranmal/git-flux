@@ -18,6 +18,11 @@ main() {
 	# get real changes
 	local changed_files=$(git diff --cached --name-only --diff-filter=ACDM "$(against_revision)")
 
+	git config core.whitespace -trailing-space
+	# restore changes
+	git reset --hard -q && git stash apply --index -q && git stash drop -q
+	git config --unset core.whitespace -trailing-space
+
 	# set default status as success
 	local status=0
 	
@@ -25,11 +30,6 @@ main() {
 	render_usage_docs "$changed_files"
 	
 	status=$?
-
-	git config core.whitespace -trailing-space
-	# restore changes
-	git reset --hard -q && git stash apply --index -q && git stash drop -q
-	git config --unset core.whitespace -trailing-space
 
 	# exit with status from the stuff we did: nonzero prevents commit
 	exit $status
