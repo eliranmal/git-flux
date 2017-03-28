@@ -1,7 +1,7 @@
 
 # contributing
 
-[pull-request][7] are very welcomed. i'll check them out, i promise :love:
+[pull-request][7] are very welcomed. i'll check them out, i promise :heart:
 
 ## code style
 
