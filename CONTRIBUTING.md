@@ -17,12 +17,17 @@ in lieu of a formal styleguide, take care to maintain the existing coding style.
    
    you can fork it beforehand, or clone directly from the original repository.
 
-1. run the [hookup.sh][5] script. its job is to set-up git hooks, and it 
-only needs to run once.  
-the pre-commit hook will take care of updating the auto-generated documentation 
-when you make changes to the help text (the output of `-h`), and will run 
-before commits with changes in `git-flux*` files.  
-if you don't want this behavior - just skip this step.
+1. run the [hookup.sh][5] script. it only needs to run once, and its job 
+is to:
+   
+   - **initialize git-hooks**  
+     the [pre-commit][4] hook will take care of updating the auto-generated documentation 
+     when you make changes to the help text (the output of `-h`), and will run 
+     before commits with changes in `git-flux*` files.  
+     if you don't want this behavior - just skip this step.
+   
+   - **ensure submodules are in place**
+     in case you forgot to clone it with `--recursive`, or whatever.
 
 1. create a brand new repository on github and clone it locally (you can 
 call it *git-flux-playground*).  
@@ -50,6 +55,7 @@ test them in your playground repository.
 
 
 
+[4]: /bin/hooks/pre-commit
 [5]: /bin/hookup.sh
 [6]: /bin/setup-dev.sh
 [7]: https://github.com/eliranmal/git-flux/compare
