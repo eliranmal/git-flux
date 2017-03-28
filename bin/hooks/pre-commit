@@ -51,14 +51,14 @@ render_usage_docs() {
 		git add ${git_root}/usage || { return 3; }
 
 		# rebuild worktree # todo - test it
-		rebuild_worktree
+		rebuild_worktree || { return 4; }
 
 	fi
 	return 0
 }
 
 rebuild_worktree() {
-	git ls-files -z | xargs -0 rm -vrf
+	git ls-files -z | xargs -0 rm -rf
 	git checkout .
 	git submodule init
 	git submodule update
