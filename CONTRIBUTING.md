@@ -21,7 +21,7 @@ in lieu of a formal styleguide, take care to maintain the existing coding style.
 only needs to run once.  
 the pre-commit hook will take care of updating the auto-generated documentation 
 when you make changes to the help text (the output of `-h`), and will run 
-before each commit to any `git-flux*` files.  
+before commits with changes in `git-flux*` files.  
 if you don't want this behavior - just skip this step.
 
 1. create a brand new repository on github and clone it locally (you can 
