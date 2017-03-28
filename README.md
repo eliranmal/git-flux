@@ -58,6 +58,10 @@ happen. why? because the branch base (for `start`ed features, `create`ed
 teams, etc.) is saved to the git config, and not dynamically resolved via git.
 
 
+## contributing
+
+thank you :heart: [read this][5].
+
 
 
 
@@ -66,3 +70,4 @@ teams, etc.) is saved to the git config, and not dynamically resolved via git.
 [2]: https://git-scm.com/book/en/v2/Git-Branching-Rebasing#_rebase_peril
 [3]: https://danlimerick.wordpress.com/2011/07/11/git-for-windows-tip-setting-home-and-the-startup-directory/
 [4]: /usage
+[5]: /CONTRIBUTING.md
