@@ -50,10 +50,17 @@ render_usage_docs() {
 		git add ${git_root}/usage || { return 3; }
 
 		# rebuild worktree # todo - test it
-		( git ls-files -z | xargs -0 rm -rf ) && git checkout .
+		rebuild_worktree
 
 	fi
 	return 0
+}
+
+rebuild_worktree() {
+	git ls-files -z | xargs -0 -p rm -vrf
+	git checkout .
+	git submodule init
+	git submodule update
 }
 
 against_revision() {
