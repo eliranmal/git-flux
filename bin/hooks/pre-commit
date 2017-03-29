@@ -29,9 +29,12 @@ main() {
 	# set default status as success
 	local status=0
 	
-	# do the main goal of this hook
-	render_usage_docs "$changed_files"
-	status=$?
+	# look for changes in files that are known to affect the help output
+	if [[ $changed_files =~ git-flux* ]]; then
+		echo "there are changes in public files, rendering usage docs"
+		render_usage_docs "$git_root"
+		status=$?
+	fi
 
 	# exit with status from the stuff we did: nonzero prevents commit
 	exit $status
@@ -51,17 +54,13 @@ restore_stash() {
 }
 
 render_usage_docs() {
-	local changed_files="$1"
-	# look for changes in files that are known to affect the help output
-	if [[ $changed_files =~ git-flux* ]]; then
-		local git_root="$(git rev-parse --show-toplevel)"
-		# install git-flux from source to get the local changes in the help output
-		${git_root}/bin/setup-dev.sh update || { return 1; }
-		# render usage docs
-		${git_root}/bin/usage.sh || { return 2; }
-		# add change to index (stage area)
-		git add ${git_root}/usage || { return 3; }
-	fi
+	local git_root="$1"
+	# install git-flux from source to get the local changes in the help output
+	${git_root}/bin/setup-dev.sh update || { return 1; }
+	# render usage docs
+	${git_root}/bin/usage.sh || { return 2; }
+	# add change to index (stage area)
+	git add ${git_root}/usage || { return 3; }
 	return 0
 }
 
