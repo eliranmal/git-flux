@@ -22,10 +22,16 @@ is to:
    
    - **initialize git-hooks**  
      this is optional - if you just hate git-hooks, you can pass `nohooks` 
-     as the first argument.  
+     as the first argument.
+     
      the [pre-commit][4] hook will take care of updating the auto-generated 
      documentation when you make changes to the help text (the output of 
-     `-h`), and will run before commits with changes in `git-flux*` files.  
+     `-h`), and will run before commits with changes in `git-flux*` files.
+     
+     the [post-commit][3] hook is only there to bypass an issue with 
+     JetBrains IDE's - they use `--only` in the commit command, so the 
+     auto-generated files seem to have changes after the commit. we fool 
+     them by updating usage docs from the index if they were changed.
    
    - **ensure submodules are in place**  
      in case you forgot to clone it with `--recursive`, or whatever.
