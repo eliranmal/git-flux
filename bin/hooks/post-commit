@@ -3,6 +3,9 @@
 
 main() {
 
+	# redirect stderr to stdout, to ensure logs are printed anyway
+	exec 2>&1
+
 	# set default status as success
 	local status=0
 	

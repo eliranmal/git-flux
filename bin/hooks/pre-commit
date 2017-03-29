@@ -3,6 +3,9 @@
 
 main() {
 
+	# redirect stderr to stdout, to ensure logs are printed anyway
+	exec 2>&1
+
 	# first, stash index and work dir, keeping only the
 	# to-be-committed changes in the working directory.
 	local old_stash=$(git rev-parse -q --verify refs/stash)
@@ -18,15 +21,15 @@ main() {
 	# get real changes
 	local changed_files=$(git diff --cached --name-only --diff-filter=ACDM "$(against_revision)")
 
+	# we want to add some changes to the staged area, unstash beforehand
+	restore_stash
+
 	# set default status as success
 	local status=0
 	
 	# do the main goal of this hook
 	render_usage_docs "$changed_files"
 	status=$?
-
-	# we want to add some changes to the staged area, unstash beforehand
-	restore_stash
 
 	# exit with status from the stuff we did: nonzero prevents commit
 	exit $status
