@@ -2,7 +2,7 @@
 
 
 cmd_usage_default() {
-	printf "[-h ]"
+	printf "[ -h]"
 }
 
 cmd_long_usage_default() {
