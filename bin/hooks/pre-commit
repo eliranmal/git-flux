@@ -22,6 +22,7 @@ main() {
 	
 	# get real changes
 	local changed_files=$(git diff --cached --name-only --diff-filter=ACDM "$(against_revision)")
+	echo "changed_files: $changed_files"
 
 	# we want to add some changes to the staged area, unstash beforehand
 	restore_stash
