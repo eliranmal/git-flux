@@ -16,29 +16,6 @@ $(f_fg_rainbow "auto-magically") updates git-flux.
 }
 
 cmd_default() {
-
-	# creating temp dir to sandbox the setup process
-	local temp_dir="$(create_temp_dir)"
-	# responsibly handle cleanup of the temp dir
-	trap 'cleanup '"$temp_dir" EXIT
-
-	io_log
-	io_log "fetching a fresh setup script from github..."
-	curl --silent \
-		--output "$temp_dir"'/setup.sh' \
-		https://raw.githubusercontent.com/eliranmal/git-flux/master/bin/setup.sh
-	io_status_logger $? "fetched ok" "fetch failed"
-
-	# setting executable permissions on the setup script
-	chmod +x "$temp_dir/setup.sh"
-	
-	io_log "running the setup script with the 'update' command..."
-	${temp_dir}/setup.sh update >/dev/null 2>&1 # todo - redirect to log file
-	io_status_logger $? "updated ok" "update failed"
-
+	io_log; self_update
 	io_log; io_log_ok "git-flux is updated. $(f_fg_rainbow "it's magic!")"; io_log
-}
-
-cleanup() {
-	rm -rf "$1"
 }
