@@ -1,8 +1,6 @@
 
     git flux hf start|finish <name> [<tag>] [-h]
 
-# hf
-
 handle lifecycle of hot-fixes.
 
 ## available actions
