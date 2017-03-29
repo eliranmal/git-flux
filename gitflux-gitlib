@@ -150,6 +150,10 @@ git_is_merged() {
 	has $1 $(git_merged_branches)
 }
 
+git_repo_is_enterprise() {
+	[[ $(git_repo_domain) != github.com ]]
+}
+
 
 # - - - - -  verbose actions - - - - - #
 
@@ -308,21 +312,18 @@ git_config_escape_subsection() {
 
 # - - - - - hub - - - - - #
 
-hub_domain() {
+hub_api_domain() {
 	local domain="$(git_repo_domain)"
-	if [[ $domain = github.com ]]; then
+	if ! git_repo_is_enterprise; then
 		domain='api.'"$domain"
 	fi
 	printf "%s" "$domain"
 }
 
 hub_root_endpoint() {
-	local root_endpoint
-	local domain="$(git_repo_domain)"
-	if [[ $domain = github.com ]]; then
-		root_endpoint='api.'"$domain"
-	else # github enterprise
-		root_endpoint="$domain"'/api/v3'
+	local root_endpoint="$(hub_api_domain)"
+	if git_repo_is_enterprise; then
+		root_endpoint="$root_endpoint"'/api/v3'
 	fi
 	printf "%s" "$root_endpoint"
 }
@@ -364,7 +365,7 @@ hub_response_status() {
 }
 
 hub_ensure_authenticated() {
-	local domain="$(hub_domain)"
+	local domain="$(hub_api_domain)"
 	local netrc="$(os_value '.netrc' '_netrc')"
 	if [[ ! -e ~/$netrc || -z $(cat ~/${netrc} | grep "$domain") ]]; then
 		local pass="$(io_prompt_pass "type in your github password (you'll only have to do this once)")"; io_log
