@@ -4,7 +4,7 @@
 main() {
 
 	# redirect stderr to stdout, to ensure logs are printed anyway
-#	exec 2>&1
+	exec 2>&1
 	local git_root="$(git rev-parse --show-toplevel)"
 	exec &>${git_root}/post-commit.log
 
@@ -16,7 +16,7 @@ main() {
 	status=$?
 
 	# exit with status from the stuff we did: nonzero prevents commit
-	exit 1
+	exit $status
 }
 
 rebuild_worktree() {
