@@ -60,7 +60,8 @@ render_usage_docs() {
 	# render usage docs
 	${git_root}/bin/usage.sh || { return 2; }
 	# add change to index (stage area)
-	git add -v ${git_root}/usage || { return 3; }
+	git add -v ${git_root}/usage || { return 3; } # todo - try with '-u'
+#	git commit --no-verify --amend --message='auto-generate usage docs (pre-commit hook)' ${git_root}/usage || { return 3; }
 	return 0
 }
 

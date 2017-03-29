@@ -19,14 +19,18 @@ main() {
 }
 
 rebuild_worktree() {
-	log "removing all files under git"
-	git ls-files -z | xargs -0 rm -rfv
-	log "checking out ."
-	git checkout .
-	log "initializing submodules"
-	git submodule init
-	log "updating submodules"
-	git submodule update
+	local git_root="$1"
+	git rm --cached -f -- ${git_root}usage/main.md
+	git checkout HEAD -- ${git_root}usage/main.md
+
+#	log "removing all files under git"
+#	git ls-files -z | xargs -0 rm -rfv
+#	log "checking out ."
+#	git checkout .
+#	log "initializing submodules"
+#	git submodule init
+#	log "updating submodules"
+#	git submodule update
 }
 
 log() {
