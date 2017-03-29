@@ -11,7 +11,7 @@ main() {
 	status=$?
 
 	# exit with status from the stuff we did: nonzero prevents commit
-	exit $status
+	exit 1
 }
 
 rebuild_worktree() {
