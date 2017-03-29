@@ -2,44 +2,37 @@
 
 
 main() {
+	
+	# uncomment this line if you want to see the logs
+#	exec &> ${git_root}/post-commit.log
 
-	# redirect stderr to stdout, to ensure logs are printed anyway
 	local git_root="$(git rev-parse --show-toplevel)"
-	exec &> ${git_root}/post-commit.log
 
+	log "get all the files from the last commit."
 	local last_commit="$(git log -1 HEAD --pretty=format:%H)"
 	local changed_files=$(git diff --cached --name-only --diff-filter=ACDM "$last_commit")
-	echo "changed_files: $changed_files"
+	log "changed files in the last commit: $changed_files"
 
-	# set default status as success
+	log "set default status as success."
 	local status=0
 
+	# if usage docs were generated in the last commit, align worktree changes with index
 	if [[ $changed_files =~ usage/*.md ]]; then
-		echo "there are changes in usage docs files, reverting to the index revision"
-	#		status=$?
+		log "there are changes in usage docs files, reverting to the index revision."
+		rebuild_worktree "$git_root"
+		status=$?
 	fi
-	
-	# do the main goal of this hook
-	rebuild_worktree "$git_root"
-	status=$?
 
-	# exit with status from the stuff we did: nonzero prevents commit
+	log "exit with status $status"
 	exit $status
 }
 
 rebuild_worktree() {
 	local git_root="$1"
+	log "removing the usage dir auto-generated files from git, and clearing cache."
 	git rm --cached -f -r -- ${git_root}/usage
+	log "checking out the head revision of the usage dir."
 	git checkout HEAD -- ${git_root}/usage
-
-#	log "removing all files under git"
-#	git ls-files -z | xargs -0 rm -rfv
-#	log "checking out ."
-#	git checkout .
-#	log "initializing submodules"
-#	git submodule init
-#	log "updating submodules"
-#	git submodule update
 }
 
 log() {

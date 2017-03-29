@@ -3,41 +3,40 @@
 
 main() {
 
-	# redirect stderr to stdout, to ensure logs are printed anyway
-	local git_root="$(git rev-parse --show-toplevel)"
-	exec &> ${git_root}/pre-commit.log
+	# uncomment this line if you want to see the logs
+#	exec &> ${git_root}/pre-commit.log
 
-	# first, stash index and work dir, keeping only the
-	# to-be-committed changes in the working directory.
+	local git_root="$(git rev-parse --show-toplevel)"
+
+	log "first, stash index and work dir, keeping only the to-be-committed changes in the working directory."
 	local old_stash=$(git rev-parse -q --verify refs/stash)
 	save_stash
 	local new_stash=$(git rev-parse -q --verify refs/stash)
 
-	# if there were no changes (e.g., `--amend` or `--allow-empty`)
-	# then nothing was stashed, and we should skip everything.
 	if [ "$old_stash" = "$new_stash" ]; then
-	    exit 0
+		log "nothing was stashed, this means there were no changes (e.g. '--amend', '--allow-empty'), so skip everything."
+		exit 0
 	fi
 	
-	# get real changes
+	log "get real changes of the commit to be done."
 	local changed_files=$(git diff --cached --name-only --diff-filter=ACDM "$(against_revision)")
-	echo "changed_files: $changed_files"
+	log "changed files: $changed_files"
 
-	# we want to add some changes to the staged area, unstash beforehand
+	log "we want to add some changes to the staged area later, so unstash beforehand."
 	restore_stash
 
-	# set default status as success
+	log "set default status as success"
 	local status=0
 	
-	# look for changes in files that are known to affect the help output
+	log "look for changes in files that are known to affect the help output"
 	if [[ $changed_files =~ git-flux* ]]; then
-		echo "there are changes in public files, rendering usage docs"
-		render_usage_docs "$git_root"
+		log "there are changes in public files, rendering usage docs"
+		generate_usage_docs "$git_root"
 		status=$?
 	fi
 
-	# exit with status from the stuff we did: nonzero prevents commit
-	exit $status
+	log "exit with status $status"
+	exit $status # nonzero prevents commit
 }
 
 save_stash() {
@@ -45,23 +44,22 @@ save_stash() {
 }
 
 restore_stash() {
-	# don't let internal git-stash implementation stand in our way
+	log "don't let internal git-stash implementation stand in our way: set config to ignore trailing-whitespace errors on git-apply"
 	git config core.whitespace -trailing-space
-	# restore changes from stash
+	log "restore changes from stash"
 	git reset --hard -q && git stash apply --index -q && git stash drop -q
-	# restore previous config
+	log "restore previous config"
 	git config --unset core.whitespace -trailing-space
 }
 
-render_usage_docs() {
+generate_usage_docs() {
 	local git_root="$1"
-	# install git-flux from source to get the local changes in the help output
+	log "install git-flux from source to get the local changes in the help output"
 	${git_root}/bin/setup-dev.sh update || { return 1; }
-	# render usage docs
+	log "render usage docs"
 	${git_root}/bin/usage.sh || { return 2; }
-	# add change to index (stage area)
-	git add -v ${git_root}/usage || { return 3; } # todo - try with '-u'
-#	git commit --no-verify --amend --message='auto-generate usage docs (pre-commit hook)' ${git_root}/usage || { return 3; }
+	log "add change to index (stage area)"
+	git add -v ${git_root}/usage || { return 3; }
 	return 0
 }
 
@@ -71,9 +69,13 @@ against_revision() {
 		against=HEAD
 	else
 		# initial commit: diff against an empty tree object
-		against=$(git hash-object -t tree /dev/null)
+		against=4b825dc642cb6eb9a060e54bf8d69288fbee4904
 	fi
 	printf "%s" "$against"
+}
+
+log() {
+	echo " > $1"
 }
 
 
