@@ -21,8 +21,8 @@ in lieu of a formal styleguide, take care to maintain the existing coding style.
 is to:
    
    - **initialize git-hooks**  
-     this is optional - if you just hate git-hooks, you can pass `nohooks` 
-     as the first argument.
+     this is optional - if you run into issues, or you just hate 
+     git-hooks, you can pass `nohooks` as the first argument.
      
      the [pre-commit][4] hook will take care of updating the auto-generated 
      documentation when you make changes to the help text (the output of 
@@ -61,6 +61,7 @@ script for that:
 
 
 
+[3]: /bin/hooks/post-commit
 [4]: /bin/hooks/pre-commit
 [5]: /bin/dev-env.sh
 [6]: /bin/setup-dev.sh
