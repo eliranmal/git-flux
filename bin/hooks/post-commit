@@ -11,19 +11,20 @@ main() {
 	log "get all the files from the last commit."
 	local last_commit="$(git log -1 HEAD --pretty=format:%H)"
 	local changed_files=$(git diff --cached --name-only --diff-filter=ACDM "$last_commit")
-	log "changed files in the last commit: $changed_files"
+	log "changed files in the last commit:"
+	echo "$changed_files"
 
 	log "set default status as success."
 	local status=0
 
 	# if usage docs were generated in the last commit, align worktree changes with index
-	if [[ $changed_files =~ usage/*.md ]]; then
+	if [[ $changed_files =~ usage/.+\.md ]]; then
 		log "there are changes in usage docs files, reverting to the index revision."
 		rebuild_worktree "$git_root"
 		status=$?
 	fi
 
-	log "exit with status $status"
+	log "exit with status $status."
 	exit $status
 }
 

@@ -20,7 +20,8 @@ main() {
 	
 	log "get real changes of the commit to be done."
 	local changed_files=$(git diff --cached --name-only --diff-filter=ACDM "$(against_revision)")
-	log "changed files: $changed_files"
+	log "changed files:"
+	echo "$changed_files"
 
 	log "we want to add some changes to the staged area later, so unstash beforehand."
 	restore_stash
@@ -28,14 +29,14 @@ main() {
 	log "set default status as success"
 	local status=0
 	
-	log "look for changes in files that are known to affect the help output"
+	log "look for changes in files that are known to affect the help output (public files)."
 	if [[ $changed_files =~ git-flux* ]]; then
-		log "there are changes in public files, rendering usage docs"
+		log "there are changes in public files, rendering usage docs."
 		generate_usage_docs "$git_root"
 		status=$?
 	fi
 
-	log "exit with status $status"
+	log "exit with status $status."
 	exit $status # nonzero prevents commit
 }
 
