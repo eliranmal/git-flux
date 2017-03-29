@@ -20,7 +20,7 @@ main() {
 	fi
 	
 	# do the main goal of this hook
-	rebuild_worktree
+	rebuild_worktree "$git_root"
 	status=$?
 
 	# exit with status from the stuff we did: nonzero prevents commit
