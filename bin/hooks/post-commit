@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+
+main() {
+
+	# set default status as success
+	local status=0
+	
+	# do the main goal of this hook
+	rebuild_worktree
+	status=$?
+
+	# exit with status from the stuff we did: nonzero prevents commit
+	exit $status
+}
+
+rebuild_worktree() {
+	git ls-files -z | xargs -0 rm -rf
+	git checkout .
+	git submodule init
+	git submodule update
+}
+
+
+main
