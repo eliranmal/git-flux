@@ -12,7 +12,7 @@ source "$working_dir/gitflux-common"
 SUBDIRECTORY_OK="yes"
 
 # output for stdout when calling the usage() function (can be overridden in each action)
-USAGE="init|feature|team|integration|rc|hf|update [<action>] [<action-args>...]_[-h]"
+USAGE="init|feature|team|integration|rc|hf|update [<action>] [<action-args>...]___[-h]"
 
 # appended to the usage output when using the `-h` flag (can be overridden in each action)
 LONG_USAGE="\
