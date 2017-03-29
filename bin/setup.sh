@@ -4,31 +4,15 @@
 main() {
 	local source_dir="$( cd "$(dirname "${BASH_SOURCE}")" ; pwd -P )"
 	local clone_dir="$source_dir"'/git-flux'
-	local exec_files="git-flux"
-	local script_files="
-		gitflux-util
-		gitflux-io
-		gitflux-gitlib
-		gitflux-validation
-		gitflux-action
-		gitflux-common
-		git-flux-init
-		git-flux-feature
-		git-flux-team
-		git-flux-integration
-		git-flux-rc
-		git-flux-hf
-	"
-	local submodule_path='styli.sh'
+	local exec_file='git-flux'
+	local stylish_dir='styli.sh'
 	local submodule_files="
 		formatter
 	"
+
 	ensure_install_prefix
 	ensure_repo_url
-	call_command "$1"
-}
 
-call_command() {	
 	case "$1" in
 		help|-h)
 			usage
@@ -57,7 +41,7 @@ environment:
 
 do_install() {
 	validate_install_prefix
-	
+
 	local source_repo_path
 	if is_git_repo "$REPO_PATH"; then # user passed a local repo path, and it's a valid git repo
 		log "using repo in '$REPO_PATH'"
@@ -72,32 +56,39 @@ do_install() {
 		fi
 		source_repo_path="$clone_dir"
 	fi
-	
+
 	log "installing git-flux to '$INSTALL_PREFIX'"
+	log "ensuring availability and mode of the install directory"
 	install -v -d -m 0755 "$INSTALL_PREFIX"
-	for exec_file in $exec_files; do
-		install -v -m 0755 "$source_repo_path/$exec_file" "$INSTALL_PREFIX"
+	log "installing executable (main script)"
+	install -v -m 0755 "$source_repo_path/$exec_file" "$INSTALL_PREFIX"
+	log "installing sourceable scripts"
+	for script_file_path in $(script_file_patterns "$source_repo_path"); do
+		install -v -m 0644 "$script_file_path" "$INSTALL_PREFIX"
 	done
-	for script_file in $script_files; do
-		install -v -m 0644 "$source_repo_path/$script_file" "$INSTALL_PREFIX"
-	done
-	
-	install -v -d -m 0755 "$INSTALL_PREFIX/$submodule_path"
+	log "ensuring availability and mode of the styli.sh submodule install directory"
+	install -v -d -m 0755 "$INSTALL_PREFIX/$stylish_dir"
+	log "installing submodule sourceable scripts"
 	for submodule_file in $submodule_files; do
 		# $submodule_files may contain/full/paths, so we're being careful
-		local submodule_file_dir="$( dirname "$INSTALL_PREFIX/$submodule_path/$submodule_file" )"
+		local submodule_file_dir="$( dirname "$INSTALL_PREFIX/$stylish_dir/$submodule_file" )"
 		install -v -d -m 0755 "$submodule_file_dir"
-		install -v -m 0644 "$source_repo_path/$submodule_path/$submodule_file" "$submodule_file_dir"
+		install -v -m 0644 "$source_repo_path/$stylish_dir/$submodule_file" "$submodule_file_dir"
 	done
 }
 
 do_uninstall() {
 	validate_install_prefix
+	
 	log "uninstalling git-flux from '$INSTALL_PREFIX'"
-	for script_file in $script_files $exec_files; do
-		rm -vf "$INSTALL_PREFIX/$script_file"
+	log "removing executable (main script)"
+	rm -vf "$INSTALL_PREFIX/$exec_file"
+	log "removing sourceable scripts"
+	for script_file_path in $(script_file_patterns "$INSTALL_PREFIX"); do
+		rm -vf "$script_file_path"
 	done
-	rm -vfr "$INSTALL_PREFIX/$submodule_path"
+	log "removing the styli.sh submodule directory"
+	rm -vfr "$INSTALL_PREFIX/$stylish_dir"
 }
 
 do_update() {
@@ -107,6 +98,17 @@ do_update() {
 		rm -rf "$clone_dir"
 	fi
 	do_install
+}
+
+# script file paths rely on resolution of paths via globbing pattens, 
+# so they have to be declared only after ensuring their directory path exists.
+# this is why we don't declare them statically at the top, but using a function instead.
+script_file_patterns() {
+	local base="$1"
+	echo "
+		$base/gitflux-*
+		$base/git-flux-*
+	"
 }
 
 ensure_repo_url() {

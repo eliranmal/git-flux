@@ -17,7 +17,7 @@ this means you can <code>git flux -h</code>, and also <code>git flux feature -h<
 
 <dl>
 	<dt><code>init</code></dt>
-	<dd>initialize the git-flux configuration survey.<br/></dd>
+	<dd>configure the git-flux environment with an interactive survey.<br/></dd>
 </dl>
 
 <dl>

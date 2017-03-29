@@ -34,7 +34,7 @@ $(f_subheading "available subcommands")
 
 $(f_code_definition \
 "init" \
-"initialize the git-flux configuration survey.")
+"configure the git-flux environment with an interactive survey.")
 
 $(f_code_definition \
 "$(f_fg_blue "feature")" \
@@ -63,7 +63,7 @@ refer to each subcommand's help menu for an in-depth description of its actions 
 
 
 main() {
-	
+
 	# a little nice backdoor for debugging :)
 	if [[ $1 = "debug" ]]; then
 		set -x; shift
@@ -87,7 +87,7 @@ main() {
 	else
 		action="default"
 	fi
-	
+
 	# explicitly override usage/long-usage from the loaded sub-command per action
 	if is_available "cmd_usage_$action"; then
 		USAGE="$sub_command $(cmd_usage_${action})"
