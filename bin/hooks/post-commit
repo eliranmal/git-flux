@@ -5,7 +5,7 @@ main() {
 	local git_root="$(git rev-parse --show-toplevel)"
 
 	# uncomment this line if you want to see the logs
-	#	exec &> ${git_root}/post-commit.log
+#	exec &> ${git_root}/post-commit.log
 
 	log "get all the files from the last commit."
 	local last_commit="$(git log -1 HEAD --pretty=format:%H)"
