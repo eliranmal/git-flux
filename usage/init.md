@@ -1,5 +1,5 @@
 
-    git flux init [-h ]
+    git flux init [ -h]
 
 # init
 
