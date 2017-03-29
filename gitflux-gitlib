@@ -320,12 +320,50 @@ hub_api_domain() {
 	printf "%s" "$domain"
 }
 
+hub_raw_content_api_domain() {
+	local domain
+	if git_repo_is_enterprise; then
+		domain="$(git_repo_domain)"
+	else
+		domain='raw.githubusercontent.com'
+	fi
+	printf "%s" "$domain"
+}
+
 hub_root_endpoint() {
 	local root_endpoint="$(hub_api_domain)"
 	if git_repo_is_enterprise; then
 		root_endpoint="$root_endpoint"'/api/v3'
 	fi
 	printf "%s" "$root_endpoint"
+}
+
+hub_raw_content_root_endpoint() {
+	local root_endpoint="$(hub_raw_content_api_domain)"
+	if git_repo_is_enterprise; then
+		root_endpoint="$root_endpoint"'/raw'
+	fi
+	printf "%s" "$root_endpoint"
+}
+
+hub_raw_content_get() {
+	local ref="$1"; local path="$2"; local output="$3"
+	# todo - pass resource? pass repo_user and repo_name?
+	local resource="/$(git_repo_user)/$(git_repo_name)/$ref/$path"
+	local  location='https://'"$(hub_raw_content_root_endpoint)$resource"
+
+	local netrc; local accept_header
+	if git_repo_is_enterprise; then
+		netrc='--netrc'
+		accept_header='--header Accept: application/vnd.github.v3.raw'
+		hub_ensure_authenticated
+	fi
+
+	curl --silent \
+		${netrc} \
+		${accept_header} \
+		--output "$output" \
+		--location "$location"
 }
 
 hub_post() {
@@ -365,8 +403,15 @@ hub_response_status() {
 }
 
 hub_ensure_authenticated() {
+	# it's safe to assume raw-content requests will not try to authenticate,
+	# so no need for a different domain for raw-content
 	local domain="$(hub_api_domain)"
-	local netrc="$(os_value '.netrc' '_netrc')"
+	local netrc
+	if is_os_unix; then
+		netrc='.netrc'
+	elif is_os_msys; then
+		netrc='_netrc'
+	fi
 	if [[ ! -e ~/$netrc || -z $(cat ~/${netrc} | grep "$domain") ]]; then
 		local pass="$(io_prompt_pass "type in your github password (you'll only have to do this once)")"; io_log
 		local user="$(git_repo_user)"

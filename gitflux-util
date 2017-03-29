@@ -22,18 +22,23 @@ strip_prefix() {
 	echo "$1" | sed -e 's,^'"$2"',,'
 }
 
-os_value() {
-	local val
-	if [[ $OSTYPE = "linux-gnu" || $OSTYPE = "darwin"* ]]; then # linux / mac osx
-		val=$1
-	elif [[ $OSTYPE = "msys" ]]; then # mingw
-		val=$2
-	fi
-	printf "%s" "$val"
+is_os_unix() {
+	# linux / mac osx
+	[[ $OSTYPE = "linux-gnu" || $OSTYPE = "darwin"* ]]
+}
+
+is_os_msys() {
+	# mingw
+	[[ $OSTYPE = "msys" ]]
 }
 
 create_temp_dir() {
 	mktemp -d 2>/dev/null || mktemp -d -t 'git-flux'
+}
+
+# responsibly handle cleanup of the temporary directories
+cleanup_dir_on_exit() {
+	trap 'rm -rf '"$@"' >/dev/null 2>&1' EXIT
 }
 
 url_last_path_seg() {

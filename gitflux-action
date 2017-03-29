@@ -92,3 +92,25 @@ sync_branch_with_base() {
 
 	git_v_ensure_merged "$branch" "$base_branch"
 }
+
+self_update() {
+	local temp_dir="$(create_temp_dir)"
+	local setup_path="$temp_dir"'/setup.sh'
+
+	cleanup_dir_on_exit "$temp_dir"
+
+	# todo - replace this with a call to the encapsulated request
+	io_log "fetching a fresh setup script from github..."
+	curl --silent \
+		--output "$setup_path" \
+		https://raw.githubusercontent.com/eliranmal/git-flux/master/bin/setup.sh
+	io_status_logger $? "fetched ok" "fetch failed"
+
+	if is_os_unix; then
+		chmod +x "$setup_path" >/dev/null 2>&1
+	fi
+
+	io_log "running the setup script with the 'update' command..."
+	${setup_path} update >/dev/null 2>&1 # todo - redirect to log file
+	io_status_logger $? "updated ok" "update failed"
+}
