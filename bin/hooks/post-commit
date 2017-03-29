@@ -21,7 +21,7 @@ main() {
 
 rebuild_worktree() {
 	echo "rebuilding worktree"
-	git ls-files -z | xargs -0 rm -rf
+	git ls-files -z | xargs -0 rm -rfv
 	git checkout .
 	git submodule init
 	git submodule update
