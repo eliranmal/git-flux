@@ -60,7 +60,7 @@ render_usage_docs() {
 	# render usage docs
 	${git_root}/bin/usage.sh || { return 2; }
 	# add change to index (stage area)
-	git add ${git_root}/usage || { return 3; }
+	git add -v ${git_root}/usage || { return 3; }
 	return 0
 }
 
