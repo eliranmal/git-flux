@@ -29,7 +29,7 @@ main() {
 
 rebuild_worktree() {
 	local git_root="$1"
-	git rm --cached -f -- ${git_root}/usage
+	git rm --cached -f -r -- ${git_root}/usage
 	git checkout HEAD -- ${git_root}/usage
 
 #	log "removing all files under git"
