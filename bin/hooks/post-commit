@@ -2,6 +2,7 @@
 
 
 main() {
+
 	# uncomment this line if you want to see the logs
 #	exec &> ${git_root}/post-commit.log
 
