@@ -3,10 +3,10 @@
 
 main() {
 
+	local git_root="$(git rev-parse --show-toplevel)"
+
 	# uncomment this line if you want to see the logs
 	exec &> ${git_root}/pre-commit.log
-
-	local git_root="$(git rev-parse --show-toplevel)"
 
 	log "first, stash index and work dir, keeping only the to-be-committed changes in the working directory."
 	local old_stash=$(git rev-parse -q --verify refs/stash)
