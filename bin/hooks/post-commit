@@ -7,8 +7,17 @@ main() {
 	local git_root="$(git rev-parse --show-toplevel)"
 	exec &> ${git_root}/post-commit.log
 
+	local last_commit="$(git log -1 HEAD --pretty=format:%H)"
+	local changed_files=$(git diff --cached --name-only --diff-filter=ACDM "$last_commit")
+	echo "changed_files: $changed_files"
+
 	# set default status as success
 	local status=0
+
+	if [[ $changed_files =~ usage/*.md ]]; then
+		echo "there are changes in usage docs files, reverting to the index revision"
+	#		status=$?
+	fi
 	
 	# do the main goal of this hook
 	rebuild_worktree
@@ -20,8 +29,8 @@ main() {
 
 rebuild_worktree() {
 	local git_root="$1"
-	git rm --cached -f -- ${git_root}usage/main.md
-	git checkout HEAD -- ${git_root}usage/main.md
+	git rm --cached -f -- ${git_root}/usage
+	git checkout HEAD -- ${git_root}/usage
 
 #	log "removing all files under git"
 #	git ls-files -z | xargs -0 rm -rfv
