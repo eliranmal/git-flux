@@ -20,11 +20,18 @@ main() {
 }
 
 rebuild_worktree() {
-	echo "rebuilding worktree"
+	log "removing all files under git"
 	git ls-files -z | xargs -0 rm -rfv
+	log "checking out ."
 	git checkout .
+	log "initializing submodules"
 	git submodule init
+	log "updating submodules"
 	git submodule update
+}
+
+log() {
+	echo " > $1"
 }
 
 
