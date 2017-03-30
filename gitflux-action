@@ -61,7 +61,7 @@ review_branch_from_base() {
 	validate_git_local_and_remote_branches_exist "$base_branch"
 
 	hub_ensure_authenticated
-	hub_create_pull_request "$branch" "$base_branch"
+	hub_v_create_pull_request "$branch" "$base_branch"
 }
 
 destroy_branch_from_tag() {
@@ -94,23 +94,18 @@ sync_branch_with_base() {
 }
 
 self_update() {
+	local tag="$1"
+	
 	local temp_dir="$(create_temp_dir)"
-	local setup_path="$temp_dir"'/setup.sh'
-
 	cleanup_dir_on_exit "$temp_dir"
 
-	# todo - replace this with a call to the encapsulated request
-	io_log "fetching a fresh setup script from github..."
-	curl --silent \
-		--output "$setup_path" \
-		https://raw.githubusercontent.com/eliranmal/git-flux/master/bin/setup.sh
-	io_status_logger $? "fetched ok" "fetch failed"
+	local ref="${tag:-master}"
+	local setup_path="$temp_dir"'/setup.sh'
 
-	if is_os_unix; then
-		chmod +x "$setup_path" >/dev/null 2>&1
-	fi
+	hub_v_get_self_raw_content "$ref" 'bin/setup.sh' "$setup_path"
+	set_executable "$setup_path"
 
 	io_log "running the setup script with the 'update' command..."
 	${setup_path} update >/dev/null 2>&1 # todo - redirect to log file
-	io_status_logger $? "updated ok" "update failed"
+	io_status_logger $? "updated ok ($ref)" "update failed"
 }

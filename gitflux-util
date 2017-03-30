@@ -32,6 +32,12 @@ is_os_msys() {
 	[[ $OSTYPE = "msys" ]]
 }
 
+set_executable() {
+	if is_os_unix; then
+		chmod +x "$1" >/dev/null 2>&1
+	fi
+}
+
 create_temp_dir() {
 	mktemp -d 2>/dev/null || mktemp -d -t 'git-flux'
 }
