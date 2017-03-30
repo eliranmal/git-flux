@@ -1,9 +1,9 @@
 
-    git flux update [-h]
+    git flux update [<tag>] [-h]
 
 # update
 
-auto-magically updates git-flux.
+magically updates git-flux. pass a `tag` to get a specific version, or not, to get the latest and greatest.
  
 
 

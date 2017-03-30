@@ -2,20 +2,18 @@
 
 
 cmd_usage_default() {
-	# todo - pass version
-#	printf "[<version>] [-h]"
-	printf "[-h]"
+	printf "[<tag>] [-h]"
 }
 
 cmd_long_usage_default() {
 	printf "\
 $(f_heading "update")
 
-$(f_fg_rainbow "auto-magically") updates git-flux.
+$(f_fg_rainbow "magically") updates git-flux. pass a $(f_code 'tag') to get a specific version, or not, to get the latest and greatest.
  "
 }
 
 cmd_default() {
-	io_log; self_update
+	io_log; self_update "$1"
 	io_log; io_log_ok "git-flux is updated. $(f_fg_rainbow "it's magic!")"; io_log
 }
