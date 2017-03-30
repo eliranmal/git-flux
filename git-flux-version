@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+
+cmd_usage_default() {
+	printf "[-h]"
+}
+
+cmd_long_usage_default() {
+	printf "\
+$(f_heading "version")
+
+shows the currently installed version.
+ "
+}
+
+cmd_default() {
+	local version="@@VERSION@@" # todo - search and replace this on bump-version.sh (or while on release.sh that will call bump-version.sh)
+	io_log; io_log_banner "git-flux version is: $version"; io_log
+}
