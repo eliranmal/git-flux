@@ -45,7 +45,7 @@ main() {
 
 confirm_init_version() {
 	log "could not find a VERSION file"
-	read -p "$(log "do you want to create a version file and start from scratch? [y] ")" answer
+	read -p "$(log "do you want to create a version file and start from scratch? (y/n) ")" answer
 	[[ $answer = y ]]
 }
 
