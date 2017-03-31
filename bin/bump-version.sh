@@ -27,10 +27,6 @@ main() {
 		suggested_version="$(get_suggested_version "$current_version")"
 		commit_message_template="version bump to %s"
 	else # todo - possibly add check for remote tags, to initialize VERSION file with the latest available release
-		# todo - is this redundant? probably
-		if ! confirm_init_version; then
-			exit 0
-		fi
 		suggested_version="0.1.0"
 		commit_message_template="add VERSION file, initial version is %s"
 	fi
@@ -41,12 +37,6 @@ main() {
 	log "new version will be set to '$new_version'"
 	write_new_version "$version_file" "$new_version"
 	submit_new_version "$version_file" "$commit_message" "$new_version"
-}
-
-confirm_init_version() {
-	log "could not find a VERSION file"
-	read -p "$(log "do you want to create a version file and start from scratch? (y/n) ")" answer
-	[[ $answer = y ]]
 }
 
 prompt_new_version() {
