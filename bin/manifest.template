@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+# this file is auto-generated, so there's no use in editing it manually
+
+GIT_FLUX_VERSION=$version
