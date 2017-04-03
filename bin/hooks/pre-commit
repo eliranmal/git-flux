@@ -30,15 +30,15 @@ $changed_files"
 	
 	log "look for changes in files that are known to affect the help output (public files)."
 	if [[ $changed_files =~ git-flux* ]]; then
-		log "there are changes in public files, rendering usage docs."
+		log "changes were found in public files, rendering usage docs."
 		generate_usage_docs "$git_root"
 		usage_docs_status=$?
 	fi
 
 	log "look for changes in files that are known to affect the manifest."
 	if [[ $changed_files =~ VERSION ]]; then
-		log "VERSION changed!"
-#		env OUTPUT_FILE=${root_dir}/gitflux-playground-manifest ${source_dir}/render-manifest.sh
+		log "affecting changes were found, updating manifest."
+		update_manifest "$git_root"
 		manifest_status=$?
 	fi
 
@@ -69,6 +69,11 @@ generate_usage_docs() {
 	log "add change to index (stage area)"
 	git add -v ${git_root}/usage || { return 3; }
 	return 0
+}
+
+update_manifest() {
+	local git_root="$1"
+	env OUTPUT_FILE=${git_root}/gitflux-manifest ${git_root}/bin/render-manifest.sh
 }
 
 against_revision() {
