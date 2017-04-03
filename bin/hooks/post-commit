@@ -22,18 +22,20 @@ $changed_files"
 	log "$files_array"
 	log "--------------------------------------------------"
 
-	# if auto-generated files were found, align worktree changes with index
+	$(echo "$changed_files" | intersection 'usage/.+\.md|gitflux-manifest' | rebuild_worktree)
+
+#	# if auto-generated files were found, align worktree changes with index
 #	if [[ $changed_files =~ usage/.+\.md || $changed_files =~ gitflux-manifest ]]; then
-	if [[ $changed_files =~ usage/.+\.md|gitflux-manifest ]]; then
-		log "there are changes in auto-generated files, reverting to the index revision."
-		log "this avoids out-of-sync issues after using '--only'."
-		for file in $changed_files; do
-			if [[ $file =~ usage/.+\.md|gitflux-manifest ]]; then
-				rebuild_worktree "$file"
-				status=$(( $? + $status ))
-			fi
-		done
-	fi
+##	if [[ $changed_files =~ usage/.+\.md|gitflux-manifest ]]; then
+#		log "there are changes in auto-generated files, reverting to the index revision."
+#		log "this avoids out-of-sync issues after using '--only'."
+#		for file in $changed_files; do
+#			if [[ $file =~ usage/.+\.md || $changed_files =~ gitflux-manifest ]]; then
+#				rebuild_worktree "$file"
+#				status=$(( $? + $status ))
+#			fi
+#		done
+#	fi
 
 	log "exit with status $status."
 	exit $status
@@ -43,7 +45,6 @@ intersection() {
 	local pattern=$1; shift
 	local array="$(cat -)"
 	if [[ $array =~ $pattern ]]; then
-		log "the array items intersect with the pattern"
 		for item in $array; do
 			if [[ $item =~ $pattern ]]; then
 				echo "$item"
@@ -53,11 +54,11 @@ intersection() {
 }
 
 rebuild_worktree() {
-	local file="$1"
+	local files=$(cat -)
 	log "removing auto-generated files from git, and clearing cache."
-	git rm --ignore-unmatch --cached -f -r -- ${file}
+	git rm --ignore-unmatch --cached -f -r -- ${files}
 	log "checking out the head revision of the cleared files to restore them."
-	git checkout HEAD -- ${file}
+	git checkout HEAD -- ${files}
 }
 
 log() {
