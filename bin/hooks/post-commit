@@ -31,7 +31,7 @@ $changed_files"
 rebuild_worktree() {
 	local git_root="$1"
 	log "removing auto-generated files from git, and clearing cache."
-	git rm --cached -f -r -- ${git_root}/usage ${git_root}/gitflux-manifest
+	git rm --ignore-unmatch --cached -f -r -- ${git_root}/usage ${git_root}/gitflux-manifest
 	log "checking out the head revision of the cleared files to restore them."
 	git checkout HEAD -- ${git_root}/usage ${git_root}/gitflux-manifest
 }
