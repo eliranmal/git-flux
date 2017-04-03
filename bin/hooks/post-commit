@@ -13,15 +13,16 @@ main() {
 	log "changed files in the last commit:
 $changed_files"
 
-	log "set default status as success."
-	local status=0
-
-	local files_array="$(echo "$changed_files" | intersection 'usage/.+\.md|gitflux-manifest')"
 	log "--------------------------------------------------"
-	log "files array after intersection:"
+	log "changed files after intersection:"
+	local files_array="$(echo "$changed_files" | intersection 'usage/.+\.md|gitflux-manifest')"
 	log "$files_array"
 	log "--------------------------------------------------"
 
+	log "set default status as success."
+	local status=0
+
+	log "rebuilding worktree of all known auto-generated files that were found in the changed files list."
 	$(echo "$changed_files" | intersection 'usage/.+\.md|gitflux-manifest' | rebuild_worktree)
 
 #	# if auto-generated files were found, align worktree changes with index
