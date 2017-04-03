@@ -22,7 +22,7 @@ main() {
 	log "changed files:
 $changed_files"
 
-	log "we want to add some changes to the staged area later, so unstash beforehand."
+	log "we want to add some changes to the staging area later, so unstash beforehand."
 	restore_stash
 
 	log "set default status as success"
