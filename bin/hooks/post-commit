@@ -12,7 +12,6 @@ main() {
 	local changed_files=$(git diff --cached --name-only --diff-filter=ACDM "$last_commit")
 	log "changed files in the last commit:
 $changed_files"
-
 	log "--------------------------------------------------"
 	log "changed files after intersection:"
 	local files_array="$(echo "$changed_files" | intersection 'usage/.+\.md|gitflux-manifest')"
