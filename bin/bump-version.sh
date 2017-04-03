@@ -107,7 +107,7 @@ write_version_file() {
 }
 
 log() {
-	echo " > $1"
+	echo " [bump-version] $1"
 }
 
 

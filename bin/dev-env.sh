@@ -29,7 +29,7 @@ ensure_submodules() {
 }
 
 log() {
-	echo " > $1"
+	echo " [dev-env] $1"
 }
 
 

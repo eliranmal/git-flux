@@ -26,18 +26,23 @@ $changed_files"
 	restore_stash
 
 	log "set default status as success"
-	local status=0
+	local usage_docs_status=0; local manifest_status=0
 	
 	log "look for changes in files that are known to affect the help output (public files)."
 	if [[ $changed_files =~ git-flux* ]]; then
 		log "there are changes in public files, rendering usage docs."
 		generate_usage_docs "$git_root"
-		status=$?
-#	elif [[ $changed_files =~ VERSION ]]; then
-#		echo "VERSION changed!"
-#		env OUTPUT_FILE=${root_dir}/gitflux-playground-manifest ${source_dir}/render-manifest.sh
+		usage_docs_status=$?
 	fi
 
+	log "look for changes in files that are known to affect the manifest."
+	if [[ $changed_files =~ VERSION ]]; then
+		log "VERSION changed!"
+#		env OUTPUT_FILE=${root_dir}/gitflux-playground-manifest ${source_dir}/render-manifest.sh
+		manifest_status=$?
+	fi
+
+	local status=$(($usage_docs_status + $manifest_status))
 	log "exit with status $status."
 	exit $status # nonzero prevents commit
 }

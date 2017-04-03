@@ -155,7 +155,7 @@ is_git_repo() {
 }
 
 log() {
-	echo " > $1"
+	echo " [setup] $1"
 }
 
 
