@@ -1,8 +1,6 @@
 
     git flux integration sync|review [-h]
 
-# integration
-
 handle integration across teams.
 
 ## available actions
