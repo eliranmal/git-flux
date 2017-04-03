@@ -25,6 +25,7 @@ $changed_files"
 	log "rebuilding worktree of all known auto-generated files that were found in the changed files list."
 	$(echo "$changed_files" | intersection 'usage/.+\.md|gitflux-manifest' | rebuild_worktree)
 
+
 #	# if auto-generated files were found, align worktree changes with index
 #	if [[ $changed_files =~ usage/.+\.md || $changed_files =~ gitflux-manifest ]]; then
 ##	if [[ $changed_files =~ usage/.+\.md|gitflux-manifest ]]; then
