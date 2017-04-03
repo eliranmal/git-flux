@@ -16,9 +16,10 @@ $changed_files"
 	log "set default status as success."
 	local status=0
 
-	# if usage docs were generated in the last commit, align worktree changes with index
-	if [[ $changed_files =~ usage/.+\.md ]]; then
-		log "there are changes in usage docs files, reverting to the index revision."
+	# if auto-generated files were found,
+	# align worktree changes with index
+	if [[ $changed_files =~ usage/.+\.md || $changed_files =~ gitflux-manifest ]]; then
+		log "there are changes in auto-generated files, reverting to the index revision. this avoids out-of-sync issues after using '--only'."
 		rebuild_worktree "$git_root"
 		status=$?
 	fi
