@@ -13,7 +13,7 @@ $(f_fg_rainbow "magically") updates git-flux.
 pass a $(f_code 'tag') to get a specific version, or not, to get the latest and greatest.
 tags will be in the format $(f_code 'vX.X.X'), where each $(f_code 'X') is a digit segment in a semantic-version string.
 
-$(f_italics '* since 0.4.0')
+$(f_italics '* since 0.4.5')
  "
 }
 

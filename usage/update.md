@@ -7,7 +7,7 @@ magically updates git-flux.
 pass a `tag` to get a specific version, or not, to get the latest and greatest.
 tags will be in the format `vX.X.X`, where each `X` is a digit segment in a semantic-version string.
 
-_* since 0.4.0_
+_* since 0.4.5_
  
 
 
