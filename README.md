@@ -11,9 +11,9 @@
 
 ## prerequisites
 
-this tool only supports bash/mingw32, so:
+this tool relies on bash/mingw32, so:
 
-**mac/linux users**  
+**linux/mac users**  
 just fire up the terminal. you're good to go.
 
 **windows people**  
