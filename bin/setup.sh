@@ -2,8 +2,6 @@
 
 
 main() {
-	local source_dir="$( cd "$(dirname "${BASH_SOURCE}")" ; pwd -P )"
-	local clone_dir="$source_dir"'/git-flux'
 	local exec_file='git-flux'
 	local stylish_dir='styli.sh'
 	local submodule_files="
@@ -48,19 +46,11 @@ do_install() {
 	if is_git_repo "$REPO_PATH"; then # user passed a local repo path, and it's a valid git repo
 		log "using repo in '$REPO_PATH'"
 		source_repo_path="$REPO_PATH"
-	else # installer is in charge of figuring out the repo path
-		if is_git_repo "$clone_dir"; then # we already have a cloned repo from a previous installation
-			log "using existing repo in '$clone_dir'"
-		else # first-time installation, go fish
-			log "cloning repo from github into '$clone_dir'"
-			log "repo ref is '$REPO_REF'"
-			# --recurse-submodules ensures submodules are initialized after the clone
-			git clone --recurse-submodules \
-			          --shallow-submodules \
-			          --depth 1 \
-			          --branch "$REPO_REF" \
-			          "$REPO_URL" "$clone_dir" || { exit 1; }
-		fi
+	else # installer is in charge of cloning
+		local temp_dir="$(create_temp_dir)"
+		cleanup_dir_on_exit "$temp_dir"
+		local clone_dir="$temp_dir"'/git-flux'
+		light_clone "$REPO_URL" "$clone_dir" "$REPO_REF" || { exit 1; }
 		source_repo_path="$clone_dir"
 	fi
 
@@ -100,11 +90,19 @@ do_uninstall() {
 
 do_update() {
 	do_uninstall
-	if is_git_repo "$clone_dir"; then # we already have a cloned repo from a previous installation
-		log "removing existing repo in '$clone_dir'"
-		rm -rf "$clone_dir"
-	fi
 	do_install
+}
+
+light_clone() {
+	local url="$1"; local dir="$2"; local ref="$3"
+
+	log "cloning repo from github into '$dir' ($ref)"
+	# --recurse-submodules ensures submodules are initialized after the clone
+	git clone --recurse-submodules \
+	          --shallow-submodules \
+	          --depth 1 \
+	          --branch "$ref" \
+	          "$url" "$dir" || { exit 1; }
 }
 
 # script file paths rely on resolution of paths via globbing pattens, 
@@ -152,6 +150,15 @@ validate_install_prefix() {
 
 is_git_repo() {
 	[[ -d $1 && -d "$1/.git" ]]
+}
+
+create_temp_dir() {
+	mktemp -d 2>/dev/null || mktemp -d -t 'git-flux-setup'
+}
+
+# responsibly handle cleanup of the temporary directories
+cleanup_dir_on_exit() {
+	trap 'rm -rf '"$@"' >/dev/null 2>&1' EXIT
 }
 
 log() {
