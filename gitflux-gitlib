@@ -472,8 +472,8 @@ hub_ensure_authenticated() {
 		netrc='_netrc'
 	fi
 	if [[ ! -e ~/$netrc || -z $(cat ~/${netrc} | grep "$domain") ]]; then
-		local pass="$(io_prompt_pass "type in your github password (you'll only have to do this once)")"; io_log
-		local user="$(git_repo_user)"
+		local user="$(io_prompt "type in your github user name:")"; io_log
+		local pass="$(io_prompt_pass "type in your github password:")"; io_log
 		# currently only 'public_repo' is needed (for pull-requests)
 		local data='{
 		                "scopes": ["public_repo"],
