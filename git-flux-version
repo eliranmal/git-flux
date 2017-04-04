@@ -10,6 +10,8 @@ cmd_long_usage_default() {
 $(f_heading "version")
 
 shows the currently installed version.
+
+$(f_italics "since version 0.4.0")
  "
 }
 
