@@ -21,7 +21,7 @@ it is advised that <code>name</code> will be the next version, e.g. '1.1.0'.<br/
  
 <dl>
 	<dt><code>review &lt;name&gt; [-h]</code></dt>
-	<dd>opens a pull request from the release-candidate branch to its base branch, i.e. the integration branch, for review in github.<br/></dd>
+	<dd>open a pull request from the release-candidate branch to its base branch, i.e. the integration branch, for review in github.<br/></dd>
 </dl>
  
 

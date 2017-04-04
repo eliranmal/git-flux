@@ -26,7 +26,7 @@ pass an optional <code>base</code> to set a custom base for the branch (default 
  
 <dl>
 	<dt><code>review &lt;name&gt; [-h]</code></dt>
-	<dd>opens a pull request from the feature branch to its base branch, for review in github.<br/></dd>
+	<dd>open a pull request from the feature branch to its base branch, for review in github.<br/></dd>
 </dl>
 
 

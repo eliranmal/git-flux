@@ -54,7 +54,7 @@ cmd_long_usage_review() {
 	printf "\
 $(f_code_definition \
 "$(cmd_usage_review)" \
-"opens a pull request from the release-candidate branch to its base branch, i.e. the integration branch, for review in github.")
+"open a pull request from the release-candidate branch to its base branch, i.e. the integration branch, for review in github.")
  "
 }
 

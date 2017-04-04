@@ -27,7 +27,7 @@ aliases: <code>disassemble</code>, <code>scatter</code>, <code>break</code>.<br/
  
 <dl>
 	<dt><code>review &lt;name&gt; [-h]</code></dt>
-	<dd>opens a pull request from the team branch to its base branch, i.e. the integration branch, for review in github.<br/></dd>
+	<dd>open a pull request from the team branch to its base branch, i.e. the integration branch, for review in github.<br/></dd>
 </dl>
  
 <dl>

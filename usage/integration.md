@@ -14,7 +14,7 @@ handle integration across teams.
  
 <dl>
 	<dt><code>review [-h]</code></dt>
-	<dd>opens a pull request from the integration branch to its base branch, i.e. 'master', for review in github.<br/></dd>
+	<dd>open a pull request from the integration branch to its base branch, i.e. 'master', for review in github.<br/></dd>
 </dl>
 
 
