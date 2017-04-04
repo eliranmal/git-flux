@@ -19,5 +19,5 @@ $(f_italics '* since 0.4.0')
 
 cmd_default() {
 	io_log; self_update "$1"
-	io_log; io_log_ok "git-flux is updated. $(f_fg_rainbow "it's magic!")"; io_log
+	io_log; io_log_ok "git-flux is updated. $(f_fg_rainbow "it's magic")!"; io_log
 }
