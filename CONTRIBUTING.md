@@ -48,7 +48,16 @@ script for that:
    ./bin/setup-dev.sh update
    ```
    
-1. test your changes in the playground repository.
+1. test your changes in the playground repository.  
+you can get a (much) more detailed log in the terminal if you prepend 
+`trace` or `debug` to any subcommand. under the hood, it will set `-x` 
+and run bash in debug mode.
+
+for example, to investigate `git flux feature start foo`, type:
+   
+   ```sh
+   git flux trace feature start foo
+   ```
 
 1. iterate the last three steps until you've made peace with your code.
 
