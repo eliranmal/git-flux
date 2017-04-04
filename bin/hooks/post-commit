@@ -12,31 +12,13 @@ main() {
 	local changed_files=$(git diff --cached --name-only --diff-filter=ACDM "$last_commit")
 	log "changed files in the last commit:
 $changed_files"
-	log "--------------------------------------------------"
-	log "changed files after intersection:"
-	local files_array="$(echo "$changed_files" | intersection 'usage/.+\.md|gitflux-manifest')"
-	log "$files_array"
-	log "--------------------------------------------------"
 
 	log "set default status as success."
 	local status=0
 
 	log "rebuilding worktree of all known auto-generated files that were found in the changed files list."
 	echo "$changed_files" | intersection 'usage/.+\.md|gitflux-manifest' | rebuild_worktree
-
-
-#	# if auto-generated files were found, align worktree changes with index
-#	if [[ $changed_files =~ usage/.+\.md || $changed_files =~ gitflux-manifest ]]; then
-##	if [[ $changed_files =~ usage/.+\.md|gitflux-manifest ]]; then
-#		log "there are changes in auto-generated files, reverting to the index revision."
-#		log "this avoids out-of-sync issues after using '--only'."
-#		for file in $changed_files; do
-#			if [[ $file =~ usage/.+\.md || $changed_files =~ gitflux-manifest ]]; then
-#				rebuild_worktree "$file"
-#				status=$(( $? + $status ))
-#			fi
-#		done
-#	fi
+	status=${#PIPESTATUS[@]}
 
 	log "exit with status $status."
 	exit $status
