@@ -48,8 +48,8 @@ script for that:
    ./bin/setup-dev.sh update
    ```
    
-1. test your changes in the playground repository.  
-you can get a (much) more detailed log in the terminal if you prepend 
+1. test your changes in the playground repository.
+   you can get a (much) more detailed log in the terminal if you prepend 
 `trace` or `debug` to any subcommand. under the hood, it will set `-x` 
 and run bash in debug mode.
    
