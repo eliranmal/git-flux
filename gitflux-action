@@ -106,6 +106,6 @@ self_update() {
 	set_executable "$setup_path"
 
 	io_log "running the setup script with the 'update' command..."
-	${setup_path} update >/dev/null 2>&1 # todo - redirect to log file
+	env REPO_REF="$ref" ${setup_path} update >/dev/null 2>&1 # todo - redirect to log file
 	io_status_logger $? "updated ok ($ref)" "update failed"
 }
