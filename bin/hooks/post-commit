@@ -38,10 +38,12 @@ intersection() {
 
 rebuild_worktree() {
 	local files=$(cat -)
-	log "removing auto-generated files from git, and clearing cache."
-	git rm --ignore-unmatch --cached -f -r -- ${files}
-	log "checking out the head revision of the cleared files to restore them."
-	git checkout HEAD -- ${files}
+	if [[ $files ]]; then
+		log "removing auto-generated files from git, and clearing cache."
+		git rm --ignore-unmatch --cached -f -r -- ${files}
+		log "checking out the head revision of the cleared files to restore them."
+		git checkout HEAD -- ${files}
+	fi
 }
 
 log() {
