@@ -44,8 +44,8 @@ do_install() {
 
 	local source_repo_path
 	if is_git_repo "$REPO_PATH"; then # user passed a local repo path, and it's a valid git repo
-		log "using repo in '$REPO_PATH'"
 		source_repo_path="$REPO_PATH"
+		log "using existing local repo in '$source_repo_path'"
 	else # installer is in charge of cloning
 		local temp_dir="$(create_temp_dir)"
 		cleanup_dir_on_exit "$temp_dir"
