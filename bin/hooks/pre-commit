@@ -19,10 +19,10 @@ main() {
 	
 	log "get real changes of the commit to be done."
 	local changed_files=$(git diff --cached --name-only --diff-filter=ACDM "$(against_revision)")
-	log "changed files:"
-	echo "$changed_files"
+	log "changed files:
+$changed_files"
 
-	log "we want to add some changes to the staged area later, so unstash beforehand."
+	log "we want to add some changes to the staging area later, so unstash beforehand."
 	restore_stash
 
 	log "set default status as success"
@@ -30,9 +30,16 @@ main() {
 	
 	log "look for changes in files that are known to affect the help output (public files)."
 	if [[ $changed_files =~ git-flux* ]]; then
-		log "there are changes in public files, rendering usage docs."
+		log "changes were found in public files, rendering usage docs."
 		generate_usage_docs "$git_root"
-		status=$?
+		status=$(($? + $status))
+	fi
+
+	log "look for changes in files that are known to affect the manifest."
+	if [[ $changed_files =~ VERSION ]]; then
+		log "affecting changes were found, updating manifest."
+		update_manifest "$git_root"
+		status=$(($? + $status))
 	fi
 
 	log "exit with status $status."
@@ -58,8 +65,18 @@ generate_usage_docs() {
 	${git_root}/bin/setup-dev.sh update || { return 1; }
 	log "render usage docs"
 	${git_root}/bin/usage.sh || { return 2; }
-	log "add change to index (stage area)"
+	log "add change to index (staging area)"
 	git add -v ${git_root}/usage || { return 3; }
+	return 0
+}
+
+update_manifest() {
+	local git_root="$1"
+	local output_file=${git_root}/gitflux-manifest
+	log "render manifest changes"
+	( env OUTPUT_FILE=${output_file} ${git_root}/bin/render-manifest.sh ) || { return 1; }
+	log "add change to index (staging area)"
+	git add -v ${output_file} || { return 2; }
 	return 0
 }
 
@@ -75,7 +92,7 @@ against_revision() {
 }
 
 log() {
-	echo " > $1"
+	echo " [pre-commit] $1"
 }
 
 

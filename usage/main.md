@@ -1,5 +1,5 @@
 
-    git flux init|feature|team|integration|rc|hf [<action>] [<action-args>...] [-h]
+    git flux init|feature|team|integration|rc|hf|version|update [<action>] [<action-args>...] [-h]
 
 # git-flux
 
@@ -43,6 +43,16 @@ this means you can <code>git flux -h</code>, and also <code>git flux feature -h<
 <dl>
 	<dt><code>hf</code></dt>
 	<dd>handle lifecycle of hot-fixes.<br/></dd>
+</dl>
+
+<dl>
+	<dt><code>version</code></dt>
+	<dd>you guessed it. shows the version.<br/></dd>
+</dl>
+
+<dl>
+	<dt><code>update</code></dt>
+	<dd>auto-magically updates git-flux.<br/></dd>
 </dl>
 
 refer to each subcommand's help menu for an in-depth description of its actions (e.g. `git flux init -h`).

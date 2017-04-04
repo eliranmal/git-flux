@@ -7,7 +7,7 @@
 
 in lieu of a formal styleguide, take care to maintain the existing coding style.
 
-## development environment setup
+## development environment and lifecycle
 
 1. clone the repository, including submodules:
    
@@ -31,7 +31,7 @@ is to:
      the [post-commit][3] hook is only there to bypass an issue with 
      JetBrains IDE's - they use `--only` in the commit command, so the 
      auto-generated files seem to have changes after the commit. we fool 
-     them by updating usage docs from the index if they were changed.
+     them by updating usage docs files from the index if they were changed.
    
    - **ensure submodules are in place**  
      in case you forgot to clone it with `--recursive`, or whatever.

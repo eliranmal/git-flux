@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+
+cmd_usage_default() {
+	printf "[-h]"
+}
+
+cmd_long_usage_default() {
+	printf "\
+$(f_heading "version")
+
+shows the currently installed version.
+
+$(f_italics '* since version 0.4.0')
+ "
+}
+
+cmd_default() {
+	local version="$GIT_FLUX_VERSION"
+	io_log; io_log_banner "git-flux version is: $version"; io_log
+}

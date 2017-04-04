@@ -12,6 +12,7 @@ main() {
 
 	ensure_install_prefix
 	ensure_repo_url
+	ensure_repo_ref
 
 	case "$1" in
 		help|-h)
@@ -34,6 +35,7 @@ usage() {
 usage: [environment] setup.sh [install|uninstall|update]
 environment:
    REPO_URL=$REPO_URL
+   REPO_REF=$REPO_REF
    REPO_PATH=$REPO_PATH
    INSTALL_PREFIX=$INSTALL_PREFIX
 "
@@ -51,8 +53,13 @@ do_install() {
 			log "using existing repo in '$clone_dir'"
 		else # first-time installation, go fish
 			log "cloning repo from github into '$clone_dir'"
-			# using --recursive to auto-init the submodule
-			git clone --recursive "$REPO_URL" "$clone_dir" || exit 1
+			log "repo ref is '$REPO_REF'"
+			# --recurse-submodules ensures submodules are initialized after the clone
+			git clone --recurse-submodules \
+			          --shallow-submodules \
+			          --depth 1 \
+			          --branch "$REPO_REF" \
+			          "$REPO_URL" "$clone_dir" || { exit 1; }
 		fi
 		source_repo_path="$clone_dir"
 	fi
@@ -117,6 +124,12 @@ ensure_repo_url() {
 	fi
 }
 
+ensure_repo_ref() {
+	if [[ -z $REPO_REF ]]; then
+		REPO_REF="master"
+	fi
+}
+
 ensure_install_prefix() {
 	if [[ -z $INSTALL_PREFIX ]]; then
 		if [[ $OSTYPE = "linux-gnu" || $OSTYPE = "darwin"* ]]; then # linux / mac osx
@@ -142,7 +155,7 @@ is_git_repo() {
 }
 
 log() {
-	echo " > $1"
+	echo " [setup] $1"
 }
 
 

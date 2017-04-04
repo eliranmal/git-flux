@@ -150,6 +150,10 @@ git_is_merged() {
 	has $1 $(git_merged_branches)
 }
 
+git_repo_is_enterprise() {
+	[[ $(git_repo_domain) != github.com ]]
+}
+
 
 # - - - - -  verbose actions - - - - - #
 
@@ -308,21 +312,36 @@ git_config_escape_subsection() {
 
 # - - - - - hub - - - - - #
 
-hub_domain() {
+hub_api_domain() {
 	local domain="$(git_repo_domain)"
-	if [[ $domain = github.com ]]; then
+	if ! git_repo_is_enterprise; then
 		domain='api.'"$domain"
 	fi
 	printf "%s" "$domain"
 }
 
+hub_raw_content_api_domain() {
+	local domain
+	if git_repo_is_enterprise; then
+		domain="$(git_repo_domain)"
+	else
+		domain='raw.githubusercontent.com'
+	fi
+	printf "%s" "$domain"
+}
+
 hub_root_endpoint() {
-	local root_endpoint
-	local domain="$(git_repo_domain)"
-	if [[ $domain = github.com ]]; then
-		root_endpoint='api.'"$domain"
-	else # github enterprise
-		root_endpoint="$domain"'/api/v3'
+	local root_endpoint="$(hub_api_domain)"
+	if git_repo_is_enterprise; then
+		root_endpoint="$root_endpoint"'/api/v3'
+	fi
+	printf "%s" "$root_endpoint"
+}
+
+hub_raw_content_root_endpoint() {
+	local root_endpoint="$(hub_raw_content_api_domain)"
+	if git_repo_is_enterprise; then
+		root_endpoint="$root_endpoint"'/raw'
 	fi
 	printf "%s" "$root_endpoint"
 }
@@ -331,15 +350,34 @@ hub_post() {
 	local resource="$1"; local data="$2"
 	# optionally pass credentials in the form "user:pass". if not passed, fallback to use the netrc file
 	local credentials="${3:+--user $3}"; local netrc="${3:---netrc}"
-	local accept_header='Accept: application/vnd.github.v3+json'
+	local accept_header='--header Accept: application/vnd.github.v3+json'
 	local location='https://'"$(hub_root_endpoint)$resource"
 
 	curl --silent \
-		${netrc} \
-		${credentials} \
-		--header "$accept_header" \
-		--data "$data" \
-		--location "$location"
+	     ${netrc} \
+	     ${credentials} \
+	     ${accept_header} \
+	     --data "$data" \
+	     --location "$location"
+}
+
+hub_get_raw_content() {
+	local resource="$1"; local output_path="$2"
+	local location='https://'"$(hub_raw_content_root_endpoint)$resource"
+
+	local netrc; local accept_header
+	if git_repo_is_enterprise; then
+		netrc='--netrc'
+		accept_header='--header Accept: application/vnd.github.v3.raw'
+		hub_ensure_authenticated
+	fi
+
+	curl --silent \
+	     --fail \
+	     ${netrc} \
+	     ${accept_header} \
+	     --output "$output_path" \
+	     --location "$location"
 }
 
 hub_response_status() {
@@ -360,29 +398,6 @@ hub_response_status() {
 		io_status_fatal "$3: '$error_message'" 1
 	else
 		io_log_ok "$2" 1
-	fi
-}
-
-hub_ensure_authenticated() {
-	local domain="$(hub_domain)"
-	local netrc="$(os_value '.netrc' '_netrc')"
-	if [[ ! -e ~/$netrc || -z $(cat ~/${netrc} | grep "$domain") ]]; then
-		local pass="$(io_prompt_pass "type in your github password (you'll only have to do this once)")"; io_log
-		local user="$(git_repo_user)"
-		# currently only 'public_repo' is needed (for pull-requests)
-		local data='{
-		                "scopes": ["public_repo"],
-		                "note": "Git Flux"
-		            }'
-
-		io_log; io_log "creating an access token on '$domain'..."
-		local response="$(hub_post "/authorizations" "$data" "$user:$pass")"
-		hub_response_status "$response" "created ok" "create failed"
-
-		local token="$(echo "$response" | json_get "token")"
-		if [[ $token ]]; then
-			printf "\nmachine %s\nlogin %s\npassword %s\n" "$domain" "$user" "$token" >> ~/${netrc}
-		fi
 	fi
 }
 
@@ -441,12 +456,68 @@ hub_build_pull_request_data() {
 	             }'
 }
 
+
+# - - - - -  hub actions - - - - - #
+
+# this must not be called from within hub_* functions, as it prompts the user for password,
+# and the prompt will break if it's called from a subshell
+hub_ensure_authenticated() {
+	# it's safe to assume raw-content requests will not try to authenticate,
+	# so no need for a different domain for raw-content
+	local domain="$(hub_api_domain)"
+	local netrc
+	if is_os_unix; then
+		netrc='.netrc'
+	elif is_os_msys; then
+		netrc='_netrc'
+	fi
+	if [[ ! -e ~/$netrc || -z $(cat ~/${netrc} | grep "$domain") ]]; then
+		local pass="$(io_prompt_pass "type in your github password (you'll only have to do this once)")"; io_log
+		local user="$(git_repo_user)"
+		# currently only 'public_repo' is needed (for pull-requests)
+		local data='{
+		                "scopes": ["public_repo"],
+		                "note": "Git Flux"
+		            }'
+
+		io_log; io_log "creating an access token on '$domain'..."
+		local response="$(hub_post "/authorizations" "$data" "$user:$pass")"
+		hub_response_status "$response" "created ok" "create failed"
+
+		local token="$(echo "$response" | json_get "token")"
+		if [[ $token ]]; then
+			printf "\nmachine %s\nlogin %s\npassword %s\n" "$domain" "$user" "$token" >> ~/${netrc}
+		fi
+	fi
+}
+
 hub_create_pull_request() {
 	local from_branch="$1"; local to_branch="$2"
-
-	io_log "creating pull-request from '$from_branch' to '$to_branch'..."
 	local data="$(hub_build_pull_request_data "$from_branch" "$to_branch")"
-	local response="$(hub_post "/repos/$(git_repo_user)/$(git_repo_name)/pulls" "$data")"
+	hub_post "/repos/$(git_repo_user)/$(git_repo_name)/pulls" "$data"
+}
+
+# $ref is branch or tag
+hub_get_self_raw_content() {
+	local ref="$1"; local path="$2"; local output_path="$3"
+	local resource="/eliranmal/git-flux/$ref/$path"
+	hub_get_raw_content "$resource" "$output_path"
+}
+
+
+# - - - - -  hub verbose actions - - - - - #
+
+hub_v_create_pull_request() {
+	local from_branch="$1"; local to_branch="$2"
+	io_log "creating pull-request from '$from_branch' to '$to_branch'..."
+	local response="$(hub_create_pull_request "$from_branch" "$to_branch")"
 	local pr_url="$(echo "$response" | json_get "html_url")"
 	hub_response_status "$response" "created ok, here's the url: $pr_url" "create failed"
+}
+
+hub_v_get_self_raw_content() {
+	local ref="$1"; local path="$2"; local output_path="$3"
+	io_log "fetching a fresh setup script from github..."
+	hub_get_self_raw_content "$ref" "$path" "$output_path"
+	io_status_logger $? "fetched ok" "fetch failed"
 }

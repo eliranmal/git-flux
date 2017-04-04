@@ -61,7 +61,7 @@ review_branch_from_base() {
 	validate_git_local_and_remote_branches_exist "$base_branch"
 
 	hub_ensure_authenticated
-	hub_create_pull_request "$branch" "$base_branch"
+	hub_v_create_pull_request "$branch" "$base_branch"
 }
 
 destroy_branch_from_tag() {
@@ -91,4 +91,21 @@ sync_branch_with_base() {
 	validate_git_local_and_remote_branches_exist "$base_branch"
 
 	git_v_ensure_merged "$branch" "$base_branch"
+}
+
+self_update() {
+	local tag="$1"
+	
+	local temp_dir="$(create_temp_dir)"
+	cleanup_dir_on_exit "$temp_dir"
+
+	local ref="${tag:-master}"
+	local setup_path="$temp_dir"'/setup.sh'
+
+	hub_v_get_self_raw_content "$ref" 'bin/setup.sh' "$setup_path"
+	set_executable "$setup_path"
+
+	io_log "running the setup script with the 'update' command..."
+	${setup_path} update >/dev/null 2>&1 # todo - redirect to log file
+	io_status_logger $? "updated ok ($ref)" "update failed"
 }

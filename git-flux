@@ -12,7 +12,7 @@ source "$working_dir/gitflux-common"
 SUBDIRECTORY_OK="yes"
 
 # output for stdout when calling the usage() function (can be overridden in each action)
-USAGE="init|feature|team|integration|rc|hf [<action>] [<action-args>...] [-h]"
+USAGE="init|feature|team|integration|rc|hf|version|update [<action>] [<action-args>...] [-h]"
 
 # appended to the usage output when using the `-h` flag (can be overridden in each action)
 LONG_USAGE="\
@@ -56,6 +56,14 @@ $(f_code_definition \
 "$(f_fg_red "hf")" \
 "handle lifecycle of hot-fixes.")
 
+$(f_code_definition \
+"version" \
+"you guessed it. shows the version.")
+
+$(f_code_definition \
+"update" \
+"$(f_fg_rainbow "auto-magically") updates git-flux.")
+
 
 refer to each subcommand's help menu for an in-depth description of its actions (e.g. $(f_code "git flux init -h")).
  "
@@ -81,8 +89,9 @@ main() {
 
 	local action;
 
-	# lose the action arg only if it's not a `-h` flag, to not break long-usage
-	if [[ -n $1 && $1 != "-h" ]]; then
+	# lose the action arg only if it's not a `-h` flag, to not break long-usage, 
+	# also check for the action function availability, to allow parameters on 'default' actions
+	if [[ -n $1 && $1 != "-h" ]] && is_available "cmd_$1"; then
 		action="$1"; shift
 	else
 		action="default"

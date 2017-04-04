@@ -10,33 +10,44 @@ main() {
 	log "get all the files from the last commit."
 	local last_commit="$(git log -1 HEAD --pretty=format:%H)"
 	local changed_files=$(git diff --cached --name-only --diff-filter=ACDM "$last_commit")
-	log "changed files in the last commit:"
-	echo "$changed_files"
+	log "changed files in the last commit:
+$changed_files"
 
 	log "set default status as success."
 	local status=0
 
-	# if usage docs were generated in the last commit, align worktree changes with index
-	if [[ $changed_files =~ usage/.+\.md ]]; then
-		log "there are changes in usage docs files, reverting to the index revision."
-		rebuild_worktree "$git_root"
-		status=$?
-	fi
+	log "collecting all known auto-generated files that were found in the changed files list."
+	echo "$changed_files" | intersection 'usage/.+\.md|gitflux-manifest' | rebuild_worktree
+	status=$(($? + $status)) # it's ok, we only want the status of the last command in the pipeline
 
 	log "exit with status $status."
 	exit $status
 }
 
+intersection() {
+	local pattern=$1; shift
+	local array="$(cat -)"
+	if [[ $array =~ $pattern ]]; then
+		for item in $array; do
+			if [[ $item =~ $pattern ]]; then
+				echo "$item"
+			fi
+		done
+	fi
+}
+
 rebuild_worktree() {
-	local git_root="$1"
-	log "removing the usage dir auto-generated files from git, and clearing cache."
-	git rm --cached -f -r -- ${git_root}/usage
-	log "checking out the head revision of the usage dir."
-	git checkout HEAD -- ${git_root}/usage
+	local files=$(cat -)
+	if [[ $files ]]; then
+		log "removing auto-generated files from git, and clearing cache."
+		git rm --ignore-unmatch --cached -f -r -- ${files}
+		log "checking out the head revision of the cleared files to restore them."
+		git checkout HEAD -- ${files}
+	fi
 }
 
 log() {
-	echo " > $1"
+	echo " [post-commit] $1"
 }
 
 
