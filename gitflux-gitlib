@@ -320,28 +320,10 @@ hub_api_domain() {
 	printf "%s" "$domain"
 }
 
-hub_raw_content_api_domain() {
-	local domain
-	if git_repo_is_enterprise; then
-		domain="$(git_repo_domain)"
-	else
-		domain='raw.githubusercontent.com'
-	fi
-	printf "%s" "$domain"
-}
-
 hub_root_endpoint() {
 	local root_endpoint="$(hub_api_domain)"
 	if git_repo_is_enterprise; then
 		root_endpoint="$root_endpoint"'/api/v3'
-	fi
-	printf "%s" "$root_endpoint"
-}
-
-hub_raw_content_root_endpoint() {
-	local root_endpoint="$(hub_raw_content_api_domain)"
-	if git_repo_is_enterprise; then
-		root_endpoint="$root_endpoint"'/raw'
 	fi
 	printf "%s" "$root_endpoint"
 }
@@ -363,19 +345,11 @@ hub_post() {
 
 hub_get_raw_content() {
 	local resource="$1"; local output_path="$2"
-	local location='https://'"$(hub_raw_content_root_endpoint)$resource"
-
-	local netrc; local accept_header
-	if git_repo_is_enterprise; then
-		netrc='--netrc'
-		accept_header='--header Accept: application/vnd.github.v3.raw'
-		hub_ensure_authenticated
-	fi
+	# not handling enterprise repos at the moment - yagni
+	local location='https://raw.githubusercontent.com'"$resource"
 
 	curl --silent \
 	     --fail \
-	     ${netrc} \
-	     ${accept_header} \
 	     --output "$output_path" \
 	     --location "$location"
 }
