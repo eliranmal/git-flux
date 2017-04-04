@@ -32,7 +32,7 @@ usage() {
 usage: [environment] bump-version.sh [major|minor|patch]
 environment:
    VERSION_FILE=$VERSION_FILE
-	"
+"
 	exit 0
 }
 

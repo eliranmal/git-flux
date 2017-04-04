@@ -5,12 +5,29 @@ main() {
 	local source_dir="$( cd "$(dirname "${BASH_SOURCE}")" ; pwd -P )"
 	
 	ensure_template_file
-	log "template file: [$TEMPLATE_FILE]"
 	ensure_output_file
+
+	case "$1" in
+		help|-h)
+			usage
+		;;
+	esac
+
+	log "template file: [$TEMPLATE_FILE]"
 	log "output file: [$OUTPUT_FILE]"
 	
 	log "render manifest file from template."
 	render_manifest_template
+}
+
+usage() {
+	echo "
+usage: [environment] render-manifest.sh
+environment:
+   TEMPLATE_FILE=$TEMPLATE_FILE
+   OUTPUT_FILE=$OUTPUT_FILE
+"
+	exit 0
 }
 
 ensure_template_file() {
