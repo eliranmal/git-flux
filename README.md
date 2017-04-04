@@ -26,8 +26,6 @@ open your [git-bash][1] *'as administrator'*, please.
 #### install
 
 ```sh
-mkdir ~/tmp
-cd ~/tmp
 curl -O https://raw.githubusercontent.com/eliranmal/git-flux/master/bin/setup.sh
 chmod +x setup.sh
 ./setup.sh
@@ -49,14 +47,12 @@ use a tag if you want a specific version.
 you can also use the setup script for that, but that's way less cool:
 
 ```sh
-cd ~/tmp
 [env REPO_REF=<tag>] ./setup.sh update
 ```
 
 #### uninstall
 
 ```sh
-cd ~/tmp
 ./setup.sh uninstall
 ```
 
