@@ -10,8 +10,9 @@ cmd_long_usage_default() {
 $(f_heading "update")
 
 $(f_fg_rainbow "magically") updates git-flux.
+
 pass a $(f_code 'tag') to get a specific version, or not, to get the latest and greatest.
-tags will be in the format $(f_code 'v#.#.#'), where each $(f_code '#') is a digit segment in a semantic-version string.
+tags are in the format $(f_code 'v#.#.#'), where each $(f_code '#') is a digit segment in a semantic-version string.
 
 $(f_italics '* since 0.4.5')
  "
