@@ -35,8 +35,6 @@ $changed_files"
 		status=$(($? + $status))
 	fi
 
-	# todo - test this stuff! why manifest file (output_file) is not added to git?!
-
 	log "look for changes in files that are known to affect the manifest."
 	if [[ $changed_files =~ VERSION ]]; then
 		log "affecting changes were found, updating manifest."
