@@ -42,7 +42,7 @@ io_status_logger() {
 }
 
 io_prompt() {
-	local question="$1"; default_suggestion="$2"
+	local question="$1"; local default_suggestion="$2"
 	if [[ -n $default_suggestion ]]; then
 		question="${question} [$default_suggestion]"
 	fi
