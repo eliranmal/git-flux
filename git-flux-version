@@ -9,7 +9,7 @@ cmd_long_usage_default() {
 	printf "\
 $(f_heading "version")
 
-$(f_italics '* since version 0.4.0')
+$(f_italics '* since 0.4.0')
 
 shows the currently installed version.
  "
