@@ -3,9 +3,9 @@
 
 # version
 
-_* since 0.4.0_
-
 shows the currently installed version.
+
+_* since 0.4.0_
  
 
 
