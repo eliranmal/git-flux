@@ -16,9 +16,12 @@ $changed_files"
 	log "set default status as success."
 	local status=0
 
-	log "rebuilding worktree of all known auto-generated files that were found in the changed files list."
-	echo "$changed_files" | intersection 'usage/.+\.md|gitflux-manifest' | rebuild_worktree
-	status=${#PIPESTATUS[@]}
+	log "collecting all known auto-generated files that were found in the changed files list."
+	local auto_generated_files="$(echo "$changed_files" | intersection 'usage/.+\.md|gitflux-manifest')"
+	status=$(($? + $status))
+
+	rebuild_worktree "$auto_generated_files"
+	status=$(($? + $status))
 
 	log "exit with status $status."
 	exit $status
@@ -37,7 +40,7 @@ intersection() {
 }
 
 rebuild_worktree() {
-	local files=$(cat -)
+	local files="$@"
 	if [[ $files ]]; then
 		log "removing auto-generated files from git, and clearing cache."
 		git rm --ignore-unmatch --cached -f -r -- ${files}
