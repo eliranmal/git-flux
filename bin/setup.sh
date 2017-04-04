@@ -44,12 +44,13 @@ do_install() {
 
 	local source_repo_path
 	if is_git_repo "$REPO_PATH"; then # user passed a local repo path, and it's a valid git repo
-		log "using repo in '$REPO_PATH'"
+		log "using existing local repo in '$REPO_PATH'"
 		source_repo_path="$REPO_PATH"
 	else # installer is in charge of cloning
 		local temp_dir="$(create_temp_dir)"
 		cleanup_dir_on_exit "$temp_dir"
 		local clone_dir="$temp_dir"'/git-flux'
+		log "cloning repo from github into '$clone_dir' ($REPO_REF)"
 		light_clone "$REPO_URL" "$clone_dir" "$REPO_REF" || { exit 1; }
 		source_repo_path="$clone_dir"
 	fi
@@ -96,7 +97,6 @@ do_update() {
 light_clone() {
 	local url="$1"; local dir="$2"; local ref="$3"
 
-	log "cloning repo from github into '$dir' ($ref)"
 	# --recurse-submodules ensures submodules are initialized after the clone
 	git clone --recurse-submodules \
 	          --shallow-submodules \
