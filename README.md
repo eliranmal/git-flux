@@ -30,18 +30,29 @@ chmod +x setup.sh
 
 (windows users can skip the `chmod` bit).
 
+#### update
+
+after git-flux is installed, you can use the [`update`][6] subcommand to 
+update git-flux with git-flux (mind = blown):
+
+```sh
+git flux update [<tag>]
+```
+
+use a tag if you want a specific version.
+
+you can also use the setup script for that, but that's way less cool:
+
+```sh
+cd ~/tmp
+[env REPO_REF=<tag>] ./setup.sh update
+```
+
 #### uninstall
 
 ```sh
 cd ~/tmp
 ./setup.sh uninstall
-```
-
-#### update
-
-```sh
-cd ~/tmp
-./setup.sh update
 ```
 
 
@@ -71,3 +82,4 @@ thank you :heart: [read this][5].
 [3]: https://danlimerick.wordpress.com/2011/07/11/git-for-windows-tip-setting-home-and-the-startup-directory/
 [4]: /usage
 [5]: /CONTRIBUTING.md
+[6]: /usage/update.md
