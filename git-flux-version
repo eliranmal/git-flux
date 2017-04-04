@@ -14,6 +14,6 @@ shows the currently installed version.
 }
 
 cmd_default() {
-	local version="@@VERSION@@" # todo - search and replace this on bump-version.sh (or while on release.sh that will call bump-version.sh)
+	local version="$GIT_FLUX_VERSION"
 	io_log; io_log_banner "git-flux version is: $version"; io_log
 }
