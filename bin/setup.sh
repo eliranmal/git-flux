@@ -117,15 +117,11 @@ script_file_patterns() {
 }
 
 ensure_repo_url() {
-	if [[ -z $REPO_URL ]]; then
-		REPO_URL="http://github.com/eliranmal/git-flux.git"
-	fi
+	REPO_URL="${REPO_URL:-http://github.com/eliranmal/git-flux.git}"
 }
 
 ensure_repo_ref() {
-	if [[ -z $REPO_REF ]]; then
-		REPO_REF="master"
-	fi
+	REPO_REF="${REPO_REF:-master}"
 }
 
 ensure_install_prefix() {
