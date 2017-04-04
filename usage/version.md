@@ -5,7 +5,7 @@
 
 shows the currently installed version.
 
-_since version 0.4.0_
+_* since version 0.4.0_
  
 
 
