@@ -73,7 +73,7 @@ refer to each subcommand's help menu for an in-depth description of its actions 
 main() {
 
 	# a little nice backdoor for debugging :)
-	if [[ $1 = "debug" ]]; then
+	if [[ $1 =~ debug|trace ]]; then
 		set -x; shift
 	fi
 
