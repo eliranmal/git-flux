@@ -2,16 +2,18 @@
 
 
 main() {
+	local bump_segment
 
 	ensure_version_file
 
 	case "$1" in
 		help|-h)
 			usage
-		;;
+			;;
+		major|minor|patch)
+			bump_segment="$1"
+			;;
 	esac
-
-	local bump_segment="$1"
 
 	local current_version="$(get_current_version)"
 	log "current version: ${current_version:-[none]}"
