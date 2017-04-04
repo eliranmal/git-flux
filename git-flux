@@ -77,21 +77,21 @@ main() {
 		set -x; shift
 	fi
 
-	local sub_command="$1";
+	local sub_command="$1"
 
 	# lose the sub-command arg only if it's not a `-h` flag, to not break long-usage
-	[[ -n $1 && $1 != "-h" ]] && shift
+	[[ -n $1 && $1 != '-h' ]] && shift
 
 	# verify the sub-command script exists, and include it
 	if [[ -e "$working_dir/git-flux-$sub_command" ]]; then
 		source "$working_dir/git-flux-$sub_command"
 	fi
 
-	local action;
+	local action
 
 	# lose the action arg only if it's not a `-h` flag, to not break long-usage, 
 	# also check for the action function availability, to allow parameters on 'default' actions
-	if [[ -n $1 && $1 != "-h" ]] && is_available "cmd_$1"; then
+	if [[ -n $1 && $1 != '-h' ]] && is_available "cmd_$1"; then
 		action="$1"; shift
 	else
 		action="default"
@@ -117,7 +117,7 @@ main() {
 	fi
 
 	# validate action prerequisites
-	if [[ $sub_command == "init" ]]; then
+	if [[ $sub_command = "init" ]]; then
 		require_non_empty_repository
 	else
 		require_gitflux_initialized
@@ -126,5 +126,6 @@ main() {
 	# delegate to the sub-command action api
 	cmd_${action} "$@"
 }
+
 
 main "$@"
