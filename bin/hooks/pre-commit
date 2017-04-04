@@ -26,13 +26,13 @@ $changed_files"
 	restore_stash
 
 	log "set default status as success"
-	local usage_docs_status=0; local manifest_status=0
+	local status=0
 	
 	log "look for changes in files that are known to affect the help output (public files)."
 	if [[ $changed_files =~ git-flux* ]]; then
 		log "changes were found in public files, rendering usage docs."
 		generate_usage_docs "$git_root"
-		usage_docs_status=$?
+		status=$(($? + $status))
 	fi
 
 	# todo - test this stuff! why manifest file (output_file) is not added to git?!
@@ -41,10 +41,9 @@ $changed_files"
 	if [[ $changed_files =~ VERSION ]]; then
 		log "affecting changes were found, updating manifest."
 		update_manifest "$git_root"
-		manifest_status=$?
+		status=$(($? + $status))
 	fi
 
-	local status=$(($usage_docs_status + $manifest_status))
 	log "exit with status $status."
 	exit $status # nonzero prevents commit
 }
