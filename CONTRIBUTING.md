@@ -9,13 +9,11 @@ in lieu of a formal styleguide, take care to maintain the existing coding style.
 
 ## development environment and lifecycle
 
-1. clone the repository, including submodules:
+1. clone the repository locally, including submodules:
    
    ```sh
    git clone --recursive https://github.com/eliranmal/git-flux.git
    ```
-   
-   you can fork it beforehand, or clone directly from the original repository.
 
 1. run the [dev-env.sh][5] script. it only needs to run once, and its job 
 is to:
