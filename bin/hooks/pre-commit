@@ -33,7 +33,8 @@ $changed_files"
 	log "set default status as success"
 	local status=0
 
-	echo "$changed_files" | difference '.+\.template$|.+\.md$|.+\.log$|LICENSE|VERSION' | lint_code "$git_root"
+	log "activate code analysis on changed files."
+	echo "$changed_files" | difference '.+\.template$|.+\.md$|.+\.log$|LICENSE|VERSION' | lint_code
 	status=$(($? + status)) # referring $? is ok here, we only want the status of the last command in the pipeline
 	
 	log "look for changes in files that are known to affect the help output (public files)."
@@ -68,14 +69,17 @@ restore_stash() {
 }
 
 lint_code() {
-	local git_root="$1"
-	if hash shellcheck 2>/dev/null; then
-		local -r files=$(cat -)
-		log "lint the code with shellcheck."
-		pushd "$git_root"
-		shellcheck "$files"
-		popd
+	if ! hash shellcheck 2>/dev/null; then
+		log "shellcheck is not installed, skipping analysis."
+		return 0
 	fi
+	local files=($(cat -))
+	if (( ${#files[@]} == 0 )); then
+		log "no files passed, skipping analysis."
+		return 0
+	fi
+	log "files to be analyzed: ${files[*]}"
+	shellcheck "${files[@]}"
 }
 
 generate_usage_docs() {
