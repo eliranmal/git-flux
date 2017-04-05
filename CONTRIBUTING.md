@@ -32,8 +32,7 @@ repo.
    
    - **initialize git-hooks**  
      this is optional - if you run into issues, or you just hate 
-     git-hooks, you can pass `nohooks` as the first argument.
-     
+     git-hooks, you can pass `nohooks` as the first argument.  
      to see what each hook does, go to [git-hooks][8].
    
    - **ensure submodules are in place**  
