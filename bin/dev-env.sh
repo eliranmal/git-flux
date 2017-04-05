@@ -42,7 +42,6 @@ ensure_submodules() {
 	git submodule update
 }
 
-
 log() {
 	echo " [dev-env] $1"
 }
