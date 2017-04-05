@@ -1,13 +1,20 @@
 
 # contributing
 
-[pull-request][7] are very welcomed. i'll check them out, i promise :heart:
+## submitting issues
 
-## code style
+- if it's a bug, please include sufficient information to reproduce the 
+problem.  
+it would help a lot if you can attach a trace log. check out the 
+[trace/debug][2] section to see how to do it.
 
-in lieu of a formal styleguide, take care to maintain the existing coding style.
+- for issues with text formatting or colors, post it at the [styli.sh][1] 
+repo.
 
-## development environment and lifecycle
+
+## development
+
+### environment setup
 
 1. clone the repository locally, including submodules:
    
@@ -39,6 +46,8 @@ call it *git-flux-playground*).
 its sole purpose will be playing around with git-flux commands and test 
 your new awesome code.
 
+### lifecycle / workflow
+
 1. make some changes to the source (a.k.a. *"your new awesome code"*).
 
 1. install git-flux from the source; use the [setup-dev.sh][6] 
@@ -48,27 +57,44 @@ script for that:
    ./bin/setup-dev.sh update
    ```
    
-1. test your changes in the playground repository.
+1. test your changes in the playground repository by running the updated 
+commands.
    
-   you can get a (much) more detailed log in the terminal if you prepend 
-`trace` or `debug` to any subcommand. under the hood, it will set `-x` 
-and run bash in debug mode.
-   
-   for example, to investigate `git flux feature start foo`, type:
-   
-   ```sh
-   git flux trace feature start foo
-   ```
+   see [trace/debug][2] for easier debugging.
 
 1. iterate the last three steps until you've made peace with your code.
 
+1. open a [pull-request][7], and i'll check it out :heart:
+
+### code style
+
+in lieu of a formal styleguide, take care to maintain the existing coding style.
+
+### tips & tricks
+
+#### trace/debug
+
+you can get a (much) more detailed log in the terminal if you prepend 
+`trace` or `debug` to any subcommand. under the hood, it will set `-x` 
+and run bash in debug mode.
+
+for example, to investigate `git flux feature start foo`, type:
+
+```sh
+git flux debug feature start foo
+```
+
+you can also dump everything to a log file:
+
+```sh
+git flux trace <subcommand> [<args>] > trace.log
+```
 
 
 
 
-
-
-
+[1]: https://github.com/eliranmal/styli.sh
+[2]: #tracedebug
 [3]: /bin/hooks/post-commit
 [4]: /bin/hooks/pre-commit
 [5]: /bin/dev-env.sh
