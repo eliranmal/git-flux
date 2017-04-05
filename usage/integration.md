@@ -1,21 +1,4 @@
 
-    git flux integration sync|review [-h]
-
-# integration
-
-handle integration across teams.
-
-## available actions
-
-<dl>
-	<dt><code>sync [-h]</code></dt>
-	<dd>pulls changes from the base branch, i.e. 'master', into the integration branch.<br/></dd>
-</dl>
- 
-<dl>
-	<dt><code>review [-h]</code></dt>
-	<dd>open a pull request from the integration branch to its base branch, i.e. 'master', for review in github.<br/></dd>
-</dl>
 
 
 
