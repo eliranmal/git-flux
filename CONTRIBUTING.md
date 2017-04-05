@@ -61,7 +61,7 @@ script for that:
    ```sh
    ./bin/setup-dev.sh update
    ```
-   
+
 1. test your changes in the playground repository by running the updated 
 commands.
    
