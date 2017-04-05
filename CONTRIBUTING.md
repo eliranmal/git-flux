@@ -8,7 +8,7 @@ problem.
 it would help a lot if you can attach a trace log. check out the 
 [trace/debug][2] section to see how to do it.
 
-- for issues with text formatting or colors, post it at the [styli.sh][1] 
+- for issues with text formatting or colors, post at the [styli.sh][1] 
 repo.
 
 
