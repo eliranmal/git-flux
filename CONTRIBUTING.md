@@ -91,8 +91,9 @@ git flux trace <subcommand> [<args>] > trace.log 2>&1
      
 #### [pre-commit][4]
 
-lint the code with shellcheck, and takes care of updating the auto-generated 
-documentation when you make changes to the help text (the output of `-h`).
+lints the code of changed files with [shellcheck][9], and takes care of 
+updating the auto-generated documentation when you make changes to the 
+help text (the output of `-h`).
 
 #### [post-commit][3]
 
@@ -113,3 +114,4 @@ they were changed.
 [6]: /bin/setup-dev.sh
 [7]: https://github.com/eliranmal/git-flux/compare
 [8]: #git-hooks
+[9]: https://github.com/koalaman/shellcheck
