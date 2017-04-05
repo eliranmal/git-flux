@@ -32,16 +32,8 @@ repo.
    
    - **initialize git-hooks**  
      this is optional - if you run into issues, or you just hate 
-     git-hooks, you can pass `nohooks` as the first argument.
-     
-     the [pre-commit][4] hook will take care of updating the auto-generated 
-     documentation when you make changes to the help text (the output of 
-     `-h`), and will run before commits with changes in `git-flux*` files.
-     
-     the [post-commit][3] hook is only there to bypass an issue with 
-     JetBrains IDE's - they use `--only` in the commit command, so the 
-     auto-generated files seem to have changes after the commit. we fool 
-     them by updating these files from the index if they were changed.
+     git-hooks, you can pass `nohooks` as the first argument.  
+     to see what each hook does, go to [git-hooks][8].
    
    - **ensure submodules are in place**  
      in case you forgot to clone it with `--recursive`, or whatever.
@@ -95,6 +87,22 @@ you can also dump everything to a log file:
 git flux trace <subcommand> [<args>] > trace.log 2>&1
 ```
 
+### git-hooks
+     
+#### [pre-commit][4]
+
+lints the code of changed files with [shellcheck][9], and takes care of 
+updating the auto-generated documentation when you make changes to the 
+help text (the output of `-h`).
+
+#### [post-commit][3]
+
+created to bypass an issue with JetBrains IDE's - they use `--only` in 
+the commit command, so the auto-generated files seem to have changes 
+after the commit. we fool them by updating these files from the index if 
+they were changed.
+
+
 
 
 
@@ -105,3 +113,5 @@ git flux trace <subcommand> [<args>] > trace.log 2>&1
 [5]: /bin/dev-env.sh
 [6]: /bin/setup-dev.sh
 [7]: https://github.com/eliranmal/git-flux/compare
+[8]: #git-hooks
+[9]: https://github.com/koalaman/shellcheck
