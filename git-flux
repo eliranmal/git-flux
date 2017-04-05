@@ -1,24 +1,17 @@
 #!/usr/bin/env bash
 
 
-working_dir=$(dirname "$(echo "$0" | sed -e 's,\\,/,g')")
-
-# include common utilities first, to be able to use the text formatter with usage/long-usage messages
-source "$working_dir/gitflux-common"
-
-
-
-# indicates this git command can run from within child directories of the git repo
-SUBDIRECTORY_OK="yes"
-
 # output for stdout when calling the usage() function (can be overridden in each action)
-USAGE="init|feature|team|integration|rc|hf [<action>] [<action-args>...] [-h]"
+cmd_usage_default() {
+	printf "init|feature|team|integration|rc|hf|version|update [<action>] [<action-args>...] [-h]"
+}
 
 # appended to the usage output when using the `-h` flag (can be overridden in each action)
-LONG_USAGE="\
+cmd_long_usage_default() {
+	printf "\
 $(f_heading "git-flux")
 
-git commands for fluent, team-oriented workflow.
+git commands for fluent, collaborative workflow.
 
 
 $(f_subheading "flags")
@@ -34,7 +27,7 @@ $(f_subheading "available subcommands")
 
 $(f_code_definition \
 "init" \
-"initialize the git-flux configuration survey.")
+"configure the git-flux environment with an interactive survey.")
 
 $(f_code_definition \
 "$(f_fg_blue "feature")" \
@@ -56,44 +49,70 @@ $(f_code_definition \
 "$(f_fg_red "hf")" \
 "handle lifecycle of hot-fixes.")
 
+$(f_code_definition \
+"version" \
+"you guessed it. shows the version.")
+
+$(f_code_definition \
+"update" \
+"$(f_fg_rainbow "magically") updates git-flux.")
+
 
 refer to each subcommand's help menu for an in-depth description of its actions (e.g. $(f_code "git flux init -h")).
  "
 # ^ single space on the last line of long-usage is used to add a line-break
+}
 
 
 main() {
-	
+
 	# a little nice backdoor for debugging :)
-	if [[ $1 = "debug" ]]; then
+	if [[ $1 =~ debug|trace ]]; then
 		set -x; shift
 	fi
 
-	local sub_command="$1";
+
+	local working_dir=$(dirname "$(echo "$0" | sed -e 's,\\,/,g')")
+
+	# include common utilities first, to be able to use the text formatter with usage/long-usage messages
+	source "$working_dir/gitflux-common"
+
+	local sub_command="$1"
 
 	# lose the sub-command arg only if it's not a `-h` flag, to not break long-usage
-	[[ -n $1 && $1 != "-h" ]] && shift
+	[[ -n $1 && $1 != '-h' ]] && shift
 
 	# verify the sub-command script exists, and include it
 	if [[ -e "$working_dir/git-flux-$sub_command" ]]; then
 		source "$working_dir/git-flux-$sub_command"
+	else
+		sub_command=""
 	fi
 
-	local action;
+	local action
 
-	# lose the action arg only if it's not a `-h` flag, to not break long-usage
-	if [[ -n $1 && $1 != "-h" ]]; then
+	# lose the action arg only if it's not a `-h` flag, to not break long-usage, 
+	# also check for the action function availability, to allow parameters on 'default' actions
+	if [[ -n $1 && $1 != '-h' ]] && is_available "cmd_$1"; then
 		action="$1"; shift
 	else
 		action="default"
 	fi
-	
+
+
+	# indicates this git command can run from within child directories of the git repo
+	local SUBDIRECTORY_OK="yes"
+
 	# explicitly override usage/long-usage from the loaded sub-command per action
 	if is_available "cmd_usage_$action"; then
-		USAGE="$sub_command $(cmd_usage_${action})"
+		local USAGE="${sub_command:+$sub_command }$(cmd_usage_${action})"
 	fi
-	if is_available "cmd_long_usage_$action"; then
-		LONG_USAGE="$(cmd_long_usage_${action})"
+	# only assign long-usage if user asks for help, to ease on performance,
+	# and to shorten the debug/trace logs
+	if [[ $@ =~ '-h' ]]; then
+		if is_available "cmd_long_usage_$action"; then
+			local LONG_USAGE="$(cmd_long_usage_${action})"
+		fi
 	fi
 
 	# include git builtin library 
@@ -108,14 +127,15 @@ main() {
 	fi
 
 	# validate action prerequisites
-	if [[ $sub_command == "init" ]]; then
+	if [[ $sub_command = "init" ]]; then
 		require_non_empty_repository
-	else
+	elif [[ $sub_command ]]; then
 		require_gitflux_initialized
 	fi
 
 	# delegate to the sub-command action api
 	cmd_${action} "$@"
 }
+
 
 main "$@"

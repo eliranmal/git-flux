@@ -1,30 +1,35 @@
 #!/usr/bin/env bash
 
 
-# all those unicode characters (✔, ✘ etc.) may not show in git-bash, f*** that.
+# all those unicode characters may not show in git-bash, f*** that.
+io_sign_v="✔"
+io_sign_x="✘"
+io_sign_i="ℹ"
+io_sign_star="★"
+io_sign_arrow="➤"
 
 io_log() {
 	io_print "   " "$@"
 }
 
 io_log_ok() {
-	io_print "$(f_fg_green " ✔ ")" "$@"
+	io_print "$(f_fg_green " $io_sign_v ")" "$@"
 }
 
 io_log_info() {
-	io_print "$(f_fg_blue " ℹ ")" "$@"
+	io_print "$(f_fg_blue " $io_sign_i ")" "$@"
 }
 
 io_log_banner() {
-	io_print "$(f_fg_blue " ★ ★ ★ ")" "$(f_bold "$1")" 2 "$(f_fg_blue " ★ ★ ★ ")"
+	io_print "$(f_fg_blue " $io_sign_star $io_sign_star $io_sign_star ")" "$(f_bold "$1")" 2 "$(f_fg_blue " $io_sign_star $io_sign_star $io_sign_star ")"
 }
 
 io_log_warn() {
-	io_print "$(f_fg_yellow " ✘ ")" "$@" >&2
+	io_print "$(f_fg_yellow " $io_sign_x ")" "$@" >&2
 }
 
 io_status_fatal() {
-	die "$(io_print "$(f_fg_red " ✘ ")" "$@")
+	die "$(io_print "$(f_fg_red " $io_sign_x ")" "$@")
 " >&2
 }
 
@@ -37,14 +42,22 @@ io_status_logger() {
 }
 
 io_prompt() {
-	local question="$1"; default_suggestion="$2"
+	local question="$1"; local default_suggestion="$2"
 	if [[ -n $default_suggestion ]]; then
 		question="${question} [$default_suggestion]"
 	fi
 	# use -p instead of sending the question to stdout, as this function will probably be 
 	# called in a $(subshell), so printing to stdout won't work as expected
-	read -r -p "$(printf "$(f_fg_yellow " ? ")%s " "$question")" answer
+	read -r -p "$(printf "$(f_fg_yellow " $io_sign_arrow ")%s " "$question")" answer
 	echo "${answer:-$default_suggestion}"
+}
+
+io_prompt_pass() {
+	local question="$1"
+	# use -p instead of sending the question to stdout, as this function will probably be 
+	# called in a $(subshell), so printing to stdout won't work as expected
+	read -r -s -p "$(printf "$(f_fg_yellow " $io_sign_arrow ")%s " "$question")" answer
+	echo "$answer"
 }
 
 io_confirm() {

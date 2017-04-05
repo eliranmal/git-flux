@@ -21,3 +21,60 @@ is_available() {
 strip_prefix() {
 	echo "$1" | sed -e 's,^'"$2"',,'
 }
+
+is_os_unix() {
+	# linux / mac osx
+	[[ $OSTYPE = "linux-gnu" || $OSTYPE = "darwin"* ]]
+}
+
+is_os_msys() {
+	# mingw
+	[[ $OSTYPE = "msys" ]]
+}
+
+set_executable() {
+	if is_os_unix; then
+		chmod +x "$1" >/dev/null 2>&1
+	fi
+}
+
+create_temp_dir() {
+	mktemp -d 2>/dev/null || mktemp -d -t 'git-flux'
+}
+
+# responsibly handle cleanup of the temporary directories
+cleanup_dir_on_exit() {
+	trap 'rm -rf '"$@"' >/dev/null 2>&1' EXIT
+}
+
+url_last_path_seg() {
+	sed -e 's,.*[/:]\([^/]*\)/[^/]*$,\1,'
+}
+
+url_domain() {
+	sed -e 's,[^:/]*://\([^/]*\)/.*$,\1,'
+}
+
+json_get() {
+	json_select '["'"$1"'"]'
+}
+
+json_select() {
+	local selector="$1"	
+	# check node is available
+	if hash node 2>/dev/null; then
+		local src='
+			var data=JSON.parse(process.argv[1] || "{}");
+			var val=data'"$selector"';
+			console.log(typeof val === "undefined" ? "" : typeof val === "string" ? val : JSON.stringify(val));
+		'
+		node -e "$src" "$(cat -)" 2>/dev/null
+	fi
+}
+
+# simple implementation: only escapes '\', '"' and new-lines
+json_escape_string() {
+	local str="$1"
+	str="$(echo "$str" | sed -e '0N' -e 's,\(["\]\),\\\1,g')"
+	printf "%s" "${str//$'\n'/\n}"
+}

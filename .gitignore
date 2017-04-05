@@ -5,3 +5,5 @@
 # ide
 .idea
 *.iml
+
+*.log

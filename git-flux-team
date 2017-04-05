@@ -2,7 +2,7 @@
 
 
 cmd_usage_default() {
-	printf "create|destroy|switch|sync <name> [-h]"
+	printf "create|destroy|sync|review|switch <name> [-h]"
 }
 
 cmd_usage_create() {
@@ -13,12 +13,16 @@ cmd_usage_destroy() {
 	printf "destroy <name> [-h]"
 }
 
-cmd_usage_switch() {
-	printf "switch <name> [-h]"
-}
-
 cmd_usage_sync() {
 	printf "sync <name> [-h]"
+}
+
+cmd_usage_review() {
+	printf "review <name> [-h]"
+}
+
+cmd_usage_switch() {
+	printf "switch <name> [-h]"
 }
 
 cmd_long_usage_default() {
@@ -32,8 +36,9 @@ $(f_subheading "available actions")
 
 $(cmd_long_usage_create)
 $(cmd_long_usage_destroy)
-$(cmd_long_usage_switch)
 $(cmd_long_usage_sync)
+$(cmd_long_usage_review)
+$(cmd_long_usage_switch)
 "
 }
 
@@ -56,6 +61,22 @@ aliases: $(f_code "disassemble"), $(f_code "scatter"), $(f_code "break").")
  "
 }
 
+cmd_long_usage_sync() {
+	printf "\
+$(f_code_definition \
+"$(cmd_usage_sync)" \
+"sync an existing team with its base branch, i.e. the integration branch.")
+ "
+}
+
+cmd_long_usage_review() {
+	printf "\
+$(f_code_definition \
+"$(cmd_usage_review)" \
+"open a pull request from the team branch to its base branch, i.e. the integration branch, for review in github.")
+ "
+}
+
 cmd_long_usage_switch() {
 	printf "\
 $(f_code_definition \
@@ -63,14 +84,6 @@ $(f_code_definition \
 "switch teams to another team, or join a team for the first time.
 after this, all new features will be based on the new team.
 aliases: $(f_code "switch").")
- "
-}
-
-cmd_long_usage_sync() {
-	printf "\
-$(f_code_definition \
-"$(cmd_usage_sync)" \
-"sync an existing team with its base branch (the integration branch).")
  "
 }
 
@@ -105,6 +118,12 @@ cmd_sync() {
 	require_args "$1"
 	io_log; sync_branch_with_base "$(git_config_get "prefix.team")$1"
 	io_log; io_log_ok "team '$1' is in sync with the base."; io_log
+}
+
+cmd_review() {
+	require_args "$1"
+	io_log; review_branch_from_base "$(git_config_get "prefix.team")$1"
+	io_log; io_log_ok "team '$1' is ready for review."; io_log
 }
 
 cmd_switch() {

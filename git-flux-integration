@@ -2,11 +2,15 @@
 
 
 cmd_usage_default() {
-	printf "sync [-h]"
+	printf "sync|review [-h]"
 }
 
 cmd_usage_sync() {
 	printf "sync [-h]"
+}
+
+cmd_usage_review() {
+	printf "review [-h]"
 }
 
 cmd_long_usage_default() {
@@ -19,6 +23,7 @@ handle integration across teams.
 $(f_subheading "available actions")
 
 $(cmd_long_usage_sync)
+$(cmd_long_usage_review)
 "
 }
 
@@ -30,9 +35,24 @@ $(f_code_definition \
  "
 }
 
+cmd_long_usage_review() {
+	printf "\
+$(f_code_definition \
+"$(cmd_usage_review)" \
+"open a pull request from the integration branch to its base branch, i.e. 'master', for review in github.")
+ "
+}
+
 cmd_sync() {
 	local branch="$(git_config_get "branch.integration")"
 	local base="master"
 	io_log ; sync_branch_with_base "$branch" "$base"
 	io_log; io_log_ok "'$branch' is in sync with '$base'."; io_log
+}
+
+cmd_review() {
+	local branch="$(git_config_get "branch.integration")"
+	local base="master"
+	io_log; review_branch_from_base "$branch" "$base"
+	io_log; io_log_ok "'$branch' is ready for review."; io_log
 }
