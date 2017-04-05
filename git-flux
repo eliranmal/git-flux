@@ -78,7 +78,7 @@ main() {
 	source "$working_dir/gitflux-common"
 
 	# todo - continue this (issue #2)
-	git_checkout "$1"; exit
+#	git_checkout "$1"; exit
 
 	local sub_command="$1"
 

@@ -1,4 +1,12 @@
 
+    git flux version [-h]
+
+# version
+
+shows the currently installed version.
+
+_* since 0.4.0_
+ 
 
 
 
