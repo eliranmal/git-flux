@@ -2,15 +2,20 @@
 
 
 main() {
-	local git_root="$(git rev-parse --show-toplevel)"
+	local git_root
+	local old_stash
+	local new_stash
+	local changed_files
+
+	git_root="$(git rev-parse --show-toplevel)"
 
 	# uncomment this line if you want to see the logs
 #	exec &> ${git_root}/pre-commit.log
 
 	log "first, stash index and work dir, keeping only the to-be-committed changes in the working directory."
-	local old_stash=$(git rev-parse -q --verify refs/stash)
+	old_stash=$(git rev-parse -q --verify refs/stash)
 	save_stash
-	local new_stash=$(git rev-parse -q --verify refs/stash)
+	new_stash=$(git rev-parse -q --verify refs/stash)
 
 	if [ "$old_stash" = "$new_stash" ]; then
 		log "nothing was stashed, this means there were no changes (e.g. '--amend', '--allow-empty'), so skip everything."
@@ -18,7 +23,7 @@ main() {
 	fi
 	
 	log "get real changes of the commit to be done."
-	local changed_files=$(git diff --cached --name-only --diff-filter=ACDM "$(against_revision)")
+	changed_files=$(git diff --cached --name-only --diff-filter=ACDM "$(against_revision)")
 	log "changed files:
 $changed_files"
 
@@ -27,19 +32,22 @@ $changed_files"
 
 	log "set default status as success"
 	local status=0
+
+	lint_code "$changed_files"
+	status=$(($? + status))
 	
 	log "look for changes in files that are known to affect the help output (public files)."
 	if [[ $changed_files =~ git-flux* ]]; then
 		log "changes were found in public files, rendering usage docs."
 		generate_usage_docs "$git_root"
-		status=$(($? + $status))
+		status=$(($? + status))
 	fi
 
 	log "look for changes in files that are known to affect the manifest."
 	if [[ $changed_files =~ VERSION ]]; then
 		log "affecting changes were found, updating manifest."
 		update_manifest "$git_root"
-		status=$(($? + $status))
+		status=$(($? + status))
 	fi
 
 	log "exit with status $status."
@@ -59,24 +67,31 @@ restore_stash() {
 	git config --unset core.whitespace -trailing-space
 }
 
+lint_code() {
+	if hash shellcheck 2>/dev/null; then
+		log "lint the code with shellcheck."
+		shellcheck "$@"
+	fi
+}
+
 generate_usage_docs() {
 	local git_root="$1"
 	log "install git-flux from source to get the local changes in the help output"
-	${git_root}/bin/setup-dev.sh update || { return 1; }
+	"$git_root"/bin/setup-dev.sh update || { return 1; }
 	log "render usage docs"
-	${git_root}/bin/usage.sh || { return 2; }
+	"$git_root"/bin/usage.sh || { return 2; }
 	log "add change to index (staging area)"
-	git add -v ${git_root}/usage || { return 3; }
+	git add -v "$git_root"/usage || { return 3; }
 	return 0
 }
 
 update_manifest() {
 	local git_root="$1"
-	local output_file=${git_root}/gitflux-manifest
+	local output_file="$git_root"/gitflux-manifest
 	log "render manifest changes"
-	( env OUTPUT_FILE=${output_file} ${git_root}/bin/render-manifest.sh ) || { return 1; }
+	( env OUTPUT_FILE="$output_file" "$git_root"/bin/render-manifest.sh ) || { return 1; }
 	log "add change to index (staging area)"
-	git add -v ${output_file} || { return 2; }
+	git add -v "$output_file" || { return 2; }
 	return 0
 }
 
