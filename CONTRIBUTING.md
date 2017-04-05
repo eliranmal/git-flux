@@ -22,8 +22,13 @@ repo.
    git clone --recursive https://github.com/eliranmal/git-flux.git
    ```
 
-1. run the [dev-env.sh][5] script. it only needs to run once, and its job 
-is to:
+1. run the [dev-env.sh][5] script:
+   
+   ```sh
+   ./bin/dev-env.sh [nohooks]
+   ```
+   
+   it only needs to run once, and its job is to:
    
    - **initialize git-hooks**  
      this is optional - if you run into issues, or you just hate 
