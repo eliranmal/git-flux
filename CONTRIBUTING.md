@@ -92,7 +92,7 @@ git flux debug feature start foo
 you can also dump everything to a log file:
 
 ```sh
-git flux trace <subcommand> [<args>] > trace.log
+git flux trace <subcommand> [<args>] > trace.log 2>&1
 ```
 
 
