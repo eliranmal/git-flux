@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
-# this file is auto-generated, so there's no use in editing it manually
+
+# this file is auto-generated, so there's no use in editing it manually.
+# refer to bin/render-manifest.sh to see how it's done
 
 GIT_FLUX_VERSION=$version
