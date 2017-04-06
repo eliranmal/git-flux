@@ -1,13 +1,14 @@
 #!/usr/bin/env bash
+# shellcheck source=/dev/null
 
-working_dir=$(dirname "$(echo "$0" | sed -e 's,\\,/,g')")
+working_dir=$(dirname "${0//\\//}") # unixify the path
 
-source "$working_dir"'/styli.sh/formatter'
+source "$working_dir"/styli.sh/formatter
 
-source "$working_dir"'/gitflux-manifest'
-source "$working_dir"'/gitflux-util'
-source "$working_dir"'/gitflux-io'
-source "$working_dir"'/gitflux-validation'
-source "$working_dir"'/gitflux-gitlib'
-source "$working_dir"'/gitflux-action'
+source "$working_dir"/gitflux-manifest
+source "$working_dir"/gitflux-util
+source "$working_dir"/gitflux-io
+source "$working_dir"/gitflux-validation
+source "$working_dir"/gitflux-gitlib
+source "$working_dir"/gitflux-action
 
