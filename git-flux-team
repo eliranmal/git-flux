@@ -2,31 +2,31 @@
 
 
 cmd_usage_default() {
-	printf "create|destroy|sync|review|switch <name> [-h]"
+	printf "%s" "create|destroy|sync|review|switch <name> [-h]"
 }
 
 cmd_usage_create() {
-	printf "create <name> [-h]"
+	printf "%s" "create <name> [-h]"
 }
 
 cmd_usage_destroy() {
-	printf "destroy <name> [-h]"
+	printf "%s" "destroy <name> [-h]"
 }
 
 cmd_usage_sync() {
-	printf "sync <name> [-h]"
+	printf "%s" "sync <name> [-h]"
 }
 
 cmd_usage_review() {
-	printf "review <name> [-h]"
+	printf "%s" "review <name> [-h]"
 }
 
 cmd_usage_switch() {
-	printf "switch <name> [-h]"
+	printf "%s" "switch <name> [-h]"
 }
 
 cmd_long_usage_default() {
-	printf "\
+	printf "%s" "\
 $(f_heading "team" | f_fg_yellow)
 
 handle integration across team members and their features.
@@ -43,7 +43,7 @@ $(cmd_long_usage_switch)
 }
 
 cmd_long_usage_create() {
-	printf "\
+	printf "%s" "\
 $(f_code_definition \
 "$(cmd_usage_create)" \
 "start a new team; create a local branch and push it to the remote.
@@ -53,7 +53,7 @@ aliases: $(f_code "assemble"), $(f_code "gather"), $(f_code "huddle").")
 }
 
 cmd_long_usage_destroy() {
-	printf "\
+	printf "%s" "\
 $(f_code_definition \
 "$(cmd_usage_destroy)" \
 "destroy an existing team; delete its local and remote branches, for good.
@@ -62,7 +62,7 @@ aliases: $(f_code "disassemble"), $(f_code "scatter"), $(f_code "break").")
 }
 
 cmd_long_usage_sync() {
-	printf "\
+	printf "%s" "\
 $(f_code_definition \
 "$(cmd_usage_sync)" \
 "sync an existing team with its base branch, i.e. the integration branch.")
@@ -70,7 +70,7 @@ $(f_code_definition \
 }
 
 cmd_long_usage_review() {
-	printf "\
+	printf "%s" "\
 $(f_code_definition \
 "$(cmd_usage_review)" \
 "open a pull request from the team branch to its base branch, i.e. the integration branch, for review in github.")
@@ -78,7 +78,7 @@ $(f_code_definition \
 }
 
 cmd_long_usage_switch() {
-	printf "\
+	printf "%s" "\
 $(f_code_definition \
 "$(cmd_usage_switch)" \
 "switch teams to another team, or join a team for the first time.
@@ -100,16 +100,18 @@ cmd_join() { cmd_switch "$@"; }
 
 
 cmd_create() {
+	local branch
 	require_args "$1"
-	local branch="$(git_config_get "prefix.team")$1"
+	branch="$(git_config_get "prefix.team")$1"
 	io_log; create_branch_from_base "$branch" "$(git_config_get "branch.integration")"
 	git_config_set "branch.team" "$branch"
 	io_log; io_log_ok "team '$1' is created. congrats!"; io_log
 }
 
 cmd_destroy() {
+	local branch
 	require_args "$1"
-	local branch="$(git_config_get "prefix.team")$1"
+	branch="$(git_config_get "prefix.team")$1"
 	io_log; destroy_branch_from_base "$branch"
 	git_config_unset "branch.team" "$branch"
 	io_log; io_log_ok "team '$1' is gone. so long!"; io_log
@@ -128,17 +130,24 @@ cmd_review() {
 }
 
 cmd_switch() {
+	local prefix
+	local new_team_branch
+	local old_team_branch
+	local new_team
+	local old_team
+    local old_team_feature_branches
+
 	require_args "$1"
 
-	local prefix="$(git_config_get "prefix.team")"
-	local new_team_branch="$prefix$1"
-	local old_team_branch="$(git_config_get "branch.team")"
-	local new_team="$1"
-	local old_team="$(strip_prefix "$old_team_branch" "$prefix")"
+	prefix="$(git_config_get "prefix.team")"
+	new_team_branch="$prefix$1"
+	old_team_branch="$(git_config_get "branch.team")"
+	new_team="$1"
+	old_team="$(strip_prefix "$old_team_branch" "$prefix")"
 
 	validate_git_local_and_remote_branches_exist "$new_team_branch"
 	
-	if [[ $new_team_branch = $old_team_branch ]]; then
+	if [[ $new_team_branch = "$old_team_branch" ]]; then
 		io_log; io_status_fatal "'$new_team' is the current team, nothing to do."
 	fi
 
@@ -147,7 +156,7 @@ cmd_switch() {
 	if [[ -n $old_team_branch ]]; then
 		validate_git_local_and_remote_branches_exist "$old_team_branch"
 		
-		local old_team_feature_branches="$(git_config_get_subsections_by_value "base" "$old_team_branch" "branch:")"
+		old_team_feature_branches="$(git_config_get_subsections_by_value "base" "$old_team_branch" "branch:")"
 		if [[ -n $old_team_feature_branches ]]; then
 			# strip prefix to get the team name
 			io_log; io_log_info "feature branches of the '$old_team' team were found:"
