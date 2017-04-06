@@ -109,7 +109,8 @@ cmd_create() {
 
 cmd_destroy() {
 	require_args "$1"
-	io_log; destroy_branch_from_base "$(git_config_get "prefix.team")$1"
+	local branch="$(git_config_get "prefix.team")$1"
+	io_log; destroy_branch_from_base "$branch"
 	git_config_unset "branch.team" "$branch"
 	io_log; io_log_ok "team '$1' is gone. so long!"; io_log
 }
