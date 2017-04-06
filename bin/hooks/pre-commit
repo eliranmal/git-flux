@@ -36,6 +36,9 @@ $changed_files"
 	log "activate code analysis on changed files."
 	echo "$changed_files" | difference '.+\.template|.+\.md|.+\.log|LICENSE|VERSION|\.gitignore|\.gitmodules' | lint_code
 	status=$(($? + status)) # referring $? is ok here, we only want the status of the last command in the pipeline
+	if (( status != 0 )); then
+		quit $status # no point in continuing, abort
+	fi
 	
 	log "look for changes in files that are known to affect the help output (public files)."
 	if [[ $changed_files =~ git-flux* ]]; then
@@ -51,8 +54,7 @@ $changed_files"
 		status=$(($? + status))
 	fi
 
-	log "exit with status $status."
-	exit $status # nonzero prevents commit
+	quit $status # nonzero prevents commit
 }
 
 save_stash() {
@@ -130,6 +132,12 @@ difference() {
 
 log() {
 	echo " [pre-commit] $1"
+}
+
+quit() {
+	local status=$1
+	log "exit with status $status."
+	exit "$status" # nonzero prevents commit
 }
 
 
