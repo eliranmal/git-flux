@@ -42,8 +42,8 @@ destroy_branch_from_base() {
 	local base_branch
 
 	io_confirm "local and remote branches will be deleted, forever! continue?" "i knew you'd chicken out."
-    io_log
-    
+	io_log
+
 	base_branch="$(git_config_get "$(git_config_escape_subsection "branch:$branch").base")"
 
 	validate_git_clean_working_tree

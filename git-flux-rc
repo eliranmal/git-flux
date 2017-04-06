@@ -59,19 +59,25 @@ $(f_code_definition \
 }
 
 cmd_start() {
+	local name
 	require_args "$1"
-	io_log; create_branch_from_base "$(git_config_get "prefix.rc")$1" "$(git_config_get "branch.integration")"
-	io_log; io_log_ok "release candidate '$1' is created. congrats!"; io_log
+	name="$1"
+	io_log; create_branch_from_base "$(git_config_get "prefix.rc")$name" "$(git_config_get "branch.integration")"
+	io_log; io_log_ok "release candidate '$name' is created. congrats!"; io_log
 }
 
 cmd_finish() {
+	local name
 	require_args "$1"
-	io_log; destroy_branch_from_base "$(git_config_get "prefix.rc")$1"
-	io_log; io_log_ok "release candidate '$1' is finished. goodbye!"; io_log
+	name="$1"
+	io_log; destroy_branch_from_base "$(git_config_get "prefix.rc")$name"
+	io_log; io_log_ok "release candidate '$name' is finished. goodbye!"; io_log
 }
 
 cmd_review() {
+	local name
 	require_args "$1"
-	io_log; review_branch_from_base "$(git_config_get "prefix.rc")$1"
-	io_log; io_log_ok "release candidate '$1' is ready for review."; io_log
+	name="$1"
+	io_log; review_branch_from_base "$(git_config_get "prefix.rc")$name"
+	io_log; io_log_ok "release candidate '$name' is ready for review."; io_log
 }
