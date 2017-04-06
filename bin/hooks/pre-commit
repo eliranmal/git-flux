@@ -34,7 +34,7 @@ $changed_files"
 	local status=0
 
 	log "activate code analysis on changed files."
-	echo "$changed_files" | difference '.+\.template$|.+\.md$|.+\.log$|LICENSE|VERSION' | lint_code
+	echo "$changed_files" | difference '.+\.template$|.+\.md$|.+\.log$|LICENSE|VERSION|\.gitignore' | lint_code
 	status=$(($? + status)) # referring $? is ok here, we only want the status of the last command in the pipeline
 	
 	log "look for changes in files that are known to affect the help output (public files)."
