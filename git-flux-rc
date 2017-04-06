@@ -2,23 +2,23 @@
 
 
 cmd_usage_default() {
-	printf "start|finish|review <name> [-h]"
+	printf "%s" "start|finish|review <name> [-h]"
 }
 
 cmd_usage_start() {
-	printf "start <name> [-h]"
+	printf "%s" "start <name> [-h]"
 }
 
 cmd_usage_finish() {
-	printf "finish <name> [-h]"
+	printf "%s" "finish <name> [-h]"
 }
 
 cmd_usage_review() {
-	printf "review <name> [-h]"
+	printf "%s" "review <name> [-h]"
 }
 
 cmd_long_usage_default() {
-	printf "\
+	printf "%s" "\
 $(f_heading "rc" | f_fg_green)
 
 handle lifecycle of release-candidates.
@@ -33,7 +33,7 @@ $(cmd_long_usage_review)
 }
 
 cmd_long_usage_start() {
-	printf "\
+	printf "%s" "\
 $(f_code_definition \
 "$(cmd_usage_start)" \
 "start a release-candidate; create a local branch and push it to the remote.
@@ -43,7 +43,7 @@ it is advised that $(f_code "name") will be the next version, e.g. '1.1.0'.")
 }
 
 cmd_long_usage_finish() {
-	printf "\
+	printf "%s" "\
 $(f_code_definition \
 "$(cmd_usage_finish)" \
 "finish an existing release-candidate; delete its local and remote branches, for good.")
@@ -51,7 +51,7 @@ $(f_code_definition \
 }
 
 cmd_long_usage_review() {
-	printf "\
+	printf "%s" "\
 $(f_code_definition \
 "$(cmd_usage_review)" \
 "open a pull request from the release-candidate branch to its base branch, i.e. the integration branch, for review in github.")
