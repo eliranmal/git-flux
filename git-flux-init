@@ -2,11 +2,11 @@
 
 
 cmd_usage_default() {
-	printf "[-h]"
+	printf "%s" "[-h]"
 }
 
 cmd_long_usage_default() {
-	printf "\
+	printf "%s" "\
 $(f_heading "init")
 
 configure the git-flux environment with an interactive survey.
@@ -41,17 +41,24 @@ this branch serves as the base to all team branches, and will be created if not 
 
 
 cmd_default() {
+	local prefix_delimiter
+	local feature_prefix
+	local team_prefix
+	local release_candidate_prefix
+	local hot_fix_prefix
+	local integration_branch
+
 	io_log; io_log_banner "git-flux initializer"; io_log
 
 	git_config_set "initialized" false
 
-	local prefix_delimiter="/"
+	prefix_delimiter="/"
 	
-	local feature_prefix=$(io_prompt "feature prefix" "feature$prefix_delimiter")
-	local team_prefix=$(io_prompt "team prefix" "team$prefix_delimiter")
-	local release_candidate_prefix=$(io_prompt "release candidate prefix" "rc$prefix_delimiter")
-	local hot_fix_prefix=$(io_prompt "hot-fix prefix" "hf$prefix_delimiter")
-	local integration_branch=$(io_prompt "integration branch" "integration")
+	feature_prefix=$(io_prompt "feature prefix" "feature$prefix_delimiter")
+	team_prefix=$(io_prompt "team prefix" "team$prefix_delimiter")
+	release_candidate_prefix=$(io_prompt "release candidate prefix" "rc$prefix_delimiter")
+	hot_fix_prefix=$(io_prompt "hot-fix prefix" "hf$prefix_delimiter")
+	integration_branch=$(io_prompt "integration branch" "integration")
 
 	io_log; git_v_ensure_branch "$integration_branch"
 
