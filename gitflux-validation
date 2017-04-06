@@ -64,7 +64,7 @@ validate_git_local_and_remote_branches_dont_exist() {
 }
 
 validate_git_local_or_remote_branch_exists() {
-	if ! git_local_branch_exists "$1" && ! git_remote_branch_exists "$1"; then
+	if ! git_branch_exists "$1"; then
 		io_status_fatal "branch '$1' doesn't exist."
 	fi
 }
