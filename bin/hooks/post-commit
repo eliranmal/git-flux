@@ -27,10 +27,10 @@ $changed_files"
 }
 
 intersection() {
-	local pattern=$1; shift
-	local -r array="$(cat -)"
-	if [[ $array =~ $pattern ]]; then
-		for item in $array; do
+	local pattern=$1
+	local -r array=($(cat -))
+	if [[ ${array[@]} =~ $pattern ]]; then
+		for item in "${array[@]}"; do
 			if [[ $item =~ $pattern ]]; then
 				echo "$item"
 			fi
