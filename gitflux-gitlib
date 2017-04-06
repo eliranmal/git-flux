@@ -265,7 +265,7 @@ git_config_section="gitflux"
 
 git_config_get() {
 	local namespace="$1"
-	echo "$(git config --global --get "$git_config_section.$namespace")"
+	git config --global --get "$git_config_section.$namespace"
 }
 
 git_config_set() {
@@ -281,6 +281,13 @@ git_config_unset() {
 git_config_remove_section() {
 	local namespace="$1"
 	git config --global --remove-section "$git_config_section.$namespace"	
+}
+
+git_config_ensure_section_removed() {
+	local namespace="$1"
+	if git_config_get "$namespace" >/dev/null 2>&1; then
+		git_config_remove_section "$namespace"
+	fi
 }
 
 git_config_get_subsections_by_value() {
