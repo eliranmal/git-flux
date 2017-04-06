@@ -40,11 +40,15 @@ create_branch_from_tag() {
 destroy_branch_from_base() {
 	local branch="$1"
 	local base_branch
+	
+	base_branch="$(git_config_get "$(git_config_escape_subsection "branch:$branch").base")"
+	base_branch="${base_branch:-master}"
+
+	# just for early exit
+	validate_git_local_or_remote_branch_exists "$branch"
 
 	io_confirm "local and remote branches will be deleted, forever! continue?" "i knew you'd chicken out."
 	io_log
-
-	base_branch="$(git_config_get "$(git_config_escape_subsection "branch:$branch").base")"
 
 	validate_git_clean_working_tree
 	validate_git_local_branch_exists "$base_branch"
@@ -53,7 +57,7 @@ destroy_branch_from_base() {
 	git_v_ensure_no_branch "$branch"
 
 	# delete the base from config, we're not gonna need it anymore
-	git_config_remove_section "$(git_config_escape_subsection "branch:$branch")"
+	git_config_ensure_section_removed "$(git_config_escape_subsection "branch:$branch")"
 }
 
 review_branch_from_base() {
@@ -77,10 +81,14 @@ destroy_branch_from_tag() {
 	local branch="$1"
 	local tag
 
+	tag="$(git_config_get "$(git_config_escape_subsection "branch:$branch").base")"
+	tag="${tag:-master}"
+
+	# just for early exit
+	validate_git_local_or_remote_branch_exists "$branch"
+
 	io_confirm "local and remote branches will be deleted, forever! continue?" "i knew you'd chicken out."
 	io_log
-
-	tag="$(git_config_get "$(git_config_escape_subsection "branch:$branch").base")"
 
 	validate_git_clean_working_tree
 	validate_git_tag_exists "$tag"
@@ -89,7 +97,7 @@ destroy_branch_from_tag() {
 	git_v_ensure_no_branch "$branch"
 
 	# delete the base from config, we're not gonna need it anymore
-	git_config_remove_section "$(git_config_escape_subsection "branch:$branch")"
+	git_config_ensure_section_removed "$(git_config_escape_subsection "branch:$branch")"
 }
 
 sync_branch_with_base() {
