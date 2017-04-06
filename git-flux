@@ -1,14 +1,15 @@
 #!/usr/bin/env bash
+# shellcheck source=/dev/null
 
 
 # output for stdout when calling the usage() function (can be overridden in each action)
 cmd_usage_default() {
-	printf "init|feature|team|integration|rc|hf|version|update [<action>] [<action-args>...] [-h]"
+	printf "%s" "init|feature|team|integration|rc|hf|version|update [<action>] [<action-args>...] [-h]"
 }
 
 # appended to the usage output when using the `-h` flag (can be overridden in each action)
 cmd_long_usage_default() {
-	printf "\
+	printf "%s" "\
 $(f_heading "git-flux")
 
 git commands for fluent, collaborative workflow.
@@ -65,6 +66,7 @@ refer to each subcommand's help menu for an in-depth description of its actions 
 
 
 main() {
+	local working_dir
 
 	# a little nice backdoor for debugging :)
 	if [[ $1 =~ debug|trace ]]; then
@@ -72,7 +74,7 @@ main() {
 	fi
 
 
-	local working_dir=$(dirname "$(echo "$0" | sed -e 's,\\,/,g')")
+	working_dir=$(dirname "${0//\\//}") # unixify the path
 
 	# include common utilities first, to be able to use the text formatter with usage/long-usage messages
 	source "$working_dir/gitflux-common"
@@ -101,17 +103,20 @@ main() {
 
 
 	# indicates this git command can run from within child directories of the git repo
-	local SUBDIRECTORY_OK="yes"
+	# shellcheck disable=SC2034
+	local -r -x SUBDIRECTORY_OK="yes"
 
 	# explicitly override usage/long-usage from the loaded sub-command per action
 	if is_available "cmd_usage_$action"; then
-		local USAGE="${sub_command:+$sub_command }$(cmd_usage_${action})"
+		# shellcheck disable=SC2034,SC2155
+		local -x USAGE="${sub_command:+$sub_command }$(cmd_usage_${action})"
 	fi
 	# only assign long-usage if user asks for help, to ease on performance,
 	# and to shorten the debug/trace logs
 	if [[ $@ =~ '-h' ]]; then
 		if is_available "cmd_long_usage_$action"; then
-			local LONG_USAGE="$(cmd_long_usage_${action})"
+			# shellcheck disable=SC2034,SC2155
+			local -x LONG_USAGE="$(cmd_long_usage_${action})"
 		fi
 	fi
 
