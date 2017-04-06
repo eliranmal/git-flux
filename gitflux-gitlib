@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 
-
 # - - - - -  actions - - - - - #
 
 git_local_branches() {
