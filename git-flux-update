@@ -2,11 +2,11 @@
 
 
 cmd_usage_default() {
-	printf "[<tag>] [-h]"
+	printf "%s" "[<tag>] [-h]"
 }
 
 cmd_long_usage_default() {
-	printf "\
+	printf "%s" "\
 $(f_heading "update")
 
 $(f_fg_rainbow "magically") updates git-flux.
