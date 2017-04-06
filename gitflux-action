@@ -18,6 +18,7 @@ create_branch_from_base() {
 	git_config_set "$(git_config_escape_subsection "branch:$branch").base" "$base_branch"
 }
 
+
 create_branch_from_tag() {
 	local branch="$1"
 	local tag="$2"
