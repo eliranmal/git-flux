@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-
 # all those unicode characters may not show in git-bash, f*** that.
 io_sign_v="✔"
 io_sign_x="✘"
