@@ -29,7 +29,7 @@ io_log_warn() {
 }
 
 io_status_fatal() {
-	die "$(io_print "$(f_fg_red " $io_sign_x ")" "$*")
+	die "$(io_print "$(f_fg_red " $io_sign_x ")" "$@")
 " >&2
 }
 

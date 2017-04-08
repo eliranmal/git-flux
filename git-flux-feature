@@ -83,7 +83,7 @@ cmd_start() {
 	# todo - turn all this into a variable expansion with default assignment
 	team_branch="$(git_config_get "branch.team")"
 	if [[ -z $team_branch && -z $base_branch ]]; then
-		io_log; io_status_fatal "no base found!" "set up a team first with 'git flux team create', or pass the desired base to this command."
+		io_log; io_status_fatal "no base found! set up a team first with 'git flux team create', or pass the desired base to this command."
 	fi
 	io_log; create_branch_from_base "$(git_config_get "prefix.feature")$1" "$team_branch" "$base_branch"
 	io_log; io_log_ok "feature '$name' is started. happy coding!"; io_log
