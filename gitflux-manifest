@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
+# shellcheck disable=SC2034
 
-# this file is auto-generated, so there's no use in editing it manually
+# this file is auto-generated, so there's no use in editing it manually.
+# refer to bin/render-manifest.sh for details.
 
 GIT_FLUX_VERSION=0.4.6
