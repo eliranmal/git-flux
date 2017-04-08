@@ -63,6 +63,7 @@ git_push() {
 
 git_create_branch() {
 	local remote="${2:+origin/$2}" # remote is optional
+	# shellcheck disable=SC2086
 	git checkout -b "$1" ${remote} >/dev/null 2>&1
 }
 
@@ -79,7 +80,7 @@ git_create_tag() {
 }
 
 git_last_commit_message() {
-	git log ${1} --no-merges --format=%s -1
+	git log "$1" --no-merges --format=%s -1
 }
 
 git_repo_origin() {
@@ -124,30 +125,35 @@ git_can_prune() {
 }
 
 git_local_branch_exists() {
-	has $1 $(git_local_branches)
+	# shellcheck disable=SC2046
+	has "$1" $(git_local_branches)
 }
 
 git_remote_branch_exists() {
 	if [[ -n $(git_can_prune) ]]; then
 		git_prune
 	fi
+	# shellcheck disable=SC2046
 	has "origin/$1" $(git_remote_branches)
 }
 
 git_branch_exists() {
-	has $1 $(git_all_branches)
+	# shellcheck disable=SC2046
+	has "$1" $(git_all_branches)
 }
 
 git_tag_exists() {
-	has $1 $(git_all_tags)
+	# shellcheck disable=SC2046
+	has "$1" $(git_all_tags)
 }
 
 git_is_different() {
-	is $(git_diff "$@")
+	is "$(git_diff "$@")"
 }
 
 git_is_merged() {
-	has $1 $(git_merged_branches)
+	# shellcheck disable=SC2046
+	has "$1" $(git_merged_branches)
 }
 
 git_repo_is_enterprise() {
@@ -192,7 +198,8 @@ git_v_push() {
 }
 
 git_v_create_branch() {
-	local branch="$1"; local remote="$2"
+	local branch="$1"
+	local remote="$2"
 	io_log "creating the '$branch' local branch..."
 	git_create_branch "$branch" "$remote"
 	io_status_logger $? "created and checked out" "create failed"
@@ -234,7 +241,8 @@ git_v_ensure_no_branch() {
 }
 
 git_v_ensure_merged() {
-	local branch="$1"; local base_branch="$2"
+	local branch="$1"
+	local base_branch="$2"
 	git_v_checkout "$base_branch"
 	git_v_pull
 	git_v_checkout "$branch"
@@ -252,7 +260,8 @@ git_v_merge() {
 }
 
 git_v_create_tag() {
-	local tag="$1"; local message="$2"
+	local tag="$1"
+	local message="$2"
 	io_log "creating tag '$tag'..."
 	git_create_tag "$tag" "$message"
 	io_status_logger $? "created ok" "create failed"
@@ -291,28 +300,36 @@ git_config_ensure_section_removed() {
 }
 
 git_config_get_subsections_by_value() {
-	local key="$1"; local value="$2"; local prefix="$3"
-	local subsection_list; local config_value; local config_subsection
-	local config_lines="$(git config --global --get-regexp "$git_config_section"'\..*\.'"$key")"
+	local key="$1"
+	local value="$2"
+	local prefix="$3"
+	local subsection_list
+	local config_value
+	local config_subsection
+	local config_lines
+	
+	config_lines="$(git config --global --get-regexp "$git_config_section"'\..*\.'"$key")"
 	while read -r line; do
 		# extract the config value
 		config_value="$(echo "$line" | cut -d ' ' -f 2)"
 		# if it does not match the passed value filter, abort this line
-		[[ -n $value && $config_value != $value ]] && continue
+		[[ -n $value && $config_value != "$value" ]] && continue
 		# strip down the section and key name to get the subsection
 		config_subsection="$(echo "$line" | cut -d ' ' -f 1 | sed -e 's,'"$git_config_section"'\.\(.*\)\.'"$key"',\1,')"
 		# strip down the prefix, if passed
 		if [[ -n $prefix ]]; then
-			config_subsection="$(echo "$config_subsection" | sed -e 's,'"$prefix"'\(.*\),\1,')"
+			config_subsection="${config_subsection#$prefix}"
 		fi
 		# add subsection to the result list
 		subsection_list="$subsection_list $config_subsection"
 	done <<< "$config_lines"
 	# remove leading spaces and send to stdout
-	echo "$subsection_list" | sed -e 's,^ *,,'
+	echo "${subsection_list##+( )}" 
 }
 
 git_config_escape_subsection() {
+	# todo - refactor: higher level of abstraction: e.g. git_config_get_base()
+	# todo - refactor: remove the printf bit
 	printf "%s" "$1" | sed 's,\([\\\"]\),\\\1,g' # '\' and '"' must be escaped in git config subsection names
 }
 
@@ -320,7 +337,8 @@ git_config_escape_subsection() {
 # - - - - - hub - - - - - #
 
 hub_api_domain() {
-	local domain="$(git_repo_domain)"
+	local domain
+	domain="$(git_repo_domain)"
 	if ! git_repo_is_enterprise; then
 		domain='api.'"$domain"
 	fi
@@ -328,7 +346,8 @@ hub_api_domain() {
 }
 
 hub_root_endpoint() {
-	local root_endpoint="$(hub_api_domain)"
+	local root_endpoint
+	root_endpoint="$(hub_api_domain)"
 	if git_repo_is_enterprise; then
 		root_endpoint="$root_endpoint"'/api/v3'
 	fi
@@ -336,23 +355,29 @@ hub_root_endpoint() {
 }
 
 hub_post() {
-	local resource="$1"; local data="$2"
+	local resource="$1"
+	local data="$2"
 	# optionally pass credentials in the form "user:pass". if not passed, fallback to use the netrc file
 	local credentials="${3:+--user $3}"; local netrc="${3:---netrc}"
-	local accept_header='--header Accept: application/vnd.github.v3+json'
-	local location='https://'"$(hub_root_endpoint)$resource"
+	local accept_header
+	local location
+	
+	accept_header='Accept: application/vnd.github.v3+json'
+	location='https://'"$(hub_root_endpoint)$resource"
 
+	# shellcheck disable=SC2086
 	curl --silent \
 	     ${netrc} \
 	     ${credentials} \
-	     ${accept_header} \
+	     --header "$accept_header" \
 	     --data "$data" \
 	     --location "$location"
 }
 
 hub_get_raw_content() {
-	local resource="$1"; local output_path="$2"
-	# not handling enterprise repos at the moment - yagni
+	local resource="$1"
+	local output_path="$2"
+	# not handling enterprise repos at the moment - YAGNI
 	local location='https://raw.githubusercontent.com'"$resource"
 
 	curl --silent \
@@ -362,8 +387,11 @@ hub_get_raw_content() {
 }
 
 hub_response_status() {
-	local response="$1"; local error_message
-	local first_error="$(echo "$response" | json_select '.errors[0]')"
+	local response="$1"
+	local error_message
+	local first_error
+	
+	first_error="$(echo "$response" | json_select '.errors[0]')"
 	if [[ $first_error ]]; then
 		code="$(echo "$first_error" | json_get "code")"
 		if [[ $code = custom ]]; then
@@ -403,27 +431,29 @@ hub_response_status() {
 #      let 'title' be 'message'
 #
 hub_build_pull_request_data() {
-	local from_branch="$1"; local to_branch="$2"
-	local title; local body
+	local from_branch="$1"
+	local to_branch="$2"
+	local title
+	local body
+	local message
 
-	local message="$(git_last_commit_message "$from_branch")"
 	local joint='...'
 	local title_max_length=40
+
+	message="$(git_last_commit_message "$from_branch")"
 	if [[ $message = *$'\n'* ]]; then # check for line breaks
 		# split message at the first line break
 		title="$(head -n 1 <<< "$message")"
 		body="$(tail -n +2 <<< "$message")"
-		if (( ${#title} > $title_max_length )); then
+		if (( ${#title} > title_max_length )); then
 			body="$joint${title:$title_max_length}"'\n'"$body" # re-add the lost line break before the original body
 			title="${title:0:$title_max_length}$joint"
 		fi
-	else # no line breaks
-		if (( ${#message} > $title_max_length )); then
-			title="${message:0:$title_max_length}$joint"
-			body="$joint${message:$title_max_length}"
-		else
-			title="$message"
-		fi
+	elif (( ${#message} > title_max_length )); then # check if the message should be truncated
+		title="${message:0:$title_max_length}$joint"
+		body="$joint${message:$title_max_length}"
+	else
+		title="$message"
 	fi
 
 	title="$(json_escape_string "$title")"
@@ -443,29 +473,38 @@ hub_build_pull_request_data() {
 # this must not be called from within hub_* functions, as it prompts the user for password,
 # and the prompt will break if it's called from a subshell
 hub_ensure_authenticated() {
-	# it's safe to assume raw-content requests will not try to authenticate,
-	# so no need for a different domain for raw-content
-	local domain="$(hub_api_domain)"
+	local domain
 	local netrc
+
+	# in the current implementation, raw-content requests will not try to authenticate,
+	# so no need for a different domain for raw-content
+	domain="$(hub_api_domain)"
 	if is_os_unix; then
 		netrc='.netrc'
 	elif is_os_msys; then
 		netrc='_netrc'
 	fi
-	if [[ ! -e ~/$netrc || -z $(cat ~/${netrc} | grep "$domain") ]]; then
-		local user="$(io_prompt "type in your github user name:")"; io_log
-		local pass="$(io_prompt_pass "type in your github password:")"; io_log
+
+	if [[ ! -e ~/$netrc ]] || ! (grep -q "$domain" ~/${netrc}); then
+		local user
+		local pass
+		local data
+		local response
+		local token
+
+		user="$(io_prompt "type in your github user name:")"; io_log
+		pass="$(io_prompt_pass "type in your github password:")"; io_log
 		# currently only 'public_repo' is needed (for pull-requests)
-		local data='{
-		                "scopes": ["public_repo"],
-		                "note": "Git Flux"
-		            }'
+		data='{
+		          "scopes": ["public_repo"],
+		          "note": "Git Flux"
+		      }'
 
 		io_log; io_log "creating an access token on '$domain'..."
-		local response="$(hub_post "/authorizations" "$data" "$user:$pass")"
+		response="$(hub_post "/authorizations" "$data" "$user:$pass")"
 		hub_response_status "$response" "created ok" "create failed"
 
-		local token="$(echo "$response" | json_get "token")"
+		token="$(echo "$response" | json_get "token")"
 		if [[ $token ]]; then
 			printf "\nmachine %s\nlogin %s\npassword %s\n" "$domain" "$user" "$token" >> ~/${netrc}
 		fi
@@ -473,14 +512,18 @@ hub_ensure_authenticated() {
 }
 
 hub_create_pull_request() {
-	local from_branch="$1"; local to_branch="$2"
-	local data="$(hub_build_pull_request_data "$from_branch" "$to_branch")"
+	local from_branch="$1"
+	local to_branch="$2"
+	local data
+	data="$(hub_build_pull_request_data "$from_branch" "$to_branch")"
 	hub_post "/repos/$(git_repo_user)/$(git_repo_name)/pulls" "$data"
 }
 
 # $ref is branch or tag
 hub_get_self_raw_content() {
-	local ref="$1"; local path="$2"; local output_path="$3"
+	local ref="$1"
+	local path="$2"
+	local output_path="$3"
 	local resource="/eliranmal/git-flux/$ref/$path"
 	hub_get_raw_content "$resource" "$output_path"
 }
@@ -489,15 +532,20 @@ hub_get_self_raw_content() {
 # - - - - -  hub verbose actions - - - - - #
 
 hub_v_create_pull_request() {
-	local from_branch="$1"; local to_branch="$2"
+	local from_branch="$1"
+	local to_branch="$2"
+	local response
+	local pr_url
 	io_log "creating pull-request from '$from_branch' to '$to_branch'..."
-	local response="$(hub_create_pull_request "$from_branch" "$to_branch")"
-	local pr_url="$(echo "$response" | json_get "html_url")"
+	response="$(hub_create_pull_request "$from_branch" "$to_branch")"
+	pr_url="$(echo "$response" | json_get "html_url")"
 	hub_response_status "$response" "created ok, here's the url: $pr_url" "create failed"
 }
 
 hub_v_get_self_raw_content() {
-	local ref="$1"; local path="$2"; local output_path="$3"
+	local ref="$1"
+	local path="$2"
+	local output_path="$3"
 	io_log "fetching a fresh setup script from github..."
 	hub_get_self_raw_content "$ref" "$path" "$output_path"
 	io_status_logger $? "fetched ok" "fetch failed"
