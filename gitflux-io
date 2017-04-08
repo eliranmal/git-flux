@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+
 # all those unicode characters may not show in git-bash, f*** that.
 io_sign_v="✔"
 io_sign_x="✘"
@@ -41,7 +42,8 @@ io_status_logger() {
 }
 
 io_prompt() {
-	local question="$1"; local default_suggestion="$2"
+	local question="$1"
+	local default_suggestion="$2"
 	if [[ -n $default_suggestion ]]; then
 		question="${question} [$default_suggestion]"
 	fi
@@ -60,7 +62,8 @@ io_prompt_pass() {
 }
 
 io_confirm() {
-	local question="$1"; local exit_message="$2";
+	local question="$1"
+	local exit_message="$2";
 	local answer
 	answer=$(io_prompt "$question (y/n)")
 	if [[ $answer != "y" ]]; then
@@ -69,7 +72,10 @@ io_confirm() {
 }
 
 io_print() {
-	local margin="$1"; local body="$2"; local indent_level=$3; local end_margin="$4"
+	local margin="$1"
+	local body="$2"
+	local indent_level=$3
+	local end_margin="$4"
 	local indent=""
 	if [[ $indent_level =~ [123] ]]; then
 		for (( n=indent_level; n > 0; n-- )); do
