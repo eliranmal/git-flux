@@ -150,7 +150,7 @@ cmd_switch() {
 	prefix="$(git_config_get "prefix.team")"
 	new_team_branch="$prefix$new_team"
 	old_team_branch="$(git_config_get "branch.team")"
-	old_team="$(strip_prefix "$old_team_branch" "$prefix")"
+	old_team="${old_team_branch#$prefix}"
 
 	validate_git_local_and_remote_branches_exist "$new_team_branch"
 	
