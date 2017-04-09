@@ -296,7 +296,6 @@ git_config_get_subsections_by_value() {
 	local key="$1"
 	local value="$2"
 	local prefix="$3"
-	local delimiter="${4:- }"
 	local config_value
 	local config_subsection
 	local config_lines
@@ -313,8 +312,9 @@ git_config_get_subsections_by_value() {
 		if [[ -n $prefix ]]; then
 			config_subsection="${config_subsection#$prefix}"
 		fi
-		# output each subsection, appended with a whitespace, to be ready for array interpolation
-		printf "%s%s" "$config_subsection" "$delimiter"
+		# send item to output appended with a whitespace delimiter, 
+		# to output a string that's ready for array interpolation
+		printf "%s " "$config_subsection"
 	done <<< "$config_lines"
 }
 
