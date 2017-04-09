@@ -3,7 +3,7 @@
 
 has() {
 	local item=$1; shift
-	echo " $@ " | grep -q " $(escape $item) "
+	grep -q "$(escape "$item")" <<< "$@"
 }
 
 is() {
@@ -11,15 +11,11 @@ is() {
 }
 
 escape() {
-	echo "$1" | sed 's/\([\.\$\*]\)/\\\1/g'
+	sed 's/\([\.\$\*]\)/\\\1/g' <<< "$1"
 }
 
 is_available() {
-	type $1 >/dev/null 2>&1
-}
-
-strip_prefix() {
-	echo "$1" | sed -e 's,^'"$2"',,'
+	type "$1" >/dev/null 2>&1
 }
 
 is_os_unix() {

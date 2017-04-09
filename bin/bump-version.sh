@@ -3,6 +3,11 @@
 
 main() {
 	local bump_segment
+	local current_version
+	local commit_message_template
+	local suggested_version
+	local new_version
+	local commit_message
 
 	ensure_version_file
 
@@ -15,14 +20,15 @@ main() {
 			;;
 	esac
 
-	local current_version="$(get_current_version)"
+	current_version="$(get_current_version)"
 	log "current version: ${current_version:-[none]}"
 
-	local commit_message_template="$(get_commit_message_template "$current_version")"
-	local suggested_version="$(get_suggested_version "$current_version" "$bump_segment")"
+	commit_message_template="$(get_commit_message_template "$current_version")"
+	suggested_version="$(get_suggested_version "$current_version" "$bump_segment")"
 
-	local new_version="$(prompt_new_version "$suggested_version")"
-	local commit_message="$(printf "$commit_message_template" "$new_version")"
+	new_version="$(prompt_new_version "$suggested_version")"
+	# shellcheck disable=SC2059
+	commit_message="$(printf "$commit_message_template" "$new_version")"
 
 	log "new version will be set to '$new_version'"
 	write_version_file "$new_version"
@@ -39,13 +45,16 @@ environment:
 }
 
 ensure_version_file() {
-	local git_root="$(git rev-parse --show-toplevel)"
+	local git_root
+	git_root="$(git rev-parse --show-toplevel)"
 	VERSION_FILE="${VERSION_FILE:-$git_root/VERSION}"
 }
 
 get_current_version() {
-	local current_tag="$(git describe --abbrev=0 --tags 2>/dev/null)"
-	local current_version="${current_tag#v}" # assume a tag format of "vX.X.X"
+	local current_tag
+	local current_version
+	current_tag="$(git describe --abbrev=0 --tags 2>/dev/null)"
+	current_version="${current_tag#v}" # assume a tag format of "vX.X.X"
 	printf "%s" "$current_version"
 }
 
@@ -64,7 +73,8 @@ get_commit_message_template() {
 }
 
 get_suggested_version() {
-	local current_version="$1"; local bump_segment="$2"
+	local current_version="$1"
+	local bump_segment="$2"
 	local suggested_version
 	if [[ $current_version ]]; then
 		suggested_version="$(increment_version "$current_version" "$bump_segment")"
@@ -75,9 +85,12 @@ get_suggested_version() {
 }
 
 increment_version() {
-	local current_version="$1"; local segment="${2:-minor}"
-	local v_segments=($(echo "$current_version" | tr '.' ' '))
-	local v_major=${v_segments[0]}; local v_minor=${v_segments[1]}; local v_patch=${v_segments[2]}
+	local current_version="$1"
+	local segment="${2:-minor}"
+	local v_segments=( ${current_version//\./ } )
+	local v_major=${v_segments[0]}
+	local v_minor=${v_segments[1]}
+	local v_patch=${v_segments[2]}
 
 	let "v_$segment += 1"
 	if [[ $segment = minor || $segment = major ]]; then
@@ -97,15 +110,17 @@ prompt_new_version() {
 }
 
 publish_version() {
-	local commit_message="$1"; local version="$2"
-	git add ${VERSION_FILE}
-	git commit --only -m "$commit_message" -- ${VERSION_FILE}
+	local commit_message="$1"
+	local version="$2"
+
+	git add "$VERSION_FILE"
+	git commit --only -m "$commit_message" -- "$VERSION_FILE"
 	git tag -a -m "tagging version $version" "v$version"
 	git push origin --tags
 }
 
 write_version_file() {
-	echo "$1" > ${VERSION_FILE}
+	echo "$1" > "$VERSION_FILE"
 }
 
 log() {

@@ -2,14 +2,16 @@
 
 
 main() {
-	local git_root="$(git rev-parse --show-toplevel)"
+	local last_commit
+	local changed_files
 
-	# uncomment this line if you want to see the logs
+	# uncomment this if you want to see the logs
+#	local -r git_root="$(git rev-parse --show-toplevel)"
 #	exec &> ${git_root}/post-commit.log
 
 	log "get all the files from the last commit."
-	local last_commit="$(git log -1 HEAD --pretty=format:%H)"
-	local changed_files=$(git diff --cached --name-only --diff-filter=ACDM "$last_commit")
+	last_commit="$(git log -1 HEAD --pretty=format:%H)"
+	changed_files=$(git diff --cached --name-only --diff-filter=ACDM "$last_commit")
 	log "changed files in the last commit:
 $changed_files"
 
@@ -18,17 +20,17 @@ $changed_files"
 
 	log "collecting all known auto-generated files that were found in the changed files list."
 	echo "$changed_files" | intersection 'usage/.+\.md|gitflux-manifest' | rebuild_worktree
-	status=$(($? + $status)) # it's ok, we only want the status of the last command in the pipeline
+	status=$(($? + status)) # referring $? is ok here, we only want the status of the last command in the pipeline
 
 	log "exit with status $status."
 	exit $status
 }
 
 intersection() {
-	local pattern=$1; shift
-	local array="$(cat -)"
-	if [[ $array =~ $pattern ]]; then
-		for item in $array; do
+	local pattern=$1
+	local -r array=($(cat -))
+	if [[ ${array[@]} =~ $pattern ]]; then
+		for item in "${array[@]}"; do
 			if [[ $item =~ $pattern ]]; then
 				echo "$item"
 			fi
@@ -37,12 +39,12 @@ intersection() {
 }
 
 rebuild_worktree() {
-	local files=$(cat -)
+	local -r files=$(cat -)
 	if [[ $files ]]; then
 		log "removing auto-generated files from git, and clearing cache."
-		git rm --ignore-unmatch --cached -f -r -- ${files}
+		git rm --ignore-unmatch --cached -f -r -- "$files"
 		log "checking out the head revision of the cleared files to restore them."
-		git checkout HEAD -- ${files}
+		git checkout HEAD -- "$files"
 	fi
 }
 

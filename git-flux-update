@@ -2,11 +2,11 @@
 
 
 cmd_usage_default() {
-	printf "[<tag>] [-h]"
+	printf "%s" "[<tag>] [-h]"
 }
 
 cmd_long_usage_default() {
-	printf "\
+	printf "%s" "\
 $(f_heading "update")
 
 $(f_fg_rainbow "magically") updates git-flux.
@@ -19,6 +19,7 @@ $(f_italics '* since 0.4.5')
 }
 
 cmd_default() {
-	io_log; self_update "$1"
+	local tag="$1"
+	io_log; self_update "$tag"
 	io_log; io_log_ok "git-flux is updated. $(f_fg_rainbow "it's magic")!"; io_log
 }

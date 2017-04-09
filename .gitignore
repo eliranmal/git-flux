@@ -6,4 +6,5 @@
 .idea
 *.iml
 
+# app
 *.log

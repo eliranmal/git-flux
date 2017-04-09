@@ -2,6 +2,7 @@
 
 
 main() {
+
 	local exec_file='git-flux'
 	local stylish_dir='styli.sh'
 	local submodule_files="
@@ -40,16 +41,20 @@ environment:
 }
 
 do_install() {
+	local source_repo_path
+	local temp_dir
+	local clone_dir
+	local submodule_file_dir
+
 	validate_install_prefix
 
-	local source_repo_path
 	if is_git_repo "$REPO_PATH"; then # user passed a local repo path, and it's a valid git repo
 		log "using existing local repo in '$REPO_PATH'"
 		source_repo_path="$REPO_PATH"
 	else # installer is in charge of cloning
-		local temp_dir="$(create_temp_dir)"
+		temp_dir="$(create_temp_dir)"
 		cleanup_dir_on_exit "$temp_dir"
-		local clone_dir="$temp_dir"'/git-flux'
+		clone_dir="$temp_dir"'/git-flux'
 		log "cloning repo from github into '$clone_dir' ($REPO_REF)"
 		light_clone "$REPO_URL" "$clone_dir" "$REPO_REF" || { exit 1; }
 		source_repo_path="$clone_dir"
@@ -69,13 +74,15 @@ do_install() {
 	log "installing submodule sourceable scripts"
 	for submodule_file in $submodule_files; do
 		# $submodule_files may contain/full/paths, so we're being careful
-		local submodule_file_dir="$( dirname "$INSTALL_PREFIX/$stylish_dir/$submodule_file" )"
+		submodule_file_dir="$( dirname "$INSTALL_PREFIX/$stylish_dir/$submodule_file" )"
 		install -v -d -m 0755 "$submodule_file_dir"
 		install -v -m 0644 "$source_repo_path/$stylish_dir/$submodule_file" "$submodule_file_dir"
 	done
 }
 
 do_uninstall() {
+	local stylish_path
+
 	validate_install_prefix
 	
 	log "uninstalling git-flux from '$INSTALL_PREFIX'"
@@ -86,7 +93,8 @@ do_uninstall() {
 		rm -vf "$script_file_path"
 	done
 	log "removing the styli.sh submodule directory"
-	rm -vfr "$INSTALL_PREFIX/$stylish_dir"
+	stylish_path="$INSTALL_PREFIX/$stylish_dir"
+	rm -vfr "${stylish_path:?}" # be extra careful, to not delete '/' by mistake!
 }
 
 do_update() {

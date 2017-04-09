@@ -5,10 +5,14 @@
 
 
 main() {
-	local source_dir="$( cd "$(dirname "${BASH_SOURCE}")" ; pwd -P )"
-	local root_dir="$source_dir/.."
+	local source_dir
+	local root_dir
 
-	env REPO_PATH=${root_dir} ${root_dir}/bin/setup.sh "$@"
+	# shellcheck disable=SC2164,SC2128
+	source_dir="$( cd "$(dirname "${BASH_SOURCE}")" ; pwd -P )"
+	root_dir="$source_dir/.."
+
+	env REPO_PATH="$root_dir" "$root_dir"/bin/setup.sh "$@"
 }
 
 

@@ -2,7 +2,10 @@
 
 
 main() {
-	local source_dir="$( cd "$(dirname "${BASH_SOURCE}")" ; pwd -P )"
+	local source_dir
+
+	# shellcheck disable=SC2164,SC2128
+	source_dir="$( cd "$(dirname "${BASH_SOURCE}")" ; pwd -P )"
 	
 	ensure_template_file
 	ensure_output_file
@@ -35,19 +38,20 @@ ensure_template_file() {
 }
 
 ensure_output_file() {
-	local git_root="$(git rev-parse --show-toplevel)"
+	local -r git_root="$(git rev-parse --show-toplevel)"
 	OUTPUT_FILE="${OUTPUT_FILE:-${git_root}/MANIFEST}"
 }
 
 render_manifest_template() {
 	log "declare manifest placeholders as variables."
-	local version="$(cat ${source_dir}/../VERSION)"
+	# shellcheck disable=SC2034
+	local -r -x version="$(cat "$source_dir"/../VERSION)"
 	log "inject values into placeholders and write to output file."
-	render_template ${TEMPLATE_FILE} > ${OUTPUT_FILE}
+	render_template "$TEMPLATE_FILE" > "$OUTPUT_FILE"
 }
 
 render_template() {
-	eval "echo \"$(cat $1)\""
+	eval "echo \"$(cat "$1")\""
 }
 
 log() {
@@ -55,4 +59,4 @@ log() {
 }
 
 
-main
+main "$@"

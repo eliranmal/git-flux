@@ -43,6 +43,9 @@ call it *git-flux-playground*).
 its sole purpose will be playing around with git-flux commands and test 
 your new awesome code.
 
+1. install [shellcheck][9], to make sure your code is analyzed and checked 
+for errors.
+
 ### lifecycle / workflow
 
 1. make some changes to the source (a.k.a. *"your new awesome code"*).
@@ -66,6 +69,9 @@ commands.
 ### code style
 
 in lieu of a formal styleguide, take care to maintain the existing coding style.
+
+the code is analyzed with [shellcheck][9] to check for common errors and 
+enforce general style conventions.
 
 ### tips & tricks
 
@@ -91,9 +97,9 @@ git flux trace <subcommand> [<args>] > trace.log 2>&1
      
 #### [pre-commit][4]
 
-lints the code of changed files with [shellcheck][9], and takes care of 
-updating the auto-generated documentation when you make changes to the 
-help text (the output of `-h`).
+lints the code of changed files with [shellcheck][9] (if you have it 
+installed), and takes care of updating the auto-generated documentation 
+when you make changes to the help text (the output of `-h`).
 
 #### [post-commit][3]
 

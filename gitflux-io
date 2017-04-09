@@ -42,7 +42,8 @@ io_status_logger() {
 }
 
 io_prompt() {
-	local question="$1"; local default_suggestion="$2"
+	local question="$1"
+	local default_suggestion="$2"
 	if [[ -n $default_suggestion ]]; then
 		question="${question} [$default_suggestion]"
 	fi
@@ -61,18 +62,24 @@ io_prompt_pass() {
 }
 
 io_confirm() {
-	local question="$1"; local exit_message="$2";
-	local answer=$(io_prompt "$question (y/n)")
+	local question="$1"
+	local exit_message="$2";
+	local answer
+	answer=$(io_prompt "$question (y/n)")
 	if [[ $answer != "y" ]]; then
 		io_status_fatal "$exit_message" 1
 	fi
 }
 
 io_print() {
-	local margin="$1"; local body="$2"; local indent_level=$3; local end_margin="$4"
+	local margin="$1"
+	local body="$2"
+	local indent_level=$3
+	local end_margin="$4"
+	local n
 	local indent=""
 	if [[ $indent_level =~ [123] ]]; then
-		for (( n=$indent_level; n > 0; n-- )); do
+		for (( n=indent_level; n > 0; n-- )); do
 			indent="   $indent"
 		done
 	fi

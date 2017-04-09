@@ -2,27 +2,27 @@
 
 
 cmd_usage_default() {
-	printf "start|finish|sync|review <name> [<base>] [-h]"
+	printf "%s" "start|finish|sync|review <name> [<base>] [-h]"
 }
 
 cmd_usage_start() {
-	printf "start <name> [<base>] [-h]"
+	printf "%s" "start <name> [<base>] [-h]"
 }
 
 cmd_usage_finish() {
-	printf "finish <name> [-h]"
+	printf "%s" "finish <name> [-h]"
 }
 
 cmd_usage_sync() {
-	printf "sync <name> [-h]"
+	printf "%s" "sync <name> [-h]"
 }
 
 cmd_usage_review() {
-	printf "review <name> [-h]"
+	printf "%s" "review <name> [-h]"
 }
 
 cmd_long_usage_default() {
-	printf "\
+	printf "%s" "\
 $(f_heading "feature" | f_fg_blue)
 
 handle feature level actions.
@@ -38,7 +38,7 @@ $(cmd_long_usage_review)
 }
 
 cmd_long_usage_start() {
-	printf "\
+	printf "%s" "\
 $(f_code_definition \
 "$(cmd_usage_start)" \
 "start a new feature; create a local branch and push it to the remote.
@@ -48,7 +48,7 @@ pass an optional $(f_code "base") to set a custom base for the branch (default $
 }
 
 cmd_long_usage_finish() {
-	printf "\
+	printf "%s" "\
 $(f_code_definition \
 "$(cmd_usage_finish)" \
 "finish an existing feature; delete its local and remote branches, for good.")
@@ -56,7 +56,7 @@ $(f_code_definition \
 }
 
 cmd_long_usage_sync() {
-	printf "\
+	printf "%s" "\
 $(f_code_definition \
 "$(cmd_usage_sync)" \
 "sync an existing feature with its base branch, usually the current team branch, unless otherwise set when the feature was started.")
@@ -64,7 +64,7 @@ $(f_code_definition \
 }
 
 cmd_long_usage_review() {
-	printf "\
+	printf "%s" "\
 $(f_code_definition \
 "$(cmd_usage_review)" \
 "open a pull request from the feature branch to its base branch, for review in github.")
@@ -73,30 +73,45 @@ $(f_code_definition \
 
 
 cmd_start() {
+	local name
+	local base_override
+	local team_branch
+	local base_branch
 	require_args "$1"
-	local team_branch="$(git_config_get "branch.team")"
-	if [[ -z $team_branch && -z $2 ]]; then
-		io_log; io_status_fatal "no base found!
-      set up a team first with 'git flux team create', or pass the desired base to this command."
+	name="$1"
+	base_override="$2"
+
+	team_branch="$(git_config_get "branch.team")"
+	base_branch="${base_override:-$team_branch}"
+
+	if [[ -z $base_branch ]]; then
+		io_log; io_status_fatal "no base found! set up a team first with 'git flux team create', or pass the desired base to this command."
 	fi
-	io_log; create_branch_from_base "$(git_config_get "prefix.feature")$1" "$team_branch" "$2"
-	io_log; io_log_ok "feature '$1' is started. happy coding!"; io_log
+	io_log; create_branch_from_base "$(git_config_get "prefix.feature")$name" "$base_branch"
+
+	io_log; io_log_ok "feature '$name' is started. happy coding!"; io_log
 }
 
 cmd_finish() {
+	local name
 	require_args "$1"
-	io_log; destroy_branch_from_base "$(git_config_get "prefix.feature")$1"
-	io_log; io_log_ok "feature '$1' is finished. RIP."; io_log
+	name="$1"
+	io_log; destroy_branch_from_base "$(git_config_get "prefix.feature")$name"
+	io_log; io_log_ok "feature '$name' is finished. RIP."; io_log
 }
 
 cmd_sync() {
+	local name
 	require_args "$1"
-	io_log; sync_branch_with_base "$(git_config_get "prefix.feature")$1"
-	io_log; io_log_ok "feature '$1' is in sync with the base."; io_log
+	name="$1"
+	io_log; sync_branch_with_base "$(git_config_get "prefix.feature")$name"
+	io_log; io_log_ok "feature '$name' is in sync with the base."; io_log
 }
 
 cmd_review() {
+	local name
 	require_args "$1"
-	io_log; review_branch_from_base "$(git_config_get "prefix.feature")$1"
-	io_log; io_log_ok "feature '$1' is ready for review."; io_log
+	name="$1"
+	io_log; review_branch_from_base "$(git_config_get "prefix.feature")$name"
+	io_log; io_log_ok "feature '$name' is ready for review."; io_log
 }

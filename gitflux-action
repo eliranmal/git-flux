@@ -2,8 +2,8 @@
 
 
 create_branch_from_base() {
-	local branch="$1"; local base_default="$2"; local base_override="$3"
-	local base_branch=${base_override:-$base_default}
+	local branch="$1"
+	local base_branch="$2"
 
 	validate_git_clean_working_tree
 	validate_git_local_and_remote_branches_exist "$base_branch"
@@ -17,7 +17,8 @@ create_branch_from_base() {
 }
 
 create_branch_from_tag() {
-	local branch="$1"; local tag="$2"
+	local branch="$1"
+	local tag="$2"
 
 	validate_git_clean_working_tree
 
@@ -36,11 +37,12 @@ create_branch_from_tag() {
 
 destroy_branch_from_base() {
 	local branch="$1"
-	local base_branch="$(git_config_get "$(git_config_escape_subsection "branch:$branch").base")"
+	local base_branch
 	
+	base_branch="$(git_config_get "$(git_config_escape_subsection "branch:$branch").base")"
 	base_branch="${base_branch:-master}"
 
-	# just for early exit
+	# early exit: avoid redundant executions, and protect unsafe removal of git-config sections later
 	validate_git_local_or_remote_branch_exists "$branch"
 
 	io_confirm "local and remote branches will be deleted, forever! continue?" "i knew you'd chicken out."
@@ -53,13 +55,17 @@ destroy_branch_from_base() {
 	git_v_ensure_no_branch "$branch"
 
 	# delete the base from config, we're not gonna need it anymore
-	git_config_ensure_section_removed "$(git_config_escape_subsection "branch:$branch")"
+	git_config_remove_section "$(git_config_escape_subsection "branch:$branch")"
 }
 
 review_branch_from_base() {
-	local branch="$1"; local base_override="$2"
-	local base_default="$(git_config_get "$(git_config_escape_subsection "branch:$branch").base")"
-	local base_branch=${base_override:-$base_default}
+	local branch="$1"
+	local base_override="$2"
+	local base_default
+	local base_branch
+
+	base_default="$(git_config_get "$(git_config_escape_subsection "branch:$branch").base")"
+	base_branch=${base_override:-$base_default}
 
 	validate_git_clean_working_tree
 	validate_git_local_and_remote_branches_exist "$branch"	
@@ -71,11 +77,12 @@ review_branch_from_base() {
 
 destroy_branch_from_tag() {
 	local branch="$1"
-	local tag="$(git_config_get "$(git_config_escape_subsection "branch:$branch").base")"
+	local tag
 
+	tag="$(git_config_get "$(git_config_escape_subsection "branch:$branch").base")"
 	tag="${tag:-master}"
 
-	# just for early exit
+	# early exit: avoid redundant executions, and protect unsafe removal of git-config sections later
 	validate_git_local_or_remote_branch_exists "$branch"
 
 	io_confirm "local and remote branches will be deleted, forever! continue?" "i knew you'd chicken out."
@@ -88,13 +95,17 @@ destroy_branch_from_tag() {
 	git_v_ensure_no_branch "$branch"
 
 	# delete the base from config, we're not gonna need it anymore
-	git_config_ensure_section_removed "$(git_config_escape_subsection "branch:$branch")"
+	git_config_remove_section "$(git_config_escape_subsection "branch:$branch")"
 }
 
 sync_branch_with_base() {
-	local branch="$1"; local base_override="$2"
-	local base_default="$(git_config_get "$(git_config_escape_subsection "branch:$branch").base")"
-	local base_branch=${base_override:-$base_default}
+	local branch="$1"
+	local base_override="$2"
+	local base_default
+	local base_branch
+
+	base_default="$(git_config_get "$(git_config_escape_subsection "branch:$branch").base")"
+	base_branch=${base_override:-$base_default}
 
 	validate_git_clean_working_tree
 	validate_git_local_and_remote_branches_exist "$branch"	
@@ -105,17 +116,20 @@ sync_branch_with_base() {
 
 self_update() {
 	local tag="$1"
+	local temp_dir
+	local ref
+	local setup_path
 	
-	local temp_dir="$(create_temp_dir)"
+	temp_dir="$(create_temp_dir)"
 	cleanup_dir_on_exit "$temp_dir"
 
-	local ref="${tag:-master}"
-	local setup_path="$temp_dir"'/setup.sh'
+	ref="${tag:-master}"
+	setup_path="$temp_dir"'/setup.sh'
 
 	hub_v_get_self_raw_content "$ref" 'bin/setup.sh' "$setup_path"
 	set_executable "$setup_path"
 
 	io_log "running the setup script with the 'update' command..."
-	env REPO_REF="$ref" ${setup_path} update >/dev/null 2>&1 # todo - redirect to log file
+	env REPO_REF="$ref" "$setup_path" update >/dev/null 2>&1 # todo - redirect to log file
 	io_status_logger $? "updated ok ($ref)" "update failed"
 }
