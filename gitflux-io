@@ -76,6 +76,7 @@ io_print() {
 	local body="$2"
 	local indent_level=$3
 	local end_margin="$4"
+	local n
 	local indent=""
 	if [[ $indent_level =~ [123] ]]; then
 		for (( n=indent_level; n > 0; n-- )); do

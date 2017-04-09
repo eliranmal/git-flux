@@ -292,18 +292,11 @@ git_config_remove_section() {
 	git config --global --remove-section "$git_config_section.$namespace"	
 }
 
-git_config_ensure_section_removed() {
-	local namespace="$1"
-	if git_config_get "$namespace" >/dev/null 2>&1; then
-		git_config_remove_section "$namespace"
-	fi
-}
-
 git_config_get_subsections_by_value() {
 	local key="$1"
 	local value="$2"
 	local prefix="$3"
-	local subsection_list
+	local delimiter="${4:- }"
 	local config_value
 	local config_subsection
 	local config_lines
@@ -320,11 +313,9 @@ git_config_get_subsections_by_value() {
 		if [[ -n $prefix ]]; then
 			config_subsection="${config_subsection#$prefix}"
 		fi
-		# add subsection to the result list
-		subsection_list="$subsection_list $config_subsection"
+		# output each subsection, appended with a whitespace, to be ready for array interpolation
+		printf "%s%s" "$config_subsection" "$delimiter"
 	done <<< "$config_lines"
-	# remove leading spaces and send to stdout
-	echo "${subsection_list##+( )}" 
 }
 
 git_config_escape_subsection() {

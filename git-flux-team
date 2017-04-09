@@ -141,33 +141,36 @@ cmd_switch() {
 	local prefix
 	local new_team_branch
 	local old_team_branch
-	local new_team
-	local old_team
+	local new_team_name
+	local old_team_name
     local old_team_feature_branches
+	local n
 	require_args "$1"
-	new_team="$1"
+	new_team_name="$1"
 
 	prefix="$(git_config_get "prefix.team")"
-	new_team_branch="$prefix$new_team"
+	new_team_branch="$prefix$new_team_name"
 	old_team_branch="$(git_config_get "branch.team")"
-	old_team="${old_team_branch#$prefix}"
 
 	validate_git_local_and_remote_branches_exist "$new_team_branch"
 	
 	if [[ $new_team_branch = "$old_team_branch" ]]; then
-		io_log; io_status_fatal "'$new_team' is the current team, nothing to do."
+		io_log; io_status_fatal "'$new_team_name' is the current team, nothing to do."
 	fi
 
-	# todo - should this block be used in 'finish' as well?
+	# todo - should this block be used in the 'destroy' action as well?
 	# relevant when switching teams, not when joining a team for the first time
 	if [[ -n $old_team_branch ]]; then
 		validate_git_local_and_remote_branches_exist "$old_team_branch"
 		
-		old_team_feature_branches="$(git_config_get_subsections_by_value "base" "$old_team_branch" "branch:")"
-		if [[ -n $old_team_feature_branches ]]; then
+		old_team_feature_branches=( $(git_config_get_subsections_by_value 'base' "$old_team_branch" 'branch:') )
+		if (( ${#old_team_feature_branches[@]} > 0 )); then
 			# strip prefix to get the team name
-			io_log; io_log_info "feature branches of the '$old_team' team were found:"
-			io_log "$old_team_feature_branches" 1
+			old_team_name="${old_team_branch#$prefix}"
+			io_log; io_log_info "feature branches of the '$old_team_name' team were found:"
+			for (( n=0; n<${#old_team_feature_branches[@]}; n++ )); do
+				io_log "${old_team_feature_branches[$n]}" 1
+			done
 			io_confirm "ignore them and continue?" "aborting, see ya later."
 		fi
 	fi
