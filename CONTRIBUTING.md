@@ -68,8 +68,10 @@ commands.
 
 ### code style
 
-in lieu of a formal styleguide, take care to maintain the existing coding style. 
-the code is analyzed with [shellcheck][9] for common errors and general style.
+in lieu of a formal styleguide, take care to maintain the existing coding style.
+
+the code is analyzed with [shellcheck][9] to check for common errors and 
+enforce general style conventions.
 
 ### tips & tricks
 
