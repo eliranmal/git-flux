@@ -319,9 +319,8 @@ git_config_get_subsections_by_value() {
 }
 
 git_config_escape_subsection() {
-	# todo - refactor: higher level of abstraction: e.g. git_config_get_base()
-	# todo - refactor: remove the printf bit
-	printf "%s" "$1" | sed 's,\([\\\"]\),\\\1,g' # '\' and '"' must be escaped in git config subsection names
+	# '\' and '"' must be escaped in git config subsection names
+	sed 's,\([\\\"]\),\\\1,g' <<< "$1"
 }
 
 
