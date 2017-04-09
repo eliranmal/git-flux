@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 
-
 require_args() {
 	for arg; do
 		if [[ -z $arg ]]; then
