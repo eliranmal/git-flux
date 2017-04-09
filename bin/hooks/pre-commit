@@ -6,6 +6,7 @@ main() {
 	local old_stash
 	local new_stash
 	local changed_files
+	local lint_exclude_pattern='.+\.template|.+\.md|.+\.log|LICENSE|VERSION|\.gitignore|\.gitmodules'
 
 	git_root="$(git rev-parse --show-toplevel)"
 
@@ -21,11 +22,10 @@ main() {
 		log "nothing was stashed, this means there were no changes (e.g. '--amend', '--allow-empty'), so skip everything."
 		exit 0
 	fi
-	
+
 	log "get real changes of the commit to be done."
-	changed_files=$(git diff --cached --name-only --diff-filter=ACDM "$(against_revision)")
-	log "changed files:
-$changed_files"
+	changed_files=( $(git diff --cached --name-only --diff-filter=ACDM "$(against_revision)") )
+	log_loop "changed files:" "${changed_files[@]}"
 
 	log "we want to add some changes to the staging area later, so unstash beforehand."
 	restore_stash
@@ -34,21 +34,21 @@ $changed_files"
 	local status=0
 
 	log "activate code analysis on changed files."
-	echo "$changed_files" | difference '.+\.template|.+\.md|.+\.log|LICENSE|VERSION|\.gitignore|\.gitmodules' | lint_code
+	echo "${changed_files[@]}" | difference ${lint_exclude_pattern} | lint_code
 	status=$(($? + status)) # referring $? is ok here, we only want the status of the last command in the pipeline
 	if (( status != 0 )); then
 		quit $status # no point in continuing, abort
 	fi
-	
+
 	log "look for changes in files that are known to affect the help output (public files)."
-	if [[ $changed_files =~ git-flux* ]]; then
+	if [[ ${changed_files[@]} =~ git-flux* ]]; then
 		log "changes were found in public files, rendering usage docs."
 		generate_usage_docs "$git_root"
 		status=$(($? + status))
 	fi
 
 	log "look for changes in files that are known to affect the manifest."
-	if [[ $changed_files =~ VERSION ]]; then
+	if [[ ${changed_files[@]} =~ VERSION ]]; then
 		log "affecting changes were found, updating manifest."
 		update_manifest "$git_root"
 		status=$(($? + status))
@@ -71,16 +71,17 @@ restore_stash() {
 }
 
 lint_code() {
+	local files
 	if ! hash shellcheck 2>/dev/null; then
 		log "shellcheck is not installed, skipping analysis."
 		return 0
 	fi
-	local files=($(cat -))
+	files=($(cat -))
 	if (( ${#files[@]} == 0 )); then
 		log "no files passed, skipping analysis."
 		return 0
 	fi
-	log "files to be analyzed: ${files[*]}"
+	log_loop "files to be analyzed:" "${files[@]}"
 	shellcheck "${files[@]}"
 }
 
@@ -132,6 +133,14 @@ difference() {
 
 log() {
 	echo " [pre-commit] $1"
+}
+
+log_loop() {
+	local message="$1"; shift
+	log "$message"
+	for arg in "$@"; do
+		log "   $arg"
+	done
 }
 
 quit() {
