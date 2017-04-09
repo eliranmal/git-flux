@@ -3,9 +3,7 @@
 
 create_branch_from_base() {
 	local branch="$1"
-	local base_default="$2"
-	local base_override="$3"
-	local base_branch=${base_override:-$base_default}
+	local base_branch="$2"
 
 	validate_git_clean_working_tree
 	validate_git_local_and_remote_branches_exist "$base_branch"
