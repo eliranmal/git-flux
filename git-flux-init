@@ -41,24 +41,39 @@ this branch serves as the base to all team branches, and will be created if not 
 
 
 cmd_default() {
-	local prefix_delimiter
 	local feature_prefix
 	local team_prefix
 	local release_candidate_prefix
 	local hot_fix_prefix
 	local integration_branch
+	local feature_prefix_suggestion
+	local team_prefix_suggestion
+	local rc_prefix_suggestion
+	local hf_prefix_suggestion
+	local integration_branch_suggestion
+	local prefix_delimiter="/"
 
 	io_log; io_log_banner "git-flux initializer"; io_log
 
 	git_config_set "initialized" false
 
-	prefix_delimiter="/"
-	
-	feature_prefix=$(io_prompt "feature prefix" "feature$prefix_delimiter")
-	team_prefix=$(io_prompt "team prefix" "team$prefix_delimiter")
-	release_candidate_prefix=$(io_prompt "release candidate prefix" "rc$prefix_delimiter")
-	hot_fix_prefix=$(io_prompt "hot-fix prefix" "hf$prefix_delimiter")
-	integration_branch=$(io_prompt "integration branch" "integration")
+	feature_prefix_suggestion="$(git_config_get "prefix.feature")"
+	team_prefix_suggestion="$(git_config_get "prefix.team")"
+	rc_prefix_suggestion="$(git_config_get "prefix.rc")"
+	hf_prefix_suggestion="$(git_config_get "prefix.hf")"
+	integration_branch_suggestion="$(git_config_get "branch.integration")"
+
+	feature_prefix_suggestion="${feature_prefix_suggestion:-feature$prefix_delimiter}"
+	team_prefix_suggestion="${team_prefix_suggestion:-team$prefix_delimiter}"
+	rc_prefix_suggestion="${rc_prefix_suggestion:-rc$prefix_delimiter}"
+	hf_prefix_suggestion="${hf_prefix_suggestion:-hf$prefix_delimiter}"
+	integration_branch_suggestion="${integration_branch_suggestion:-integration}"
+
+	feature_prefix=$(io_prompt "feature prefix" "$feature_prefix_suggestion")
+	team_prefix=$(io_prompt "team prefix" "$team_prefix_suggestion")
+	release_candidate_prefix=$(io_prompt "release candidate prefix" "$rc_prefix_suggestion")
+	hot_fix_prefix=$(io_prompt "hot-fix prefix" "$hf_prefix_suggestion")
+	integration_branch=$(io_prompt "integration branch" "$integration_branch_suggestion")
 
 	io_log; git_v_ensure_branch "$integration_branch"
 
