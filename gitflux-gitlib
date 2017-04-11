@@ -272,24 +272,34 @@ git_v_create_tag() {
 
 git_config_section="gitflux"
 
-git_config_get() {
+git_config_get_global() {
 	local namespace="$1"
 	git config --global --get "$git_config_section.$namespace"
 }
 
-git_config_set() {
+git_config_set_global() {
 	local namespace="$1"; local value="$2"
 	git config --global "$git_config_section.$namespace" "$value"
 }
 
+git_config_get() {
+	local namespace="$1"
+	git config --get "$git_config_section.$namespace"
+}
+
+git_config_set() {
+	local namespace="$1"; local value="$2"
+	git config "$git_config_section.$namespace" "$value"
+}
+
 git_config_unset() {
 	local namespace="$1"
-	git config --global --unset "$git_config_section.$namespace"
+	git config --unset "$git_config_section.$namespace"
 }
 
 git_config_remove_section() {
 	local namespace="$1"
-	git config --global --remove-section "$git_config_section.$namespace"	
+	git config --remove-section "$git_config_section.$namespace"	
 }
 
 git_config_get_subsections_by_value() {
@@ -300,7 +310,7 @@ git_config_get_subsections_by_value() {
 	local config_subsection
 	local config_lines
 	
-	config_lines="$(git config --global --get-regexp "$git_config_section"'\..*\.'"$key")"
+	config_lines="$(git config --get-regexp "$git_config_section"'\..*\.'"$key")"
 	while read -r line; do
 		# extract the config value
 		config_value="$(echo "$line" | cut -d ' ' -f 2)"

@@ -46,6 +46,11 @@ cmd_default() {
 	local release_candidate_prefix
 	local hot_fix_prefix
 	local integration_branch
+	local curr_feature_prefix
+	local curr_team_prefix
+	local curr_rc_prefix
+	local curr_hf_prefix
+	local curr_integration_branch
 	local feature_prefix_suggestion
 	local team_prefix_suggestion
 	local rc_prefix_suggestion
@@ -57,19 +62,25 @@ cmd_default() {
 	io_log "please fill some details for the global configuration. they'll be used across all git-flux repositories."
 	io_log "if you need help, type $(f_code 'git flux init -h')."; io_log
 
-	git_config_set "initialized" false
+	curr_feature_prefix="$(git_config_get_global "prefix.feature")"
+	curr_team_prefix="$(git_config_get_global "prefix.team")"
+	curr_rc_prefix="$(git_config_get_global "prefix.rc")"
+	curr_hf_prefix="$(git_config_get_global "prefix.hf")"
+	curr_integration_branch="$(git_config_get_global "branch.integration")"
 
-	feature_prefix_suggestion="$(git_config_get "prefix.feature")"
-	team_prefix_suggestion="$(git_config_get "prefix.team")"
-	rc_prefix_suggestion="$(git_config_get "prefix.rc")"
-	hf_prefix_suggestion="$(git_config_get "prefix.hf")"
-	integration_branch_suggestion="$(git_config_get "branch.integration")"
+	git_config_set_global "initialized" "$(
+		if [[ $curr_feature_prefix && $curr_team_prefix && $curr_rc_prefix && $curr_hf_prefix && $curr_integration_branch ]]; then
+			echo 'true'
+		else
+			echo 'false'
+		fi
+	)"
 
-	feature_prefix_suggestion="${feature_prefix_suggestion:-feature$prefix_delimiter}"
-	team_prefix_suggestion="${team_prefix_suggestion:-team$prefix_delimiter}"
-	rc_prefix_suggestion="${rc_prefix_suggestion:-rc$prefix_delimiter}"
-	hf_prefix_suggestion="${hf_prefix_suggestion:-hf$prefix_delimiter}"
-	integration_branch_suggestion="${integration_branch_suggestion:-integration}"
+	feature_prefix_suggestion="${curr_feature_prefix:-feature$prefix_delimiter}"
+	team_prefix_suggestion="${curr_team_prefix:-team$prefix_delimiter}"
+	rc_prefix_suggestion="${curr_rc_prefix:-rc$prefix_delimiter}"
+	hf_prefix_suggestion="${curr_hf_prefix:-hf$prefix_delimiter}"
+	integration_branch_suggestion="${curr_integration_branch:-integration}"
 
 	feature_prefix=$(io_prompt "feature prefix" "$feature_prefix_suggestion")
 	team_prefix=$(io_prompt "team prefix" "$team_prefix_suggestion")
@@ -77,14 +88,14 @@ cmd_default() {
 	hot_fix_prefix=$(io_prompt "hot-fix prefix" "$hf_prefix_suggestion")
 	integration_branch=$(io_prompt "integration branch" "$integration_branch_suggestion")
 
-	io_log; git_v_ensure_branch "$integration_branch"
+	io_log; create_branch_from_base "$integration_branch" "master"
 
-	git_config_set "prefix.feature" "$feature_prefix"
-	git_config_set "prefix.team" "$team_prefix"
-	git_config_set "prefix.rc" "$release_candidate_prefix"
-	git_config_set "prefix.hf" "$hot_fix_prefix"
-	git_config_set "branch.integration" "$integration_branch"
-	git_config_set "initialized" true
+	git_config_set_global "prefix.feature" "$feature_prefix"
+	git_config_set_global "prefix.team" "$team_prefix"
+	git_config_set_global "prefix.rc" "$release_candidate_prefix"
+	git_config_set_global "prefix.hf" "$hot_fix_prefix"
+	git_config_set_global "branch.integration" "$integration_branch"
+	git_config_set_global "initialized" true
 	
 	io_log; io_log_ok "all done. you're awesome!"; io_log
 }
