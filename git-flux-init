@@ -54,6 +54,8 @@ cmd_default() {
 	local prefix_delimiter="/"
 
 	io_log; io_log_banner "git-flux initializer"; io_log
+	io_log "please fill some details for the global configuration. they'll be used across all git-flux repositories."
+	io_log "if you need help, type $(f_code 'git flux init -h')."; io_log
 
 	git_config_set "initialized" false
 
