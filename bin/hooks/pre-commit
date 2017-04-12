@@ -6,17 +6,20 @@ main() {
 	local old_stash
 	local new_stash
 	local changed_files
+	local modified_files
+	local diff_revision
 	local lint_exclude_pattern='.+\.template|.+\.md|.+\.log|LICENSE|VERSION|\.gitignore|\.gitmodules'
 
 	git_root="$(git rev-parse --show-toplevel)"
+	diff_revision="$(against_revision)"
 
 	# uncomment this line if you want to see the logs
 #	exec &> ${git_root}/pre-commit.log
 
 	log "first, stash index and work dir, keeping only the to-be-committed changes in the working directory."
-	old_stash=$(git rev-parse -q --verify refs/stash)
+	old_stash=$(get_stash)
 	save_stash
-	new_stash=$(git rev-parse -q --verify refs/stash)
+	new_stash=$(get_stash)
 
 	if [ "$old_stash" = "$new_stash" ]; then
 		log "nothing was stashed, this means there were no changes (e.g. '--amend', '--allow-empty'), so skip everything."
@@ -24,8 +27,12 @@ main() {
 	fi
 
 	log "get real changes of the commit to be done."
-	changed_files=( $(git diff --cached --name-only --diff-filter=ACDM "$(against_revision)") )
+	changed_files=( $(git diff --cached --name-only --diff-filter=ACDM "$diff_revision") )
 	log_loop "changed files:" "${changed_files[@]}"
+
+	log "get added/modified files for the linter"
+	modified_files=( $(git diff --cached --name-only --diff-filter=AM "$diff_revision") )
+	log_loop "modified files:" "${modified_files[@]}"
 
 	log "we want to add some changes to the staging area later, so unstash beforehand."
 	restore_stash
@@ -34,7 +41,7 @@ main() {
 	local status=0
 
 	log "activate code analysis on changed files."
-	echo "${changed_files[@]}" | difference ${lint_exclude_pattern} | lint_code
+	echo "${modified_files[@]}" | difference ${lint_exclude_pattern} | lint_code
 	status=$(($? + status)) # referring $? is ok here, we only want the status of the last command in the pipeline
 	if (( status != 0 )); then
 		quit $status # no point in continuing, abort
@@ -55,6 +62,10 @@ main() {
 	fi
 
 	quit $status # nonzero prevents commit
+}
+
+get_stash() {
+	git rev-parse -q --verify refs/stash
 }
 
 save_stash() {
