@@ -347,10 +347,15 @@ hub_root_endpoint() {
 hub_post() {
 	local resource="$1"
 	local data="$2"
-	# optionally pass credentials in the form "user:pass". if not passed, fallback to use the netrc file
-	local credentials="${3:+--user $3}"; local netrc="${3:---netrc}"
 	local accept_header
 	local location
+	local netrc
+	# optionally pass credentials in the form "user:pass"
+	local credentials="${3:+--user $3}"
+	# if not passed, fallback to use the netrc file
+	if [[ -z $credentials ]]; then
+		netrc="--netrc"
+	fi
 	
 	accept_header='Accept: application/vnd.github.v3+json'
 	location='https://'"$(hub_root_endpoint)$resource"
