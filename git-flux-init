@@ -40,6 +40,9 @@ this branch serves as the base to all team branches, and will be created if not 
 }
 
 
+# todo - provide a way to configure global stuff (prompt user if not already configured, or ask if she would like to alter the current config)
+# todo - save team/integration long-lived branches in the local config (check for get operations on that config entry as well)
+
 cmd_default() {
 	local feature_prefix
 	local team_prefix
@@ -94,7 +97,10 @@ cmd_default() {
 	git_config_set_global "prefix.team" "$team_prefix"
 	git_config_set_global "prefix.rc" "$release_candidate_prefix"
 	git_config_set_global "prefix.hf" "$hot_fix_prefix"
+	# todo - is this necessary now?
 	git_config_set_global "branch.integration" "$integration_branch"
+
+	# todo - this should be set in the local config level (this is where we check for it later)
 	git_config_set_global "initialized" true
 	
 	io_log; io_log_ok "all done. you're awesome!"; io_log

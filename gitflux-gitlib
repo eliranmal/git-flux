@@ -328,11 +328,6 @@ git_config_get_subsections_by_value() {
 	done <<< "$config_lines"
 }
 
-git_config_escape_subsection() {
-	# '\' and '"' must be escaped in git config subsection names
-	sed 's,\([\\\"]\),\\\1,g' <<< "$1"
-}
-
 
 # - - - - - hub - - - - - #
 
