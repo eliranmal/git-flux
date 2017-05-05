@@ -95,12 +95,24 @@ git_repo_domain() {
 	git_repo_origin | url_domain
 }
 
+git_repo_path() {
+	git rev-parse --show-toplevel
+}
+
 git_repo_name() {
-	basename "$(git rev-parse --show-toplevel)"
+	basename "$(git_repo_path)"
+}
+
+git_repo_dir() {
+	git rev-parse --git-dir 2>/dev/null
 }
 
 
 # - - - - -  predicates - - - - - #
+
+git_is_repo() {
+	is_dir '.git' || git_repo_dir >/dev/null 2>&1
+}
 
 git_is_clean_working_tree() {
 	if ! git diff --no-ext-diff --ignore-submodules --quiet --exit-code; then
@@ -493,7 +505,7 @@ hub_ensure_authenticated() {
 		local token
 
 		user="$(io_prompt "type in your github user name:")"; io_log
-		pass="$(io_prompt_pass "type in your github password:")"; io_log
+		pass="$(io_prompt_password "type in your github password:")"; io_log
 		# currently only 'public_repo' is needed (for pull-requests)
 		data='{
 		          "scopes": ["public_repo"],

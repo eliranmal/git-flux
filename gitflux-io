@@ -8,6 +8,7 @@ io_sign_i="ℹ"
 io_sign_star="★"
 io_sign_arrow="➤"
 
+# shellcheck disable=SC2120
 io_log() {
 	io_print "   " "$@"
 }
@@ -28,8 +29,17 @@ io_log_warn() {
 	io_print "$(f_fg_yellow " $io_sign_x ")" "$@" >&2
 }
 
+io_log_err() {
+	io_print "$(f_fg_red " $io_sign_x ")" "$@" >&2
+}
+
 io_status_fatal() {
-	die "$(io_print "$(f_fg_red " $io_sign_x ")" "$@")
+	die "$(io_log_err "$@")
+" >&2
+}
+
+io_status_fatal_info() {
+	die "$(io_log_info "$@")
 " >&2
 }
 
@@ -43,31 +53,47 @@ io_status_logger() {
 
 io_prompt() {
 	local question="$1"
-	local default_suggestion="$2"
-	if [[ -n $default_suggestion ]]; then
-		question="${question} [$default_suggestion]"
+	local suggestion="$2"
+	local indent_level=$3
+	local indent=""
+	if [[ -n $suggestion ]]; then
+		question="${question} [$suggestion]"
+	fi
+	if [[ $indent_level =~ [123] ]]; then
+		# shellcheck disable=SC2086
+		indent="$(repeat "   " ${indent_level})"
 	fi
 	# use -p instead of sending the question to stdout, as this function will probably be 
 	# called in a $(subshell), so printing to stdout won't work as expected
-	read -r -p "$(printf "$(f_fg_yellow " $io_sign_arrow ")%s " "$question")" answer
-	echo "${answer:-$default_suggestion}"
+	read -r -p "$indent$(f_fg_yellow " $io_sign_arrow ")$question " answer
+	echo "${answer:-$suggestion}"
 }
 
-io_prompt_pass() {
+io_prompt_password() {
 	local question="$1"
 	# use -p instead of sending the question to stdout, as this function will probably be 
 	# called in a $(subshell), so printing to stdout won't work as expected
-	read -r -s -p "$(printf "$(f_fg_yellow " $io_sign_arrow ")%s " "$question")" answer
+	read -r -s -p "$(f_fg_yellow " $io_sign_arrow ")$question " answer
 	echo "$answer"
 }
 
 io_confirm() {
 	local question="$1"
-	local exit_message="$2";
+	local no_response="$2";
+	local yes_response="$3";
+	local exit_log_level="${4:+_$4}"
 	local answer
 	answer=$(io_prompt "$question (y/n)")
 	if [[ $answer != "y" ]]; then
-		io_status_fatal "$exit_message" 1
+		if is_available "io_status_fatal$exit_log_level"; then
+			# shellcheck disable=SC2086
+			io_status_fatal${exit_log_level} "$no_response" 1
+		fi
+	elif [[ $yes_response ]]; then
+		io_log_ok "$yes_response" 1
+	else
+		# shellcheck disable=SC2119
+		io_log
 	fi
 }
 
@@ -76,12 +102,10 @@ io_print() {
 	local body="$2"
 	local indent_level=$3
 	local end_margin="$4"
-	local n
 	local indent=""
 	if [[ $indent_level =~ [123] ]]; then
-		for (( n=indent_level; n > 0; n-- )); do
-			indent="   $indent"
-		done
+		# shellcheck disable=SC2086
+		indent="$(repeat "   " ${indent_level})"
 	fi
 	echo "$indent$margin$body$end_margin"
 }

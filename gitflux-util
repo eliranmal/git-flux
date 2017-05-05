@@ -19,13 +19,29 @@ is_available() {
 }
 
 is_os_unix() {
-	# linux / mac osx
+	# linux / mac
 	[[ $OSTYPE = "linux-gnu" || $OSTYPE = "darwin"* ]]
 }
 
 is_os_msys() {
-	# mingw
+	# windows (mingw)
 	[[ $OSTYPE = "msys" ]]
+}
+
+is_dir() {
+	[[ -d $1 ]]
+}
+
+repeat() {
+	local term="$1"
+	# shellcheck disable=SC2034
+	local times=$2
+	local n
+	local str=""
+	for (( n=times; n > 0; n-- )); do
+		str="$str$term"
+	done
+	printf "%s" "$str"
 }
 
 set_executable() {
@@ -68,7 +84,7 @@ json_select() {
 	fi
 }
 
-# simple implementation: only escapes '\', '"' and new-lines
+# narrow implementation: only escapes '\', '"' and new-lines
 json_escape_string() {
 	local str="$1"
 	str="$(echo "$str" | sed -e '0N' -e 's,\(["\]\),\\\1,g')"
