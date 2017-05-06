@@ -12,7 +12,7 @@ $(f_heading "init")
 configure the git-flux environment with an interactive survey.
 
 
-here are the details you need to fill in:
+$(f_subheading "global options")
 
 $(f_list_item \
 "$(f_fg_blue "feature prefix")" \
@@ -32,6 +32,9 @@ $(f_list_item \
 "$(f_fg_red "hot-fix prefix")" \
 "a prefix for hot-fix branch names, defaults to $(f_code "hf/").")
 
+	
+$(f_subheading "local options")
+
 $(f_list_item \
 "$(f_fg_magenta "integration branch")" \
 "the long-lived integration branch name, defaults to $(f_code "integration").
@@ -43,15 +46,26 @@ this branch serves as the base to all team branches, and will be created if not 
 # todo - save team/integration long-lived branches in the local config (check for get operations on that config entry as well)
 
 cmd_default() {
-	io_log; io_log_banner "git-flux initializer"; io_log
-	io_log; io_log "$(f_bold "global options")"; io_log
-	survey_global
-	io_log; io_log "$(f_bold "local options")"; io_log
-	survey_local
+	greet_hello
+	global_survey
+	if git_is_repo; then
+		local_survey
+		local_bootstrap
+	fi
+	greet_goodbye
+}
+
+greet_hello() {
+	io_log; io_log; io_log_banner "git-flux initializer"
+	io_log; io_log_info "global options apply to all git-flux repositories, and local options only affect a specific one (run inside a git repository to set local options)."
+	io_log_info "to get help, run $(f_code 'git flux init -h')."; io_log
+}
+
+greet_goodbye() {
 	io_log; io_log_ok "all done. you're awesome!"; io_log
 }
 
-survey_global() {
+global_survey() {
 	local feature_prefix
 	local team_prefix
 	local rc_prefix
@@ -67,9 +81,9 @@ survey_global() {
 	local initialized
 	local edit_question="global options are already set, do you want to update them?"
 	local abort_response="skipping global configuration."
-	# todo:
-#	local confirm_response="alright, please fill in the questions:"
 	local prefix_delimiter="/"
+
+	io_log; io_print "" "$(f_heading "global options")"; io_log
 
 	initialized="$(git_config_get_global "initialized")"
 
@@ -99,35 +113,53 @@ survey_global() {
 	git_config_set_global "prefix.hf" "$hf_prefix"
 
 	if [[ $feature_prefix && $team_prefix && $rc_prefix && $hf_prefix ]]; then
-		io_log; io_log_ok "global options are all set."; io_log
 		git_config_set_global "initialized" "true"
+		io_log; io_log_ok "global options are all set."; io_log
 	else
-		io_log; io_log_err "not all global options are set, please run the initializer again."; io_log
 		git_config_set_global "initialized" "false"
+		io_log; io_status_fatal "not all global options are set, please run the initializer again."
 	fi
 }
 
-survey_local() {
-
-	if ! git_is_repo; then
-		return 0
-	fi
-
+local_survey() {
 	local integration_branch
 	local curr_integration_branch
 	local integration_branch_suggestion
+	local initialized
+	local edit_question="local options are already set, do you want to update them?"
+	local abort_response="skipping local configuration."
+
+	io_log; io_print "" "$(f_heading "local options")"; io_log
+
+	initialized="$(git_config_get "initialized")"
+
+	# abort if everything is initialized and the user chooses not to edit
+	if [[ $initialized = "true" ]] && ! ( io_confirm "$edit_question" "$abort_response" "" "info" ); then
+		return 0
+	fi
 
 	curr_integration_branch="$(git_config_get "branch.integration")"
-	integration_branch_suggestion="${curr_integration_branch:-next}"
+	integration_branch_suggestion="${curr_integration_branch:-integration}"
 	integration_branch=$(io_prompt "integration branch" "$integration_branch_suggestion" 1)
 
-	io_log; create_branch_from_base "$integration_branch" "master"
+	git_config_set "branch.integration" "$integration_branch"
 
 	if [[ $integration_branch ]]; then
-		io_log; io_log_ok "local options are all set."; io_log
 		git_config_set "initialized" "true"
+		io_log; io_log_ok "local options are all set."; io_log
 	else
-		io_log; io_log_err "not all local options are set, please run the initializer again."; io_log
 		git_config_set "initialized" "false"
+		io_log; io_status_fatal "not all local options are set, please run the initializer again."
 	fi
+}
+
+local_bootstrap() {
+	local integration_branch
+
+	io_log; io_print "" "$(f_heading "local bootstrap")"; io_log
+
+	integration_branch="$(git_config_get "branch.integration")"
+	
+	create_branch_from_base "$integration_branch" "master"
+	io_log; io_status_logger $? "repository bootstrapped ok." "repository bootstrap failed, please run the initializer again." 0; io_log
 }

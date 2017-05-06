@@ -5,7 +5,7 @@
 
 configure the git-flux environment with an interactive survey.
 
-here are the details you need to fill in:
+## global options
 
 - **feature prefix**  
   a prefix for feature branch names, defaults to `feature/`.
@@ -20,10 +20,12 @@ here are the details you need to fill in:
 - **hot-fix prefix**  
   a prefix for hot-fix branch names, defaults to `hf/`.
 
+	
+## local options
+
 - **integration branch**  
   the long-lived integration branch name, defaults to `integration`.
   this branch serves as the base to all team branches, and will be created if not already exists.
- 
 
 
 
