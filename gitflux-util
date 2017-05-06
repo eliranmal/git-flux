@@ -28,10 +28,6 @@ is_os_msys() {
 	[[ $OSTYPE = "msys" ]]
 }
 
-is_dir() {
-	[[ -d $1 ]]
-}
-
 repeat() {
 	local term="$1"
 	# shellcheck disable=SC2034

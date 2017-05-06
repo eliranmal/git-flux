@@ -110,10 +110,6 @@ git_repo_dir() {
 
 # - - - - -  predicates - - - - - #
 
-git_is_repo() {
-	is_dir '.git' || git_repo_dir >/dev/null 2>&1
-}
-
 git_is_clean_working_tree() {
 	if ! git diff --no-ext-diff --ignore-submodules --quiet --exit-code; then
 		return 1

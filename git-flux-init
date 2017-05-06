@@ -46,16 +46,14 @@ this branch serves as the base to all team branches, and will be created if not 
 cmd_default() {
 	greet_hello
 	global_survey
-	if git_is_repo; then
-		local_survey
-		local_bootstrap
-	fi
+	local_survey
+	local_bootstrap
 	greet_goodbye
 }
 
 greet_hello() {
 	io_log; io_log; io_log_banner "git-flux initializer"
-	io_log; io_log_info "global options apply to all git-flux repositories, and local options only affect a specific one (run inside a git repository to set local options)."
+	io_log; io_log_info "global options apply to all git-flux repositories, and local options only affect the current one."
 	io_log_info "to get help, run $(f_code 'git flux init -h')."; io_log
 }
 
