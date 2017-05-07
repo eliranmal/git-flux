@@ -21,10 +21,13 @@ io_log_info() {
 	io_print "$(f_fg_blue " $io_sign_i ")" "$@"
 }
 
+io_log_star() {
+	io_print "$(f_fg_blue " $io_sign_star ")" "$@"
+}
+
 io_log_banner() {
-	local blue_star_margin
-	blue_star_margin="$(f_fg_blue " $io_sign_star ")"
-	io_print "$blue_star_margin$(f_bold "$1")$blue_star_margin"
+	io_print "$(f_bold "$1")"
+	io_print "$(repeat "$(f_fg_blue "$io_sign_star")" ${#1})"
 }
 
 io_log_warn() {

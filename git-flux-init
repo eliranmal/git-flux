@@ -52,9 +52,10 @@ cmd_default() {
 }
 
 greet_hello() {
-	io_log; io_log; io_log_banner "git-flux initializer"
+	io_log; io_log
+	io_log_banner "git-flux initializer"
 	io_log; io_log_info "global options apply to all git-flux repositories, and local options only affect the current one."
-	io_log_info "to get help, run $(f_code 'git flux init -h')."; io_log
+	io_log "to get help, run $(f_code 'git flux init -h')."; io_log
 }
 
 greet_goodbye() {
@@ -128,6 +129,12 @@ local_survey() {
 	io_log; io_print "$(f_heading "local options")"; io_log
 
 	initialized="$(git_config_get "initialized")"
+
+	# todo - local config get operations bubble to the global level, if no value found, is this ok?
+
+	# todo - should we keep all local configs in the global context, with repository namespace?
+	# todo - keeping it in local context means we lose it if someone deletes their local repo
+	# todo - perhaps the best approach is to have separate files and include them in the global context
 
 	# abort if everything is initialized and the user chooses not to edit
 	if [[ $initialized = "true" ]] && ! ( io_confirm "$edit_question" "$abort_response" "" "info" ); then

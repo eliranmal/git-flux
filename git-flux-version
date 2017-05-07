@@ -17,5 +17,5 @@ $(f_italics '* since 0.4.0')
 
 cmd_default() {
 	local version="$GIT_FLUX_VERSION"
-	io_log; io_log_banner "git-flux version is: $version"; io_log
+	io_log; io_log_star "git-flux version is: $(f_bold "$version")"; io_log
 }
