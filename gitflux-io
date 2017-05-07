@@ -21,21 +21,25 @@ io_log_info() {
 	io_print "$(f_fg_blue " $io_sign_i ")" "$@"
 }
 
-io_log_star() {
-	io_print "$(f_fg_blue " $io_sign_star ")" "$@"
-}
-
-io_log_banner() {
-	io_print "$(f_bold "$1")"
-	io_print "$(repeat "$(f_fg_blue "$io_sign_star")" ${#1})"
-}
-
 io_log_warn() {
 	io_print "$(f_fg_yellow " $io_sign_x ")" "$@" >&2
 }
 
 io_log_err() {
 	io_print "$(f_fg_red " $io_sign_x ")" "$@" >&2
+}
+
+io_log_star() {
+	io_print "$(f_fg_blue " $io_sign_star ")" "$@"
+}
+
+io_log_banner() {
+	io_print "$(f_bold "$1")"
+	repeat "$(f_fg_blue "$io_sign_star")" ${#1}; io_print
+}
+
+io_log_heading() {
+	f_heading "$1"; io_print
 }
 
 io_status_fatal() {

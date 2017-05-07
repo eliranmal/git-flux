@@ -52,8 +52,7 @@ cmd_default() {
 }
 
 greet_hello() {
-	io_log; io_log
-	io_log_banner "git-flux initializer"
+	io_log; io_log; io_log_banner "git-flux initializer"
 	io_log; io_log_info "global options apply to all git-flux repositories, and local options only affect the current one."
 	io_log "to get help, run $(f_code 'git flux init -h')."; io_log
 }
@@ -80,7 +79,7 @@ global_survey() {
 	local abort_response="skipping global configuration."
 	local prefix_delimiter="/"
 
-	io_log; io_print "$(f_heading "global options")"; io_log
+	io_log; io_log_heading "global options"; io_log
 
 	initialized="$(git_config_get_global "initialized")"
 
@@ -126,7 +125,7 @@ local_survey() {
 	local edit_question="local options are already set, do you want to update them?"
 	local abort_response="skipping local configuration."
 
-	io_log; io_print "$(f_heading "local options")"; io_log
+	io_log; io_log_heading "local options"; io_log
 
 	initialized="$(git_config_get "initialized")"
 
@@ -159,7 +158,7 @@ local_survey() {
 local_bootstrap() {
 	local integration_branch
 
-	io_log; io_print "$(f_heading "local bootstrap")"; io_log
+	io_log; io_log_heading "local bootstrap"; io_log
 
 	integration_branch="$(git_config_get "branch.integration")"
 	
