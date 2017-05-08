@@ -134,7 +134,7 @@ main() {
 	# validate action prerequisites
 	if [[ $sub_command = "init" ]]; then
 		require_non_empty_repository
-	elif [[ $sub_command ]]; then
+	elif [[ $sub_command && ! $sub_command =~ update|version ]]; then
 		require_gitflux_initialized
 	fi
 

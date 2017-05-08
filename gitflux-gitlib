@@ -535,6 +535,7 @@ hub_get_self_raw_content() {
 	local ref="$1"
 	local path="$2"
 	local output_path="$3"
+	# todo - put repo path in manifest
 	local resource="/eliranmal/git-flux/$ref/$path"
 	hub_get_raw_content "$resource" "$output_path"
 }

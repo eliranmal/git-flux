@@ -81,7 +81,7 @@ cmd_start() {
 	name="$1"
 	base_override="$2"
 
-	# todo - current team should reside in global context (only the name, no prefix)
+	# todo - current team should reside in global context? (only the name, no prefix)
 	team_branch="$(git_config_get "branch.team")"
 	base_branch="${base_override:-$team_branch}"
 
