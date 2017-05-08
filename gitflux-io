@@ -108,11 +108,10 @@ io_print() {
 	local margin="$1"
 	local body="$2"
 	local indent_level=$3
-	local end_margin="$4"
 	local indent=""
 	if [[ $indent_level =~ [123] ]]; then
 		# shellcheck disable=SC2086
 		indent="$(repeat "   " ${indent_level})"
 	fi
-	echo "$indent$margin$body$end_margin"
+	echo "$indent$margin$body"
 }

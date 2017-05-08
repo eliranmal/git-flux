@@ -48,7 +48,7 @@ cmd_sync() {
 	local base
 	branch="$(git_config_get "branch.integration")"
 	base="master"
-	io_log ; sync_branch_with_base "$branch" "$base"
+	io_log; sync_branch_with_base "$branch" "$base"
 	io_log; io_log_ok "'$branch' is in sync with '$base'."; io_log
 }
 
