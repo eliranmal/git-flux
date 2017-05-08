@@ -14,23 +14,23 @@ io_log() {
 }
 
 io_log_ok() {
-	io_print "$(f_fg_green " $io_sign_v ")" "$@"
+	io_print " $(f_fg_green "$io_sign_v") " "$@"
 }
 
 io_log_info() {
-	io_print "$(f_fg_blue " $io_sign_i ")" "$@"
+	io_print " $(f_fg_blue "$io_sign_i") " "$@"
 }
 
 io_log_warn() {
-	io_print "$(f_fg_yellow " $io_sign_x ")" "$@" >&2
+	io_print " $(f_fg_yellow "$io_sign_x") " "$@" >&2
 }
 
 io_log_err() {
-	io_print "$(f_fg_red " $io_sign_x ")" "$@" >&2
+	io_print " $(f_fg_red "$io_sign_x") " "$@" >&2
 }
 
 io_log_star() {
-	io_print "$(f_fg_blue " $io_sign_star ")" "$@"
+	io_print " $(f_fg_blue "$io_sign_star") " "$@"
 }
 
 io_log_banner() {
@@ -43,23 +43,24 @@ io_log_heading() {
 }
 
 io_status_fatal() {
-	die "$(io_log_err "$@")
-" >&2
+	die "$(io_log_err "$@")" >&2
 }
 
 io_status_fatal_info() {
-	die "$(io_log_info "$@")
-" >&2
+	die "$(io_log_info "$@")" >&2
 }
 
 io_status_logger() {
+	local status=$1
+	local ok_msg="$2"
+	local exit_msg="$3"
 	local indent_level=${4:-1}
-	if (( $1 == 0 )); then
+	if (( status == 0 )); then
 		# shellcheck disable=SC2086
-		io_log_ok "$2" ${indent_level}
+		io_log_ok "$ok_msg" ${indent_level}
 	else
 		# shellcheck disable=SC2086
-		io_status_fatal "$3" ${indent_level}
+		io_status_fatal "$exit_msg" ${indent_level}
 	fi
 }
 
@@ -77,7 +78,7 @@ io_prompt() {
 	fi
 	# use -p instead of sending the question to stdout, as this function will probably be 
 	# called in a $(subshell), so printing to stdout won't work as expected
-	read -r -p "$indent$(f_fg_yellow " $io_sign_arrow ")$question " answer
+	read -r -p "$indent $(f_fg_yellow "$io_sign_arrow") $question " answer
 	echo "${answer:-$suggestion}"
 }
 
@@ -85,20 +86,20 @@ io_prompt_password() {
 	local question="$1"
 	# use -p instead of sending the question to stdout, as this function will probably be 
 	# called in a $(subshell), so printing to stdout won't work as expected
-	read -r -s -p "$(f_fg_yellow " $io_sign_arrow ")$question " answer
+	read -r -s -p " $(f_fg_yellow "$io_sign_arrow") $question " answer
 	echo "$answer"
 }
 
 io_confirm() {
 	local question="$1"
 	local exit_msg="$2";
-	local exit_log_level="${4:+_$4}"
+	local log_level="${3:+_$3}"
 	local answer
 	answer=$(io_prompt "$question (y/n)")
 	if [[ $answer != "y" ]]; then
-		if is_available "io_status_fatal$exit_log_level"; then
+		if is_available "io_status_fatal$log_level"; then
 			# shellcheck disable=SC2086
-			io_status_fatal${exit_log_level} "$exit_msg" 1
+			io_status_fatal${log_level} "$exit_msg" 1
 		fi
 	fi
 }
