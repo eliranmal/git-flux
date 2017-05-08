@@ -84,7 +84,7 @@ global_survey() {
 	initialized="$(git_config_get_global "initialized")"
 
 	# abort if everything is initialized and the user chooses not to edit
-	if [[ $initialized = "true" ]] && ! ( io_confirm "$edit_question" "$abort_response" "" "info" ); then
+	if [[ $initialized = "true" ]] && ! ( io_confirm "$edit_question" "$abort_response" "info" ); then
 		return 0
 	fi
 
@@ -98,6 +98,7 @@ global_survey() {
 	rc_prefix_suggestion="${curr_rc_prefix:-rc$prefix_delimiter}"
 	hf_prefix_suggestion="${curr_hf_prefix:-hf$prefix_delimiter}"
 
+	io_log
 	feature_prefix=$(io_prompt "feature prefix" "$feature_prefix_suggestion" 1)
 	team_prefix=$(io_prompt "team prefix" "$team_prefix_suggestion" 1)
 	rc_prefix=$(io_prompt "release candidate prefix" "$rc_prefix_suggestion" 1)
@@ -129,19 +130,16 @@ local_survey() {
 
 	initialized="$(git_config_get "initialized")"
 
-	# todo - local config get operations bubble to the global level, if no value found, is this ok?
-
-	# todo - should we keep all local configs in the global context, with repository namespace?
-	# todo - keeping it in local context means we lose it if someone deletes their local repo
-	# todo - perhaps the best approach is to have separate files and include them in the global context
-
 	# abort if everything is initialized and the user chooses not to edit
-	if [[ $initialized = "true" ]] && ! ( io_confirm "$edit_question" "$abort_response" "" "info" ); then
+	if [[ $initialized = "true" ]] && ! ( io_confirm "$edit_question" "$abort_response" "info" ); then
 		return 0
 	fi
 
 	curr_integration_branch="$(git_config_get "branch.integration")"
+
 	integration_branch_suggestion="${curr_integration_branch:-integration}"
+
+	io_log
 	integration_branch=$(io_prompt "integration branch" "$integration_branch_suggestion" 1)
 
 	git_config_set "branch.integration" "$integration_branch"

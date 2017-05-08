@@ -81,13 +81,14 @@ cmd_start() {
 	name="$1"
 	base_override="$2"
 
+	# todo - current team should reside in global context (only the name, no prefix)
 	team_branch="$(git_config_get "branch.team")"
 	base_branch="${base_override:-$team_branch}"
 
 	if [[ -z $base_branch ]]; then
 		io_log; io_status_fatal "no base found! set up a team first with 'git flux team create', or pass the desired base to this command."
 	fi
-	io_log; create_branch_from_base "$(git_config_get "prefix.feature")$name" "$base_branch"
+	io_log; create_branch_from_base "$(git_config_get_global "prefix.feature")$name" "$base_branch"
 
 	io_log; io_log_ok "feature '$name' is started. happy coding!"; io_log
 }
@@ -96,7 +97,7 @@ cmd_finish() {
 	local name
 	require_args "$1"
 	name="$1"
-	io_log; destroy_branch_from_base "$(git_config_get "prefix.feature")$name"
+	io_log; destroy_branch_from_base "$(git_config_get_global "prefix.feature")$name"
 	io_log; io_log_ok "feature '$name' is finished. RIP."; io_log
 }
 
@@ -104,7 +105,7 @@ cmd_sync() {
 	local name
 	require_args "$1"
 	name="$1"
-	io_log; sync_branch_with_base "$(git_config_get "prefix.feature")$name"
+	io_log; sync_branch_with_base "$(git_config_get_global "prefix.feature")$name"
 	io_log; io_log_ok "feature '$name' is in sync with the base."; io_log
 }
 
@@ -112,6 +113,6 @@ cmd_review() {
 	local name
 	require_args "$1"
 	name="$1"
-	io_log; review_branch_from_base "$(git_config_get "prefix.feature")$name"
+	io_log; review_branch_from_base "$(git_config_get_global "prefix.feature")$name"
 	io_log; io_log_ok "feature '$name' is ready for review."; io_log
 }

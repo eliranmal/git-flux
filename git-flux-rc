@@ -62,7 +62,7 @@ cmd_start() {
 	local name
 	require_args "$1"
 	name="$1"
-	io_log; create_branch_from_base "$(git_config_get "prefix.rc")$name" "$(git_config_get "branch.integration")"
+	io_log; create_branch_from_base "$(git_config_get_global "prefix.rc")$name" "$(git_config_get "branch.integration")"
 	io_log; io_log_ok "release candidate '$name' is created. congrats!"; io_log
 }
 
@@ -70,7 +70,7 @@ cmd_finish() {
 	local name
 	require_args "$1"
 	name="$1"
-	io_log; destroy_branch_from_base "$(git_config_get "prefix.rc")$name"
+	io_log; destroy_branch_from_base "$(git_config_get_global "prefix.rc")$name"
 	io_log; io_log_ok "release candidate '$name' is finished. goodbye!"; io_log
 }
 
@@ -78,6 +78,6 @@ cmd_review() {
 	local name
 	require_args "$1"
 	name="$1"
-	io_log; review_branch_from_base "$(git_config_get "prefix.rc")$name"
+	io_log; review_branch_from_base "$(git_config_get_global "prefix.rc")$name"
 	io_log; io_log_ok "release candidate '$name' is ready for review."; io_log
 }

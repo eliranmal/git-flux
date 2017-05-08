@@ -278,36 +278,39 @@ git_v_create_tag() {
 
 # - - - - - config - - - - - #
 
-git_config_section="gitflux"
-
 git_config_get_global() {
 	local namespace="$1"
-	git config --global --get "$git_config_section.$namespace"
+	git config --global --get "gitflux.$namespace"
 }
 
 git_config_set_global() {
 	local namespace="$1"; local value="$2"
-	git config --global "$git_config_section.$namespace" "$value"
+	git config --global "gitflux.$namespace" "$value"
 }
 
 git_config_get() {
 	local namespace="$1"
-	git config --get "$git_config_section.$namespace"
+	git config --local --get "gitflux.$namespace"
 }
 
 git_config_set() {
 	local namespace="$1"; local value="$2"
-	git config "$git_config_section.$namespace" "$value"
+	git config --local "gitflux.$namespace" "$value"
 }
 
 git_config_unset() {
 	local namespace="$1"
-	git config --unset "$git_config_section.$namespace"
+	git config --local --unset "gitflux.$namespace"
 }
 
 git_config_remove_section() {
 	local namespace="$1"
-	git config --remove-section "$git_config_section.$namespace"	
+	git config --local --remove-section "gitflux.$namespace"	
+}
+
+git_config_get_regexp() {
+	local regexp="$1"
+	git config --local --get-regexp 'gitflux\.'"$regexp"
 }
 
 git_config_get_subsections_by_value() {
@@ -317,17 +320,17 @@ git_config_get_subsections_by_value() {
 	local config_value
 	local config_subsection
 	local config_lines
-	
-	config_lines="$(git config --get-regexp "$git_config_section"'\..*\.'"$key")"
+
+	config_lines="$(git_config_get_regexp '.*\.'"$key")"
 	while read -r line; do
 		# extract the config value
 		config_value="$(echo "$line" | cut -d ' ' -f 2)"
 		# if it does not match the passed value filter, abort this line
-		[[ -n $value && $config_value != "$value" ]] && continue
+		[[ $value && $config_value != "$value" ]] && continue
 		# strip down the section and key name to get the subsection
-		config_subsection="$(echo "$line" | cut -d ' ' -f 1 | sed -e 's,'"$git_config_section"'\.\(.*\)\.'"$key"',\1,')"
+		config_subsection="$(echo "$line" | cut -d ' ' -f 1 | sed -e 's,gitflux\.\(.*\)\.'"$key"',\1,')"
 		# strip down the prefix, if passed
-		if [[ -n $prefix ]]; then
+		if [[ $prefix ]]; then
 			config_subsection="${config_subsection#$prefix}"
 		fi
 		# send item to output appended with a whitespace delimiter, 

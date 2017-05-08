@@ -52,7 +52,7 @@ cmd_start() {
 	require_args "$1" "$2"
 	name="$1"
 	tag="$2"
-	io_log; create_branch_from_tag "$(git_config_get "prefix.hf")$name" "$tag"
+	io_log; create_branch_from_tag "$(git_config_get_global "prefix.hf")$name" "$tag"
 	io_log; io_log_ok "hot-fix '$name' is started. good luck!"; io_log
 }
 
@@ -60,6 +60,6 @@ cmd_finish() {
 	local name
 	require_args "$1"
 	name="$1"
-	io_log; destroy_branch_from_tag "$(git_config_get "prefix.hf")$name"
+	io_log; destroy_branch_from_tag "$(git_config_get_global "prefix.hf")$name"
 	io_log; io_log_ok "hot-fix '$name' is finished. goodbye!"; io_log
 }

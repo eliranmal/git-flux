@@ -91,21 +91,15 @@ io_prompt_password() {
 
 io_confirm() {
 	local question="$1"
-	local no_response="$2";
-	local yes_response="$3";
+	local exit_msg="$2";
 	local exit_log_level="${4:+_$4}"
 	local answer
 	answer=$(io_prompt "$question (y/n)")
 	if [[ $answer != "y" ]]; then
 		if is_available "io_status_fatal$exit_log_level"; then
 			# shellcheck disable=SC2086
-			io_status_fatal${exit_log_level} "$no_response" 1
+			io_status_fatal${exit_log_level} "$exit_msg" 1
 		fi
-	elif [[ $yes_response ]]; then
-		io_log_ok "$yes_response" 1
-	else
-		# shellcheck disable=SC2119
-		io_log
 	fi
 }
 

@@ -104,7 +104,7 @@ cmd_create() {
 	local branch
 	require_args "$1"
 	name="$1"
-	branch="$(git_config_get "prefix.team")$name"
+	branch="$(git_config_get_global "prefix.team")$name"
 	io_log; create_branch_from_base "$branch" "$(git_config_get "branch.integration")"
 	git_config_set "branch.team" "$branch"
 	io_log; io_log_ok "team '$name' is created. congrats!"; io_log
@@ -115,7 +115,7 @@ cmd_destroy() {
 	local branch
 	require_args "$1"
 	name="$1"
-	branch="$(git_config_get "prefix.team")$name"
+	branch="$(git_config_get_global "prefix.team")$name"
 	io_log; destroy_branch_from_base "$branch"
 	git_config_unset "branch.team" "$branch"
 	io_log; io_log_ok "team '$name' is gone. so long!"; io_log
@@ -125,7 +125,7 @@ cmd_sync() {
 	local name
 	require_args "$1"
 	name="$1"
-	io_log; sync_branch_with_base "$(git_config_get "prefix.team")$name"
+	io_log; sync_branch_with_base "$(git_config_get_global "prefix.team")$name"
 	io_log; io_log_ok "team '$name' is in sync with the base."; io_log
 }
 
@@ -133,7 +133,7 @@ cmd_review() {
 	local name
 	require_args "$1"
 	name="$1"
-	io_log; review_branch_from_base "$(git_config_get "prefix.team")$name"
+	io_log; review_branch_from_base "$(git_config_get_global "prefix.team")$name"
 	io_log; io_log_ok "team '$name' is ready for review."; io_log
 }
 
@@ -148,7 +148,7 @@ cmd_switch() {
 	require_args "$1"
 	new_team_name="$1"
 
-	prefix="$(git_config_get "prefix.team")"
+	prefix="$(git_config_get_global "prefix.team")"
 	new_team_branch="$prefix$new_team_name"
 	old_team_branch="$(git_config_get "branch.team")"
 
