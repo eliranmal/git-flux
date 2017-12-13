@@ -27,7 +27,7 @@ open your [git-bash][1] *'as administrator'*, please.
 
 ```sh
 curl -O https://raw.githubusercontent.com/eliranmal/git-flux/master/bin/setup.sh
-chmod +x setup.sh
+chmod u+x setup.sh
 ./setup.sh
 ```
 
