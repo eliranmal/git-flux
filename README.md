@@ -4,11 +4,6 @@
 > git commands for fluent, collaborative workflow
 
 
-## overview
-
-- [ ] todo - fill this up with the overview
-
-
 ## prerequisites
 
 this tool relies on bash/mingw32, so:
